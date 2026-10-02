@@ -59,7 +59,7 @@ C9 & Support email & \todo{} \\
 %% ---------------------------------------------------------------
 \section{Motivation and significance}
 
-Topological indices are graph invariants of the hydrogen-suppressed molecular graph. They have been used as structural descriptors since Wiener's path-number study of paraffin boiling points \cite{wiener1947}. Degree-based families, including the Zagreb \cite{gutman1972}, Randi\'c \cite{randic1975}, atom-bond connectivity \cite{estrada1998} and Sombor \cite{gutman2021sombor} indices and their many recent variants, are now frequently correlated with physicochemical properties of drugs used for a particular disease. Most such studies share three weaknesses.
+Topological indices are graph invariants of the hydrogen-suppressed molecular graph. They have been used as structural descriptors since Wiener's path-number study of paraffin boiling points \cite{wiener1947}. Degree-based families, including the Zagreb \cite{gutman1972}, Randi\'c \cite{randic1975}, atom-bond connectivity \cite{estrada1998} and Sombor \cite{gutman2021sombor} indices and their many recent variants, are now frequently correlated with physicochemical properties of drugs used for a particular disease, typically on 20--30 manually listed drugs \cite{almulla2026antifungal}. Most such studies share three weaknesses.
 
 \paragraph{The drug set is under-specified} The ``drugs for disease~X'' are usually listed without saying how they were chosen. Approved, investigational and withdrawn agents are mixed, salts and parents are counted separately, and the list cannot be regenerated. Table~\ref{tab:audit} shows how large the choice is. On ChEMBL release~37, a substring query for \emph{diabetes} returns 580 distinct molecules. Only 103 of them reached phase~4 for a diabetes indication, and the matched headings include \emph{Diabetes Insipidus}, which is a different disease. A plain-language query such as \emph{breast cancer} matches no heading at all, because the controlled term is \emph{Breast Neoplasms} (1{,}407 indication records).
 
@@ -67,7 +67,9 @@ Topological indices are graph invariants of the hydrogen-suppressed molecular gr
 
 \paragraph{Predictive claims are optimistic} Models are often fitted and scored on the same handful of molecules, with hyperparameters tuned on the evaluation folds. They are seldom compared with the simplest alternative: many indices are strongly correlated with molecular size, which by itself predicts size-dependent properties well.
 
-\ml{} addresses all three weaknesses in a single tool that also works for users without programming experience. The contribution is not a new index. It is infrastructure that makes a topological-index QSPR study fully specified, verifiable and comparable.
+Existing software covers parts of this workflow. ChemGraphX \cite{jacob2026chemgraphx} computes degree-, degree-sum-, hybrid- and distance-based indices and graph entropies from structure files, and DOPtools \cite{byadi2025doptools} automates descriptor calculation and model optimisation. Neither defines \emph{which} molecules constitute a disease-specific drug set, and neither evaluates index-based models against a molecular-size baseline. \ml{} is complementary. It does not compete on the number of indices. Instead it turns disease-specific topological QSPR into a reproducible and statistically defensible experiment. Its index values are cross-checked against ChemGraphX where the two overlap \todo{M3}.
+
+ChEMBL itself notes that indication data require controlled MeSH/EFO mapping, handling of drug forms and phase information \cite{hunter2025chembl}. \ml{} addresses the three weaknesses above in a single tool that also works for users without programming experience.
 
 \begin{table}[t]
 \centering\small
@@ -106,7 +108,8 @@ The resulting \emph{drug manifest} is shown to the user before any computation a
 \subsection{Topological indices}
 For a molecular graph $G=(V,E)$ with vertex degrees $d(v)$, the package implements \todo{135} indices in five families (Table~\ref{tab:indices}, full definitions in Supplementary~S1):
 degree-based edge sums $\sum_{uv\in E} f(d(u),d(v))$;
-reverse-degree variants with $c(v)=\Delta-d(v)+1$ and the generalised $R_k$ \todo{cite source of $R_k$};
+reverse-degree variants \todo{v0.x code uses $n+1-d(v)$, the literature standard is $c(v)=\Delta-d(v)+1$; reconcile in M3} and the generalised $R_k$ \todo{cite source of $R_k$};
+hybrid geometric-harmonic-Zagreb indices \cite{arockiaraj2023hybrid};
 neighbourhood-degree-sum variants, in which $d(v)$ is replaced by $S(v)=\sum_{u\sim v} d(u)$;
 distance-based indices (Wiener, Balaban~$J$ \cite{balaban1982}, Hosoya~$Z$ \cite{hosoya1971}, Szeged, Mostar, PI, Schultz, Gutman);
 and graph entropy.
@@ -132,8 +135,10 @@ Information-theoretic     &  1 & graph entropy \\
 \subsection{Model evaluation}
 Each target property is modelled with \todo{11} regressors (ordinary least squares, ridge, lasso, elastic net, random forest, extra trees, gradient boosting, XGBoost \cite{chen2016xgboost}, support-vector regression, multilayer perceptron, \todo{11th}) implemented in scikit-learn \cite{pedregosa2011}. The evaluation protocol is designed to prevent optimistic bias:
 \begin{itemize}
-  \item \textbf{Nested cross-validation.} Hyperparameters are tuned inside each outer training fold only. The outer $k$ folds (default $k=5$, repeated \todo{5} times) give the reported performance \cite{varma2006,cawley2010}.
-  \item \textbf{Mandatory baselines.} Every result is reported next to a mean-only null model and a \emph{size baseline} fitted on heavy-atom and bond counts. The gain over the size baseline, $\Delta R^2_{\text{size}}$, is the headline metric, because it isolates information that the indices carry beyond molecular size.
+  \item \textbf{Nested cross-validation.} Both the hyperparameters and the choice of model family are made inside each outer training fold only. The outer $k$ folds (default $k=5$, repeated \todo{5} times) give the reported performance, so the score of the ``best'' model is not inflated by selecting it on its own test folds \cite{varma2006,cawley2010}. Per-family scores are reported as well.
+  \item \textbf{Mandatory baselines.} Every result is reported next to a mean-only null model and a \emph{size baseline} fitted on heavy-atom and bond counts. A standard RDKit 2D descriptor set serves as an upper reference. The gain over the size baseline, $\Delta R^2_{\text{size}}=R^2_{\text{TI}}-R^2_{\text{size}}$, is the headline metric, because it isolates information that the indices carry beyond molecular size. It is reported with a confidence interval from repeated nested CV \todo{choose: corrected resampled $t$ or paired bootstrap}.
+  \item \textbf{Multiplicity control.} Index--property correlations are reported as effect sizes with confidence intervals. Significance is controlled by the Benjamini--Hochberg false discovery rate across all index--property pairs \todo{cite BH 1995}.
+  \item \textbf{Failures are explicit.} An index that cannot be computed for a molecule is recorded as missing with a reason. It is never imputed as zero.
   \item \textbf{Independent targets only.} Duplicate targets (e.g.\ RDKit and PubChem molecular weight) are collapsed. Targets that are near-deterministic functions of atom counts are labelled as such in the report.
   \item \textbf{Explainability.} Mean absolute SHAP values \cite{lundberg2017} are computed for the selected model and summarised by index family, because individual indices within a family are highly collinear.
 \end{itemize}
@@ -143,13 +148,13 @@ PubChem physicochemical properties \cite{kim2023pubchem}, UniChem cross-referenc
 
 %% ---------------------------------------------------------------
 \section{Illustrative examples}
-\todo{Run v1.0 on a fixed panel of diseases (proposed: type~2 diabetes mellitus, hypertension, asthma, Alzheimer disease, breast neoplasms, epilepsy) with phase~4 drugs, ChEMBL~37. Report per disease: manifest size; best nested-CV $R^2$ per target; $\Delta R^2_{\text{size}}$; top index families by SHAP.}
+\todo{Run v1.0 on a fixed panel of 8--12 diseases whose approved-drug cohort exceeds a pre-set minimum size (e.g.\ type~2 diabetes mellitus, hypertension, asthma, breast neoplasms, epilepsy; Alzheimer disease has only 13 approved drugs and is likely too small) with phase~4 drugs, ChEMBL~37. Report per disease: manifest size; best nested-CV $R^2$ per target; $\Delta R^2_{\text{size}}$; top index families by SHAP.}
 
 \todo{Fig.~2: screenshots of the web workflow (disease resolution $\to$ manifest confirmation $\to$ results dashboard).}
 
 \todo{Fig.~3: $\Delta R^2_{\text{size}}$ heat-map, diseases $\times$ targets.}
 
-\todo{Case study: reproduce one published topological-index QSPR study from our group with \ml{} and compare the in-sample with the nested-CV estimate.}
+\todo{Replication: re-analyse 3--5 published disease-specific topological-index QSPR studies (chosen with all co-authors) using their own drug lists and property values. Report the published in-sample $R^2$, the nested-CV $R^2$ and the size-baseline $R^2$, with confidence intervals, since $n\approx 20$ makes every estimate noisy.}
 
 %% ---------------------------------------------------------------
 \section{Impact}
