@@ -80,7 +80,7 @@ Bioactivity values are excluded from v1.0 modelling.
 | M_comp | element counts (C, N, O, S, P, halogens, other) + H count |
 | M_TI | all verified TIs (after removing exact duplicates) |
 | M_TI-family | one model per index family (Experiment B, family contributions) |
-| M_std | RDKit 2D descriptors, **excluding any descriptor that defines or is the target** (e.g. MolLogP when predicting Crippen logP) |
+| M_std | RDKit 2D descriptors, **excluding every descriptor in the target's derivation family** (e.g. for Crippen logP: MolLogP, MolMR, SlogP_VSA*, SMR_VSA*) |
 
 ## 6. Models and cross-validation
 
@@ -88,7 +88,11 @@ Bioactivity values are excluded from v1.0 modelling.
   inner loop only.
 - Outer: 5-fold, repeated 5 times with fixed seeds 0–4. Inner: 3-fold.
 - All preprocessing (scaling, missing-value handling, constant-feature removal) is inside the pipeline.
-- Sensitivity: scaffold-grouped outer folds (Bemis–Murcko), to check analog leakage.
+- Every feature set (including size and composition baselines) uses the **same** model families and
+  inner tuning, so baseline comparisons are fair.
+- Scaffold-grouped outer folds (Bemis–Murcko) as the third step of Experiment C. Acyclic molecules
+  (empty scaffold) each form their own group; report the number of groups and the largest group's share.
+- Protocol follows Ash et al. 2025 (JCIM 65:9398) for method comparison.
 
 ## 7. Endpoints and statistics
 
@@ -97,7 +101,10 @@ Bioactivity values are excluded from v1.0 modelling.
   Averaged over repeats; 95% CI via the corrected repeated k-fold t-test (Nadeau & Bengio 2003;
   Bouckaert & Frank 2004) on paired per-fold differences. TIs are called *informative beyond size*
   if the CI lower bound > 0 after Benjamini–Hochberg control (q = 0.05) over this confirmatory family.
-  Sensitivity: paired bootstrap of the whole nested procedure on the pooled set.
+  Sensitivity: paired bootstrap of the whole nested procedure on the pooled set (CV intervals can
+  undercover; Bates, Hastie & Tibshirani 2023), and Benjamini–Yekutieli instead of BH (dependence).
+  **Practical significance:** ΔR² ≥ 0.05 is the pre-specified minimal meaningful gain
+  (to be confirmed by co-authors before freezing).
 - **Secondary (exploratory):** ΔR²(TI+comp − comp); ΔR² per TI family; M_std vs M_TI; class-2 targets;
   R² and MAE of every model (mean, SD, median); n for every endpoint.
 - **Size dependence of the descriptors themselves:** for every TI and TI family, the cross-validated R²
