@@ -27,6 +27,7 @@
 \affiliation[c]{organization={TBD}}
 
 \begin{abstract}
+\todo{Abstract describes the planned v1.0; not yet true of the code.}
 Quantitative structure--property relationship (QSPR) studies based on graph-theoretic topological indices are widely published, but each study usually hand-assembles a small drug set, computes a few indices with ad-hoc scripts, and reports in-sample regression fits. As a result the studies are hard to reproduce and hard to compare. \ml{} is an open-source web platform and Python package that turns a disease concept into a fully specified QSPR study. It resolves the disease to a controlled MeSH heading, assembles an approved-drug set from ChEMBL with an explicit clinical-phase threshold and salt and parent normalisation, and writes a versioned drug manifest. It then computes \todo{135} degree-, reverse-degree-, neighbourhood-degree-sum- and distance-based topological indices that have been checked against published reference values. Finally it evaluates \todo{11} regression models under nested cross-validation against mandatory null and molecular-size baselines. Every run exports its inputs, database release and settings so that it can be re-executed exactly. \todo{One sentence on the multi-disease validation result.}
 \end{abstract}
 
@@ -61,7 +62,7 @@ C9 & Support email & \todo{} \\
 
 Topological indices are graph invariants of the hydrogen-suppressed molecular graph. They have been used as structural descriptors since Wiener's path-number study of paraffin boiling points \cite{wiener1947}. Degree-based families, including the Zagreb \cite{gutman1972}, Randi\'c \cite{randic1975}, atom-bond connectivity \cite{estrada1998} and Sombor \cite{gutman2021sombor} indices and their many recent variants, are now frequently correlated with physicochemical properties of drugs used for a particular disease, typically on 20--30 manually listed drugs \cite{almulla2026antifungal}. Most such studies share three weaknesses.
 
-\paragraph{The drug set is under-specified} The ``drugs for disease~X'' are usually listed without saying how they were chosen. Approved, investigational and withdrawn agents are mixed, salts and parents are counted separately, and the list cannot be regenerated. Table~\ref{tab:audit} shows how large the choice is. On ChEMBL release~37, a substring query for \emph{diabetes} returns 580 distinct molecules. Only 103 of them reached phase~4 for a diabetes indication, and the matched headings include \emph{Diabetes Insipidus}, which is a different disease. A plain-language query such as \emph{breast cancer} matches no heading at all, because the controlled term is \emph{Breast Neoplasms} (1{,}407 indication records).
+\paragraph{The drug set is under-specified} The ``drugs for disease~X'' are usually listed without saying how they were chosen. Approved, investigational and withdrawn agents are mixed, salts and parents are counted separately, and the list cannot be regenerated. Table~\ref{tab:audit} shows how large the choice is. On ChEMBL release~37, a substring query for \emph{diabetes} returns 580 distinct molecules, and the matched headings include \emph{Diabetes Insipidus}, which is a different disease. Restricting to molecules that reached phase~4 for a matched indication leaves 103, of which only 71 are small molecules. Even these include antihypertensives such as lisinopril and valsartan, sodium chloride and vitamins, several attached to the indication through drug-label text mining. So a phase filter alone does not define a disease-specific drug set. A plain-language query such as \emph{breast cancer} matches no heading at all, because the controlled term is \emph{Breast Neoplasms} (1{,}171 indication records for the exact heading).
 
 \paragraph{Index implementations are unverified} Few papers release code, and implementation errors in less common indices (e.g.\ Hosoya~$Z$, reverse-degree variants) are seldom checked against reference values.
 
@@ -75,9 +76,10 @@ ChEMBL itself notes that indication data require controlled MeSH/EFO mapping, ha
 \centering\small
 \caption{Disease-to-drug mapping in ChEMBL~37 (\texttt{drug\_indication}, substring match on MeSH heading, queried 2026-10-02). ``Phase~4'' is the maximum phase reached \emph{for that indication}. Script: \texttt{audit\_chembl\_indications.py}.}
 \label{tab:audit}
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{lrrl}
 \toprule
-Query & Molecules & Phase~4 & Off-target headings matched (examples) \\
+Query & Molecules & Phase~4 for indication & Other headings matched (examples) \\
 \midrule
 diabetes      & 580 & 103 & Diabetes Insipidus; Diabetes, Gestational \\
 hypertension  & 407 & 120 & Pulmonary, Ocular, Portal, Intracranial hypertension \\
@@ -85,11 +87,12 @@ asthma        & 275 &  48 & Status Asthmaticus \\
 alzheimer     & 306 &  13 & -- \\
 breast cancer &   0 &   0 & (controlled term is ``Breast Neoplasms'') \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 %% ---------------------------------------------------------------
 \section{Software description}
+\todo{This section describes the v1.0 design. As of 2026-10-02 none of the following is implemented in the code (see docs/AUDIT\_TOPOQSPR.md); rewrite in the present tense only for features that exist in the tagged release.}
 
 \subsection{Architecture}
 \ml{} is a Python package with three interfaces: a command-line program, a FastAPI REST service, and a single-page web client served by the same process \todo{Fig.~1: architecture diagram}. A run has five stages, and each stage writes a versioned artefact:
@@ -111,7 +114,7 @@ degree-based edge sums $\sum_{uv\in E} f(d(u),d(v))$;
 reverse-degree variants \todo{v0.x code uses $n+1-d(v)$, the literature standard is $c(v)=\Delta-d(v)+1$; reconcile in M3} and the generalised $R_k$ \todo{cite source of $R_k$};
 hybrid geometric-harmonic-Zagreb indices \cite{arockiaraj2023hybrid};
 neighbourhood-degree-sum variants, in which $d(v)$ is replaced by $S(v)=\sum_{u\sim v} d(u)$;
-distance-based indices (Wiener, Balaban~$J$ \cite{balaban1982}, Hosoya~$Z$ \cite{hosoya1971}, Szeged, Mostar, PI, Schultz, Gutman);
+distance-based indices (Wiener, Balaban~$J$ \cite{balaban1982}, Szeged, Mostar, PI, Schultz, Gutman); the matching-based Hosoya~$Z$ \cite{hosoya1971};
 and graph entropy.
 Each index is unit-tested against closed-form values on path, cycle, star and complete graphs (e.g.\ $W(P_n)=(n^3-n)/6$) and against values reported in the literature for reference molecules \cite{todeschini2009}.
 
