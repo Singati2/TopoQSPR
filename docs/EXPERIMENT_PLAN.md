@@ -92,12 +92,16 @@ Bioactivity values are excluded from v1.0 modelling.
 
 ## 7. Endpoints and statistics
 
-- **Primary:** ΔR²(TI+comp − comp) and ΔR²(TI − size) on class-3 targets (pooled set); per disease × target secondary, averaged over repeats. 95% CI via the
-  corrected repeated k-fold t-test (Nadeau & Bengio 2003; Bouckaert & Frank 2004), using
-  paired per-fold differences.
-- TIs are called *informative beyond size* for a disease × target if the CI lower bound > 0
-  after Benjamini–Hochberg control (q = 0.05) across all main-panel disease × target pairs.
-- **Secondary:** ΔMAE(size − TI); R² and MAE of every model (mean, SD, median); M_std vs M_TI.
+- **Primary (confirmatory):** paired ΔR²(TI − size) and ΔMAE(size − TI), for each class-3 target on the
+  pooled approved-drug set, and for each main-panel disease × class-3 target with ≥ 50 measured values.
+  Averaged over repeats; 95% CI via the corrected repeated k-fold t-test (Nadeau & Bengio 2003;
+  Bouckaert & Frank 2004) on paired per-fold differences. TIs are called *informative beyond size*
+  if the CI lower bound > 0 after Benjamini–Hochberg control (q = 0.05) over this confirmatory family.
+  Sensitivity: paired bootstrap of the whole nested procedure on the pooled set.
+- **Secondary (exploratory):** ΔR²(TI+comp − comp); ΔR² per TI family; M_std vs M_TI; class-2 targets;
+  R² and MAE of every model (mean, SD, median); n for every endpoint.
+- **Size dependence of the descriptors themselves:** for every TI and TI family, the cross-validated R²
+  of that TI regressed on the size features (how much of each index *is* molecular size).
 - **Correlations:** Spearman ρ with 95% CI, BH-adjusted q, n; family-level summaries;
   collinearity reported via correlation clustering.
 
@@ -110,11 +114,17 @@ Bioactivity values are excluded from v1.0 modelling.
   Run primarily on the **pooled** set of all curated approved small-molecule drugs with experimental
   endpoints (per-disease approved cohorts are too small for stable estimates); per-disease results
   are secondary.
-- **C. Evaluation optimism:** training R², v0.x-style CV (tuned on all data, best-of-family),
-  nested R²; B_train = R²_train − R²_nested and B_CV = R²_CV − R²_nested.
-- **D. Replication:** 3–5 published disease-specific TI-QSPR studies, chosen with all co-authors,
-  by these criteria: compound list and property values published; index formulas clear.
-  Report published R² vs reproduced in-sample R² vs nested R² vs size baseline, with CIs.
+- **C. Evaluation optimism:** training R² → ordinary CV (v0.x protocol: tuned on all data, best of
+  families) → repeated nested CV (random outer folds) → scaffold-grouped nested CV (Bemis–Murcko).
+  Report each step's change: B_train = R²_train − R²_nested, B_CV = R²_CV − R²_nested,
+  B_scaffold = R²_nested − R²_scaffold.
+- **D. Replication:** 3–5 published disease-specific TI-QSPR studies. Selection is fixed before any
+  re-analysis: a pre-written Europe PMC query (recorded here at freeze), screened in date order
+  (newest first) against eligibility criteria: (i) compound list resolvable to structures,
+  (ii) property values tabulated, (iii) index formulas stated, (iv) n ≥ 10. The first eligible studies
+  are taken, subject to co-author agreement, with no regard to their reported R². Chain per study:
+  published R² → reproduced in-sample R² → ordinary CV → nested CV → scaffold CV → size baseline,
+  with CIs and the optimism gap.
 
 ## 9. Interpretation (SHAP)
 
@@ -122,7 +132,20 @@ Secondary and descriptive only. SHAP is computed for the model refit in each out
 evaluated on that fold's test set, summarised by index family, and its stability across folds
 is reported. If it is unstable, we say so.
 
-## 10. Provenance
+## 10. Confirmatory vs exploratory
+
+Only the primary endpoint in §7 is confirmatory. Everything else (secondary endpoints, family-level
+results, class-2 targets, SHAP, per-disease results below the n threshold) is labelled exploratory
+in the paper.
+
+## 11. GO / NO-GO checkpoint
+
+The main experiment starts only after `docs/CHECKPOINT.md` reports GO. It lists: unresolved code or
+definition issues; verified vs unverified indices; independent cross-checks (Mordred, ChemGraphX);
+cohort validation; leakage audit; frozen endpoints, disease rule, baselines and statistics;
+replication candidates; threats to internal and external validity; reproducibility status.
+
+## 12. Provenance
 
 Every result file records: git commit and tag, package version, ChEMBL release, dependency
 lock, seeds, run configuration and cohort manifest. Paper numbers come only from a tagged release.
