@@ -1,0 +1,1107 @@
+[
+ {
+  "label": null,
+  "role": "Red-team reviewer of the lead author's own manuscript (paper/main.tex, paper/refs.bib, README.md)",
+  "summary": "The bibliography is clean: all 14 DOIs resolve on Crossref and match the bib's authors, title, journal, volume, issue, pages and year. The 5 entries without a DOI (Estrada 1998, Sombor 2021, Pedregosa, Lundberg 2017, Cawley) also check out. Table 1 reproduces exactly on the live ChEMBL_37 API (release 2026-05-01). The real problems are in the manuscript itself:\n\n(1) Most of the Software description describes v1.0 features in the present tense, and none of them exist in the code yet: drug manifest, run record, re-execution, salt/parent normalisation, MeSH confirmation, nested CV, baselines, unit tests, pinned requirements, Python package. Only the counts carry \\todo markers, so the abstract currently claims things the repo does not do.\n\n(2) The paper defines reverse degree as c(v)=\u0394\u2212d(v)+1. The code uses n+1\u2212d(v) with n = atom count (ml.py:223-225). So the 9 reverse-degree indices are not what the paper says, and they are dominated by molecule size.\n\n(3) Hosoya Z is listed as a distance-based index; it is a matching count. It is badly wrong in the code: 1 for 19-25 bonds, garbage above 25 (sitagliptin 248 vs true 394,051).\n\n(4) 'Phase 4 for a diabetes indication' is not the same as 'antidiabetic drug'. The 103 phase-4 molecules are only 71 small molecules. They include lisinopril, amlodipine, valsartan, verapamil, ticagrelor, sodium chloride, biotin, folic acid, tyrosine and 4 sitagliptin salt forms, partly via DailyMed label text-mining. So the paper's proposed default (phase-4 filter) would not give a clean drug set either, and the README's '103 approved for a diabetes indication' is misleading.\n\n(5) The 1,407 'Breast Neoplasms' rows come from a substring match over 4 headings; the exact heading has 1,171.\n\n(6) There is no RDKit citation, no M2/Zagreb-1975, GA, harmonic, ISI, Szeged, Mostar, PI, Schultz, Gutman, sigma, reverse-degree, neighbourhood-degree-sum or graph-entropy source, no comparator tools (Mordred, PaDEL), and no citations for the 'most studies share three weaknesses' claim.\n\n(7) The paper uses plain elsarticle rather than the SoftwareX OSP template. It has no generative-AI declaration (Elsevier policy) and no CRediT statement. Table 1 is overfull by 57.6 pt.\n\nPrior claims C1-C10 are confirmed, with nuances on C1, C2 and C10.",
+  "prior_claim_checks": [
+   {
+    "claim_id": "C1",
+    "verdict": "partly",
+    "evidence": "Re-ran paper/audit_chembl_indications.py against the live API (status.json: ChEMBL_37, release 2026-05-01). diabetes 821 rows/580 mols/103 phase-4; hypertension 550/407/120; asthma 288/275/48; alzheimer 306/306/13; 'breast cancer' 0. All numbers in Table 1 match. Two corrections. (a) 'breast neoplasms' substring gives 1407 rows/868 mols over 4 headings (Breast Neoplasms 1171, Triple Negative 125, Male 69, Inflammatory 42). mesh_heading__iexact='Breast Neoplasms' gives 1171, so main.tex:64 '(1,407 indication records)' for 'the controlled term' is wrong. (b) The 103 includes 2 molecules (CHEMBL373742, CHEMBL1200556) that are phase 4 only via Diabetes Insipidus/Gestational. It is 71 small molecules + 26 proteins + 3 antibodies + 3 other, 96 distinct parents. Diabetes Insipidus matched: confirmed (6+1 rows)."
+   },
+   {
+    "claim_id": "C2",
+    "verdict": "confirmed",
+    "evidence": "fetcher.py:100-127 calls new_client.drug_indication.search(...). https://www.ebi.ac.uk/chembl/api/data/drug_indication/search.json?q=breast%20cancer returns HTTP 404, so strategies 2/3 throw and are swallowed by except. The 'would pull all cancers' half is hypothetical, because the endpoint never works. Strategy 1 also stops at max_drugs*2=400 IDs in API order (fetcher.py:93), so for diabetes 180 of 580 are never considered."
+   },
+   {
+    "claim_id": "C3",
+    "verdict": "confirmed",
+    "evidence": "fetcher.py:134 list(chembl_ids)[:max_drugs] on a set of str. PYTHONHASHSEED=1/2/3 give different first elements for the same 1000 'CHEMBLn' strings (['CHEMBL77',...] vs ['CHEMBL851',...] vs ['CHEMBL854',...])."
+   },
+   {
+    "claim_id": "C4",
+    "verdict": "confirmed",
+    "evidence": "Phase-4 diabetes set has 21 salt/child forms (METFORMIN HYDROCHLORIDE alongside METFORMIN, ROSIGLITAZONE MALEATE, PIOGLITAZONE HYDROCHLORIDE). SITAGLIPTIN appears in 4 forms (base, fumarate, HCl monohydrate, phosphate). Duplicate parents: CHEMBL1422 x4, CHEMBL595, CHEMBL121, CHEMBL1431, CHEMBL429910 x2. ml.py:152 parses the full salt SMILES into one disconnected graph."
+   },
+   {
+    "claim_id": "C5",
+    "verdict": "confirmed",
+    "evidence": "ml.py:829-846: gs.fit(X_prop, y) on all rows, then cross_val_score(gs.best_estimator_, ..., cv=kf_outer). Same KFold seed for inner and outer. Additionally, best model per target is chosen as max mean CV R2 over 10 models (ml.py:860-864), a second selection bias that per-model nested CV alone does not remove."
+   },
+   {
+    "claim_id": "C6",
+    "verdict": "confirmed",
+    "evidence": "config.py:136-141: MolWt, PC_MolecularWeight, PC_ExactMass and PC_MonoisotopicMass (4 near-identical mass targets). HBD/PC_HBD, HBA/PC_HBA, TPSA/PC_TPSA and RotBonds/PC_RotatableBonds duplicated. PC_HeavyAtomCount is literally size. PC_CovalentUnitCount counts salt fragments."
+   },
+   {
+    "claim_id": "C7",
+    "verdict": "confirmed",
+    "evidence": "ml.py:115-141; ran the function extracted by AST against exact matching counts. Path m=18: 6765 correct. m=19: 1 (true 10946). m=25: 1 (true 196418). m=26: 189 (true 317811). Sitagliptin (30 bonds): 248 vs 394051. Atorvastatin (44 bonds): 518 vs 267,895,296. Correct for m<=18 (aspirin 335, ibuprofen 804). README 'more than 18 bonds' is accurate."
+   },
+   {
+    "claim_id": "C8",
+    "verdict": "confirmed",
+    "evidence": "fetcher.py ~298: caco2 = round(0.5 - 0.01*tpsa + 0.02*logp, 3), no source. fetcher.py:480-490 builds BIO_* from activities filtered only by standard_type, with no target/unit/assay filter. Also invented GI/BBB rules at fetcher.py ~296-297."
+   },
+   {
+    "claim_id": "C9",
+    "verdict": "confirmed",
+    "evidence": "ml.py:737-771 MODELS_AND_GRIDS has 10 entries (LinearReg, Ridge, Lasso, ElasticNet, RF, ET, GB, XGB, SVR, MLP). index.html:255, 290, 325 and 533 say 11. index.html:290 still says 'MolecuLens' and :325 says 'Railway free tier' although render.yaml deploys to Render."
+   },
+   {
+    "claim_id": "C10",
+    "verdict": "partly",
+    "evidence": "Arithmetic is right: config.py degree 9+11+11=31; reverse 9 (RM1..RSDD) + 44 Rk = 53; 'neighbourhood degree-sum' 5 DS_ + 30 SS_ = 35; distance/cut 4 (W,J,Z,Sz) + 11 = 15; GE 1; total 135. But the 5 DS_ indices use edge weight d(u)+d(v) (config.py:73) and are not neighbourhood degree sums S(v), so that family is mislabelled. GE sits in config's 'Distance-based (5)' block. Z is not distance-based."
+   },
+   {
+    "claim_id": "C11",
+    "verdict": "partly",
+    "evidence": "https://pypi.org/pypi/topoqspr/json returns 404 (free on PyPI). moleculens.com responds (HTTP 308) so the domain is in use. Singati2/TopoQSPR exists, public, MIT. Did not search all of GitHub for other 'TopoQSPR' repos."
+   },
+   {
+    "claim_id": "C12",
+    "verdict": "not_checked",
+    "evidence": "Venue fit is outside the red-team scope. Template compliance is reported in the findings: plain elsarticle is used, not the SoftwareX OSP template."
+   }
+  ],
+  "findings": [
+   {
+    "title": "Abstract and Software description present unimplemented v1.0 features as existing, with no \\todo marker",
+    "severity": "critical",
+    "evidence": "main.tex:30 claims 'salt and parent normalisation', 'versioned drug manifest', indices 'checked against published reference values', 'nested cross-validation against mandatory null and molecular-size baselines', 'can be re-executed exactly'. main.tex:93-94 claims run records that re-execute ('Uploading a run record re-executes the same study'). main.tex:97-104 describes MeSH confirmation, a manifest and deterministic ordering. main.tex:113: 'Each index is unit-tested'. main.tex C7: 'pinned requirements.txt'. Code reality: no tests anywhere (grep for pytest/unittest/test_ finds only a demo list in disease_validator.py:334); requirements.txt has no version pins; no pyproject/setup.py, so not a 'Python package'; fetcher.py:134 is non-deterministic; ml.py:829 is not nested; no baselines exist. README.md:36-40 itself lists these as unfixed.",
+    "how_verified": "read source",
+    "recommendation": "Until the code exists, write these sentences in the future tense or wrap them in \\todo, or simply do not circulate the draft. Before submission, every sentence in Sections 1-2 must map to a commit and a test. Add a claims-to-code checklist to PAPER_ROADMAP.md."
+   },
+   {
+    "title": "Reverse-degree definition in paper does not match code",
+    "severity": "critical",
+    "evidence": "main.tex:109 defines c(v)=\u0394\u2212d(v)+1, the standard reverse degree. ml.py:223-225 uses rev_deg = [n + 1 - d for d in degrees] with n = mol.GetNumAtoms() (ml.py:155), and config.py:69 documents 'rd(v) = n+1-d(v)'. For aspirin (n=13, \u0394=3) the code gives rd\u2208{11,12,13} instead of {1,2,3}, so RM1, RM2, RABC, RR, RH, RF, RGA, RBM and RSDD are essentially size proxies. The Rk helper (ml.py:70-76) uses '(\u0394\u2212d+k) mod \u0394 when k>d', which can give 0. This needs a literature source; main.tex:109 already has \\todo{cite source of R_k}.",
+    "how_verified": "read source",
+    "recommendation": "Fix the code to \u0394\u2212d(v)+1 (Kulli's reverse degree) or rename the indices. Add a unit test on a star/path with hand values. Cite the original reverse-degree and Rk definitions; if the Rk mod-\u0394 rule comes from a group paper, cite it explicitly."
+   },
+   {
+    "title": "Hosoya Z is wrong for >=19 bonds (most drugs) and is misclassified as distance-based",
+    "severity": "major",
+    "evidence": "Measured: ml.py _hosoya_z returns 1 for 19-25 bonds and 1+m+m(m-1)//4 for >25. Sitagliptin: 248 vs 394,051; atorvastatin: 518 vs 267,895,296. main.tex:111 lists Hosoya Z under 'distance-based indices'; Z is the number of matchings (Hosoya 1971), not a distance index. Schultz and Gutman are degree-distance hybrids.",
+    "how_verified": "ran code",
+    "recommendation": "Use an exact matching-polynomial algorithm. Drug graphs have low treewidth; an edge-deletion recursion with memoisation finished in under a second for atorvastatin. Otherwise drop Z. Move Z to a 'matching/counting' family in Table 2 and the text."
+   },
+   {
+    "title": "'Phase 4 for indication' is not 'approved drug for the disease'; the proposed default filter would still produce a polluted set",
+    "severity": "major",
+    "evidence": "Live ChEMBL_37, diabetes and max_phase_for_ind=4: 103 molecules, of which only 71 are small molecules. The list includes LISINOPRIL, AMLODIPINE BESYLATE, VALSARTAN, TELMISARTAN, IRBESARTAN, VERAPAMIL HCl, PRAZOSIN HCl, ATENOLOL, TICAGRELOR, DULOXETINE, FENOFIBRATE, SODIUM CHLORIDE, BIOTIN, FOLIC ACID, PYRIDOXINE, CYANOCOBALAMIN, TYROSINE and 4 SITAGLIPTIN forms. Lisinopril/verapamil/prazosin get phase 4 for 'Diabetes Mellitus' via DailyMed label refs (indication_refs ref_type 'DailyMed'). README.md:36 says '103 approved for a diabetes indication'. main.tex:64 says 'Only 103 of them reached phase 4 for a diabetes indication' and in the same breath calls Diabetes Insipidus a different disease, yet the 103 includes insipidus-only drugs.",
+    "how_verified": "ran code",
+    "recommendation": "Report the phase-4 count as an upper bound and add columns for 'small-molecule parents' and 'after excluding non-disease-specific agents'. Consider ATC-code (WHO ATC A10 for diabetes) or mechanism-based cross-checks as an alternative or complementary definition. Fix the README wording ('approved' should be 'max_phase_for_ind = 4'). This finding strengthens the motivation, so add it to Table 1."
+   },
+   {
+    "title": "Breast Neoplasms row count is a substring total, not the controlled term",
+    "severity": "minor",
+    "evidence": "main.tex:64 '(1,407 indication records)'. The substring query covers 4 headings; mesh_heading__iexact='Breast Neoplasms' returns 1171 rows. Substring 'breast neoplasms' gives 868 molecules, 51 at phase 4.",
+    "how_verified": "ran code",
+    "recommendation": "Write '1,171 records for the exact heading (1,407 including Triple Negative, Male and Inflammatory subheadings)'. Adding a Breast Neoplasms row to Table 1 would also help."
+   },
+   {
+    "title": "Table 1 'Off-target headings' column is mislabelled and partly wrong",
+    "severity": "minor",
+    "evidence": "main.tex:78-83. 'Off-target' is a pharmacology term of art (off-target effects). Status Asthmaticus and Diabetes, Gestational arguably are the queried disease, not off-target. The hypertension row omits Essential Hypertension (58) and Pulmonary Arterial Hypertension. Table is overfull by 57.6 pt (main.log: 'Overfull \\hbox (57.63338pt too wide) in paragraph at lines 76--87').",
+    "how_verified": "ran code",
+    "recommendation": "Rename the column to 'Other headings matched (rows)', show counts, and use tabularx or p{} columns."
+   },
+   {
+    "title": "Missing primary citations for most implemented indices and for core tools",
+    "severity": "major",
+    "evidence": "refs.bib cites only Wiener, Gutman-Trinajsti\u0107 1972 (M1 only), Randi\u0107, ABC, Sombor, Balaban, Hosoya. Missing, with Crossref-verified DOIs: M2/'Zagreb' naming, Gutman, Ru\u0161\u010di\u0107, Trinajsti\u0107, Wilcox, J. Chem. Phys. 62 (1975) 3399-3405, doi:10.1063/1.430994; GA, Vuki\u010devi\u0107 & Furtula, J. Math. Chem. 46 (2009) 1369-1376, doi:10.1007/s10910-009-9520-x; harmonic, Zhong, Appl. Math. Lett. 25 (2012) 561-566, doi:10.1016/j.aml.2011.09.059 (original Fajtlowicz 1987, Congr. Numer., no DOI, verify); Schultz, J. Chem. Inf. Comput. Sci. 29 (1989) 227-228, doi:10.1021/ci00063a012; Gutman index, Gutman, J. Chem. Inf. Comput. Sci. 34 (1994) 1087-1089, doi:10.1021/ci00021a009. Not DOI-checked (verify before adding): ISI (Vuki\u010devi\u0107 & Ga\u0161perov, Croat. Chem. Acta 2010); Szeged (Gutman, Graph Theory Notes N.Y. 27 (1994)); Mostar (Do\u0161li\u0107 et al., J. Math. Nanosci. 2018); PI (Khadikar 2000); sigma (Gutman et al., MATCH 2018); reverse-degree (Kulli); neighbourhood-degree-sum (Mondal, De, Pal); graph entropy (Dehmer/Bonchev). Also missing: RDKit (Zenodo concept DOI 10.5281/zenodo.591637 resolves), ChEMBL release DOI 10.6019/CHEMBL.database.37 (resolves, Crossref title 'CHEMBL database release 37'), MeSH, SHAP TreeExplainer (Lundberg et al., Nat. Mach. Intell. 2 (2020) 56-67, doi:10.1038/s42256-019-0138-9; ml.py:908 uses TreeExplainer), FastAPI.",
+    "how_verified": "web source",
+    "recommendation": "Add these, and build Supplementary S1 so that every index row has its definition and a primary citation. Note that no newer ChEMBL NAR update than Zdrazil 2024 was found. Optionally add Zdrazil, J. Cheminform. 17 (2025) 32, doi:10.1186/s13321-025-00963-z."
+   },
+   {
+    "title": "No comparison with existing descriptor software or with the literature being criticised",
+    "severity": "major",
+    "evidence": "main.tex:62-70 asserts 'Most such studies share three weaknesses' with zero citations. There is no mention of Mordred (J. Cheminform. 10 (2018), doi:10.1186/s13321-018-0258-y), PaDEL (J. Comput. Chem. 32 (2011) 1466, doi:10.1002/jcc.21707), RDKit GraphDescriptors or alvaDesc. The 2025-2026 landscape is full of Python-script TI-QSPR drug papers, each with ad-hoc code: Frontiers in Chemistry 2025 domination-degree heart-disease drugs (https://www.frontiersin.org/journals/chemistry/articles/10.3389/fchem.2025.1536199/full); Sci. Rep. Sombor/entropy anticancer (https://www.nature.com/articles/s41598-025-32906-x); arthritis drugs + ML (https://pmc.ncbi.nlm.nih.gov/articles/PMC13261421/); arXiv 2505.07821.",
+    "how_verified": "web source",
+    "recommendation": "Cite 3-5 representative studies as evidence for each weakness. Add a feature-comparison table (Mordred/PaDEL/RDKit vs TopoQSPR: which TIs exist, verification, disease-anchored curation, nested CV). Cross-validate the overlapping indices (W, Balaban J, Randi\u0107, Zagreb) against Mordred values. That is the cheapest 'checked against reference values' evidence available."
+   },
+   {
+    "title": "'Re-executed exactly' and 'fully specified' are unattainable with live web services",
+    "severity": "major",
+    "evidence": "main.tex:30 and :94. The ChEMBL web services only serve the current release (status.json shows ChEMBL_37), so a run record naming release 37 cannot be re-queried once 38 is out. PubChem properties also change. Hyperparameter search uses n_jobs=-1 and MLP/XGB, so numerical results can also differ across platforms.",
+    "how_verified": "reasoning only",
+    "recommendation": "Say 're-executable against an archived snapshot'. Archive the resolved manifest, SMILES and target values per run (Zenodo). Support a local ChEMBL SQLite dump keyed by release DOI. Replace 'fully specified' with 'explicitly specified'."
+   },
+   {
+    "title": "Selection of best model across 10 regressors is itself optimistically biased",
+    "severity": "major",
+    "evidence": "ml.py:860-864 keeps the model with maximum outer-CV mean R2. main.tex:146 plans to report 'best nested-CV R2 per target'. Varma & Simon and Cawley & Talbot (already cited) warn against exactly this.",
+    "how_verified": "read source",
+    "recommendation": "Either pre-specify one model family for the headline result, or put the model choice inside the inner loop and report the outer score of the whole selection procedure. Report all models alongside. Also use repeated KFold with distinct inner/outer seeds."
+   },
+   {
+    "title": "Index-family description in the paper does not match code naming and grouping",
+    "severity": "minor",
+    "evidence": "Table 2 (main.tex:123-127) uses SM1/SABC/SGA; the code uses SS_ prefixes. 5 DS_ indices (config.py:73-74, weight d(u)+d(v)) are counted under 'Neighbourhood degree-sum' although they are not S(v)-based. GE sits under 'Distance-based' in config.py:76-81 but is listed as information-theoretic in the paper. The UI (index.html:251) says '50 original + 11 + 30 + 44', a different decomposition again.",
+    "how_verified": "read source",
+    "recommendation": "Define one canonical family assignment in code (a per-index metadata table with family, formula and citation). Generate Table 2, the UI and the README from it."
+   },
+   {
+    "title": "Lipinski flag implements a stricter rule than Lipinski",
+    "severity": "minor",
+    "evidence": "ml.py:938-943 requires all four criteria. Lipinski et al. 2001 flags poor absorption when more than one rule is violated. Missing values default to 999 or NaN and count as fail.",
+    "how_verified": "read source",
+    "recommendation": "Implement the 'at most one violation' rule and report missing values as NA, or describe the rule as implemented."
+   },
+   {
+    "title": "SoftwareX template and declaration compliance",
+    "severity": "major",
+    "evidence": "main.tex:4 uses generic elsarticle preprint. SoftwareX states it only considers OSPs submitted in its Original Software Publication template (Word/LaTeX). Sections in the template, from memory: 1 Motivation and significance; 2 Software description (2.1 Software architecture, 2.2 Software functionalities, 2.3 optional sample code snippets); 3 Illustrative examples; 4 Impact; 5 Conclusions. The draft's Section 2 subsections don't follow that. The draft has no 'Declaration of generative AI and AI-assisted technologies' (Elsevier policy; the draft was AI-written), no CRediT statement and no Acknowledgements/funding. The code metadata C1-C9 rows are present with abbreviated wording, and C2 must point to the exact version. Word count of the compiled PDF is about 1,943 including tables and refs, under the ~3,000 limit, but Illustrative examples, Impact and Conclusions are empty. Compile: 8 pages; 4 overfull hboxes (largest 57.6 pt, Table 1); 4 hyperref 'Token not allowed in a PDF string' warnings; 1 float-specifier warning; BibTeX 0 warnings; all 19 bib entries cited.",
+    "how_verified": "ran code",
+    "recommendation": "Port to the official SoftwareX OSP template. Before submission, re-check the guide (sciencedirect.com returned 403 to my fetches, so the word/figure limits and exact C-row wording are from memory and must be confirmed). Add the AI-use declaration, CRediT and funding statements. Fill C3 (Code Ocean capsule is SoftwareX's partner) and C8. Use \\texorpdfstring for \\ml in the title."
+   },
+   {
+    "title": "Wording a reviewer will attack",
+    "severity": "minor",
+    "evidence": "Title (main.tex:18) 'provenance-tracked': nothing in the code records provenance today. main.tex:70 'addresses all three weaknesses'. main.tex:30 'checked against published reference values'. index.html:290 'rigorous 5-fold CV' and 'real drug data from multiple databases' (pkCSM removed, fetcher.py:276). main.tex:68 'which by itself predicts size-dependent properties well' is uncited. Accurate statements: 'Wiener's path-number study of paraffin boiling points' matches Wiener 1947 (JACS 69:17-20, DOI verified); 'diabetes matches Diabetes Insipidus' is correct.",
+    "how_verified": "read source",
+    "recommendation": "Soften the claims to match the code: 'records query parameters and release', 'tested against closed-form values on reference graphs'. Cite a size-baseline reference or show it empirically in the Illustrative examples. Fix the UI copy (name, 11 models, Railway)."
+   }
+  ],
+  "sources": [
+   "/home/mpcrlab/moleculens/paper/main.tex",
+   "/home/mpcrlab/moleculens/paper/refs.bib",
+   "/home/mpcrlab/moleculens/README.md",
+   "/home/mpcrlab/moleculens/ml.py",
+   "/home/mpcrlab/moleculens/config.py",
+   "/home/mpcrlab/moleculens/fetcher.py",
+   "/home/mpcrlab/moleculens/index.html",
+   "/home/mpcrlab/moleculens/requirements.txt",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/redteam/audit_out.txt",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/redteam/hz2.py",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/redteam/a2.py",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/redteam/tex/main.log",
+   "https://api.crossref.org/works/<doi> (all 14 bib DOIs + candidate additions)",
+   "https://www.ebi.ac.uk/chembl/api/data/status.json",
+   "https://www.ebi.ac.uk/chembl/api/data/drug_indication.json",
+   "https://doi.org/10.6019/CHEMBL.database.37",
+   "https://doi.org/10.5281/zenodo.591637",
+   "https://link.springer.com/article/10.1186/s13321-025-00963-z",
+   "https://github.com/ElsevierSoftwareX",
+   "https://www.sciencedirect.com/journal/softwarex/publish/guide-for-authors (403, not readable)",
+   "https://www.frontiersin.org/journals/chemistry/articles/10.3389/fchem.2025.1536199/full",
+   "https://www.nature.com/articles/s41598-025-32906-x",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC13261421/",
+   "https://arxiv.org/pdf/2505.07821",
+   "https://pypi.org/pypi/topoqspr/json"
+  ]
+ },
+ {
+  "label": null,
+  "role": "Research-landscape analyst (2024-2026 tools, literature, venues, name, opportunities)",
+  "summary": "The biggest finding is that the index engine is no longer new, and the people behind the closest tool are the planned co-authors. ChemGraphX (Jacob K, Clement J, Arockiaraj M, Jindal A; J. Cheminform. 2026, DOI 10.1186/s13321-025-01141-x, accepted 2025-12-11) is an open-source MIT web tool from Prof. Arockiaraj's own group. It computes 150 degree, neighbourhood-degree-sum and distance indices plus entropies. The SoftwareX draft (paper/main.tex) cites neither it nor any other descriptor or QSPR tool. Those tools include Mordred, PaDEL, alvaDesc, MathChem, PyTIE, QSPRpred, the 2026 JCIM 'QSAR in the Browser', and a Python drug-to-index pipeline by Arockiaraj's Turkish co-authors. The novelty claim therefore has to move away from '135 indices' and onto three things none of these tools do: a curated, reproducible disease-to-drug manifest from ChEMBL indications; leakage-free nested CV with a mandatory molecular-size baseline; and a large benchmark across indications. The literature makes the need clear. Europe PMC hits for 'topological indices' AND QSPR AND drugs rose from 16 (2022) to 40, 62 and 113 (2023-2025), and 77 so far in 2026, with machine learning mentioned in about half of the 2025-26 papers. Typical studies use 9-50 drugs, report in-sample or LOOCV R2, and often model properties that are themselves computed from structure. One 2026 bipolar-drug paper says ML performance 'deteriorated under leave-one-out cross-validation because of the limited sample size'. Classic critiques to cite are Dearden-Cronin-Kaiser 2009 and Gutman 2012/Furtula 2013 on index quality, plus the Ash/Walters 2025 JCIM protocol for method comparison. I checked the code against Mordred: TopoQSPR's M1, M2, ABC, Randi\u0107, Wiener and Balaban J match Mordred exactly on 5 drugs. Hosoya Z is badly wrong for larger molecules: donepezil gives 264 against a true 965,380 (C7 confirmed). On venues, SoftwareX survives my attempt to refute it. JOSS is ruled out for now because the repo has only been public since 2026-10-02 and JOSS needs six months of public history. J. Cheminform. has just published the group's overlapping ChemGraphX. SoftwareX accepts up to 4000 words and 6 figures and has recent cheminformatics precedent (scikit-fingerprints 2024, CombinatorixPy 2025). The name 'TopoQSPR' is free on PyPI, conda, the web and in Crossref; 'MolecuLens' collides with moleculens.com and at least 10 GitHub repos.",
+  "prior_claim_checks": [
+   {
+    "claim_id": "C1",
+    "verdict": "not_checked",
+    "evidence": "Outside my area (data audit). I did not re-query ChEMBL 37."
+   },
+   {
+    "claim_id": "C2",
+    "verdict": "not_checked",
+    "evidence": "Outside my area. I did not test the drug_indication search strategies."
+   },
+   {
+    "claim_id": "C3",
+    "verdict": "confirmed",
+    "evidence": "fetcher.py:85 builds chembl_ids as a set() and fetcher.py:134 takes list(chembl_ids)[:max_drugs]. Running the same set of 399 'CHEMBLn' strings in 3 separate python3 processes gave 3 different first-5 orderings (e.g. ['CHEMBL232','CHEMBL60',...] vs ['CHEMBL16','CHEMBL385',...]), because string hashing is randomised per process. Collection also stops early at 2*max_drugs (fetcher.py:93,107), so even the candidate pool depends on API order."
+   },
+   {
+    "claim_id": "C4",
+    "verdict": "not_checked",
+    "evidence": "Not my area."
+   },
+   {
+    "claim_id": "C5",
+    "verdict": "not_checked",
+    "evidence": "Not my area. The literature context supports it: Varma & Simon 2006 and Cawley & Talbot 2010 are already in refs.bib."
+   },
+   {
+    "claim_id": "C6",
+    "verdict": "partly",
+    "evidence": "Landscape view: across the genre, 'experimental' targets are usually ChemSpider values, which are ACD/Labs Percepta predictions (https://www.acdlabs.com/resource/get-acd-labs-physchem-predictions-on-rscs-chemspider/), or PubChem computed values. Prediction from structure-derived indices is therefore partly circular, and C6's concern is well founded. I did not re-run the code-level duplication check."
+   },
+   {
+    "claim_id": "C7",
+    "verdict": "confirmed",
+    "evidence": "ml.py:115-143. If m>25 it returns 1+m+m(m-1)//4. The p[] array is only filled when m<=18, so 19-25 bonds returns 1. Executed: donepezil (31 bonds) TopoQSPR Z=264 vs exact Z=965,380 from an independent matching-count DP. For aspirin, metformin, ibuprofen and salbutamol (<=17 bonds) the values agree (335, 37, 804, 1756). Script: /tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/landscape/cmp_mordred.py"
+   },
+   {
+    "claim_id": "C8",
+    "verdict": "not_checked",
+    "evidence": "Not my area."
+   },
+   {
+    "claim_id": "C9",
+    "verdict": "confirmed",
+    "evidence": "ml.py:737-770 defines 10 models (LinearReg, Ridge, Lasso, ElasticNet, RandomForest, ExtraTrees, GradientBoosting, XGBoost, SVR, NeuralNet). index.html:255, 290, 325 and 533 all say '11 models'."
+   },
+   {
+    "claim_id": "C10",
+    "verdict": "confirmed",
+    "evidence": "config.TOPO_INDICES has 135 entries. Degree-based: 20 (M1..SDD) + 11 (A..TMA) = 31. Reverse-degree: 9 (RM1..RSDD) + 4x11 (R1_..R4_) = 53. Neighbourhood-degree-sum: 5 (DS*) + 30 (SS_*) = 35. Distance: 15 (W, J, Z, Sz, W_v/e/ve, Sz_v/e/ve, Mo_v/e, PI, Schultz, Gutman). Entropy: GE = 1. Running compute_topological_indices returned 135 columns."
+   },
+   {
+    "claim_id": "C11",
+    "verdict": "confirmed",
+    "evidence": "moleculens.com redirects (308) to www.moleculens.com, titled 'Molecular Visualization & Figures | MolecuLens'. A GitHub search for 'moleculens' returns 16 repos, including Pulkit-Sharma-25303/MolecuLens ('full-featured drug discovery platform') and DeeparshSingh/MolecuLens-Showcase. 'TopoQSPR': PyPI JSON 404, pypi.org/simple/topoqspr 404, anaconda.org search [], no DNS for topoqspr.com/.org/.io, the only GitHub hit is Singati2/TopoQSPR, no Crossref hits, and a web search finds nothing. Trademark registries not checked."
+   },
+   {
+    "claim_id": "C12",
+    "verdict": "confirmed",
+    "evidence": "Holds up after an attempt to refute it. JOSS: the repo was created publicly on 2026-10-02 (GitHub API created_at), JOSS needs 'at least six months of public history' and treats web apps as generally out of scope (https://joss.readthedocs.io/en/latest/submitting.html), so it is not eligible before ~April 2027. J. Cheminform.: APC ~USD 2390, and it published the overlapping ChemGraphX from the same PI in 2026, which invites an 'incremental' verdict. JCIM Application Note: up to 5000 words, high bar for novelty. Digital Discovery: APC GBP 2200 (GBP 1100 for India-based corresponding authors), scope is AI/automation. SoftwareX: 4000 words, max 6 figures, OSI licence, GitHub, code metadata table, APC about USD 1560 (personalised, varies by source), cheminformatics precedent (10.1016/j.softx.2024.101944 scikit-fingerprints; 10.1016/j.softx.2025.102060 CombinatorixPy). Caveat: the '7 days to first decision / 55% acceptance' figures come from a search snippet of the SoftwareX Insights page that I could not load directly."
+   }
+  ],
+  "findings": [
+   {
+    "title": "ChemGraphX, from the planned co-author's own group, already does index computation (150 indices, web, MIT); the draft does not cite it and its novelty framing overlaps",
+    "severity": "critical",
+    "evidence": "Jacob K, Clement J, Arockiaraj M, Jindal A. 'ChemGraphX: an open-source web tool for computing topological indices and entropy measures', J Cheminform 2026; 18:39, DOI 10.1186/s13321-025-01141-x (https://link.springer.com/article/10.1186/s13321-025-01141-x; PMC13020044). The full text says it computes 150 indices (52 degree-based + 52 entropies, 24 distance + 21 entropies), including neighbourhood-degree-sum ones. Input is .mol/.pdb/adjacency. It has no SMILES/ChEMBL ingestion and no QSPR. Code: https://github.com/aditya-jindal/chemgraphx ; app: https://chemgraphx.vercel.app/. paper/refs.bib has 19 entries and none is ChemGraphX or any tool.",
+    "how_verified": "read source (Europe PMC full-text XML, GitHub API tree)",
+    "recommendation": "Cite ChemGraphX prominently and state the split: ChemGraphX is the index calculator for arbitrary graphs and materials; TopoQSPR is the reproducible disease-to-drug-set-to-validated-QSPR workflow. Either reuse ChemGraphX as a dependency or cross-validate against it as a second oracle. Drop '135 indices' as a selling point in the abstract and highlights. Agree the framing with Prof. Arockiaraj before submission."
+   },
+   {
+    "title": "The draft's related-work coverage of existing tools is empty; several close competitors exist",
+    "severity": "major",
+    "evidence": "Descriptor engines: Mordred / mordredcommunity 2.0.7 (PyPI, Jan 2026); PaDEL (padelpy 0.1.17, Jul 2026); alvaDesc (PMC9655980); MathChem (MATCH 71(3) 2014, https://open.ni.ac.rs/handle/123456789/4660); PyTIE (arXiv 2510.26813, degree/NDS indices + entropy); topoindex 0.1.6 (PyPI). Workflow tools: QSPRpred (J Cheminform 2024, 16:128, https://github.com/CDDLeiden/QSPRpred) for reproducible serialised QSPR; 'QSAR in the Browser' (JCIM 2026, DOI 10.1021/acs.jcim.6c01010), a no-code web QSAR with ChEMBL access. Genre pipelines on GitHub: aliberkanbektas/drug-indices-project_1 (PubChem to RDKit to indices, MIT), whose author is a co-author of Arockiaraj's Sci Rep 2025 paper DOI 10.1038/s41598-025-32906-x; HakanKucuk38/Topological-Indices-PhysChem (indices + RF/XGB + SHAP on 4711 antibiotics).",
+    "how_verified": "web source + PyPI/GitHub APIs + Crossref",
+    "recommendation": "Add a comparison table (inputs, index families, data sourcing, validation protocol, provenance, UI). Columns: Mordred, PaDEL, alvaDesc, ChemGraphX, MathChem, PyTIE, QSPRpred, QITB, TopoQSPR. What is genuinely new is the curated ChEMBL indication-to-manifest step, nested CV with a size baseline, and run-record provenance. Nothing found automates disease to drug set to topological-index QSPR."
+   },
+   {
+    "title": "Mordred reproduces TopoQSPR's core indices exactly; use it as a cross-implementation test oracle",
+    "severity": "opportunity",
+    "evidence": "Executed compute_topological_indices (ml.py:146) against mordredcommunity 2.0.7 on aspirin, metformin, ibuprofen, donepezil and salbutamol. M1=Zagreb1, M2=Zagreb2, ABC=ABC, R=Xp-1d (Randi\u0107), W=WPath and J=BalabanJ are all identical to floating-point precision. Mordred has no Sombor, harmonic, GA, ISI, reverse-degree, NDS, Szeged, Mostar, PI or Hosoya, so those families are TopoQSPR/ChemGraphX-only and need closed-form or literature tests.",
+    "how_verified": "ran code (/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/landscape/cmp_mordred.py)",
+    "recommendation": "Add pytest cross-checks against Mordred for the overlapping indices, and against ChemGraphX (on .mol exports) for NDS and reverse-degree. The draft claims unit tests, but the public repo has no tests/ directory."
+   },
+   {
+    "title": "Hosoya Z is wrong for any molecule with more than 18 bonds, which covers most drugs",
+    "severity": "major",
+    "evidence": "ml.py:115-143. Donepezil: TopoQSPR Z=264, exact 965,380. With 19-25 bonds the function returns 1.0.",
+    "how_verified": "ran code",
+    "recommendation": "Replace with an exact matching-polynomial DP (memoised bitmask, or the tree/ring decomposition), or drop Z and say so in Table 2, as the draft's TODO already allows."
+   },
+   {
+    "title": "The topological-index QSPR genre is growing fast and is methodologically weak, which is the paper's real justification",
+    "severity": "opportunity",
+    "evidence": "Europe PMC hit counts for ('topological indices' OR 'topological index') AND QSPR AND (drug OR drugs): 2022=16, 2023=40, 2024=62, 2025=113, 2026 so far=77. Of these, the ones also mentioning ML/RF/XGBoost: 5, 13, 18, 59, 47. Typical n: 9 (anti-alkaptonuria, Front Chem 2026, 10.3389/fchem.2026.1845927), 18 (bipolar, ACS Omega 2026, 10.1021/acsomega.6c06753), 30 (Sombor anticancer, Sci Rep 2025, 10.1038/s41598-025-32906-x, R2=0.998 for heavy atom count, in-sample), 50 (arthritis, ACS Omega 2026, 10.1021/acsomega.6c03590, 'near-perfect' r2=0.9945). Arockiaraj group drug QSPR papers: lung cancer Sci Rep 2025 (10.1038/s41598-025-88044-x), TB Heliyon 2024 (10.1016/j.heliyon.2024.e23981), cardiovascular EPJE 2024 (10.1140/epje/s10189-024-00446-3), anticancer distance EPJE 2025 (10.1140/epje/s10189-025-00481-8), COVID IJQC 2021 (10.1002/qua.26617). Critiques: Dearden, Cronin & Kaiser 2009 (SAR QSAR Environ Res 20:241, PMID 19544191, 21 error types); Gutman et al. 2012 (J Serb Chem Soc, 10.2298/jsc121002134g: many degree indices correlate 'weak or nil' on octanes); Furtula et al. 2013 (smoothness, 10.1016/j.amc.2013.03.072); Ash, ..., Walters 2025 JCIM (10.1021/acs.jcim.5c01609). I found no meta-analysis that specifically criticises the drug-TI genre.",
+    "how_verified": "web source + Europe PMC REST counts + Consensus",
+    "recommendation": "Frame the paper around this gap and cite the critiques. The illustrative-examples section should include the planned case study re-running one of the group's own published studies (e.g. lung cancer 2025) under nested CV with a size baseline, which is the most persuasive demonstration available."
+   },
+   {
+    "title": "Targets in the genre are mostly predicted or computed, not experimental",
+    "severity": "major",
+    "evidence": "ChemSpider boiling point, flash point, molar refractivity and polarizability are ACD/Labs Percepta predictions (https://www.acdlabs.com/resource/get-acd-labs-physchem-predictions-on-rscs-chemspider/). PubChem MW/XLogP/TPSA are computed from structure. Studies like the 2026 arthritis paper explicitly take targets 'from ChemDraw and PubChem'.",
+    "how_verified": "web source",
+    "recommendation": "Label targets as computed or experimental in the run record. Add at least one experimental endpoint with open data (e.g. measured logP or melting point from an open curated set) for the benchmark, so \u0394R2 over size means something."
+   },
+   {
+    "title": "JOSS is not eligible until about April 2027; the public repo also exposes the unfinished paper",
+    "severity": "minor",
+    "evidence": "GitHub API: Singati2/TopoQSPR created_at 2026-10-02T20:09:34Z (88 commits back-dated to 2026-04-28). JOSS requires six months of public history and says web apps are generally out of scope (https://joss.readthedocs.io/en/latest/submitting.html). The repo root lists 'paper/' (draft with red TODOs) and 'docs/'.",
+    "how_verified": "GitHub API + web source",
+    "recommendation": "Target SoftwareX now. Consider moving paper/ out of the public repo until submission, and archive a tagged release on Zenodo for code-metadata row C3."
+   },
+   {
+    "title": "'MolecuLens' name collision confirmed; 'TopoQSPR' is clear",
+    "severity": "minor",
+    "evidence": "See C11: moleculens.com is a molecular visualisation product, and GitHub has 16 'moleculens' repos, including a 'MolecuLens drug discovery platform'. TopoQSPR is absent from PyPI, conda, DNS, Crossref and web search.",
+    "how_verified": "curl/APIs + web search",
+    "recommendation": "Rename everywhere: index.html still says 'MolecuLens' (index.html:290) and the live URL is moleculens.onrender.com. Reserve the PyPI name 'topoqspr' with a 0.0.1 release before announcing."
+   },
+   {
+    "title": "2026 differentiators: agentic/MCP interface, Workflow Run RO-Crate provenance, a benchmark across all indications, and learned baselines",
+    "severity": "opportunity",
+    "evidence": "Several ChEMBL MCP servers exist (e.g. pipeworx-io/mcp-chembl listed 2026-05-14, labelled 'official' by Pipeworx, not EMBL-EBI: https://www.pulsemcp.com/servers/chembl; https://github.com/Augmented-Nature/ChEMBL-MCP-Server). Agentic chemistry package 'chemgraph' 0.7.0 on PyPI (Sep 2026). Workflow Run RO-Crate (PLOS ONE 2024, 10.1371/journal.pone.0309210; https://www.researchobject.org/workflow-run-crate/). Learned baselines: CheMeleon, a descriptor-pretrained D-MPNN with a 75% win rate on 58 Polaris datasets (arXiv 2506.15792); Polaris and the Ash 2025 comparison protocol.",
+    "how_verified": "web source",
+    "recommendation": "In priority order: (1) a benchmark over every ChEMBL MeSH indication with at least 30 phase-4 small-molecule parents, reporting \u0394R2 over the size baseline per family (this is the headline figure); (2) export the run record as a Workflow Run RO-Crate with a Zenodo DOI; (3) one strong comparator (RDKit 2D descriptors or Mordred + RF) and one learned baseline (Chemprop/CheMeleon) at the same nested CV; (4) a thin MCP server exposing resolve_disease, build_manifest and run_qspr so LLM agents can call it. Keep (4) to one paragraph; SoftwareX reviewers value it as an interface, not as science."
+   }
+  ],
+  "sources": [
+   "https://link.springer.com/article/10.1186/s13321-025-01141-x",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC13020044/",
+   "https://github.com/aditya-jindal/chemgraphx",
+   "https://www.nature.com/articles/s41598-025-32906-x",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC12830717/",
+   "https://github.com/aliberkanbektas/drug-indices-project_1",
+   "https://www.nature.com/articles/s41598-025-88044-x",
+   "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10827473/",
+   "https://arxiv.org/abs/2510.26813",
+   "https://arxiv.org/abs/2511.20249",
+   "https://arxiv.org/abs/2505.07821",
+   "https://github.com/HakanKucuk38/Topological-Indices-PhysChem",
+   "https://pypi.org/project/topoindex/",
+   "https://pypi.org/project/mordredcommunity/",
+   "https://open.ni.ac.rs/handle/123456789/4660",
+   "https://graphtea.github.io/about",
+   "https://jcheminf.biomedcentral.com/articles/10.1186/s13321-024-00908-y",
+   "https://pubs.acs.org/doi/10.1021/acs.jcim.6c01010",
+   "https://pubmed.ncbi.nlm.nih.gov/19544191/",
+   "https://doi.org/10.2298/jsc121002134g",
+   "https://doi.org/10.1016/j.amc.2013.03.072",
+   "https://pubs.acs.org/doi/10.1021/acs.jcim.5c01609",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC13563987/",
+   "https://pubs.acs.org/acsodf/article/11/22/33216/5184618/Degree-Based-Topological-Indices-and-Machine",
+   "https://doi.org/10.3389/fchem.2026.1845927",
+   "https://www.acdlabs.com/resource/get-acd-labs-physchem-predictions-on-rscs-chemspider/",
+   "https://joss.readthedocs.io/en/latest/submitting.html",
+   "https://www.sciencedirect.com/journal/softwarex/publish/guide-for-authors",
+   "https://www.sciencedirect.com/journal/softwarex/about/insights",
+   "https://doi.org/10.1016/j.softx.2024.101944",
+   "https://doi.org/10.1016/j.softx.2025.102060",
+   "https://link.springer.com/journal/13321/submission-guidelines",
+   "https://www.rsc.org/publishing/journals/digital-discovery",
+   "https://researcher-resources.acs.org/publish/author_guidelines?coden=jcisd8",
+   "https://academic.oup.com/bioinformaticsadvances/pages/instructions-to-authors",
+   "https://www.pulsemcp.com/servers/chembl",
+   "https://github.com/Augmented-Nature/ChEMBL-MCP-Server",
+   "https://pypi.org/project/chemgraph/",
+   "https://www.researchobject.org/workflow-run-crate/",
+   "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0309210",
+   "https://arxiv.org/abs/2506.15792",
+   "https://www.moleculens.com/",
+   "https://github.com/Pulkit-Sharma-25303/MolecuLens",
+   "https://api.github.com/repos/Singati2/TopoQSPR",
+   "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
+  ]
+ },
+ {
+  "label": null,
+  "role": "Chemical graph theory expert: audit of ml.py compute_topological_indices (formulas, graph handling, redundancy, references)",
+  "summary": "I tested ml.py two ways. First against closed forms on paths P3\u2013P30, cycles C4\u2013C20, stars, benzene and naphthalene: 427 checks pass and 5 fail, all of them Hosoya Z. Second against my own networkx reference implementation and Mordred-community 2.0.7 on real drugs. For connected molecules, all the core degree and distance indices are correct: M1, M2, F, R, H, SC, GA, ABC, AZI, SO, ISI, sigma, W, J, Sz, PI, Mostar, edge-Szeged, edge-Wiener, Schultz/degree-distance and Gutman. Five defects make some indices wrong:\n(1) Hosoya Z is wrong for every molecule with more than 18 bonds (C7 confirmed). On 1,959 ChEMBL approved small molecules, 518 (26%) get Z=1 and 905 (46%) get a made-up formula; only 27% are correct.\n(2) SS_ABC, SS_AZ and SS_ABS, plus the reverse RABC, carry an extra product term in the numerator (S_u+S_v+S_uS_v-2 instead of S_u+S_v-2). They match no published definition.\n(3) The 9 'R*' reverse indices use rd(v)=n+1-d(v), not Kulli's c(v)=\u0394-d(v)+1 that the paper states. As a result RM1, RM2 and RBM are exact polynomials in n, m, M1 and M2.\n(4) Balaban J uses cyclomatic number m-n+1 regardless of components, so it is wrong for every disconnected (salt) SMILES. fetcher.py passes ChEMBL canonical_smiles unstripped, and 24% of approved drugs are multi-fragment.\n(5) R4_* is ill-defined for drugs with \u0394=3: the mod-\u0394 rule maps pendant vertices to 0 and the code silently drops those edges, which happens in 55% of drugs.\nRedundancy is large. 8 pairs are exact duplicates, 2 more are exactly proportional (one is the identity \u03a3(S_u+S_v)=2\u00b7M2), and at least 13 indices are exact linear or polynomial functions of others. On approved drugs, 77 of 135 indices have |Spearman \u03c1|>0.95 with heavy-atom count, and 5 principal components carry 95% of the variance.\nThe family counts in C10 add up to 135, but the paper's 'neighbourhood degree-sum 35' row includes 5 DS_ indices that are plain-degree edge functions (4 of them duplicates), and graph entropy is listed under distance-based in config.py.\nThe generalized R_k with the mod-\u0394 rule comes from the collaborator's own group (Arockiaraj, Greeni, Kalaam, IJQC 2023; Kalaam et al., Front. Chem. 2024), so it is cite-able. It needs k restricted to 1..\u0394 and a stated precedence for 'mod'.\nI recommend about 35 deduplicated, correctly defined, unit-tested indices with primary references, cross-validated against Mordred where they overlap. The paper's sentence 'checked against published reference values' is currently untrue.",
+  "prior_claim_checks": [
+   {
+    "claim_id": "C7",
+    "verdict": "confirmed",
+    "evidence": "ml.py:119-120 returns 1+m+m(m-1)//4 for m>25; ml.py:137 enumerates only when m<=18, so p stays [1,0..] and Z=1 for 19<=m<=25. Tests: P20 code=1 vs F21=10946; P30 code=233 vs 1346269; C20 code=1 vs Lucas 15127; imatinib code=452 vs exact 79,015,504; atorvastatin 518 vs 267,895,296. On 1,959 ChEMBL approved small molecules: 536 correct (m<=18), 518 get Z=1, 905 get the invented formula. Enumeration itself is correct for m<=18 (benzene 18, P_n Fibonacci, aspirin 335 all match). An exact memoised recursion Z(G)=Z(G-e)+Z(G-u-v) per component runs in well under a second on 40-bond drugs (scratch ref.py:hosoya)."
+   },
+   {
+    "claim_id": "C10",
+    "verdict": "partly",
+    "evidence": "Counts in code are right and add to 135: degree 9 (ml.py block1) + 11 (block2) + 11 (block5) = 31; reverse 9 (block3) + 44 (R1..R4 x 11) = 53; SS 30 + DS 5 = 35; distance W,J,Z,Sz + 11 cut = 15; GE 1. But the family labels are wrong in two places. The 5 DS_ indices (ml.py:252-266) are functions of d(u)+d(v), not the neighbourhood sum S(v), so they belong with degree-based. Four of them are exact duplicates of H, GA and SC, and DS1=DS2. GE is a degree-based entropy (ml.py:302-308) but sits under 'Distance-based' in config.py:76-81. Also the 'reverse-degree' family mixes two conventions: n+1-d in block 3 (ml.py:225) and \u0394-d+k in R_k (ml.py:70-76)."
+   },
+   {
+    "claim_id": "C4",
+    "verdict": "partly",
+    "evidence": "In my area: fetcher.py:165 takes ChEMBL canonical_smiles as-is, and ml.py:153 only calls RemoveHs (no fragment or salt stripping). 474 of 1,959 (24.2%) approved small-molecule SMILES from the ChEMBL API are multi-fragment. Counterions enter all degree/vertex sums. J is wrong for all of them (66 get J=0 because cyclo=m-n+2<=0, ml.py:324-326), and W/Sz are silently summed per component. I did not check the parent/salt merging of drug identities (fetcher side)."
+   }
+  ],
+  "findings": [
+   {
+    "title": "Hosoya Z wrong for every molecule with more than 18 bonds (73% of approved drugs)",
+    "severity": "critical",
+    "evidence": "ml.py:115-140 (m>25 formula at 119-120; enumeration only if m<=18 at 137). test_closed.py: 5 failures, all Z. test_drugs.py: imatinib 452 vs 79,015,504; donepezil 264 vs 965,380. Approved set: 518 Z=1, 905 formula, 536 correct.",
+    "how_verified": "ran code (repo ml.py vs independent memoised recursion and Fibonacci/Lucas closed forms)",
+    "recommendation": "Replace it with an exact recursion Z(G)=Z(G-e)+Z(G-{u,v}), memoised on the edge set and multiplied over connected components. Drug graphs (m<=~100) finish quickly. Unit-test against Z(P_n)=F_{n+1}, Z(C_n)=L_n, Z(benzene)=18 and Z(naphthalene). Report log10 Z as the descriptor."
+   },
+   {
+    "title": "SS_ABC, SS_AZ, SS_ABS and RABC have the wrong numerator (extra product term)",
+    "severity": "critical",
+    "evidence": "ml.py:501-503: sqrt((xs+xy-2)/xy), (xy/(xs+xy-2))^3, sqrt((xs+xy-2)/xs). ml.py:246: num_rabc = rsuv + rpruv - 2. Standard forms: ABC4 = \u03a3 sqrt((S_u+S_v-2)/(S_uS_v)); AZI-type = \u03a3 (S_uS_v/(S_u+S_v-2))^3; ABS = \u03a3 sqrt((x+y-2)/(x+y)). Example, aspirin: SS_ABC code 15.02 vs ABC4 7.51; SS_AZ 5.52 vs 426.1; SS_ABS 23.33 vs 11.55. All 12 test drugs mismatch.",
+    "how_verified": "ran code against reference implementation (scratch ref.py)",
+    "recommendation": "Use S_u+S_v-2 (or c_u+c_v-2) in all four. Cite ABC4 (Ghorbani & Hosseinzadeh, Optoelectron. Adv. Mater. Rapid Commun. 4 (2010) 1419-1422) and ABS (Ali, Furtula, Red\u017eepovi\u0107, Gutman, J. Math. Chem. 2022; verify volume/pages). The degree-based ABC, AZI and ABC_SC lines are correct in form."
+   },
+   {
+    "title": "Reverse-degree block uses n+1-d(v), contradicting the paper's \u0394-d(v)+1, and reduces to size polynomials",
+    "severity": "major",
+    "evidence": "ml.py:225 rev_deg=[n+1-d]; config.py:69 comment. Paper main.tex:109 says c(v)=\u0394-d(v)+1. Exact identities on 1,959 drugs, residual 0: RM1 = n(n+1)^2 - 4m(n+1) + M1; RM2 = m(n+1)^2 - (n+1)M1 + M2; RBM = 2m(n+1) - M1 + RM2. RM1 and RF are vertex sums of c^2 and c^3, whereas Kulli's reverse Zagreb indices are edge sums (CM1=\u03a3_uv(c_u+c_v), CM2=\u03a3 c_uc_v), and \u03a3c^2 \u2260 \u03a3_uv(c_u+c_v) for c. I could not find a source for n+1-d.",
+    "how_verified": "ran code (identities checked numerically) + web source for Kulli definition",
+    "recommendation": "Use Kulli's c_v = \u0394-d_v+1 with the edge-defined forms (V.R. Kulli, Ann. Pure Appl. Math. 16(1) (2018) 47-51, doi:10.22457/apam.v16n1a6). Note that this block then coincides with R_1, so merge the two. Also note the general fact that any reverse index is a polynomial in (n, m, \u0394, degree-based indices)."
+   },
+   {
+    "title": "Balaban J wrong for disconnected (multi-fragment / salt) graphs",
+    "severity": "major",
+    "evidence": "ml.py:324 cyclo=m_bonds-n+2 assumes one component (\u03bc+1 = m-n+c+1). metformin\u00b7HCl: code 0 vs 3.377; amlodipine besylate: 9.41 vs 7.06; Li2CO3: 0 vs 2.32. 66 of 474 multi-fragment approved drugs get J=0. W, Sz, PI and Mo silently sum over components; Wiener-type indices are not defined on disconnected graphs in the standard sense.",
+    "how_verified": "ran code vs reference using \u03bc=m-n+c",
+    "recommendation": "Strip salts and keep the largest organic fragment (RDKit rdMolStandardize: FragmentParent / LargestFragmentChooser, or the ChEMBL Structure Pipeline parent) before computing the graph. Then reject any graph that is still disconnected, as main.tex:102 already promises. Matches Mordred BalabanJ once connected (verified on 4 drugs)."
+   },
+   {
+    "title": "R_k (mod \u0394) family: k>\u0394 ill-defined, edges silently dropped, and not comparable across molecules",
+    "severity": "major",
+    "evidence": "ml.py:70-76 and 527-530 ('if ru==0 or rv==0: continue'). Molecules with dropped edges: k=4 1080/1959 (55%), k=3 13, k=2 4. For \u0394=3, R_k for k=1..3 is just a cyclic permutation of {3,2,1}, e.g. k=2 \u2192 [1,3,2] for d=1,2,3, and k=4 maps d=1 to 0. The same k therefore means different relabelings for \u0394=3 and \u0394=4 molecules within one dataset. R1_sigma is identical to sigma for every graph, because (c_u-c_v)^2=(d_u-d_v)^2. Definition source: Arockiaraj, Greeni, Kalaam, IJQC 123(16) (2023) e27136; restated in Kalaam, Greeni, Arockiaraj, Front. Chem. 12 (2024) 1470231 (PMC11462630), which also cites Ediz 2015.",
+    "how_verified": "ran code; definition read from PMC11462630",
+    "recommendation": "Cite the Arockiaraj/Kalaam papers. Restrict k to 1..\u0394(G) and document that the published '\u0394-d+k mod \u0394' is read as (\u0394-d+k) mod \u0394. Never drop zero-weight edges silently: either define 0^-1 handling or raise. Drop R*_sigma and the R_k copies of indices that are linear in the weights (A, which reduces to an expression in m, \u0394 and M1)."
+   },
+   {
+    "title": "Exact duplicates and proportional indices inflate the count from about 115 to 135",
+    "severity": "major",
+    "evidence": "Identical on 1,959 drugs: H=DSH, GA=DSGA, SC=DSR, DS1=DS2, W=W_v, Sz=Sz_v, sigma=R1_sigma, M2=SS_A. Proportional: A=M1/2 and SS_M1=2\u00b7M2 (identity \u03a3_uv(S_u+S_v)=\u03a3_v d_vS_v=2M2). Exact linear identities (residual <1e-12): BM=M1+M2, TM=F+M2, sigma=F-2M2, DS1=HM=F+2M2, BMA=2m+2ISI, TMA=2M1-2ISI, SS_BM=SS_M1+SS_M2, SS_TM=SS_HM-SS_M2, SS_sigma=SS_HM-4SS_M2, SS_BMA=2m+2SS_ISI, SS_TMA=2SS_M1-2SS_ISI, plus the RM1/RM2/RBM size polynomials. Code: ml.py:252-266, 283, 391, 470, 480, 583.",
+    "how_verified": "ran code (pairwise allclose + identity residuals)",
+    "recommendation": "Delete the exact duplicates. Keep the composite Zagreb-type indices only if the paper states their identities. For a neighbourhood first Zagreb, use Mondal-De-Pal's vertex form NM1=\u03a3_v S_v^2, which is not 2M2."
+   },
+   {
+    "title": "Index matrix is mostly molecular size: 5 principal components explain 95% of variance",
+    "severity": "major",
+    "evidence": "Approved drugs (N=1959): 77 of 135 indices have |Spearman \u03c1|>0.95 with heavy-atom count (101 have >0.9). 28 indices have linear R\u00b2>0.99 on (n,m). PCA of the standardized 135 needs 3/5/10 components for 90/95/99% variance. Grouping at |\u03c1|>0.99 collapses the 135 into 37 groups (scratch analyse2.py).",
+    "how_verified": "ran code",
+    "recommendation": "Report \u0394 over a size baseline, as the paper already plans. Summarise SHAP by family. Consider size-normalised variants (per edge/vertex) or residualised indices. Ship the deduplicated set by default and the full set behind an 'all' flag."
+   },
+   {
+    "title": "Paper text claims verification that does not exist; family table mislabels DS and GE",
+    "severity": "major",
+    "evidence": "main.tex:30 says indices were 'checked against published reference values', and main.tex:113 says each index is unit-tested; the repo has no tests. main.tex table rows: 'Neighbourhood degree-sum 35' includes 5 DS_ plain-degree indices; config.py:76-81 lists GE under distance-based although it is degree entropy -\u03a3(d/2m)log2(d/2m).",
+    "how_verified": "read source",
+    "recommendation": "Add pytest tests: my scratch test_closed.py (427 closed-form checks) and test_drugs.py can be lifted. Add a Mordred cross-check for W, J, M1, M2 and ABC, which agreed exactly on aspirin, imatinib, donepezil and memantine. Fix the family table after deduplication."
+   },
+   {
+    "title": "Nonstandard or unsourced names (ABC_SC, HA, GH, HG, GBM, GTM, BMG, TMG, BMH, TMH, HBM, HTM, BMA, TMA)",
+    "severity": "minor",
+    "evidence": "ml.py:186-218, 274-297. ABC_SC = \u03a3 sqrt((s-2)/p)/sqrt(s) is not the ABS index, which is \u03a3 sqrt((s-2)/s). BM and TM (bi-/tri-Zagreb) and their harmonic variants appear in the modified-reverse literature (Kalaam et al. 2024 list BM, TM, BMH, TMH), but I could not verify primary sources for GH, HG, GBM, GTM, BMG, TMG, HBM, HTM, BMA, TMA or HA.",
+    "how_verified": "web source (PMC11462630) + reasoning",
+    "recommendation": "For each, cite the paper that introduced it or drop it. The collaborating group should supply primary references. Don't invent them."
+   },
+   {
+    "title": "Silent failure handling: exceptions become 0 and single-atom species stay in the dataset",
+    "severity": "minor",
+    "evidence": "ml.py:621-624 sets all indices to NaN on any exception, ml.py:641 fillna(0.0). Molecules with m=0 (16 of 1959, metal ions or single atoms) keep nonzero RM1=n(n+1)^2, so they survive the 'all zero' filter at ml.py:644. RemoveHs keeps isotopic hydrogens such as [2H] as vertices (verified in RDKit 2026.03.6), which affects deuterated drugs.",
+    "how_verified": "ran code",
+    "recommendation": "Reject molecules with n<3 or m<2 and log them in the manifest. Use RemoveHs(..., sanitize=True) with removeIsotopes, or Chem.RemoveAllHs. Fail loudly per index instead of filling with 0."
+   },
+   {
+    "title": "Recommended minimal, cited index set (~35)",
+    "severity": "opportunity",
+    "evidence": "Degree: M1, M2 (Gutman & Trinajsti\u0107 1972), F (Furtula & Gutman, J Math Chem 2015), HM (Shirdel et al. 2013), R (Randi\u0107 1975), SC (Zhou & Trinajsti\u0107, J Math Chem 2009), H (Fajtlowicz 1987), GA (Vuki\u010devi\u0107 & Furtula, J Math Chem 2009), ABC (Estrada et al. 1998), AZI (Furtula, Graovac, Vuki\u010devi\u0107, J Math Chem 2010), SO (Gutman, MATCH 86 (2021) 11), ISI (Vuki\u010devi\u0107 & Ga\u0161perov, Croat Chem Acta 2010), SDD, sigma (Gutman et al., MATCH 2018), ABS (Ali et al. 2022). Reverse: CM1, CM2, RABC with Kulli c_v (APAM 2018); R_k (Arockiaraj et al., IJQC 2023; Kalaam et al., Front Chem 2024) for k=1..\u0394. Neighbourhood: NM1=\u03a3 S_v^2, NM2=\u03a3 S_uS_v (Mondal, De, Pal; verify which paper), ABC4 (Ghorbani & Hosseinzadeh 2010), GA5 (Graovac, Ghorbani, Hosseinzadeh, J Math Nanosci 2011). Distance: W (Wiener 1947), J (Balaban 1982), Z (Hosoya 1971), Sz (Gutman 1994), PI_e (Khadikar 2000), Mo (Do\u0161li\u0107 et al., J Math Chem 2018), edge Mostar (Arockiaraj, Clement, Tratnik, IJQC 2019), Sz_e (Gutman & Ashrafi, Croat Chem Acta 2008), W_e (Iranmanesh et al., MATCH 2009), W_ve (Khalifeh et al., Eur J Combin 2009), degree distance/Schultz (Dobrynin & Kochetova 1994; Gutman 1994), Gutman index (Gutman 1994). Entropy: degree-based (Cao, Dehmer, Shi, Inf Sci 2014). Volume and page details marked 'verify' were not checked against primary sources.",
+    "how_verified": "web source for R_k, Kulli, ABC4/GA5; others from domain knowledge, needing bib verification",
+    "recommendation": "Make this the default 'core' set with per-index docstrings citing the defining paper, and offer the rest as an opt-in 'extended' set. Landscape: 2025-2026 papers on modified-reverse and neighbourhood-degree-sum QSPR (e.g., Sci Rep 2026 renal-failure drugs; AIMS Math 2026, 11(2):4705; EPJE 2025 anti-HIV) all use small drug sets fitted in-sample. A verified, deduplicated and reproducible implementation with the group's own R_k is the defensible novelty for SoftwareX. Mordred already covers W, J, Zagreb and ABC, so do not present those as new."
+   }
+  ],
+  "sources": [
+   "/home/mpcrlab/moleculens/ml.py (lines 70-76, 115-140, 153, 225, 246, 252-266, 283, 324, 391, 470-503, 527-530, 583, 621-644)",
+   "/home/mpcrlab/moleculens/config.py (lines 69, 76-81, 119)",
+   "/home/mpcrlab/moleculens/fetcher.py:165",
+   "/home/mpcrlab/moleculens/paper/main.tex (lines 30, 102, 107-127)",
+   "Scratch tests: /tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/cgt/{load.py,ref.py,test_closed.py,test_drugs.py,run_all.py,analyse.py,analyse2.py,rk.py,approved_TI.pkl}",
+   "ChEMBL API approved small molecules: https://www.ebi.ac.uk/chembl/api/data/molecule.json?max_phase=4&molecule_type=Small%20molecule",
+   "Kalaam, Greeni, Arockiaraj 2024 Front Chem 12:1470231 (R_k definition, cites Arockiaraj et al. IJQC 123(16) e27136 and Ediz 2015): https://pmc.ncbi.nlm.nih.gov/articles/PMC11462630/",
+   "Kulli 2018 reverse Zagreb, Ann Pure Appl Math 16:47-51, doi:10.22457/apam.v16n1a6 (as cited in https://www.aimspress.com/article/id/69a23703ba35de31c6aa3e59)",
+   "Tchier et al. 2026 AIMS Math 11(2):4705-4738 doi:10.3934/math.2026192: https://www.sciopen.com/article/10.3934/math.2026192",
+   "GA5/ABC4 definitions: http://journals.sru.ac.ir/article_461.html ; https://pmc.ncbi.nlm.nih.gov/articles/PMC6273492/",
+   "Neighbourhood degree-sum QSPR landscape: https://link.springer.com/article/10.1140/epje/s10189-025-00534-y ; https://link.springer.com/article/10.1140/epjp/s13360-023-04439-7",
+   "Modified reverse degree 2026: https://www.nature.com/articles/s41598-026-37586-9",
+   "Mordred-community 2.0.7 (pip) used for cross-check of W, J, M1, M2, ABC"
+  ]
+ },
+ {
+  "label": null,
+  "role": "Cheminformatics data-curation expert (ChEMBL drug_indication / hierarchy / phase semantics / UniChem / PubChem)",
+  "summary": "I checked everything against the live services on 2026-10-02. The ChEMBL status endpoint reported chembl_db_version=ChEMBL_37, release date 2026-05-01. The C1 counts reproduce exactly. C3 (the drug set changes between processes) and C4 (salts and parents both counted) are confirmed, and both are worse than the lead author claimed. C2 is only partly right. Strategies 2 and 3 can never work: the chembl_webresource_client raises 'AssertionError: This resource is not searchable' for drug_indication, and /drug_indication/search returns 404. So the claim that \"cancer\" would pull in all cancers is wrong. A substring search for \"cancer\" returns only 52 molecules, mainly from 'Cancer Pain' (pain drugs) and 'Hereditary Breast and Ovarian Cancer Syndrome'. \"cancer\" is on the validator's whitelist, so the site runs on that wrong set without warning. Separately, 17 of the 73 KNOWN_DISEASES whitelist terms (type 2 diabetes, breast/lung/colorectal/prostate cancer, COPD, rheumatoid arthritis, ulcerative colitis and others) match no MeSH heading, so ChEMBL returns zero drugs and the validator blocks them. The fetcher applies no clinical-phase filter and no molecule-type filter. Any record with a SMILES is kept with its salt form, including peptides (for example 25 non-small-molecule records in diabetes, such as exenatide and vasopressin) and simple inorganics such as NaCl and sodium nitrite. Counterions change the topological indices themselves: amitriptyline gives M1 108 alone and 166 as the citrate, and metformin gives J 3.38 alone and 0.0 as the hydrochloride, computed with ml.compute_topological_indices. In UniChem, 5 of the 10 source IDs are wrong (9, 12, 17, 38, 41), and the source labelled PubChem_SID actually holds CIDs. The first UniChem call always fails with HTTP 405 and the code silently falls back to the legacy REST endpoint. PubChem matching by SMILES can return the wrong compound record: ChEMBL's metformin SMILES resolves to CID 152743144, not the canonical CID 4091, and salt inputs return salt properties with no XLogP. I propose a v1.0 curation procedure. The user picks MeSH descriptor IDs, optionally expanded down the MeSH tree through the NLM SPARQL endpoint. Clinical phase is taken as the highest value across each parent's family of salt forms. Then: parent mapping, ChEMBL structure-pipeline standardisation, explicit exclusion rules, deduplication by InChIKey first block, ordering by sorted ID, and the ChEMBL version recorded in the run manifest and the cache key.",
+  "prior_claim_checks": [
+   {
+    "claim_id": "C1",
+    "verdict": "confirmed",
+    "evidence": "I re-ran the substring query on mesh_heading (scratch pull.py, live API, ChEMBL_37). Diabetes: 821 rows, 580 molecules, 103 with phase 4 for the indication. Hypertension: 550/407/120. Asthma: 288/275/48. Alzheimer: 306/306/13. 'breast cancer': 0. Diabetes headings include 'Diabetes Insipidus' (6 rows) and 'Diabetes Insipidus, Neurogenic' (1). Two of the 103 phase-4 molecules qualify only through insipidus: VASOPRESSIN CHEMBL373742 and DESMOPRESSIN ACETATE CHEMBL1200556. Two numbers need care. (a) The 1,407 figure for breast cancer (main.tex:64) is the substring count for 'breast neoplasms', which also matches Triple Negative, Male and Inflammatory headings. The exact heading mesh_heading=Breast Neoplasms has 1,171 rows. (b) The 103 counts molecule IDs, not parents. They collapse to 96 parents, and only 63 are small-molecule parents with a structure and a unique InChIKey first block. Table tab:audit should report parent-level counts."
+   },
+   {
+    "claim_id": "C2",
+    "verdict": "partly",
+    "evidence": "Strategies 2 and 3 always fail. new_client.drug_indication.search(...) raises AssertionError 'This resource is not searchable' (client 0.10.9), and GET /chembl/api/data/drug_indication/search.json?q=... returns 404. The try/except at fetcher.py:102-111 and 120-128 swallows the error, so 'breast cancer' ends with an empty DataFrame. In practice the validator (disease_validator.py:153) blocks it first because the substring search returns 0. The second half of the claim is refuted: a single 'cancer' keyword cannot pull all cancers, because the search call never runs. Even the working substring search for 'cancer' (a whitelisted term) returns only 54 rows / 52 molecules, from Cancer Pain, Hereditary Breast and Ovarian Cancer Syndrome and Precancerous Conditions. The real bug is that 'cancer' runs on a set mostly made of pain drugs and PARP inhibitors. 17 of the 73 KNOWN_DISEASES terms return 0 rows: type 1/2 diabetes, high blood pressure, breast/lung/colorectal/prostate cancer, COPD, copd, alzheimer's disease, parkinson's disease, OCD, rheumatoid arthritis, renal failure, atopic dermatitis, ulcerative colitis, sickle cell anemia. Several substring matches also pick up the wrong disease: 'stroke' matches Heat Stroke, 'parkinson' matches Wolff-Parkinson-White Syndrome, 'thyroid' matches Hyperparathyroidism."
+   },
+   {
+    "claim_id": "C3",
+    "verdict": "confirmed",
+    "evidence": "Scratch c3.py copies fetcher.py:85-94 and :134. It takes the first 400 unique IDs in API order, then list(set)[:200]. Across PYTHONHASHSEED values 0, 1, 2, 42 and random, pairwise overlap of the 200 diabetes IDs was 89-108 out of 200, which is about the 50% expected by chance. The set also depends on the API's unspecified default row order (no order_by), because collection stops at max_drugs*2=400 (fetcher.py:93). Within one host, caching by disease name (fetcher.py:79) hides the problem, but the cache key carries no ChEMBL version and the Render disk is wiped on restart. max_drugs is set by the client with no upper bound (website.py:79)."
+   },
+   {
+    "claim_id": "C4",
+    "verdict": "confirmed",
+    "evidence": "Molecules where both a salt record and its parent are in the substring set: diabetes 32 (sitagliptin phosphate / sitagliptin, dapagliflozin propanediol / dapagliflozin, ...), hypertension 52, breast neoplasms 53 (tamoxifen citrate / tamoxifen, raloxifene HCl / raloxifene, docetaxel / docetaxel anhydrous). InChIKey first-block counts drop after RDKit largest-fragment plus uncharge: diabetes 421 to 385, hypertension 365 to 309, breast 616 to 566. Salt SMILES are used as-is (fetcher.py:165, ml.py:153), so descriptors and indices include the counterion. Amitriptyline vs its citrate: M1 108 vs 166, W 882 vs 1128. Metformin vs metformin HCl: J 3.38 vs 0.0. Phase also lives on the salt record. The number of parents whose phase-4 evidence exists only on a salt record is 14 for diabetes, 33 for hypertension and 17 for breast cancer, for example tamoxifen CHEMBL83 through tamoxifen citrate. So a phase filter must take the maximum across each parent's family."
+   }
+  ],
+  "findings": [
+   {
+    "title": "Strategies 2/3 are dead code: drug_indication is not searchable",
+    "severity": "major",
+    "evidence": "fetcher.py:104 and :121. Client raises AssertionError 'This resource is not searchable'. https://www.ebi.ac.uk/chembl/api/data/drug_indication/search.json?q=breast%20cancer returns 404.",
+    "how_verified": "ran code (chembl_webresource_client 0.10.9) and curl",
+    "recommendation": "Delete both strategies. Resolve diseases only to controlled MeSH descriptor IDs (mesh_id filter) that the user confirms. Never fall back to free-text keywords."
+   },
+   {
+    "title": "No clinical-phase or molecule-type filter. Peptides, proteins with SMILES and inorganics enter the QSPR set",
+    "severity": "critical",
+    "evidence": "fetcher.py:90-183 never reads max_phase_for_ind or molecule_type. Diabetes substring set: 405 small molecules, 89 proteins, 33 antibodies, 43 unknown. 25 non-small-molecule records have SMILES and are kept (exenatide, pramlintide, insulin detemir, vasopressin, GLP-1). Inorganics in sets include SODIUM CHLORIDE CHEMBL1200574, SODIUM NITRITE and CALCIUM. 24 diabetes records have MW above 900.",
+    "how_verified": "ran code against the live molecule endpoint (scratch analyse.py)",
+    "recommendation": "Filter on molecule_type=='Small molecule', inorganic_flag==0, structure present, organic-subset elements only, and a heavy-atom window of about 6-70 (pre-registered). Report every exclusion with its reason in the manifest."
+   },
+   {
+    "title": "Phase semantics: ChEMBL 32+ decimal phases and phase stored on salt records",
+    "severity": "major",
+    "evidence": "Since ChEMBL 32, max_phase and max_phase_for_ind are FLOAT: 4 approved, 3/2/1, 0.5 = early phase 1, -1 = phase unknown, NULL = preclinical (http://chembl.blogspot.com/2023/03/what-is-max-phase-in-chembl.html ; https://chembl.gitbook.io/chembl-interface-documentation/frequently-asked-questions/drug-and-compound-questions). Diabetes rows include -1 (BEINAGLUTIDE, CARFLOGLITAZAR, LUSEOGLIFLOZIN) and 0.5. Parents whose phase 4 appears only on a salt record: 14 for diabetes, 33 for hypertension, 17 for breast cancer.",
+    "how_verified": "ran code plus ChEMBL documentation",
+    "recommendation": "Define eligibility at parent level as the maximum over the parent family of max_phase_for_ind for the chosen mesh_ids, at or above the threshold (default 4). Treat -1 as 'unknown', never as low or excluded-as-preclinical. Report it separately. Parse phases with float(), not int(). Note that any-heading aggregation lets Diabetes Insipidus drugs (vasopressin, desmopressin) into 'diabetes'."
+   },
+   {
+    "title": "Non-deterministic drug subset (hash-seed and API-order dependent)",
+    "severity": "major",
+    "evidence": "fetcher.py:85,93,134. Pairwise overlap across PYTHONHASHSEED values was 89-108 out of 200 (scratch c3.py). The cache key at fetcher.py:79 is md5(disease) with no ChEMBL version or settings.",
+    "how_verified": "ran code (5 seeds)",
+    "recommendation": "Collect all rows (paginate fully, or order_by=drugind_id), map to parents, filter, dedupe, then sort by ChEMBL ID (or by phase desc then ID). If capping, apply a seeded, documented rule. Prefer no cap: phase-4 small-molecule sets are 9-101 per disease. Include chembl_db_version, query mesh_ids, phase threshold, filters and package versions in the cache key and in the manifest."
+   },
+   {
+    "title": "Salt and parent duplicates; descriptors and indices computed on salt forms",
+    "severity": "critical",
+    "evidence": "Diabetes has 32 salt/parent pairs both present, hypertension 52, breast 53. ml.py:153 runs Chem.MolFromSmiles on the full salt SMILES. Amitriptyline vs citrate: M1 108 vs 166, J 1.70 vs 7.68. Metformin vs HCl: J 3.38 vs 0.0 (ml.compute_topological_indices).",
+    "how_verified": "ran code",
+    "recommendation": "Map every molecule to molecule_hierarchy.parent_chembl_id (or drug_indication.parent_molecule_chembl_id). Take the parent's structure. Run chembl_structure_pipeline 1.2.4 standardize_molblock plus get_parent_molblock (verified working: metformin.HCl gives metformin). Deduplicate on the InChIKey first block, keeping the stereo-defined form and logging merges (enantiomer/racemate pairs such as esomeprazole/omeprazole collapse under this rule; make that an explicit, reported choice). Records with 2 or more drug-sized distinct fragments after parent mapping (e.g. combination products) are excluded."
+   },
+   {
+    "title": "UniChem source-ID map is half wrong and the first call always fails",
+    "severity": "major",
+    "evidence": "fetcher.py:377-388 vs live https://www.ebi.ac.uk/unichem/api/v1/sources/. Correct: 1 ChEMBL, 2 DrugBank, 7 ChEBI, 14 FDA SRS. Mislabelled: 22 holds PubChem CIDs, not SIDs. Wrong: 9 (ZINC, no longer a source), 12 (not a source; ChemSpider absent), 17 (not current; BindingDB is 31), 38 = Rhea (not SureChEMBL, which is 15), 41 = SwissLipids (not CompTox, which is 32). GET .../unichem/api/v1/compounds?inchiKey= returns 405 because the v1 API takes POST with JSON {compound,type:'inchikey'}. The legacy fallback https://www.ebi.ac.uk/unichem/rest/inchikey/{IK} still returns 200 (with a text/html content type). Multiple IDs per source are overwritten (last wins: metformin has 3 CIDs). The InChIKey comes from the salt SMILES, so a salt query returns salt-form IDs (metformin HCl gives CHEMBL1703 / CHEBI:6802).",
+    "how_verified": "ran curl against both endpoints",
+    "recommendation": "Use POST /unichem/api/v1/compounds with the standardised parent InChIKey. Map 1, 2, 7, 14, 22 (as CID), 15, 31, 32, 34. Keep lists, not the last value. Annotation only, never model input."
+   },
+   {
+    "title": "PubChem PUG-REST: identity by SMILES is fragile; salt inputs change targets",
+    "severity": "minor",
+    "evidence": "fetcher.py:205-211. The POST endpoint works (200). ChEMBL's metformin SMILES CN(C)C(=N)N=C(N)N resolves to CID 152743144, not the canonical metformin CID 4091. Metformin.HCl gives CID 137704554, MW 165.62, HBD 4, no XLogP. An unregistered structure returns CID 0 with all other properties missing.",
+    "how_verified": "ran curl",
+    "recommendation": "Query PubChem by standardised parent InChIKey (compound/inchikey/{IK}/property) or by CID from UniChem source 22. Store the CID used. Drop PubChem MolWt and similar duplicate targets, and keep PubChem only as annotation."
+   },
+   {
+    "title": "Disease resolution: substring search is invalid; use the MeSH descriptor tree, not EFO alone",
+    "severity": "major",
+    "evidence": "drug_indication rows always carried a mesh_id in the sets I sampled. efo_id values mix EFO/MONDO/Orphanet/HP CURIEs (e.g. MODY Orphanet:552 under MeSH T2D). EFO expansion via OLS4 (https://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/{iri}/hierarchicalDescendants; EFO 3.94.0) from MONDO:0007254 gave 767 molecules and missed 101 found by the MeSH Breast Neoplasms family, because ChEMBL also uses EFO:0000305 and EFO:0003869. NLM MeSH SPARQL (https://id.nlm.nih.gov/mesh/sparql, meshv:parentTreeNumber+) returns the descendants of D001943, but polyhierarchy pulls in e.g. 'Carcinoma, Lobular' and 'Hereditary Breast and Ovarian Cancer Syndrome'. 227 diabetes rows carry only the generic 'Diabetes Mellitus' heading, so a strict T2D query (mesh_id=D003924, 376 rows) differs materially.",
+    "how_verified": "ran code against ChEMBL, OLS4 and NLM SPARQL",
+    "recommendation": "Use fuzzy matching only to suggest headings that exist in drug_indication (pre-index the distinct mesh_id/mesh_heading list for the release). The user ticks descriptor IDs, with optional tree-descendant expansion shown as a checklist. Store the mesh_ids, MeSH year and the EFO IDs seen. Offer EFO/MONDO expansion only as a cross-check. Fix KNOWN_DISEASES or drop it in favour of the ChEMBL-derived heading list."
+   },
+   {
+    "title": "Stereo and undefined stereocentres not handled",
+    "severity": "minor",
+    "evidence": "Records with undefined stereocentres: 59 in diabetes, 76 in hypertension, 60 in breast cancer (substring sets). The 135 graph indices are stereo-blind (ml.py:153 RemoveHs on the 2-D graph), so enantiomers and racemates are duplicate rows for every index.",
+    "how_verified": "ran code",
+    "recommendation": "Deduplicate on the InChIKey first block before modelling (identical graph means identical features). Record dropped stereoisomers in the manifest."
+   },
+   {
+    "title": "Unpinned dependencies and no provenance",
+    "severity": "minor",
+    "evidence": "requirements.txt has no versions (rdkit, chembl_webresource_client, ...). No chembl_db_version is recorded anywhere in fetcher.py, main.py or website.py.",
+    "how_verified": "read source",
+    "recommendation": "Pin versions. At run start, call /chembl/api/data/status.json and write chembl_db_version and chembl_release_date into the manifest. Optionally support an offline ChEMBL SQLite dump (chembl_37) for exact re-execution, because the web API always serves the latest release."
+   },
+   {
+    "title": "Proposed v1.0 curation procedure (defensible default)",
+    "severity": "opportunity",
+    "evidence": "On the substring sets, this pipeline gives phase-4 small-molecule parents unique by InChIKey first block of: diabetes 63, hypertension 101, asthma 37, alzheimer 9, epilepsy 46, breast neoplasms 34. These are the realistic n for the paper's multi-disease panel; Alzheimer (9) is too small for 5-fold nested CV.",
+    "how_verified": "ran code (scratch analyse.py)",
+    "recommendation": "1) Record status.json (ChEMBL_37). 2) The user selects mesh_ids (optional tree expansion via NLM SPARQL, shown and confirmed). 3) Pull every drug_indication row with mesh_id__in, fully paginated. 4) Group by parent_molecule_chembl_id and take the maximum max_phase_for_ind; keep the group if at or above the threshold (default 4; -1 reported as unknown). 5) Fetch the parent molecule records; require molecule_type=='Small molecule', a structure, inorganic_flag==0, elements within {C,H,N,O,S,P,F,Cl,Br,I,B,Si,Se}, and 6 to 70 heavy atoms, with a documented peptide/macrocycle rule. 6) Standardise with chembl_structure_pipeline (standardise, get parent); reject if 2 or more organic fragments remain. 7) Deduplicate by InChIKey first block, keeping the lowest ChEMBL ID and logging merges. 8) Sort by ChEMBL ID; use no random cap. 9) Write a manifest CSV with parent ID, pref_name, mesh headings matched, phase, standardised SMILES, InChIKey, inclusion/exclusion reason, release and code version. Set a minimum n (e.g. 30) before modelling. Cite Zdrazil et al. 2024 NAR (ChEMBL in 2023) and Bento et al. 2020 J Cheminform (ChEMBL structure pipeline). I did not re-verify the bibliographic details of these two citations."
+   }
+  ],
+  "sources": [
+   "https://www.ebi.ac.uk/chembl/api/data/status.json",
+   "https://www.ebi.ac.uk/chembl/api/data/drug_indication.json",
+   "https://www.ebi.ac.uk/chembl/api/data/drug_indication/search.json (404)",
+   "https://www.ebi.ac.uk/chembl/api/data/molecule.json",
+   "https://www.ebi.ac.uk/chembl/api/data/molecule_form.json",
+   "http://chembl.blogspot.com/2023/03/what-is-max-phase-in-chembl.html",
+   "http://chembl.blogspot.com/2023/03/chembl-32-is-released.html",
+   "https://chembl.gitbook.io/chembl-interface-documentation/frequently-asked-questions/drug-and-compound-questions",
+   "https://www.ebi.ac.uk/unichem/api/v1/sources/",
+   "https://www.ebi.ac.uk/unichem/api/v1/compounds (POST)",
+   "https://www.ebi.ac.uk/unichem/rest/inchikey/XZWYZXLIPXDOLR-UHFFFAOYSA-N",
+   "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/property/.../JSON",
+   "https://www.ebi.ac.uk/ols4/api/ontologies/efo",
+   "https://id.nlm.nih.gov/mesh/sparql",
+   "Scratch scripts: /tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/curation/{pull.py,c3.py,mols.py,analyse.py,molcache.json,di_*.json}",
+   "/home/mpcrlab/moleculens/fetcher.py",
+   "/home/mpcrlab/moleculens/disease_validator.py",
+   "/home/mpcrlab/moleculens/paper/main.tex"
+  ]
+ },
+ {
+  "label": null,
+  "role": "Red team: attacking the lead author's publication strategy (framing, venue, headline metric, targets/panel, naming/licence/authorship, timeline)",
+  "summary": "Most of the strategy holds up, but the evidence calls for four changes. First, the senior co-author's group already published ChemGraphX, a topological-index web tool (J Cheminform 18:39, 2026; Jacob, Clement, Arockiaraj, Jindal; Crossref-verified). TopoQSPR has to be framed as the study and evaluation layer that sits on top of index engines like ChemGraphX, and it should cross-check its values against ChemGraphX. It should not be pitched as another index calculator. Second, I ran ridge regression with repeated 5-fold CV on ChEMBL phase-4 parent drugs for four diseases (n=37 to 102, pooled 235) and on measured ESOL solubility (n=1128). Across these sets, ml.py's 135 indices add almost nothing over a 2-feature size baseline (heavy atoms and bonds). Simple element counts beat the indices by a wide margin (pooled TPSA: TI 0.36 vs composition 0.83; ESOL measured logS: TI 0.29, size 0.34, composition 0.72, RDKit 2D 0.89). So the delta-R2 over size alone is too weak a headline: it needs a composition rung and a stated upper reference. Third, computed targets (Crippen logP, TPSA, MR, MolWt) are atom-contribution sums. Modelling them is close to circular, so the headline results must use experimental endpoints. Fourth, the MIT relicensing is legally fragile. The original repo gcap733-bit/moleculens is public with no licence; 77 of its 87 commits are by gcap733-bit, 5 are by an 'Antigravity AI' agent, and the MIT licence was added by Singati2 on 2026-10-02 into a repo that is already public. Copyright stays with the original contributors until they agree. SoftwareX is still the right venue (JOSS fails on development history and web-app scope; J Cheminform would look like the group's second tool paper and needs a benchmark). The 'real quick' timeline is not realistic: a minimum credible v1.0 is about 4 to 6 weeks of focused work, then 2 to 4 months of review.",
+  "prior_claim_checks": [
+   {
+    "claim_id": "C1",
+    "verdict": "not_checked",
+    "evidence": "I did not rerun the substring counts. As a related check, a REST query with mesh_heading__icontains plus max_phase_for_ind=4 returned 106 parent IDs for hypertension, 91 for 'diabetes mellitus', 44 for asthma and 47 for 'epilep'. After keeping small molecules only, 102/63/37/47 remained (script: scratchpad/audit/strategy-redteam/fetch.py). The hypertension figure is the same order as the claimed 120."
+   },
+   {
+    "claim_id": "C3",
+    "verdict": "partly",
+    "evidence": "Code-read only: fetcher.py:85 builds chembl_ids as a set() and fetcher.py:134 does list(chembl_ids)[:max_drugs]. Python string hashing is randomized per process, so the claim follows. I did not run it."
+   },
+   {
+    "claim_id": "C5",
+    "verdict": "confirmed",
+    "evidence": "ml.py:829-837 runs gs.fit(X_prop, y) on all rows. ml.py:840-848 then calls cross_val_score(gs.best_estimator_, ...) with the same rows. A second optimistic step sits on top: the best of 10 models is picked by the same CV mean (ml.py:857-861)."
+   },
+   {
+    "claim_id": "C6",
+    "verdict": "confirmed",
+    "evidence": "config.py:134-146 has MolWt and PC_MolecularWeight, plus PC_ExactMass, PC_MonoisotopicMass, PC_HeavyAtomCount and PC_CovalentUnitCount. In my run, a composition baseline gives CV R2 = 1.000 for MolWt and 0.998 for MolMR on the pooled drugs."
+   },
+   {
+    "claim_id": "C9",
+    "verdict": "confirmed",
+    "evidence": "index.html:255, 290, 325, 533 and 732 say '11 models'. MODELS_AND_GRIDS in ml.py:737-772 has 10 entries: LinearReg, Ridge, Lasso, ElasticNet, RF, ExtraTrees, GB, XGBoost, SVR, NeuralNet."
+   },
+   {
+    "claim_id": "C11",
+    "verdict": "partly",
+    "evidence": "https://pypi.org/pypi/topoqspr/json returns 404, and a web search for \"TopoQSPR\" found no tool. However, the live site is still moleculens.onrender.com and index.html still says MolecuLens (index.html:290), so the rename is incomplete. I did not check moleculens.com."
+   },
+   {
+    "claim_id": "C12",
+    "verdict": "partly",
+    "evidence": "Keep SoftwareX, for different reasons than the ones given. JOSS requires the repo to be public for 6 months with continuing development (https://joss.readthedocs.io/en/latest/submitting.html). gcap733-bit/moleculens was created 2026-04-28 with its last push 2026-06-01, and Singati2/TopoQSPR was created 2026-10-02. JOSS also rules out most web apps. J Cheminform already holds the group's ChemGraphX paper, and its APC is GBP 1690 / USD 2390. The SoftwareX limit is 4000 words. Search snippets give the SoftwareX APC as about USD 1,920, but I could not read the guide directly (HTTP 403), so verify it."
+   },
+   {
+    "claim_id": "C2",
+    "verdict": "not_checked",
+    "evidence": "Outside my scope."
+   },
+   {
+    "claim_id": "C4",
+    "verdict": "not_checked",
+    "evidence": "I did not test this directly. My experiment applied LargestFragmentChooser itself because ml.py:153 does not."
+   },
+   {
+    "claim_id": "C7",
+    "verdict": "not_checked",
+    "evidence": "Outside my scope."
+   },
+   {
+    "claim_id": "C8",
+    "verdict": "not_checked",
+    "evidence": "Outside my scope."
+   },
+   {
+    "claim_id": "C10",
+    "verdict": "not_checked",
+    "evidence": "Outside my scope."
+   }
+  ],
+  "findings": [
+   {
+    "title": "(1) Framing: MODIFY. 'Infrastructure/reproducibility' is publishable, but in its current form it reads as an audit of the co-author's own field and overlaps the co-author's existing tool",
+    "severity": "major",
+    "evidence": "refs.bib:128-133: ChemGraphX, J Cheminform 18:39 (2026), with Arockiaraj as co-author; DOI 10.1186/s13321-025-01141-x confirmed on Crossref. main.tex:70 already positions TopoQSPR as complementary to it. main.tex:62-68 ('Most such studies share three weaknesses ... Predictive claims are optimistic') criticises the genre the group publishes in. Example: Kara, Sa\u011flam \u00d6zkan, Bekta\u015f & Arockiaraj, Sci Rep 2025 (https://pmc.ncbi.nlm.nih.gov/articles/PMC12830717/) fits 30 drugs in-sample with no CV and reports R2=0.998 for heavy-atom count and 0.985 for exact mass. Both are size properties.",
+    "how_verified": "Read the source (main.tex, refs.bib), checked the reference on Crossref, and read the Kara et al. paper through WebFetch.",
+    "recommendation": "Reframe the paper as 'a fair benchmarking arena for topological indices'. Its job is to let index developers show that a new index carries information beyond size and composition, which is the evidence the community needs to justify new indices. Make ChemGraphX the reference implementation that TopoQSPR's values are cross-checked against, or a pluggable index backend. That turns overlap into collaboration and shrinks the burden of verifying 135 indices. Rewrite main.tex:62-68 in the first person plural, e.g. 'including our own earlier work', and talk about 'in-sample vs out-of-sample estimates' rather than weaknesses. Agree on wording with Prof. Arockiaraj before anything goes public. The README already lists the known issues in public."
+   },
+   {
+    "title": "(2) Venue: KEEP SoftwareX, but for the right reasons. JOSS is not available, and J Cheminform would need a benchmark and would look like a second tool paper from the group",
+    "severity": "minor",
+    "evidence": "JOSS: 6 months of public history, no 'development concentrated into a few days or weeks', web apps generally out of scope, AI-use disclosure required (https://joss.readthedocs.io/en/latest/submitting.html). git log: gcap733-bit commits run 2026-04-28 to 2026-06-01, then nothing until a bulk import into Singati2/TopoQSPR on 2026-10-02 (GitHub API created_at 2026-10-02T20:09:34Z). J Cheminform APC is GBP 1690 / USD 2390 (jcheminf fees page, via search) and ChemGraphX is already published there.",
+    "how_verified": "Web sources plus the GitHub API and git log.",
+    "recommendation": "Submit to SoftwareX: about 4000 words plus the code metadata table, which already exists. If the benchmark results below hold across more datasets, write them up separately as a short research or methodology paper (J Cheminform Research, or J Chem Inf Model). That result is more interesting than the tool itself. Do not use it as padding in the SoftwareX paper."
+   },
+   {
+    "title": "(3) Headline metric: MODIFY. delta-R2 over (heavy atoms, bonds) alone is the wrong single headline. Use a baseline ladder: null, size, composition, then an RDKit 2D upper reference",
+    "severity": "critical",
+    "evidence": "Ridge regression, 5x3 repeated CV, ml.compute_topological_indices imported unmodified. Script: scratchpad/audit/strategy-redteam/exp.py; log: exp2.log. Format is size / composition (element counts, H count, aromatic rings) / TI-135 / RDKit2D. Pooled 235 approved drugs: LogP 0.45/0.79/0.51/0.97; TPSA 0.29/0.83/0.36/0.97; MolMR 0.97/1.00/0.97/1.00. Asthma, n=37: TPSA -0.12/0.75/-0.20/0.83. Epilepsy, n=47: TPSA -0.39/0.69/-0.60/0.88. ESOL measured logS, n=1128: 0.34/0.72/0.29/0.89, so the 135 indices are worse than 2 size counts. TI+size equals TI in every case: the indices already encode size. Ring count adds nothing, because cyclomatic number = bonds - atoms + 1 for connected graphs. A MolWt baseline would leak into a MolWt target. A random forest on hypertension gives the same picture (TPSA: size -0.02, TI 0.19, composition 0.65). Root cause: ml.py:160-524 uses only GetDegree() and distances. The indices cannot tell C from N or O, so they are structurally unable to predict heteroatom-driven properties.",
+    "how_verified": "Ran the code: the original ml.py index function on ChEMBL phase-4 parent drugs and on the Delaney ESOL dataset. Limits: ridge only for most rows, and I stripped salts with LargestFragmentChooser before computing indices.",
+    "recommendation": "Report delta-R2 over size, delta-R2 over composition, and the gap to the RDKit 2D (or Mordred-community) upper reference, all with repeated-CV confidence intervals. State openly that hydrogen-suppressed, unlabeled-graph indices are blind to heteroatoms. Give the CGT community a constructive path: add vertex-weighted, heteroatom-aware variants (e.g. Kier-Hall valence connectivity) so TopoQSPR can show where labeled indices help. Leave targets out of the headline when they are functions of a baseline (MolWt, heavy-atom count, exact mass)."
+   },
+   {
+    "title": "(4a) Computed targets: REVERSE for headline results. Use experimental endpoints and keep computed properties only as sanity checks",
+    "severity": "major",
+    "evidence": "Crippen LogP, TPSA and MolMR are atom- and fragment-contribution sums, so composition counts reach R2 0.79-1.00 on them. Learning them from structure is close to circular. The group's own targets (BP, flash point, polarizability from ChemSpider) are largely ACD/Labs predictions; I believe this but did not verify it per compound. Experimental ESOL is the most informative case, and it is where TI-135 underperforms size.",
+    "how_verified": "Ran the code (ESOL) and reasoned from the descriptor definitions.",
+    "recommendation": "Use open experimental sets as the modelling benchmark: ESOL measured logS (1128), AstraZeneca lipophilicity logD (about 4200), FreeSolv, and an open melting-point set. Each must be cited and licence-checked before use. Mark every computed target 'computed - sanity check only' in reports and in the UI."
+   },
+   {
+    "title": "(4b) 6-disease modelling panel: MODIFY. Disease anchoring is a curation feature, not a modelling variable, and the approved-drug n is too small for stable CV",
+    "severity": "major",
+    "evidence": "Phase-4 small molecules: asthma 37, epilepsy 47, diabetes 63, hypertension 102. CV R2 per disease swings from -0.6 to +0.2 for TPSA with large variance, while the pooled n=235 is stable. Physicochemical structure-property relationships do not depend on indication.",
+    "how_verified": "Ran the code (exp2.log).",
+    "recommendation": "Show the 6-disease panel for what TopoQSPR uniquely adds: the drug-manifest curation statistics (Table 1 extended). Run modelling on the pooled approved-drug set plus the experimental benchmarks. Keep per-disease runs as a demo, with CIs, and without claims."
+   },
+   {
+    "title": "(4c) Reproducing a published group study: KEEP, but only with explicit consent, and let the group choose the paper",
+    "severity": "major",
+    "evidence": "Kara et al. 2025 (Arockiaraj co-author): n=30, no CV, HAC R2 0.998 and exact mass 0.985 (PMC12830717). Under nested CV with a size baseline, those targets will show delta-R2 of about 0, which publicly undercuts a co-author's paper.",
+    "how_verified": "Web source (PMC), plus my baseline results.",
+    "recommendation": "Present the case study as 'TopoQSPR reproduces the published in-sample fits exactly (an index-correctness check) and adds an out-of-sample estimate'. Pick, with the group, a study whose targets are not pure size. Get written agreement on the text before submission."
+   },
+   {
+    "title": "(5) Licence, ownership and authorship: the MIT relicensing is legally unsupported until every copyright holder agrees, and the repo is already public under MIT",
+    "severity": "critical",
+    "evidence": "git shortlog: gcap733-bit 77 commits, Antigravity AI 5, Singati2 4 plus Ganesh Shiwakoti 1. git diff 46f1a95..HEAD changes no .py files; Singati2 added only LICENSE, README and paper/. The original repo has license: null (GitHub API). GitHub ToS D.5 grants others only view and fork rights inside GitHub, not relicensing. LICENSE reads 'Copyright (c) 2026 The TopoQSPR authors'. ml.py:4-6 says code came from degreessum_computation.py and degree_reverse_computation.py, which points to further unnamed contributors. The gcap733-bit profile has no real name.",
+    "how_verified": "git log/shortlog/diff, GitHub API, and GitHub ToS via WebFetch.",
+    "recommendation": "Get written consent to MIT from gcap733-bit and from the authors of the two imported scripts. The cleanest route is for gcap733 to commit the LICENSE to their own repo, or to transfer that repo into an organisation account and rename it there, which also keeps stars and history. Name copyright holders explicitly, not 'The TopoQSPR authors'. Put gcap733 (the main developer) high in the author order, with CRediT 'Software'. Credit Arockiaraj with Conceptualization/Supervision and Singati2 with Validation/Writing. Agree the order in writing now. Add an AI-use declaration covering the Antigravity commits and Claude-assisted drafting, as Elsevier and JOSS policies require."
+   },
+   {
+    "title": "(5b) The rename to TopoQSPR is fine but incomplete",
+    "severity": "minor",
+    "evidence": "PyPI topoqspr returns 404 and no web hits. index.html:290 and the live site still say MolecuLens at moleculens.onrender.com, while the paper's C2 metadata points to Singati2/TopoQSPR.",
+    "how_verified": "curl to PyPI, web search, grep.",
+    "recommendation": "Keep the name. Register the PyPI name with a placeholder once licence consent is in place. Rename the UI and the deployment together so reviewers do not see two names."
+   },
+   {
+    "title": "(6) Timeline 'real quick': REVERSE. The required work is about 4-6 focused weeks before submission, plus 2-4 months of review",
+    "severity": "major",
+    "evidence": "Every number in the paper is still a \\todo (main.tex:30, 101, 121, 135, 152-160). Open items: rewriting the fetcher for MeSH resolution, phase filter, parent mapping and deterministic order (C1-C4); nested CV plus a three-rung baseline ladder (C5); unit tests for 135 indices, many of which have no published reference values, plus the Hosoya fix (C7, C10); removing or relabelling Caco2/BIO (C8); a Docker image and Zenodo DOI; docs; benchmark runs; case-study consent; and licence consent.",
+    "how_verified": "Read the source, plus reasoning.",
+    "recommendation": "Cut scope to ship. For v1.0, ship only indices verified against ChemGraphX or closed forms (for example the degree family plus W, J, Sz, PI, about 40-60 indices), and leave the rest marked experimental. Drop SHAP-per-index and report SHAP by family only. Settle licence and authorship in week 1, because it blocks everything else. Target submission about 6 weeks out."
+   },
+   {
+    "title": "Opportunity (2026 landscape): many 'Python-based' TI-QSPR papers ship no code, so a validated, citable harness has a real audience",
+    "severity": "opportunity",
+    "evidence": "2025-26 examples: Sci Rep s41598-025-32906-x (no code released), PMC11937137 (Python domination indices), Sci Rep s41598-025-16497-1 (ML on bone cancer drugs), Almulla et al. Sci Rep 2026 (refs.bib:156). Mordred is unmaintained; a mordred-community fork exists (github.com/mordred-descriptor/mordred/issues/109).",
+    "how_verified": "Web search.",
+    "recommendation": "Ship a one-line 'benchmark my index' API: the user supplies an index function and gets delta-R2 over size and over composition across a fixed experimental suite. That is the feature most likely to get the tool cited by the CGT community, and it fits the senior group's interests."
+   }
+  ],
+  "sources": [
+   "/home/mpcrlab/moleculens/paper/main.tex",
+   "/home/mpcrlab/moleculens/paper/refs.bib",
+   "/home/mpcrlab/moleculens/ml.py",
+   "/home/mpcrlab/moleculens/config.py",
+   "/home/mpcrlab/moleculens/fetcher.py",
+   "/home/mpcrlab/moleculens/index.html",
+   "/home/mpcrlab/moleculens/LICENSE",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/strategy-redteam/exp.py",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/strategy-redteam/exp2.log",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/strategy-redteam/exp_run1.log",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/strategy-redteam/fetch.py",
+   "https://api.crossref.org/works/10.1186/s13321-025-01141-x",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC12830717/",
+   "https://joss.readthedocs.io/en/latest/submitting.html",
+   "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#5-license-grant-to-other-users",
+   "https://link.springer.com/journal/13321/submission-guidelines",
+   "https://jcheminf.biomedcentral.com/submission-guidelines/fees-and-funding",
+   "https://www.sciencedirect.com/journal/softwarex/publish/guide-for-authors",
+   "https://api.github.com/repos/gcap733-bit/moleculens",
+   "https://api.github.com/repos/Singati2/TopoQSPR",
+   "https://pypi.org/pypi/topoqspr/json",
+   "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/delaney-processed.csv",
+   "https://www.ebi.ac.uk/chembl/api/data/drug_indication.json",
+   "https://github.com/mordred-descriptor/mordred/issues/109",
+   "https://www.nature.com/articles/s41598-025-16497-1",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC11937137/"
+  ]
+ },
+ {
+  "label": null,
+  "role": "Senior research-software engineer: web tool readiness and SoftwareX release engineering",
+  "summary": "The live site at https://moleculens.onrender.com is up: /health answered in 0.9 s and the served index.html is byte-identical to the repo. As a public scientific tool it is not ready. For any disease not already in the ChEMBL client cache, /validate took 105-221 s on the live site (asthma 221 s, hypertension 176 s, cold diabetes 105 s), but the browser gives up after 15 s (index.html:451). On a first query the UI therefore shows 'Server is still starting up' instead of running. 18 of the 73 curated disease names (25%) return zero ChEMBL rows and are hard-blocked, including 'breast cancer', 'type 2 diabetes', 'rheumatoid arthritis' and 'COPD'. Fetch strategies 2 and 3 are dead code: drug_indication is 'not searchable' in the ChEMBL client. Jobs live in an in-memory dict on a free instance that Render can restart at any time and spins down after 15 minutes idle. One local run with 37 drugs (gout) did not finish within 50 minutes wall time (132 CPU-minutes on a shared 16-core machine). That makes the advertised 20-45 min, and any run on a free tier, implausible. The API accepts any max_drugs, including 10^9, negative values and null. Both caches are keyed on the disease name only, so whoever runs a disease first fixes the result everyone else gets until restart. Failed indices silently become 0: Balaban J for metformin HCl is 0.0, while metformin gives 3.38. Dependencies are completely unpinned, with no tests, CI, release, DOI or Dockerfile. The paper's code-metadata table and Methods describe several things that do not exist yet: a run record, re-execution from that record, pinned requirements, a Docker image, nested CV and unit-tested indices. Path traversal is not exploitable today, and XSS risk is low because disease names are whitelisted and SMILES and ChEMBL IDs contain no markup. Both depend on the whitelist and need defensive fixes before the disease input is opened up. Required for SoftwareX: a tagged v1.0.0 with a Zenodo DOI, an installable package with a CLI, pinned environment plus Dockerfile, a pytest suite with CI, a provenance run record, docs, and a UI and paper that match the code. A durable job queue and hosted compute are nice-to-have. For a free web demo, run precomputed results from a tagged release and leave heavy compute to the CLI and Docker image.",
+  "prior_claim_checks": [
+   {
+    "claim_id": "C1",
+    "verdict": "partly",
+    "evidence": "Live /validate (validator caps at 500 unique IDs, disease_validator.py:158): hypertension drug_count=407, asthma=275, diabetes=500 (cap), breast cancer=0/blocked. ChEMBL REST status: ChEMBL_37, release 2026-05-01. Row counts via mesh_heading__icontains: diabetes 821, alzheimer 306, asthma 288, hypertension 550. I did not re-check the phase-4 counts (103/120/48/13), the 1407 Breast Neoplasms rows, or the Diabetes Insipidus match. Extension: 18/73 KNOWN_DISEASES return 0 rows (type 2 diabetes, type 1 diabetes, high blood pressure, breast/lung/colorectal/prostate cancer, COPD, chronic obstructive pulmonary disease, alzheimer's disease, parkinson's disease, OCD, rheumatoid arthritis, renal failure, atopic dermatitis, ulcerative colitis, sickle cell anemia). 'cancer' gives only 54 rows. Script: scratchpad/audit/research-software-engineer/known_zero.py"
+   },
+   {
+    "claim_id": "C2",
+    "verdict": "partly",
+    "evidence": "Strategies 2/3 always fail. chembl_webresource_client 0.10.9: new_client.drug_indication.search('cancer') raises AssertionError 'This resource is not searchable'. REST /drug_indication/search.json returns HTTP 404. The exception is caught at fetcher.py:110 and 127, so both strategies are dead code. The 'single keyword cancer would pull all cancers' scenario cannot happen today; it would only appear if someone 'fixed' the search, e.g. the keyword 'disease' from 'chronic kidney disease' (fetcher.py:116)."
+   },
+   {
+    "claim_id": "C3",
+    "verdict": "confirmed",
+    "evidence": "fetcher.py:85,134: set() then list(...)[:max_drugs]. In a demo with 600 synthetic CHEMBL IDs, PYTHONHASHSEED=1 vs 2 gave 200-element subsets overlapping in only 64. Separately, strategy 1 stops at 2*max_drugs IDs (fetcher.py:93) in API page order with no order_by, so the candidate pool itself is truncated."
+   },
+   {
+    "claim_id": "C4",
+    "verdict": "confirmed",
+    "evidence": "No standardisation step in fetcher.py:162-181 or ml.py:152. Ran compute_topological_indices: 'CN(C)C(=N)N=C(N)N.Cl' keeps the counterion. W/Z/M1 equal the parent, but J=0.0 vs 3.3766 for the parent (NaN filled with 0). Lithium carbonate and [Na+] produce rows of mostly zeros and are kept."
+   },
+   {
+    "claim_id": "C5",
+    "verdict": "confirmed",
+    "evidence": "ml.py:829-848: GridSearchCV.fit(X_prop, y) on all rows, then cross_val_score(gs.best_estimator_, ...) on kf_outer. The best model per property is then chosen by max outer mean R2 (ml.py:859), which adds selection bias."
+   },
+   {
+    "claim_id": "C6",
+    "verdict": "partly",
+    "evidence": "Duplicates confirmed in config.py:136-141: MolWt and PC_MolecularWeight, HBD/PC_HBD, HBA/PC_HBA, TPSA/PC_TPSA, RotBonds/PC_RotatableBonds, and ExactMass vs MonoisotopicMass. In the gout run, 23 targets were modelled including PC_FormalCharge and raw BIO_* values. I did not test the near-determinism quantitatively; another role should."
+   },
+   {
+    "claim_id": "C7",
+    "verdict": "confirmed",
+    "evidence": "Ran ml._hosoya_z on path graphs (truth = Fibonacci). m<=18 correct (P19: 6765). m=19,20,25 return 1 (truth 10946, 17711, 196418). m=26 returns 189 (truth 317811). m=39 returns 410 (truth 165580141). Code: ml.py:118-140."
+   },
+   {
+    "claim_id": "C8",
+    "verdict": "confirmed",
+    "evidence": "fetcher.py:298: caco2 = 0.5 - 0.01*tpsa + 0.02*logp, with no source. fetcher.py:483-488 keeps the first standard_value per standard_type regardless of target, assay, relation or units. The query requests only standard_type/value/units/assay_type, so units are fetched but never checked. index.html:297 and 608 label these 'experimental IC50'."
+   },
+   {
+    "claim_id": "C9",
+    "verdict": "confirmed",
+    "evidence": "ml.py:735-774: MODELS_AND_GRIDS has 10 entries. index.html says 11 at lines 255, 290, 325, 533 and 732. The Excel summary sheet (main.py:110) also says '4 models x 7 properties', and main.py:114 says '50 topological indices'; the definitions sheet lists only 50 of 135."
+   },
+   {
+    "claim_id": "C10",
+    "verdict": "partly",
+    "evidence": "The arithmetic from config.py:45-131 holds: degree 9+11+11=31; reverse 9+44=53; SS 30 + DS 5 = 35; distance/cut 4+11=15; GE 1; total 135. But the 5 DS indices are edge degree-sum indices, not neighbourhood-degree-sum. On 10 drugs, 8 column pairs are numerically identical: M2=SS_A, H=DSH, GA=DSGA, SC=DSR, DS1=DS2, W=W_v, Sz=Sz_v, sigma=R1_sigma. That leaves 127 distinct indices. Script: t_dup.py."
+   },
+   {
+    "claim_id": "C11",
+    "verdict": "not_checked",
+    "evidence": "Outside my scope. Note: the live site, Render service name, page title (index.html), Excel title (main.py:66) and citation block (index.html:351, 'Natarajan, A. MolecuLens ...') all still say MolecuLens."
+   },
+   {
+    "claim_id": "C12",
+    "verdict": "partly",
+    "evidence": "SoftwareX fits a tool paper, and its code-metadata table (C1-C9) is already in paper/main.tex:39-54. The author guide pages returned 403 to my fetch. From secondary sources: a public repo plus permanent link is required, and Code Ocean is supported. The venue only works if the metadata rows (release tag, DOI/capsule, docs, support email) are real, and today none of them are."
+   }
+  ],
+  "findings": [
+   {
+    "title": "Live site cannot start a first-time analysis: /validate takes 105-221 s, but the frontend aborts after 15 s",
+    "severity": "critical",
+    "evidence": "Live timings on 2026-10-02: diabetes 105.5 s (cold) then 1.2 s (client-cached); hypertension 175.7 s; asthma 221.0 s; gout 16.0 s. index.html:451 sets AbortSignal.timeout(15000) on /validate and shows 'Server is still starting up' (index.html:455). /run runs the same ChEMBL probe again synchronously (website.py:85-86) under a 20 s timeout (index.html:477). Cause: confirm_with_chembl (disease_validator.py:150-159) pages through drug_indication with the client's MAX_LIMIT=20 rows/page until 500 unique IDs.",
+    "how_verified": "ran code (curl against live site) + read source",
+    "recommendation": "Do not enumerate in the validator. Use one REST call with limit=1 and read page_meta.total_count, or better, precompute a disease->drug-count table per ChEMBL release and ship it as data. Make /run return the job id at once and do the validation inside the job. Raise the client timeouts and show progress from server-side stage reporting, not from fixed timers (index.html:488)."
+   },
+   {
+    "title": "Disease vocabulary: 25% of the curated list is guaranteed to fail, and the UI's 'type any disease' is a 73-name whitelist",
+    "severity": "critical",
+    "evidence": "disease_validator.py:17-42 plus the fuzzy gate at :102. 18/73 names give 0 ChEMBL rows (breast/lung/colorectal/prostate cancer, type 1 and type 2 diabetes, COPD, rheumatoid arthritis, ulcerative colitis, ...). 'pancreatitis' gets 422 with suggestions 'hepatitis c', 'hepatitis', 'atopic dermatitis'. The typo 'type 2 diabeetus' silently becomes 'type 2 diabetes', which then has 0 rows. index.html:290 and 324 say 'Type any disease'.",
+    "how_verified": "ran code (ChEMBL REST counts for all 73 names; TestClient)",
+    "recommendation": "Resolve to MeSH/EFO IDs (ChEMBL drug_indication mesh_id/efo_id). Ship a release-pinned lookup table of all headings with counts and show the user the exact heading and N before running. Drop the hard-coded list. This is milestone M2 in docs/PAPER_ROADMAP.md."
+   },
+   {
+    "title": "Unbounded and unvalidated max_drugs (DoS), plus caches keyed on disease only (result poisoning)",
+    "severity": "major",
+    "evidence": "website.py:79 is Optional[int] with no bounds. TestClient accepted max_drugs=1e9, -5, 0 and null (null crashed the job: \"'<' not supported between NoneType and int\"). The results cache is outputs/{disease}_results_cache.json (website.py:114, main.py:424). The ChEMBL drug cache is md5(disease) (fetcher.py:79). Neither includes max_drugs, the ChEMBL release, the code version or settings. A planted cache with 5 drugs was returned for a max_drugs=200 request. Nothing ever expires or invalidates the cache.",
+    "how_verified": "ran code (t_api.py with FastAPI TestClient)",
+    "recommendation": "Declare max_drugs as Field(ge=5, le=200), or remove it from the public API. Key every cache on a hash of the full run spec (disease ID, phase threshold, max_drugs, ChEMBL release, package version, seed). Store caches by that run-spec hash, not by disease string."
+   },
+   {
+    "title": "Job model is incompatible with Render free tier: in-memory JOBS, BackgroundTasks, ephemeral disk, multi-hour CPU jobs",
+    "severity": "major",
+    "evidence": "website.py:38 is a dict with unbounded growth, holding full results per job. website.py:104 uses BackgroundTasks on a single worker (render.yaml:9). Render docs: free services spin down after 15 min without inbound traffic, the filesystem is lost on redeploy, restart or spin-down, Render 'might restart a Free web service at any time', and there are 750 instance-hours/month. A restart makes /status return 404 'Job not found', and the client swallows errors silently (index.html:516 catch{}). In a local run for gout (37 drugs), the pipeline did not finish after 50 min wall / 132 CPU-min on a shared 16-core box. GridSearchCV n_jobs=-1 nested with RF/XGB n_jobs=-1 (ml.py:751-763, 832) oversubscribes. Two concurrent jobs for the same disease write the same output files (main.py:422-424).",
+    "how_verified": "ran code (local pipeline with /usr/bin/time; ps etime/time) + web source + read source",
+    "recommendation": "For the official site, serve precomputed results for a fixed disease panel built by CI from a tagged release, as static JSON plus a Zenodo archive. Let users run custom diseases via CLI or Docker. If live jobs are kept, use a durable store (SQLite on a persistent volume, or a free managed Postgres/Redis) and a separate worker (RQ/Arq/Celery). Set n_jobs from os.cpu_count and avoid nested parallelism. Use per-job output directories named by job id."
+   },
+   {
+    "title": "Silent failure handling corrupts data: NaN indices filled with 0, swallowed exceptions everywhere",
+    "severity": "major",
+    "evidence": "ml.py:627-641: any exception sets all 135 indices to NaN, then fillna(0.0). Rows are dropped only if all indices are 0, so [Na+] survives with Z=1 and everything else 0. Metformin HCl gets J=0.0 vs 3.38 for the parent. Bare excepts at fetcher.py:41,51,182,262,318,406,423,493; main.py:52,396-411 continue without ML or SHAP and still report status 'complete'. _with_retry returns None (fetcher.py:66), and PubChem failures are cached as {} permanently (fetcher.py:243-244), so one network outage poisons the cache.",
+    "how_verified": "ran code (t_core.py) + read source",
+    "recommendation": "Keep failures as NaN and record per-molecule, per-index error codes in the run record. Exclude failed molecules explicitly and report the count. Never cache failed fetches. Mark a job 'complete_with_warnings' and surface the warnings in the UI. Use logging instead of print."
+   },
+   {
+    "title": "Fully unpinned dependencies; xgboost 3.x pulls a CUDA NCCL wheel; Python version mismatch",
+    "severity": "major",
+    "evidence": "requirements.txt:5-18 has no versions. A fresh resolve (2026-10-02) gave rdkit 2026.3.6, scikit-learn 1.7.2, xgboost 3.2.0, shap 0.49.1, numpy 2.2.6, pandas 2.3.3, fastapi 0.142.2, starlette 1.7.0, chembl-webresource-client 0.10.9, plus nvidia-nccl-cu12 2.32.3. The venv is 1.5 GB. render.yaml pins Python 3.12.0; the paper claims 'pinned requirements.txt' (main.tex:52).",
+    "how_verified": "ran code (pip install into scratch venv; pip freeze; du)",
+    "recommendation": "Use pyproject.toml with compatible ranges, plus a lock file (uv.lock or pip-tools requirements.lock with hashes) for the app, Docker image and CI. Consider xgboost-cpu or dropping XGBoost, since 10 model families are not needed. Record resolved versions in every run record."
+   },
+   {
+    "title": "Paper and code-metadata table describe software that does not exist yet",
+    "severity": "major",
+    "evidence": "paper/main.tex:46-54: v1.0.0, Zenodo/Code Ocean, pinned requirements, Docker image, docs URL and support email are all \\todo or false. main.tex:95-96 describes 'run record stores the ChEMBL release ... Uploading a run record re-executes the same study'; none exists in code. main.tex:116 says 'Each index is unit-tested'; there are no tests. main.tex:138 claims nested CV, which C5 contradicts. GitHub: 0 releases, no .github/ directory (gh api).",
+    "how_verified": "read source + gh api",
+    "recommendation": "Treat M6 in docs/PAPER_ROADMAP.md as blocking. Fill no metadata row until it is true for a tagged release. Write Methods from the v1.0.0 code."
+   },
+   {
+    "title": "UI, Excel and comments contradict the code (C9 and more)",
+    "severity": "major",
+    "evidence": "'11 models' (index.html:255,290,325,533,732) vs 10. 'rigorous 5-fold CV' (index.html:290) vs non-nested. 'experimental IC50, Ki, EC50, Kd' (index.html:297,608) vs first arbitrary value. 'On Railway free tier' (index.html:325,396) while deployed on Render. 'first run takes 20-45 minutes' is unsupported (local run >50 min). Excel: 'all 4 models x 7 properties' and '50 topological indices' (main.py:110,114); the definitions sheet lists 50 of 135 (main.py:305-364). fetcher.py:3 says 'Sources: ChEMBL, PubChem, pkCSM', and config.py:18 PKCMS_DELAY is dead (pkCSM was removed at fetcher.py:276). DS 'degree-sum' definitions (main.py:339-343) duplicate H/GA/SC. API title is 'Drug QSPR Pipeline API', version '1.0.0' (website.py:26-28,56), although the README says v0.x. Citation and author block: 'Natarajan, A. MolecuLens' and a personal gmail (index.html:340-352), which is inconsistent with the paper's authorship.",
+    "how_verified": "read source",
+    "recommendation": "Generate all counts and labels from a single source: index and model registries in the package, exposed through /api/meta. Add a CI test that greps the UI for hard-coded counts. Set version from package metadata. Agree on authorship and citation with co-authors, and add a CITATION.cff."
+   },
+   {
+    "title": "UniChem v1 GET call always fails and silently falls back to the legacy REST API",
+    "severity": "minor",
+    "evidence": "fetcher.py:392: GET https://www.ebi.ac.uk/unichem/api/v1/compounds?inchiKey=... returns HTTP 405 ('method is not allowed'). The current API needs POST {type:'inchikey', compound}, which returned 200. The legacy /unichem/rest/inchikey still answers. Duplicate src_ids overwrite each other (fetcher.py:416-420).",
+    "how_verified": "ran code (curl, aspirin InChIKey)",
+    "recommendation": "Switch to POST v1, record the UniChem access date in the run record, or drop UniChem from the paper scope (it is annotation only)."
+   },
+   {
+    "title": "Security hygiene: CORS *, no rate limit, server paths leaked, innerHTML of remote strings",
+    "severity": "minor",
+    "evidence": "config.py:32 and website.py:31-36 allow any origin and method (live preflight from https://evil.example returned access-control-allow-origin: *). /run has no rate limit or concurrency cap. /results returns absolute csv_path/xlsx_path (website.py:185; main.py:459-460). index.html:557-795 builds tables with innerHTML from column names, ChEMBL IDs, model names and all preview values, with no escaping. Path traversal is not exploitable: disease is always a whitelisted canonical name (disease_validator.py:249), sanitize forbids '/' (:67), and downloads are looked up by job id. XSS is not exploitable today for the same reason; SMILES and IDs contain no '<'. Both protections break once the disease whitelist is opened up (M2). /docs and /openapi.json are public; HEAD /health gives 405.",
+    "how_verified": "ran code (curl live, TestClient) + read source",
+    "recommendation": "Restrict CORS to the site origin. Add slowapi or similar rate limiting and a global max-concurrent-jobs limit. Strip server paths from responses. Add an esc() helper or use textContent/DOM building for all remote values. Sanitise filenames with a slug plus job id. Add CSP and X-Content-Type-Options headers."
+   },
+   {
+    "title": "Dead and stale files; caches not ignored",
+    "severity": "minor",
+    "evidence": "drug_pipeline_expanded.py (346 lines) is imported nowhere (grep). DEPLOYMENT.md is a Railway guide referencing 'validator.py' and a 'drug_pipeline/' folder. Railway (railway.toml, Nixpacks.toml), Procfile and render.yaml are three overlapping deploy configs. chembl_webresource_client writes .chembl_ws_client__0.10.9.sqlite to the CWD (settings.py CACHE_NAME), which is not in .gitignore. main.py:25 and fetcher.py:25 create directories next to the source at import time, which fails in a read-only installed package.",
+    "how_verified": "read source + grep",
+    "recommendation": "Delete drug_pipeline_expanded.py, DEPLOYMENT.md, railway.toml, Nixpacks.toml and Procfile, keeping one Dockerfile (plus render.yaml if Render is kept). Use platformdirs for cache and output dirs, configurable by env/CLI."
+   },
+   {
+    "title": "v1.0 engineering plan: required for SoftwareX",
+    "severity": "opportunity",
+    "evidence": "The SoftwareX code-metadata table (paper/main.tex:39-54) requires a current version, a permanent link, a reproducible capsule, license, dependencies, docs and a support email. Repo state: 0 releases, no CI, no tests, no pyproject.",
+    "how_verified": "reasoning + read source + gh api",
+    "recommendation": "REQUIRED: (1) Package layout pyproject.toml (hatchling), src/topoqspr/{resolve.py (disease->MeSH/EFO), curate.py (phase filter, parent/salt via ChEMBL molecule_hierarchy + RDKit rdMolStandardize, InChIKey dedup, sorted order), indices/ (one module per family, registry with name, family, formula, reference), evaluate.py (true nested CV + null/size baselines), annotate.py, report.py, runrecord.py, api/ (FastAPI), web/static/}. Remove config-as-module globals; use a frozen RunSpec dataclass. (2) CLI 'topoqspr run --disease-id D003924 --max-phase 4 --seed 0 --out runs/x' and 'topoqspr rerun run.json', with 'topoqspr indices smiles.csv' as a standalone descriptor calculator, which is the most reusable piece for the graph-theory co-authors. (3) pytest: closed-form index tests on P_n, C_n, K_n, S_n (W(P_n)=(n^3-n)/6, Z(P_n)=F_{n+1}), literature values for reference molecules, a cross-check vs an independent implementation, no-duplicate-column test, salt-handling test, API tests with mocked ChEMBL (responses/vcrpy cassettes), and a determinism test (two processes, different PYTHONHASHSEED, identical manifest). (4) GitHub Actions: ruff + pytest on 3.11/3.12 x ubuntu/macos, build the Docker image, and a weekly smoke test against live ChEMBL. (5) Locked env + Dockerfile (python:3.12-slim, uv sync --frozen, non-root, CMD topoqspr). (6) Run record run.json: RunSpec, ChEMBL release from /status.json, query timestamps, resolved drug manifest (ChEMBL IDs, parent IDs, InChIKeys, SMILES), package versions (importlib.metadata), git SHA, seed, platform, per-molecule failures, and output file SHA-256. Rerunning from it must reproduce or report the diff. (7) Release v1.0.0 with GitHub-Zenodo integration, so a DOI is minted per release (concept DOI in the paper), plus CITATION.cff and .zenodo.json. (8) Docs: README quickstart plus mkdocs-material on GitHub Pages (install, CLI, API, index definitions with references, provenance format, limitations). (9) Fix the UI and paper claims to match the release."
+   },
+   {
+    "title": "v1.0 engineering plan: nice-to-have for the official web tool on free hosting",
+    "severity": "opportunity",
+    "evidence": "Render free tier: 15-min spin-down, ephemeral FS, restarts at any time, 750 h/month (render.com/docs/free). The local 37-drug run took >50 min.",
+    "how_verified": "web source + ran code",
+    "recommendation": "NICE-TO-HAVE: (a) Static-first site. CI builds results for a fixed panel of 8-12 diseases from the tagged release and publishes JSON plus manifests to GitHub Pages and Zenodo. The FastAPI service handles only cheap things: index computation for user-supplied SMILES with a 500-molecule cap, and serving the precomputed panel. (b) If live custom runs are wanted: a durable queue (RQ with free Redis such as Upstash, or a SQLite job table on a persistent disk on a paid instance), a separate worker process, job TTL, and per-IP rate limits. (c) A Code Ocean capsule as an alternative 'reproducible capsule' for row C3. (d) Hugging Face Spaces (Docker) as a free host with more RAM than Render free, if the account terms allow; verify the current limits before committing. (e) A PyPI release of 'topoqspr' and a conda-forge recipe. (f) Structured logging plus a /api/meta endpoint (versions, ChEMBL release, index and model counts)."
+   }
+  ],
+  "sources": [
+   "https://moleculens.onrender.com/health",
+   "https://moleculens.onrender.com/validate",
+   "https://moleculens.onrender.com/openapi.json",
+   "https://www.ebi.ac.uk/chembl/api/data/status.json",
+   "https://www.ebi.ac.uk/chembl/api/data/drug_indication.json?mesh_heading__icontains=<name>&limit=1",
+   "https://www.ebi.ac.uk/chembl/api/data/drug_indication/search.json?q=cancer (HTTP 404)",
+   "https://www.ebi.ac.uk/unichem/api/v1/compounds (GET 405, POST 200)",
+   "https://www.ebi.ac.uk/unichem/rest/inchikey/BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+   "https://render.com/docs/free",
+   "https://www.sciencedirect.com/journal/softwarex/publish/guide-for-authors (403 to fetch; secondary summary only)",
+   "https://www.sciencedirect.com/journal/softwarex/about/about-softwarex/softwarex-and-code-ocean-partner-to-advance-transparency-and-code-executability",
+   "gh api repos/Singati2/TopoQSPR (0 releases, no .github)",
+   "/home/mpcrlab/moleculens/{website.py,main.py,fetcher.py,config.py,ml.py,disease_validator.py,index.html,requirements.txt,render.yaml,DEPLOYMENT.md,docs/PAPER_ROADMAP.md,paper/main.tex}",
+   "/tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/research-software-engineer/{known_zero.py,t_core.py,t_api.py,t_dup.py,t_run.py,run_gout.log}"
+  ]
+ },
+ {
+  "label": null,
+  "role": "QSPR/QSAR ML methodology expert (OECD validation, nested CV, applicability domain, Y-randomisation, SHAP with collinear features)",
+  "summary": "I audited ml.py (run_correlation, run_ml_qspr, compute_shap) and the config.py target list, and ran an experiment on real data. The dataset was ChEMBL 37 phase-4-for-indication drugs for \"hypertension\" plus \"diabetes\": 209 IDs, 160 unique largest-fragment structures, 154 with MW below 1000. Indices were computed by importing the repo's own compute_topological_indices, and the repo's run_ml_qspr was also called directly. The main result is negative for the paper's story. For MolWt and MolMR, 135 indices are no better than a linear model on heavy-atom count plus bond count (nested R\u00b2 0.957 vs 0.958, and 0.973 vs 0.967). For LogP and TPSA the gain over that size baseline is small (+0.05 and +0.07) and absolute R\u00b2 is low (0.33 and 0.26). The repo's tune-on-all-data-then-CV protocol is methodologically wrong (C5 confirmed in code), but here its measured bias is small (about \u00b10.04). That is smaller than the split-to-split variance. A bigger problem is that it reports a single seed-42 split with fold-mean R\u00b2. On the unfiltered set this gave TPSA Ridge R\u00b2 = \u221266.8, while nested CV with other seeds gave 0.80, because four peptides (insulin detemir, exenatide, pramlintide, liraglutide) dominate whichever fold they land in. I found three new bugs that are worse than C5. (1) A shared module-level LinearRegression instance is never cloned, so the stored \"best model\" for one property gets silently refit on the next property. Shown empirically: the MolWt model ends up predicting with r = \u22120.98 to MolWt. (2) VIF returns 999 for 132/135 indices, and the index matrix has numerical rank 48\u201361, so the VIF output carries no information. (3) KernelExplainer with nsamples=50 on 135 features keeps only 10 non-zero features per row and is unseeded. Its top-10 overlaps exact linear SHAP on only 4\u20136 of 10 features, and two seeds disagree on 4 of the top 10. The indices are also blind to element and bond order. Hexane, 1-pentanol, pentylamine and 1,4-butanediol get identical values for all 135 indices, yet their TPSA runs from 0 to 40.5 and their LogP from 2.59 to \u22120.25. So TPSA, HBD, HBA and LogP cannot be identified from these features beyond their correlation with size. Taken together, most of the current targets are either duplicates of mass, counts the graph already encodes, or properties computed by RDKit or PubChem rather than measured. v1.0 should switch to experimental endpoints (PubChem experimental annotations, AqSolDB, OPERA/PHYSPROP, the Bradley melting-point set, TDC/Biogen). It should also use repeated nested CV, mandatory size baselines with \u0394R\u00b2_size as the headline number, Y-scrambling, an applicability domain, FDR control and family-level SHAP. The paper draft already claims nested CV, baselines and salt normalisation (main.tex:30, 135-136), and none of these is in the code.",
+  "prior_claim_checks": [
+   {
+    "claim_id": "C5",
+    "verdict": "partly",
+    "evidence": "Code confirmed: ml.py:830-838 runs GridSearchCV(...).fit(X_prop, y) on all rows, then cross_val_score(tuned_pipe, ..., cv=kf_outer) at ml.py:842-850, so it is not nested. The best of 10 models is then picked by the same outer-CV scores (ml.py:861-865), which adds selection bias. Empirically on n=154 (MW<1000), repo best vs true nested CV including model selection (2 seeds) was: MolWt 0.962 vs 0.957; MolMR 0.973 vs 0.973; LogP 0.369 vs 0.333\u00b10.05; TPSA 0.217 vs 0.260\u00b10.07. The bias is real but small with these tiny grids (1-4 configs). The protocol is wrong in principle and is mislabelled as nested in main.tex:135, but 'optimistic bias' is not the dominant numerical problem. The single fixed split (KFold rs=42) with fold-mean R\u00b2 is: TPSA on the full set gave Ridge -66.8 (repo) vs 0.80 (nested, other seeds). Y-scrambled LogP under the repo protocol gave best R\u00b2 -0.01/-0.05/-0.10 (3 permutations), so the repo protocol does not invent signal under the null."
+   },
+   {
+    "claim_id": "C6",
+    "verdict": "partly",
+    "evidence": "Duplication confirmed and worse than stated: config.py:136-143 holds 4 mass targets (MolWt, PC_MolecularWeight, PC_ExactMass, PC_MonoisotopicMass) and duplicate pairs TPSA/PC_TPSA, HBD/PC_HBD, HBA/PC_HBA, RotBonds/PC_RotatableBonds. PC_HeavyAtomCount is the graph's vertex count. PC_FormalCharge, PC_CovalentUnitCount and PC_AtomStereoCount are bookkeeping, not properties. 'Near-deterministic from atom counts' holds only for element-resolved composition. Heavy-atom + bond count alone gives nested R\u00b2 0.958 (MolWt) and 0.967 (MolMR), and indices add at most +0.006. For TPSA/HBD/HBA/LogP the indices cannot identify them at all: hexane, 1-pentanol, pentylamine and 1,4-butanediol give identical values for all 135 indices (verified by calling ml.compute_topological_indices), as do cyclohexane, piperidine and tetrahydropyran."
+   },
+   {
+    "claim_id": "C9",
+    "verdict": "confirmed",
+    "evidence": "ml.py:735-776 MODELS_AND_GRIDS has 10 entries. index.html:255, 290, 325, 533 and 732 say '11 models'. The paper abstract main.tex:30 also has \\todo{11}. Separately, LinearReg (OLS with p=135 > n_train\u2248123) gives R\u00b2 of order -1e8 to -1e10 in every run and is shown in the results table."
+   },
+   {
+    "claim_id": "C7",
+    "verdict": "confirmed",
+    "evidence": "ml.py:115-143: m>25 returns 1+m+m(m-1)//4. For 19<=m<=25 the recursion is skipped and the function returns sum(p)=1. In the 160-drug set, Z==1 for 29 molecules (28 with 19-25 bonds), and for the 99 molecules with >25 bonds Z correlates 1.000 with the bond-count formula, so 'Z' acts as a size proxy."
+   },
+   {
+    "claim_id": "C8",
+    "verdict": "confirmed",
+    "evidence": "fetcher.py:300 caco2 = 0.5 - 0.01*tpsa + 0.02*logp (invented). fetcher.py:482-489 keeps the first standard_value per standard_type regardless of target, units, assay_type or relation. Values are raw nM with no pChEMBL/log transform, and BIO_* are in ML_TARGETS (config.py:143)."
+   },
+   {
+    "claim_id": "C4",
+    "verdict": "confirmed",
+    "evidence": "209 phase-4 ChEMBL IDs map to 188 distinct parent_chembl_id values (molecule_hierarchy), and 179 SMILES collapse to 160 largest-fragment InChIKeys. 63/179 SMILES are multi-fragment salts. fetcher.py:165-180 and ml.py:151 compute targets and indices on the full salt SMILES, so counter-ions enter MolWt and the graph."
+   },
+   {
+    "claim_id": "C1",
+    "verdict": "partly",
+    "evidence": "Re-queried live ChEMBL 37 (release 2026-05-01): hypertension 550 rows / 407 molecules / 120 phase-4-for-indication; diabetes 821 rows / 580 molecules / 103 phase-4. These match the claimed figures. I did not check asthma, alzheimer or breast."
+   }
+  ],
+  "findings": [
+   {
+    "title": "Shared, uncloned LinearRegression instance corrupts stored best models (and is not thread-safe)",
+    "severity": "critical",
+    "evidence": "ml.py:736 LinearRegression() is a module-level object. ml.py:826 Pipeline([...('model', model)]) wraps it without clone. With no grid, tuned_pipe = pipe (ml.py:840), and ml.py:863 tuned_pipe.fit(...) runs for every property because LinearReg is evaluated first with best_r2=-inf. Demo (scratch bug.py, restricted to LinearReg): after running MolWt then LogP, best_models['MolWt'] predictions have r=-0.978 with MolWt and r=0.739 with LogP, and both stored pipelines share id 134280599107472. website.py:84 runs the pipeline via FastAPI BackgroundTasks (threadpool), so concurrent runs also share the object.",
+    "how_verified": "ran code",
+    "recommendation": "Always clone(model) inside the loop and store a fresh fitted estimator per property. Add a regression test that the stored model for property A still predicts A after property B is fitted."
+   },
+   {
+    "title": "Indices are element- and bond-order-blind; polarity targets are not identifiable",
+    "severity": "critical",
+    "evidence": "ml.py:151-157 uses only heavy-atom degree on RemoveHs graph. Hexane, 1-pentanol, pentylamine and 1,4-butanediol give identical values for all 135 indices (TPSA 0/20.2/26.0/40.5, LogP 2.59/1.17/1.14/-0.25). Cyclohexane, piperidine and tetrahydropyran are also identical. Partial correlation of the best index with TPSA after controlling for heavy-atom and bond counts: max |r| 0.475.",
+    "how_verified": "ran code",
+    "recommendation": "State this limitation in the paper. Do not headline TPSA/HBD/HBA. If the chemical-graph-theory group wants hetero-aware results, add vertex-weighted (electronegativity or valence-delta) variants as a clearly separate feature family."
+   },
+   {
+    "title": "Indices add ~nothing beyond molecular size for MolWt/MolMR; small gains for LogP/TPSA",
+    "severity": "major",
+    "evidence": "n=154 (MW<1000). Nested CV including model selection vs linear size baseline (heavy atoms + bonds), same folds: MolWt 0.957 vs 0.958 (\u0394R\u00b2\u22480); MolMR 0.973 vs 0.967 (+0.006); LogP 0.333 vs 0.286 (+0.05); TPSA 0.260 vs 0.192 (+0.07). 129/135 indices have |r|>0.9 with heavy-atom count. Scratch files: res_*.json, corr.log.",
+    "how_verified": "ran code",
+    "recommendation": "Make the size baseline (linear + RF on nHeavy, nBonds) mandatory and report \u0394R\u00b2_size with a paired CI over repeated folds as the headline, which matches main.tex:136 and is not in code yet. Drop MolWt/MolMR/mass duplicates as 'predicted' targets, or keep them only as sanity checks."
+   },
+   {
+    "title": "Single fixed split + fold-mean R\u00b2 + heavy-tailed y makes reported R\u00b2 unstable",
+    "severity": "major",
+    "evidence": "KFold(random_state=42) once (ml.py:822). On the full 160-drug set, 4 peptides (MW 3751-5917) change TPSA results drastically: repo Ridge R\u00b2 = -66.8 and best (RF) = 0.34, while nested Ridge with seeds 0/1 = 0.80. In-sample max |r| index-TPSA is 0.988 with peptides and 0.556 without. The drug set includes NO (MW 30).",
+    "how_verified": "ran code",
+    "recommendation": "Use repeated (e.g. 5x5) nested CV, report the pooled out-of-fold R\u00b2/RMSE with spread, and define an applicability domain (MW and heavy-atom range, leverage h*=3(p'+1)/n on a reduced descriptor set, or kNN distance). Exclude or flag peptides, inorganics and molecules with <~6 heavy atoms before modelling."
+   },
+   {
+    "title": "run_ml_qspr is not nested CV; model selection reuses outer scores",
+    "severity": "major",
+    "evidence": "ml.py:830-850 (GridSearchCV fit on all data, then cross_val_score). ml.py:861 chooses the best of 10 by the same outer scores. The paper claims nested CV (main.tex:135). The measured bias is small here (see C5), but the label is false.",
+    "how_verified": "ran code",
+    "recommendation": "cross_validate(GridSearchCV(pipe, grid, cv=inner), X, y, cv=RepeatedKFold(5,5)). Model-family selection goes inside the inner loop, or report all families and pre-register one primary model."
+   },
+   {
+    "title": "VIF output is meaningless with 135 collinear features and n\u2248160",
+    "severity": "major",
+    "evidence": "ml.py:719-733. Measured: VIF==999 (capped) for 132/135 indices and >10 for 135/135. Numerical rank of the index matrix is 48 (raw) / 61 (standardised). 88% of index pairs have |r|>0.9 and 38% have |r|>0.99. With n<p every auxiliary regression has R\u00b2=1.",
+    "how_verified": "ran code",
+    "recommendation": "Remove per-index VIF. Report condition number or rank, hierarchical clustering of |r| (e.g. cut at 0.95) with one representative per cluster, and family-level summaries."
+   },
+   {
+    "title": "Pearson/Spearman p-values uncorrected, rounded, and computed on dependent tests",
+    "severity": "major",
+    "evidence": "ml.py:690-706: 135 x up to 24 targets, no correction, p rounded to 4 dp (924/945 shown as 0.0). Under Y-scrambling (10 permutations) raw p<0.05 counts were mean 74 and max 244 out of 945 (nominal 47), because collinear indices fail together. Real data: 932/945 'significant', which mostly reflects size. NaN r (constant index) is reported as r=0, p=1 (ml.py:702-705). run_correlation does joint dropna across all targets (ml.py:675), so it uses a different row set from run_ml_qspr (\u226550% rule, ml.py:799).",
+    "how_verified": "ran code",
+    "recommendation": "Apply BH-FDR within each target, report p in scientific notation, and add partial correlation controlling for size (the max partial |r| was only 0.46-0.53). Report undefined r as NaN. Use identical row sets for the correlation and ML analyses."
+   },
+   {
+    "title": "SHAP: KernelExplainer nsamples=50 on 135 features is sparse and unseeded; SHAP uses in-sample full refit",
+    "severity": "major",
+    "evidence": "ml.py:914-916 with shap 0.49.1. The default l1_reg='num_features(10)' (shap/_kernel.py:351) means 10 non-zero features per row. The recommended nsamples is 2*135+2048=2318 (_kernel.py:356). Demo on Ridge/LogP: Spearman vs exact linear SHAP 0.41/0.44, top-10 overlap with exact 4 and 6, and the two seeds share only 6 of top 10. TreeExplainer runs on the training rows of the full-data refit. With |r|>0.99 collinearity, attribution among near-duplicate indices is arbitrary.",
+    "how_verified": "ran code",
+    "recommendation": "Use LinearExplainer for linear models, TreeExplainer for trees, and for others nsamples\u22652M+2048 with a fixed seed. Compute SHAP on outer-fold test rows and aggregate across folds/repeats with a rank-stability measure. Report importance by index family or correlation cluster (main.tex:138 already says family). Note that SHAP explains the model, not causal structure-property links."
+   },
+   {
+    "title": "Target list is mostly duplicates, bookkeeping, or computed rather than measured",
+    "severity": "major",
+    "evidence": "config.py:134-144: 4 mass targets, 4 computed duplicate pairs, PC_HeavyAtomCount (=graph order), PC_FormalCharge, PC_CovalentUnitCount (=number of salt fragments), PC_AtomStereoCount. BIO_* are first-hit raw nM across unrelated targets (fetcher.py:482-489). XLogP and Crippen LogP are model outputs, not measurements.",
+    "how_verified": "read source + ran code",
+    "recommendation": "For v1.0, primary targets should be EXPERIMENTAL. Recommended sources: (a) PubChem PUG-View experimental annotations via https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{CID}/JSON?heading=Melting+Point (also LogP, Solubility, Boiling Point). Tested on 40 of our drugs: MP present for 27/40, LogP for 35/40 (32 with numeric field), Solubility for 36/40 (often qualitative text). These are free text with mixed units and sources, so parse and keep provenance. (b) AqSolDB (9,982 compounds, Harvard Dataverse doi:10.7910/DVN/OVHAW8). (c) OPERA/PHYSPROP curated sets for logP (~15.8k) and MP (~10k), plus BP, VP and WS, via github.com/kmansouri/OPERA and the CompTox dashboard. (d) Jean-Claude Bradley Open Melting Point dataset (CC0, figshare doi:10.6084/m9.figshare.1031637). (e) TDC ADMET: Lipophilicity_AstraZeneca 4,200 and Caco2_Wang 906. (f) Biogen ADME (Fang et al. 2023, 3,521 cpds; github.com/molecularinformatics/Computational-ADME). Boiling point is a poor drug target: most drugs decompose, and the PubChem metformin BP '224.1 \u00b0C at 760 mmHg' looks like a predicted value. Indication-defined drug sets will have small n for experimental endpoints, so offer a 'benchmark mode' on these curated sets alongside the disease mode."
+   },
+   {
+    "title": "No Y-randomisation, applicability domain, or external/held-out validation (OECD principles 3-4)",
+    "severity": "major",
+    "evidence": "ml.py has no permutation test or AD. The OECD 2007 guidance (ENV/JM/MONO(2007)2) requires a defined AD and appropriate measures of goodness-of-fit, robustness and predictivity.",
+    "how_verified": "read source",
+    "recommendation": "Add 100 Y-permutations on the full nested pipeline and report the empirical p of the observed nested R\u00b2 and \u0394R\u00b2_size. Add an AD (leverage or kNN) and report performance inside vs outside it. Optionally use a scaffold-split check."
+   },
+   {
+    "title": "Unpinned dependencies and unseeded SHAP undermine the reproducibility claim",
+    "severity": "minor",
+    "evidence": "requirements.txt lists rdkit, scikit-learn, xgboost and shap without versions. compute_shap sets no RNG seed. main.tex:30 claims exact re-execution.",
+    "how_verified": "read source",
+    "recommendation": "Pin versions (lock file), record versions in the run manifest, and seed numpy before SHAP."
+   },
+   {
+    "title": "Proposed v1.0 evaluation protocol",
+    "severity": "opportunity",
+    "evidence": "Derived from the experiments above (scratch: /tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/qspr_ml/).",
+    "how_verified": "reasoning only",
+    "recommendation": "1) Curation: largest fragment, neutralise, dedupe by InChIKey or parent_chembl_id. Exclude MW>1000 or peptides, inorganics and <6 heavy atoms, and log what was excluded. 2) Features: 135 indices plus 'size-only' (nHeavy, nBonds) and 'indices residualised on size' variants. Optionally reduce redundancy by correlation clustering at |r|>0.95, done inside folds. 3) Models: pre-register a small set (Ridge, PLS, RF; drop OLS, which fails whenever p>n_train). 4) Evaluation: 5x5 repeated nested CV (inner 5-fold grid), pooled out-of-fold R\u00b2, RMSE and MAE with spread. Headline is \u0394R\u00b2_size, a paired per-split difference with 95% interval (corrected resampled t or bootstrap of repeats). 5) Null: 100 Y-permutations through the full pipeline. 6) AD: leverage/kNN, with performance reported inside vs outside the AD. 7) Correlation: Spearman with BH-FDR per target, plus partial correlation given size. 8) SHAP: out-of-fold, correct explainer per model, aggregated by index family with stability across repeats. 9) Targets: experimental logP, aqueous solubility (logS) and melting point from the sources above as primary. Keep computed descriptors only as positive-control sanity checks, and drop mass duplicates and bookkeeping counts. Cite OECD 2007 guidance; Tropsha 2010 Mol Inf 29:476; R\u00fccker et al. 2007 JCIM 47:2345 (y-randomisation); Varma & Simon 2006; Cawley & Talbot 2010; Krstajic et al. 2014 J Cheminform 6:10; Benjamini & Hochberg 1995; Alexander, Tropsha & Winkler 2015 JCIM 55:1316 ('Beware of R2'). Verify the bibliographic details of these before citing."
+   }
+  ],
+  "sources": [
+   "/home/mpcrlab/moleculens/ml.py:115-143,653-927",
+   "/home/mpcrlab/moleculens/config.py:13-14,133-144",
+   "/home/mpcrlab/moleculens/fetcher.py:160-180,280-305,470-495",
+   "/home/mpcrlab/moleculens/index.html:255,290,325,533,732",
+   "/home/mpcrlab/moleculens/website.py:84-133",
+   "/home/mpcrlab/moleculens/paper/main.tex:30,68,135-138",
+   "/home/mpcrlab/moleculens/requirements.txt",
+   "Scratch scripts and results: /tmp/claude-1000/-home-mpcrlab/0e4f9418-e309-4221-9ada-8ec4ca414b1c/scratchpad/audit/qspr_ml/ (fetch.py, build.py, dataset.csv, exp2.py, res_*.json, scr_*.json, corr.py/corr.log, bug.py, shapdemo.py, pc.py/pc.log)",
+   "https://www.ebi.ac.uk/chembl/api/data/status.json (ChEMBL_37, 2026-05-01)",
+   "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/4091/JSON?heading=Melting+Point",
+   "https://github.com/kmansouri/OPERA",
+   "https://www.nature.com/articles/s41597-019-0151-1 (AqSolDB)",
+   "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/OVHAW8",
+   "https://figshare.com/articles/Jean_Claude_Bradley_Open_Melting_Point_Datset/1031637/2",
+   "https://tdcommons.ai/benchmark/admet_group/01caco2/",
+   "https://polarishub.io/datasets/biogen/adme-fang-v1",
+   "https://github.com/molecularinformatics/Computational-ADME"
+  ]
+ }
+]

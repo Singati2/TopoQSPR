@@ -13,7 +13,7 @@ External review and its verification: [`external-review-2026-10.md`](external-re
 | # | Milestone | Feeds paper section | Status |
 |---|---|---|---|
 | M0 | Repository consolidated under `Singati2/TopoQSPR`, MIT license, README, paper draft | Code metadata (C1–C9) | done |
-| M1 | Expert audit of code, paper and 2026 landscape (`docs/audit-2026-10.md`) | All; decides scope | in progress |
+| M1 | Expert audit of code, paper and 2026 landscape ([`AUDIT_TOPOQSPR.md`](AUDIT_TOPOQSPR.md), [`LITERATURE_GAP_2026.md`](LITERATURE_GAP_2026.md)) | All; decides scope | done |
 | M2 | **Drug-set curation**: disease → controlled MeSH/EFO term confirmed by the user; clinical-phase threshold (default approved); small molecules only; parent/salt normalisation; dedup by InChIKey; deterministic ordering; downloadable drug manifest with ChEMBL release | §2.2, Table 1, Fig. 2 | todo |
 | M3 | **Verified indices**: unit tests against closed forms and literature values; cross-check against ChemGraphX; fix or drop Hosoya Z; fix DS1≡DS2 duplicate; reconcile reverse-degree definition; failures recorded as missing (never 0); cite the source of every family | §2.3, Table 2, Suppl. S1 | todo |
 | M4 | **Honest evaluation**: true (repeated) nested CV with model-family selection inside the outer fold; null, size and RDKit-2D baselines; ΔR²(TI − size) with CI as headline; collapse duplicate targets; Benjamini–Hochberg FDR for correlations | §2.4, Fig. 3 | todo |

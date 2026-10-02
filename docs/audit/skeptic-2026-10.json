@@ -1,0 +1,291 @@
+{
+ "verdicts": [
+  {
+   "item": "graph-theory: Hosoya Z wrong for every molecule with >18 bonds (also landscape-2026 and redteam-paper duplicates)",
+   "verdict": "upheld",
+   "reproduction": "Read ml.py:115-140: m>25 returns 1+m+m(m-1)//4; enumeration runs only if m<=18; for 19<=m<=25 p=[1,0,..] so Z=1. I ran the repo's ml.compute_topological_indices against my own frontier-memoised matching counter (skeptic/t_idx.py). Results: aspirin (13 bonds) 335 vs 335, correct; donepezil 264 vs 965,380; imatinib 452 vs 79,015,504; n-icosane path (19 bonds) 1 vs 10,946 = F(21); C27 path 189 vs 317,811. On 2,148 single-fragment ChEMBL_37 max_phase=4 small molecules (my own pull, skeptic/fetch.py): 76.6% have >18 bonds (523 in 19-25, 1,123 >25) and 534 get Z=1. The expert said 73%; the difference is the denominator. The fix is cheap: my memoised DP gives imatinib's exact Z instantly. Hosoya is listed under distance-based at main.tex:114, so the misclassification claim is also upheld."
+  },
+  {
+   "item": "graph-theory: SS_ABC, SS_AZ, SS_ABS and RABC have an extra product term in the numerator",
+   "verdict": "upheld",
+   "reproduction": "ml.py:501-503 uses sqrt((xs+xy-2)/xy), (xy/(xs+xy-2))^3 and sqrt((xs+xy-2)/xs); ml.py:246 has num_rabc = rsuv + rpruv - 2. Block-1 ABC (ml.py:186) uses the correct (u+v-2)/uv, so the code is internally inconsistent. Aspirin: SS_ABC is 15.0236 in code vs 7.5058 for ABC4; SS_ABS is 23.330 vs 11.550. Both match the expert to 2 dp. Caveat: the source script degreessum_computation.py is not in the repo, so I cannot rule out that the group intended a variant. Ask them before 'fixing' it."
+  },
+  {
+   "item": "graph-theory: reverse-degree block uses n+1-d(v), not \u0394-d(v)+1, and reduces to size polynomials",
+   "verdict": "upheld",
+   "reproduction": "ml.py:225 has rev_deg=[n+1-d]; aspirin RM1 = 1880 (rd in {11,12,13}). The identities hold exactly on my 2,148 molecules: RM1 = n(n+1)^2-4m(n+1)+M1 (residual 0) and RM2 = m(n+1)^2-(n+1)M1+M2 (residual 0). The draft now flags the mismatch itself at main.tex:111 (\\todo 'v0.x code uses n+1-d(v) ... reconcile in M3'), so the paper/code contradiction is acknowledged but unresolved. I did not independently check the Kulli edge-sum vs vertex-sum point."
+  },
+  {
+   "item": "graph-theory: Balaban J wrong for multi-fragment / salt graphs",
+   "verdict": "upheld",
+   "reproduction": "ml.py:324 cyclo=m_bonds-n+2. metformin = 3.377 vs metformin\u00b7HCl = 0.0 (repo code). In my pull of 3,311 phase-4 records (salts included as separate records), 1,163 are multi-fragment and 169 of those get J=0. The expert's 474/1,959 used a different denominator. Same mechanism."
+  },
+  {
+   "item": "graph-theory: R_k family drops edges / k>\u0394 ill-defined / R1_sigma \u2261 sigma",
+   "verdict": "upheld",
+   "reproduction": "ml.py:70-76 and 527-530. Molecules with at least one dropped edge, out of 2,148: k=1 0, k=2 6, k=3 18, k=4 1,173 (54.6%, matches the expert's 55%). By hand for \u0394=3: k=2 maps d=1,2,3 to 1,3,2 and k=4 maps d=1 to 0. R1_sigma==sigma is numerically identical on all molecules and follows algebraically because R1 = \u0394-d+1. The cited sources resolve on Crossref: Arockiaraj, Greeni, Kalaam, IJQC 2023 doi:10.1002/qua.27136, and Kalaam, Greeni, Arockiaraj, Front Chem 2024 doi:10.3389/fchem.2024.1470231. I did not re-read their exact R_k definition."
+  },
+  {
+   "item": "graph-theory: exact duplicates and linear identities inflate 135 to ~115-127 distinct",
+   "verdict": "upheld",
+   "reproduction": "allclose on 2,148 molecules found exactly 8 duplicate pairs: M2=SS_A, H=DSH, GA=DSGA, SC=DSR, DS1=DS2, W=W_v, Sz=Sz_v, sigma=R1_sigma. Identities with residual 0 or about 1e-15: BM=M1+M2, sigma=F-2M2, SS_M1=2M2, A=M1/2, TMA=2M1-2ISI, SS_TM=SS_HM-SS_M2. All also follow algebraically from ml.py."
+  },
+  {
+   "item": "graph-theory: index matrix is mostly size (5 PCs explain 95%)",
+   "verdict": "upheld",
+   "reproduction": "Independent set of N=2,148: 78 indices have |Spearman| >0.95 with heavy-atom count (99 have >0.9). Standardised PCA needs 3/5/9 components for 90/95/99% (expert: 3/5/10). Greedy grouping at |\u03c1|>0.99 gives 34 groups (expert: 37). Numerical rank of the standardised matrix on a random n=160 subset is 57 (expert: 61)."
+  },
+  {
+   "item": "graph-theory/redteam-paper: paper claims verification and unit tests that do not exist; family labels wrong",
+   "verdict": "upheld",
+   "reproduction": "Current main.tex:30 says 'checked against published reference values' and main.tex:116 says 'Each index is unit-tested ...'. The repo has no test files (ls; nothing under tests/). Line numbers in the expert reports are shifted by ~3 because the draft was edited at 16:38 today. I confirmed the GE and DS mislabelling by reading ml.py:252-266 and 302-308."
+  },
+  {
+   "item": "chembl-curation: strategies 2/3 dead code (drug_indication not searchable)",
+   "verdict": "upheld",
+   "reproduction": "chembl_webresource_client: new_client.drug_indication.search('cancer') raises AssertionError 'This resource is not searchable'. curl /chembl/api/data/drug_indication/search.json?q=breast%20cancer returns HTTP 404. A substring search for 'cancer' gives 54 rows: Hereditary Breast and Ovarian Cancer Syndrome 35, Cancer Pain 16, Precancerous Conditions 3."
+  },
+  {
+   "item": "chembl-curation / redteam-paper: no phase or molecule-type filter; 'phase 4 for indication' \u2260 approved for the disease",
+   "verdict": "upheld",
+   "reproduction": "Live ChEMBL_37 (release 2026-05-01), diabetes substring: 821 rows, 580 molecules. max_phase_for_ind values: 4.0:144, 3:239, 2:247, 1:168, 0.5:20, -1:3. Phase-4 molecules: 103, of which 71 small molecule, 26 protein, 3 antibody, 2 unknown, 1 oligosaccharide. The set includes LISINOPRIL CHEMBL419213 (refs: 2\u00d7 DailyMed), ATENOLOL, VERAPAMIL HCl, PRAZOSIN HCl, TICAGRELOR, BIOTIN and SODIUM CHLORIDE CHEMBL1200574. VASOPRESSIN and DESMOPRESSIN ACETATE are phase 4 only via Insipidus. fetcher.py:90-183 never reads phase or molecule_type."
+  },
+  {
+   "item": "chembl-curation: phase semantics (decimal phases, phase on salt records)",
+   "verdict": "upheld",
+   "reproduction": "Phase values 0.5 and -1.0 appear in the live diabetes rows (see above). Salt-only phase-4 parent counts (14/33/17) were not re-counted."
+  },
+  {
+   "item": "chembl-curation: non-deterministic drug subset",
+   "verdict": "upheld",
+   "reproduction": "fetcher.py:85 uses set(), :93 breaks at 2*max_drugs, :134 does list(set)[:max_drugs] with MAX_DRUGS=200 (config.py:9). Simulation with 400 CHEMBL-style IDs: overlap of the first 200 between PYTHONHASHSEED 0 and 1 is 99, and between 0 and 2 is 106 (expert: 89-108). This triggers for any disease with >200 candidates (diabetes 580, hypertension 407, asthma 275)."
+  },
+  {
+   "item": "chembl-curation: salt/parent duplicates; indices on salt forms",
+   "verdict": "upheld",
+   "reproduction": "Metformin J = 3.377 vs metformin HCl J = 0.0 (repo code). ml.py:153 only calls RemoveHs. I did not re-count the 32/52/53 salt-parent pairs."
+  },
+  {
+   "item": "chembl-curation: UniChem source map half wrong, GET returns 405",
+   "verdict": "upheld",
+   "reproduction": "Live /unichem/api/v1/sources: 1 chembl, 2 drugbank, 7 chebi, 14 fdasrs, 15 surechembl, 22 pubchem, 31 bindingdb, 32 comptox, 38 rhea, 41 swisslipids; 9, 12 and 17 are absent. fetcher.py:377-388 labels 12 ChemSpider, 9 ZINC, 17 BindingDB, 38 SureChEMBL, 41 CompTox and 22 PubChem_SID. GET /unichem/api/v1/compounds?inchiKey=... returns 405. POST with {compound,type:'inchikey'} returns 200. Legacy /unichem/rest/inchikey/... returns 200 with text/html."
+  },
+  {
+   "item": "chembl-curation: disease resolution should use the MeSH tree; substring search is invalid",
+   "verdict": "upheld",
+   "reproduction": "Diabetes headings: T2DM 376, generic 'Diabetes Mellitus' 227, T1DM 192, Gestational 14, Insipidus 6+1, Complications 3, LADA 2. mesh_heading__iexact='Breast Neoplasms' gives 1,171; icontains 'breast neoplasms' gives 1,407; icontains 'breast cancer' gives 0. OLS4/EFO and SPARQL parts not reproduced."
+  },
+  {
+   "item": "qspr-ml: shared uncloned LinearRegression corrupts stored best models",
+   "verdict": "upheld",
+   "reproduction": "Mechanism reproduced (skeptic/bug.py, real ml.py). With MODELS_AND_GRIDS restricted to LinearReg, best_models['MolWt'] and ['LogP'] share one estimator object, and the stored 'MolWt' model's predictions correlate 0.854 with LogP and 0.503 with MolWt. Severity is overstated, though. In the full 10-model run (n=160, p=135), LinearReg's CV R\u00b2 is -1.2e9 (MolWt) and -1.5e10 (LogP), so it never wins. The stored best models were Lasso and ElasticNet and were not corrupted. The bug matters only if LinearReg wins, which is plausible only when n>>p. Side effect nobody flagged: R\u00b2 values around -1e9 are written into the results table and UI."
+  },
+  {
+   "item": "qspr-ml: indices element- and bond-order-blind; polarity targets not identifiable",
+   "verdict": "upheld",
+   "reproduction": "Repo code gives identical values for all 135 indices for hexane, 1-pentanol, pentylamine and 1,4-butanediol, and again for cyclohexane, piperidine and tetrahydropyran (skeptic/t_idx.py)."
+  },
+  {
+   "item": "qspr-ml: indices add ~nothing beyond size for MolWt/MolMR; small gains for LogP/TPSA",
+   "verdict": "upheld",
+   "reproduction": "Direction upheld, but the magnitude depends on n. Ridge (RidgeCV), 5x2 repeated CV, on 800 single-fragment approved drugs with MW<1000 (size / composition / TI / TI+comp): LogP 0.236 / 0.857 / 0.379 / 0.864; TPSA 0.427 / 0.920 / 0.593 / 0.928; MolMR 0.967 / 0.998 / 0.973 / 0.998. The TI gain over size is +0.14 (LogP) and +0.17 (TPSA) at n=800, against +0.05/+0.07 at n=154. That is not 'small', but it is dwarfed by element counts, and TI+comp \u2248 comp."
+  },
+  {
+   "item": "qspr-ml: single fixed split + heavy-tailed y makes R\u00b2 unstable",
+   "verdict": "uncertain",
+   "reproduction": "Confirmed by reading: KFold(random_state=42) is created once per property (ml.py:822, RANDOM_STATE=42 in config.py:14). Not reproduced: the -66.8 Ridge TPSA result with peptides."
+  },
+  {
+   "item": "qspr-ml / redteam-paper: run_ml_qspr is not nested; best-of-10 selection reuses outer scores",
+   "verdict": "upheld",
+   "reproduction": "ml.py:830-838 fits GridSearchCV on all rows, then ml.py:842 runs cross_val_score on gs.best_estimator_. ml.py:861 keeps the max mean R\u00b2. The draft still says 'nested' (keywords main.tex:34; plan main.tex:151). I did not re-measure the bias magnitude."
+  },
+  {
+   "item": "qspr-ml: VIF meaningless with 135 collinear features",
+   "verdict": "upheld",
+   "reproduction": "ml.py:719-733 caps at 999 when R\u00b2\u22650.9999. Numerical rank is 57 at n=160 on my set, so most auxiliary regressions are perfect fits. I did not re-count 132/135."
+  },
+  {
+   "item": "qspr-ml: uncorrected, rounded p-values on dependent tests",
+   "verdict": "upheld",
+   "reproduction": "Y-scrambling on 160 approved drugs, Crippen LogP, 50 permutations, 135 Pearson tests each: mean 5.3 'significant' (nominal 6.75), median 0, max 94. 34% of permutations had \u22651 hit. Real LogP gives 127/135 significant. False positives arrive in collinear blocks. Rounding to 4 dp, NaN\u2192r=0/p=1 and joint dropna confirmed by reading ml.py:672,698-702."
+  },
+  {
+   "item": "qspr-ml: SHAP KernelExplainer nsamples=50, l1_reg num_features(10), in-sample",
+   "verdict": "upheld",
+   "reproduction": "shap 0.49.1 _kernel.py:351: l1_reg default 'num_features(10)'. _kernel.py:356: auto nsamples = 2*M+2048 = 2,318 for M=135. ml.py:916 passes nsamples=50. SHAP runs on row_idx, the rows of the full-data refit (ml.py:866, 896). The 0.41/0.44 Spearman agreement was not reproduced."
+  },
+  {
+   "item": "qspr-ml: target list mostly duplicates, bookkeeping or computed",
+   "verdict": "upheld",
+   "reproduction": "config.py:134-144 lists MolWt, PC_MolecularWeight, PC_ExactMass and PC_MonoisotopicMass; the duplicate pairs; PC_FormalCharge, PC_CovalentUnitCount, PC_AtomStereoCount and PC_HeavyAtomCount. fetcher.py:482-489 takes the first non-null standard_value per type and ignores standard_units and target. ADMET_Caco2_approx = 0.5-0.01*TPSA+0.02*logP at fetcher.py:298 (C8 confirmed)."
+  },
+  {
+   "item": "qspr-ml: no Y-randomisation, applicability domain or external validation",
+   "verdict": "upheld",
+   "reproduction": "grep of ml.py and main.py finds no permutation test, AD or held-out set."
+  },
+  {
+   "item": "landscape-2026: ChemGraphX from co-author's group already computes indices; draft does not cite it",
+   "verdict": "refuted",
+   "reproduction": "First half upheld. Crossref doi:10.1186/s13321-025-01141-x lists Jacob, Clement, Arockiaraj and Jindal, J Cheminform, issued 2026-02-11. Europe PMC full text: input .pdb/.mol/adjacency, MIT licence, github.com/aditya-jindal/chemgraphx. The text says '150 different TIs', but its own table sums to 52+52+24+21 = 149. Second half refuted as stale: current paper/refs.bib has 24 entries, cites ChemGraphX at refs.bib:128 and DOPtools, and main.tex:70 positions TopoQSPR as complementary. The draft was edited at 16:38."
+  },
+  {
+   "item": "landscape-2026: related-work coverage of tools is empty; close competitors exist",
+   "verdict": "uncertain",
+   "reproduction": "Partly stale: ChemGraphX and DOPtools are now cited (main.tex:70). Mordred, PaDEL, QSPRpred and alvaDesc are still absent: grep of refs.bib and main.tex for mordred/padel/qsprpred finds nothing. Crossref confirms QSPRpred (doi:10.1186/s13321-024-00908-y, 2024), 'QSAR in the Browser' (doi:10.1021/acs.jcim.6c01010, JCIM 2026, Masud et al.) and Kara et al. Sci Rep 2025 (doi:10.1038/s41598-025-32906-x, Arockiaraj co-author). Not verified: PyTIE, topoindex and the GitHub genre repos."
+  },
+  {
+   "item": "landscape-2026 / redteam-strategy: targets in the genre are predicted or computed, not experimental",
+   "verdict": "uncertain",
+   "reproduction": "The ACD/Labs claim for ChemSpider was not re-fetched. PubChem MW/XLogP/TPSA are computed by definition. Kara et al. 2025 (PMC12830717): n=30, no CV or train/test split. For HAC the linear R\u00b2 is 0.999 (cubic 0.998); for exact mass the cubic R\u00b2 is 0.985. The strategy expert's numbers are the cubic-model values."
+  },
+  {
+   "item": "software-eng: live site cannot start a first-time analysis (/validate 105-221 s vs 15 s abort)",
+   "verdict": "refuted",
+   "reproduction": "The mechanism is real: index.html:450 sets AbortSignal.timeout(15000), and the probe pages at client MAX_LIMIT=20. Locally the probe took 15.1 s (asthma) and 37.7 s (hypertension); live /validate for glaucoma took 43.6 s cold. But the second call to live /validate took 0.52 s, because the chembl client's HTTP cache was warmed by the server-side call that kept running. So the UI's 'wait ~30s and try again' path does work. The claim 'cannot start' is overstated: first attempts for new diseases fail with a misleading message. I could not reproduce the 105-221 s timings."
+  },
+  {
+   "item": "software-eng: 73-name whitelist; 25% of names return 0 ChEMBL rows",
+   "verdict": "upheld",
+   "reproduction": "KNOWN_DISEASES has 73 entries (ast parse of disease_validator.py). 'breast cancer' returns 0 rows via substring. The 17 vs 18 zero-row count differs between experts; I did not recount all 73."
+  },
+  {
+   "item": "software-eng: unbounded max_drugs; caches keyed on disease only",
+   "verdict": "upheld",
+   "reproduction": "website.py:79 is Optional[int] with no bounds. fetcher.py:31-33 builds the cache key as md5(disease). website.py:114 uses {disease}_results_cache.json with no release, version or settings. TestClient was not run, but path traversal is not possible because the path uses the canonical whitelist name (website.py:93)."
+  },
+  {
+   "item": "software-eng: job model incompatible with Render free tier",
+   "verdict": "upheld",
+   "reproduction": "render.com/docs/free: spins down after 15 min with no inbound traffic; ephemeral filesystem lost on redeploy, restart or spin-down; 'might restart a Free web service at any time'; 750 instance-hours/month. render.yaml: plan free, --workers 1. JOBS is an in-memory dict (website.py). The 50-min gout run was not reproduced."
+  },
+  {
+   "item": "software-eng: silent failure handling; PubChem failures cached as {} permanently poison the cache",
+   "verdict": "refuted",
+   "reproduction": "Partly refuted. fillna(0) and survival of ions are upheld: [Na+].[Cl-] survives with nonzero Z=1, RM1=18 and RF=54, so it is not 'everything else 0'. Bare excepts are confirmed in fetcher.py and main.py. But the 'poisoned cache' claim is false: fetcher.py:240-242 checks `if cached:`, and an empty {} (or empty list) is falsy, so a cached failure is re-fetched on the next run. The bioactivity cache stores an all-None dict, which is truthy, only on a successful empty query, not on exception (fetcher.py:493 returns without caching)."
+  },
+  {
+   "item": "software-eng: fully unpinned dependencies",
+   "verdict": "upheld",
+   "reproduction": "requirements.txt has no version pins. A fresh install today resolved rdkit 2026.3.6, scikit-learn 1.7.2 and shap 0.49.1. render.yaml pins Python 3.12.0. main.tex:52 claims a 'pinned requirements.txt'. The nccl wheel was not checked."
+  },
+  {
+   "item": "software-eng / redteam-paper: paper describes software that does not exist yet (run records, tests, release)",
+   "verdict": "upheld",
+   "reproduction": "gh api repos/Singati2/TopoQSPR/releases returns 0. No tests. No pyproject or setup.py. git diff 46f1a95..HEAD on *.py touches only paper/audit_chembl_indications.py."
+  },
+  {
+   "item": "software-eng: UI and Excel contradict code (11 models etc.)",
+   "verdict": "upheld",
+   "reproduction": "index.html:255 says '11 models'; MODELS_AND_GRIDS (ml.py:735-772) has 10 (C9 confirmed). index.html:397 mentions Railway cold starts. Excel strings were not re-checked."
+  },
+  {
+   "item": "redteam-paper: 'phase 4 for indication' polluted; README/main.tex '103 approved'",
+   "verdict": "upheld",
+   "reproduction": "See the diabetes reproduction above: 103 = 71 small molecules + 32 others; lisinopril has phase 4 via DailyMed refs; 2 molecules are Insipidus-only."
+  },
+  {
+   "item": "redteam-paper: missing primary citations",
+   "verdict": "upheld",
+   "reproduction": "Crossref resolves every DOI listed: 10.1063/1.430994 (Gutman et al. 1975), 10.1007/s10910-009-9520-x (GA), 10.1016/j.aml.2011.09.059 (harmonic), 10.1021/ci00063a012 (Schultz 1989), 10.1021/ci00021a009 (Gutman 1994), 10.1038/s42256-019-0138-9 (TreeExplainer) and 10.6019/CHEMBL.database.37. Mordred, PaDEL and RDKit are still absent from refs.bib."
+  },
+  {
+   "item": "redteam-paper: 're-executed exactly' unattainable with live services",
+   "verdict": "upheld",
+   "reproduction": "status.json reports only ChEMBL_37. The chembl client's local HTTP cache, observed above, adds another hidden source of state."
+  },
+  {
+   "item": "redteam-paper: SoftwareX template/declaration compliance (~3000 words)",
+   "verdict": "uncertain",
+   "reproduction": "main.tex:4 uses elsarticle preprint. Has 'Declaration of competing interest' (main.tex:167); no generative-AI declaration, CRediT or acknowledgements (grep). The primary SoftwareX guide returned 403. Search snippets of the guide say 4000 words, excluding title, authors, references and metadata tables, which contradicts the ~3000 figure."
+  },
+  {
+   "item": "redteam-strategy: baseline ladder; ESOL shows TI-135 worse than 2 size counts",
+   "verdict": "refuted",
+   "reproduction": "Partly refuted. The ladder recommendation is supported by my runs: composition dominates TI everywhere. But 'TI worse than size on measured ESOL' holds only for Ridge: ESOL n=1,128, Ridge size 0.341 / comp 0.723 / TI 0.202 / TI+comp 0.747 / RDKit2D 0.889. With a random forest, TI beats size: size 0.396 / comp 0.849 / TI 0.526 / TI+comp 0.838 / RDKit2D 0.901. The paper must report the ladder per learner, not one Ridge number."
+  },
+  {
+   "item": "redteam-strategy: computed targets circular; use experimental endpoints",
+   "verdict": "upheld",
+   "reproduction": "Composition counts reach R\u00b2 0.857 (LogP), 0.920 (TPSA) and 0.998 (MolMR) on 800 approved drugs, consistent with atom- and fragment-additive definitions."
+  },
+  {
+   "item": "redteam-strategy: 6-disease panel n too small; disease is not a modelling variable",
+   "verdict": "uncertain",
+   "reproduction": "Approved-drug sizes are consistent with mine: asthma 48 and alzheimer 13 phase-4 molecules, before small-molecule filtering. Per-disease CV variance was not reproduced."
+  },
+  {
+   "item": "redteam-strategy: MIT relicensing unsupported; original repo had no licence",
+   "verdict": "upheld",
+   "reproduction": "git shortlog: gcap733-bit 77, Singati2 7 (expert said 4; the repo is moving), Antigravity AI 5, Ganesh Shiwakoti 1. gh api: gcap733-bit/moleculens license null, created 2026-04-28, last push 2026-06-01; Singati2/TopoQSPR is MIT, created 2026-10-02. This is a factual confirmation, not legal advice."
+  },
+  {
+   "item": "redteam-strategy: timeline 4-6 weeks; JOSS ineligible",
+   "verdict": "uncertain",
+   "reproduction": "JOSS docs: repo public >6 months 'with active development spanning that period'; many web tools out of scope. The original repo is 5 months old with no pushes since June, so JOSS is ineligible now. The 4-6 week estimate is judgement and cannot be reproduced."
+  },
+  {
+   "item": "Prior claim C1 (ChEMBL counts)",
+   "verdict": "upheld",
+   "reproduction": "Live ChEMBL_37 (rows / molecules / phase-4): diabetes 821/580/103, hypertension 550/407/120, asthma 288/275/48, alzheimer 306/306/13, 'breast cancer' 0, Diabetes Insipidus matched. One correction: 1,407 is the substring count over four headings; iexact 'Breast Neoplasms' is 1,171. The current draft no longer states 1,407."
+  },
+  {
+   "item": "Prior claim C2",
+   "verdict": "refuted",
+   "reproduction": "Partly. Strategies 2/3 always fail (404 / AssertionError), so 'would pull all cancers' cannot happen. Substring 'cancer' gives 54 rows of mostly unrelated headings."
+  },
+  {
+   "item": "Prior claim C3",
+   "verdict": "upheld",
+   "reproduction": "Hash-seed simulation: 99-106/200 overlap."
+  },
+  {
+   "item": "Prior claim C5",
+   "verdict": "upheld",
+   "reproduction": "Not nested (ml.py:830-850). Bias magnitude per qspr-ml is small; I did not re-measure it."
+  },
+  {
+   "item": "Prior claim C7",
+   "verdict": "upheld",
+   "reproduction": "Returns 1 for 19-25 bonds and a formula for >25 bonds; see Hosoya reproduction."
+  },
+  {
+   "item": "Prior claim C9",
+   "verdict": "upheld",
+   "reproduction": "10 models in code, '11 models' in the UI."
+  },
+  {
+   "item": "Prior claim C10",
+   "verdict": "refuted",
+   "reproduction": "Partly. The arithmetic to 135 is right, but the labels are wrong (DS_ are edge degree-sums; GE sits under distance-based), and only 127 columns are numerically distinct."
+  },
+  {
+   "item": "Prior claim C11",
+   "verdict": "upheld",
+   "reproduction": "PyPI topoqspr returns 404. GitHub search 'topoqspr' finds only Singati2/TopoQSPR. The live site and index.html still say MolecuLens."
+  }
+ ],
+ "conflicts_between_experts": [
+  "ChemGraphX citation: landscape-2026 says refs.bib has 19 entries and does not cite ChemGraphX; redteam-strategy says refs.bib:128 cites it and main.tex:70 positions it. Resolved: the draft was edited at 16:38 on 2026-10-02 and now has 24 entries including ChemGraphX and DOPtools. The landscape finding is stale. Several experts' main.tex line numbers are also off by about 3.",
+  "SoftwareX word limit: redteam-paper says about 3,000; redteam-strategy says 4,000. Secondary sources (search snippets of the SoftwareX guide) say 4,000, excluding title, authors, references and metadata tables. The primary page returned 403, so this needs manual confirmation.",
+  "Value of the indices over size: redteam-strategy says TI-135 is worse than 2 size counts on ESOL; qspr-ml says gains are small (+0.05/+0.07). My runs show both claims depend on the learner and on n. ESOL: Ridge TI 0.20 < size 0.34, but RF TI 0.53 > size 0.40. Approved drugs at n=800: TI beats size by +0.14 (LogP) and +0.17 (TPSA). The robust statement is that composition counts beat TI by a wide margin in every setting.",
+  "qspr-ml rates the shared LinearRegression bug as corrupting best models. In a realistic run LinearReg scores R\u00b2 \u2248 -1e9 (n<p) and never wins, so the stored models are unaffected. The mechanism is real; the practical severity is low.",
+  "software-eng: /validate takes 105-221 s and a first analysis 'cannot start'. My measurements: 15-44 s cold, and 0.5 s on retry because the chembl client's HTTP cache is warm, so the UI's retry message works.",
+  "software-eng: PubChem failures cached as {} 'poison the cache permanently'. The code's `if cached:` treats {} as a miss, so this is refuted.",
+  "Hosoya prevalence: 73% (graph-theory, N=1,959) vs 76.6% (mine, N=2,148), from different de-duplication. Multi-fragment counts: 474/1,959 vs 1,163/3,311 (mine includes salt records). Same conclusion either way.",
+  "C2 and C10 verdicts: the experts agree with each other but partly refute the lead (no 'all cancers' pull; family labels wrong). The whitelist zero-row count is 17 (curation) vs 18 (software-eng).",
+  "ChemGraphX size: landscape says 150 indices; the paper's own table sums to 149 (52+52+24+21) while its text says 150.",
+  "Kara et al. 2025 HAC R\u00b2: strategy quotes 0.998, which is the cubic model; the linear model is 0.999."
+ ],
+ "missing_coverage": [
+  "Data licensing: ChEMBL is CC BY-SA 3.0. Redistributing drug sets, cached ChEMBL-derived files or result workbooks needs attribution and share-alike, and that must be stated in the paper and README alongside the MIT code licence. Nobody covered this.",
+  "Provenance of the non-standard formulas: SS_ABC/AZ/ABS, RABC, ABC_SC (ml.py:302, sqrt((s-2)/p)/sqrt(s), an unexplained hybrid) and n+1-d come from scripts that are not in the repo (degreessum_computation.py, degree_reverse_computation*.py, ml.py:4-6). Before 'fixing' them, get those scripts and the intended definitions from the Arockiaraj group. Some may be deliberate variants used in the group's published papers.",
+  "Feasibility of the Hosoya fix: exact Z is #P-hard in general. A frontier-memoised DP handled imatinib (41 bonds, Z \u2248 7.9e7) instantly, but nobody tested peptides and macrocycles (hundreds of bonds) or set a size cap / applicability rule.",
+  "Statistical numbers shown to users: the results table currently displays LinearReg R\u00b2 around -1e9 (n<p), and UI 'best R\u00b2' values come from a single seed. Nobody specified what the UI should display (e.g. a ladder table with CIs over repeated CV).",
+  "Hidden state from the chembl_webresource_client HTTP cache (on-disk, with expiry) affects both the timing and the reproducibility of queries, separately from the app's own md5 cache. Nobody covered it.",
+  "Security and abuse beyond max_drugs: no auth or rate limit on /run, 8-hex-char job IDs, and CORS_ORIGINS values in config.py not inspected. Path traversal is not possible (canonical whitelist name), but nobody verified this explicitly.",
+  "Whether the planned ChemGraphX cross-check (main.tex:70 \\todo M3) is feasible: ChemGraphX takes .mol/.pdb/adjacency, and the overlapping indices and naming conventions (e.g. its degree-sum indices) were never mapped against TopoQSPR's 135.",
+  "Nobody ran the full pipeline end to end with the current code on a pinned environment, to give actual runtime numbers for the paper's 'first run takes X minutes' claim. The software-eng gout run was aborted at 50 min."
+ ]
+}
