@@ -19,6 +19,7 @@ External review and its verification: [`external-review-2026-10.md`](external-re
 | M4 | **Honest evaluation**: true (repeated) nested CV with model-family selection inside the outer fold; null, size and RDKit-2D baselines; ΔR²(TI − size) with CI as headline; collapse duplicate targets; Benjamini–Hochberg FDR for correlations | §2.4, Fig. 3 | todo |
 | M5 | **Clean annotations**: remove invented Caco-2 formula and unit-mixed bioactivity; fix model count claim in UI | §2.5 | todo |
 | M6 | **Official release engineering**: `pyproject.toml` package, CLI, pytest + GitHub Actions CI, pinned environment + Dockerfile, run-record (provenance) file, docs, v1.0.0 tag, Zenodo DOI, website renamed | Code metadata, §2.1 | todo |
+| M6b | **GO / NO-GO checkpoint** (`docs/CHECKPOINT.md`, per RECOMMENDATIONS.md); pilot on quarantined disease; freeze experiment plan | gate for M7 | todo |
 | M7 | **Validation study**: 8–12 diseases above a pre-set minimum approved-cohort size, current ChEMBL release; per-disease manifests and results archived | §3 Illustrative examples | todo |
 | M7b | **Replication**: re-analyse 3–5 published disease-specific topological-index QSPR studies (chosen with all co-authors): published in-sample R² vs nested-CV R² vs size baseline | §3 | todo |
 | M8 | Write-up: results, impact, conclusions, figures; co-author review; submission | whole paper | todo |
