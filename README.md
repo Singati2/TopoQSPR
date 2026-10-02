@@ -42,3 +42,7 @@ uvicorn website:app --port 8000            # web app at http://localhost:8000
 ## Citation
 
 Manuscript in preparation (see `paper/`).
+
+## License
+
+MIT; see [LICENSE](LICENSE).
