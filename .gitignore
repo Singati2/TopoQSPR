@@ -1,0 +1,13 @@
+.cache/
+outputs/
+__pycache__/
+*.pyc
+.env
+# LaTeX build artefacts
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.spl
+paper/*.pdf

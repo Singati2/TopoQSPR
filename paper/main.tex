@@ -1,0 +1,170 @@
+%% MolecuLens — SoftwareX submission draft
+%% Template: elsarticle (SoftwareX uses it). Upload this folder to Overleaf as-is.
+%% Items marked \todo{} depend on the v1.0 code fixes and must NOT be filled by hand.
+\documentclass[preprint,12pt]{elsarticle}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,multirow}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\ml}{\textsc{MolecuLens}}
+
+\journal{SoftwareX}
+
+\begin{document}
+\begin{frontmatter}
+
+\title{\ml: a provenance-tracked web platform for disease-anchored QSPR modelling with graph-theoretic topological indices}
+
+%% Author list and order to be agreed with the group (incl. Prof. Arockiaraj).
+\author[a]{Author One}
+\author[b]{Author Two}
+\author[c]{Corresponding Author\corref{cor1}}
+\cortext[cor1]{Corresponding author}
+\affiliation[a]{organization={TBD}}
+\affiliation[b]{organization={TBD}}
+\affiliation[c]{organization={TBD}}
+
+\begin{abstract}
+Quantitative structure--property relationship (QSPR) studies based on graph-theoretic topological indices are widely published, but each study usually hand-assembles a small drug set, computes a few indices with ad-hoc scripts, and reports in-sample regression fits. As a result the studies are hard to reproduce and hard to compare. \ml{} is an open-source web platform and Python package that turns a disease concept into a fully specified QSPR study. It resolves the disease to a controlled MeSH heading, assembles an approved-drug set from ChEMBL with an explicit clinical-phase threshold and salt and parent normalisation, and writes a versioned drug manifest. It then computes \todo{135} degree-, reverse-degree-, neighbourhood-degree-sum- and distance-based topological indices that have been checked against published reference values. Finally it evaluates \todo{11} regression models under nested cross-validation against mandatory null and molecular-size baselines. Every run exports its inputs, database release and settings so that it can be re-executed exactly. \todo{One sentence on the multi-disease validation result.}
+\end{abstract}
+
+\begin{keyword}
+topological indices \sep QSPR \sep chemical graph theory \sep ChEMBL \sep reproducibility \sep nested cross-validation \sep web application
+\end{keyword}
+\end{frontmatter}
+
+%% ---------------------------------------------------------------
+\section*{Code metadata}
+\begin{table}[h]
+\small
+\begin{tabularx}{\linewidth}{lXX}
+\toprule
+Nr. & Code metadata description & Metadata \\
+\midrule
+C1 & Current code version & v1.0.0 \todo{tag release} \\
+C2 & Permanent link to code/repository & \url{https://github.com/gcap733-bit/moleculens} \\
+C3 & Permanent link to reproducible capsule & \todo{Zenodo DOI / Code Ocean} \\
+C4 & Legal code license & \todo{MIT -- LICENSE file must be added} \\
+C5 & Code versioning system used & git \\
+C6 & Software code languages, tools and services used & Python 3.12, RDKit, scikit-learn, XGBoost, SHAP, FastAPI; ChEMBL, PubChem and UniChem web services \\
+C7 & Compilation requirements, operating environments and dependencies & Linux/macOS/Windows; pinned \texttt{requirements.txt}; Docker image \todo{} \\
+C8 & Link to developer documentation & \todo{docs URL} \\
+C9 & Support email & \todo{} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%% ---------------------------------------------------------------
+\section{Motivation and significance}
+
+Topological indices are graph invariants of the hydrogen-suppressed molecular graph. They have been used as structural descriptors since Wiener's path-number study of paraffin boiling points \cite{wiener1947}. Degree-based families, including the Zagreb \cite{gutman1972}, Randi\'c \cite{randic1975}, atom-bond connectivity \cite{estrada1998} and Sombor \cite{gutman2021sombor} indices and their many recent variants, are now frequently correlated with physicochemical properties of drugs used for a particular disease. Most such studies share three weaknesses.
+
+\paragraph{The drug set is under-specified} The ``drugs for disease~X'' are usually listed without saying how they were chosen. Approved, investigational and withdrawn agents are mixed, salts and parents are counted separately, and the list cannot be regenerated. Table~\ref{tab:audit} shows how large the choice is. On ChEMBL release~37, a substring query for \emph{diabetes} returns 580 distinct molecules. Only 103 of them reached phase~4 for a diabetes indication, and the matched headings include \emph{Diabetes Insipidus}, which is a different disease. A plain-language query such as \emph{breast cancer} matches no heading at all, because the controlled term is \emph{Breast Neoplasms} (1{,}407 indication records).
+
+\paragraph{Index implementations are unverified} Few papers release code, and implementation errors in less common indices (e.g.\ Hosoya~$Z$, reverse-degree variants) are seldom checked against reference values.
+
+\paragraph{Predictive claims are optimistic} Models are often fitted and scored on the same handful of molecules, with hyperparameters tuned on the evaluation folds. They are seldom compared with the simplest alternative: many indices are strongly correlated with molecular size, which by itself predicts size-dependent properties well.
+
+\ml{} addresses all three weaknesses in a single tool that also works for users without programming experience. The contribution is not a new index. It is infrastructure that makes a topological-index QSPR study fully specified, verifiable and comparable.
+
+\begin{table}[t]
+\centering\small
+\caption{Disease-to-drug mapping in ChEMBL~37 (\texttt{drug\_indication}, substring match on MeSH heading, queried 2026-10-02). ``Phase~4'' is the maximum phase reached \emph{for that indication}. Script: \texttt{audit\_chembl\_indications.py}.}
+\label{tab:audit}
+\begin{tabular}{lrrl}
+\toprule
+Query & Molecules & Phase~4 & Off-target headings matched (examples) \\
+\midrule
+diabetes      & 580 & 103 & Diabetes Insipidus; Diabetes, Gestational \\
+hypertension  & 407 & 120 & Pulmonary, Ocular, Portal, Intracranial hypertension \\
+asthma        & 275 &  48 & Status Asthmaticus \\
+alzheimer     & 306 &  13 & -- \\
+breast cancer &   0 &   0 & (controlled term is ``Breast Neoplasms'') \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ---------------------------------------------------------------
+\section{Software description}
+
+\subsection{Architecture}
+\ml{} is a Python package with three interfaces: a command-line program, a FastAPI REST service, and a single-page web client served by the same process \todo{Fig.~1: architecture diagram}. A run has five stages, and each stage writes a versioned artefact:
+(i) disease resolution, (ii) drug-set curation, (iii) descriptor computation, (iv) model evaluation, and (v) reporting. The run record stores the ChEMBL release, the query parameters, package versions and the random seed. Uploading a run record re-executes the same study.
+
+\subsection{Disease resolution and drug-set curation}
+The free-text input is matched against the MeSH headings that occur in ChEMBL's \texttt{drug\_indication} table \cite{zdrazil2024chembl}. The user then confirms one or more headings, and their MeSH/EFO identifiers rather than the typed string are used in all later steps. The drug set is defined by explicit rules: \todo{finalise defaults}
+\begin{enumerate}
+  \item indication-specific maximum phase $\geq$ a user-chosen threshold (default: 4, approved);
+  \item small molecules only (ChEMBL \texttt{molecule\_type});
+  \item mapping to the parent compound through the ChEMBL molecule hierarchy, retention of the largest organic fragment, and removal of duplicates by InChIKey connectivity layer;
+  \item exclusion of structures for which the hydrogen-suppressed graph is undefined or disconnected after normalisation.
+\end{enumerate}
+The resulting \emph{drug manifest} is shown to the user before any computation and can be downloaded. It lists the ChEMBL ID, preferred name, phase and the reason each candidate was included or excluded. Ordering is deterministic, so a given release and set of settings always produce the same set.
+
+\subsection{Topological indices}
+For a molecular graph $G=(V,E)$ with vertex degrees $d(v)$, the package implements \todo{135} indices in five families (Table~\ref{tab:indices}, full definitions in Supplementary~S1):
+degree-based edge sums $\sum_{uv\in E} f(d(u),d(v))$;
+reverse-degree variants with $c(v)=\Delta-d(v)+1$ and the generalised $R_k$ \todo{cite source of $R_k$};
+neighbourhood-degree-sum variants, in which $d(v)$ is replaced by $S(v)=\sum_{u\sim v} d(u)$;
+distance-based indices (Wiener, Balaban~$J$ \cite{balaban1982}, Hosoya~$Z$ \cite{hosoya1971}, Szeged, Mostar, PI, Schultz, Gutman);
+and graph entropy.
+Each index is unit-tested against closed-form values on path, cycle, star and complete graphs (e.g.\ $W(P_n)=(n^3-n)/6$) and against values reported in the literature for reference molecules \cite{todeschini2009}.
+
+\begin{table}[t]
+\centering\small
+\caption{Index families implemented. \todo{update counts after verification; drop any index that fails tests}}
+\label{tab:indices}
+\begin{tabular}{lrl}
+\toprule
+Family & $n$ & Examples \\
+\midrule
+Degree-based              & 31 & $M_1,M_2,R,ABC,GA,H,SO,ISI,\sigma$ \\
+Reverse-degree ($R$, $R_k$) & 53 & $RM_1, RABC, R_kSO, R_kISI$ \\
+Neighbourhood degree-sum  & 35 & $S\!M_1, S\!ABC, S\!GA$ \\
+Distance / cut-based      & 15 & $W, J, Z, Sz, Mo, PI$ \\
+Information-theoretic     &  1 & graph entropy \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Model evaluation}
+Each target property is modelled with \todo{11} regressors (ordinary least squares, ridge, lasso, elastic net, random forest, extra trees, gradient boosting, XGBoost \cite{chen2016xgboost}, support-vector regression, multilayer perceptron, \todo{11th}) implemented in scikit-learn \cite{pedregosa2011}. The evaluation protocol is designed to prevent optimistic bias:
+\begin{itemize}
+  \item \textbf{Nested cross-validation.} Hyperparameters are tuned inside each outer training fold only. The outer $k$ folds (default $k=5$, repeated \todo{5} times) give the reported performance \cite{varma2006,cawley2010}.
+  \item \textbf{Mandatory baselines.} Every result is reported next to a mean-only null model and a \emph{size baseline} fitted on heavy-atom and bond counts. The gain over the size baseline, $\Delta R^2_{\text{size}}$, is the headline metric, because it isolates information that the indices carry beyond molecular size.
+  \item \textbf{Independent targets only.} Duplicate targets (e.g.\ RDKit and PubChem molecular weight) are collapsed. Targets that are near-deterministic functions of atom counts are labelled as such in the report.
+  \item \textbf{Explainability.} Mean absolute SHAP values \cite{lundberg2017} are computed for the selected model and summarised by index family, because individual indices within a family are highly collinear.
+\end{itemize}
+
+\subsection{Additional annotations}
+PubChem physicochemical properties \cite{kim2023pubchem}, UniChem cross-references \cite{chambers2013unichem}, and Lipinski \cite{lipinski2001}, Veber \cite{veber2002} and PAINS \cite{baell2010} flags are reported as annotations of the drug set. They are not used as modelling targets.
+
+%% ---------------------------------------------------------------
+\section{Illustrative examples}
+\todo{Run v1.0 on a fixed panel of diseases (proposed: type~2 diabetes mellitus, hypertension, asthma, Alzheimer disease, breast neoplasms, epilepsy) with phase~4 drugs, ChEMBL~37. Report per disease: manifest size; best nested-CV $R^2$ per target; $\Delta R^2_{\text{size}}$; top index families by SHAP.}
+
+\todo{Fig.~2: screenshots of the web workflow (disease resolution $\to$ manifest confirmation $\to$ results dashboard).}
+
+\todo{Fig.~3: $\Delta R^2_{\text{size}}$ heat-map, diseases $\times$ targets.}
+
+\todo{Case study: reproduce one published topological-index QSPR study from our group with \ml{} and compare the in-sample with the nested-CV estimate.}
+
+%% ---------------------------------------------------------------
+\section{Impact}
+\todo{Who uses it (chemical graph theory groups, teaching), what becomes possible (multi-disease comparisons; reproducible supplementary material for index papers), usage statistics if available.}
+
+%% ---------------------------------------------------------------
+\section{Conclusions}
+\todo{}
+
+\section*{Declaration of competing interest}
+The authors declare no competing interests.
+
+\section*{Data availability}
+All data are retrieved from public databases at run time. The manifests and run records for every example in this paper are archived at \todo{Zenodo DOI}.
+
+\bibliographystyle{elsarticle-num}
+\bibliography{refs}
+\end{document}
