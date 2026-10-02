@@ -48,15 +48,24 @@ fallback), with **all** candidates kept (no random truncation) so that it is det
 4. Candidates with 20 ≤ n < 50 are reported descriptively as *underpowered*; no ML claims.
 5. Record the counts table here before step 4 of the analysis begins.
 
+### 3.4 Open decision before freezing
+The phase-4 filter alone still admits drugs attached by label text mining (e.g. lisinopril for
+diabetes). The default evidence filter (none / exclude DailyMed-only / ATC class) is chosen from
+the cohort module's measured counts **before** any modelling, and recorded here.
+
 ## 4. Targets
 
 Classified before analysis; only class 2 and 3 can support headline claims.
 
 | Class | Meaning | Targets |
 |---|---|---|
-| 1 Structural / near-deterministic | Sanity checks | Molecular weight |
-| 2 Computed physicochemical | Main analysis | Crippen logP, XLogP3 (PubChem), TPSA, molar refractivity, PubChem complexity |
-| 3 External experimental | Main analysis if obtainable at adequate n | `TBD from audit` (candidates: experimental logP, melting point, aqueous solubility) |
+| 1 Structural / near-deterministic | Sanity checks only | Molecular weight |
+| 2 Computed physicochemical | Genre replication and Experiments A/C; **no headline claims** (these are atom-contribution sums, so modelling them is close to circular) | Crippen logP, XLogP3 (PubChem), TPSA, molar refractivity |
+| 3 External experimental | **Headline analysis (Experiment B)** | Candidates: aqueous solubility (AqSolDB), melting point (Bradley open set), experimental logP (OPERA/PHYSPROP). Each source is used only after its licence is checked; matched to drugs by InChIKey |
+
+Audit note (2026-10): all v0.x indices are blind to element type and bond order (hexane, 1-pentanol,
+pentylamine and 1,4-butanediol get identical values), so polarity-type targets can only be
+predicted through their correlation with size.
 
 Duplicate targets are removed (RDKit and PubChem molecular weight are the same quantity).
 Bioactivity values are excluded from v1.0 modelling.
@@ -68,6 +77,7 @@ Bioactivity values are excluded from v1.0 modelling.
 | M0 null | none (training-fold mean) |
 | M_size | heavy-atom count, bond count |
 | M_size+ (sensitivity) | + ring count |
+| M_comp | element counts (C, N, O, S, P, halogens, other) + H count |
 | M_TI | all verified TIs (after removing exact duplicates) |
 | M_TI-family | one model per index family (Experiment B, family contributions) |
 | M_std | RDKit 2D descriptors, **excluding any descriptor that defines or is the target** (e.g. MolLogP when predicting Crippen logP) |
@@ -82,7 +92,7 @@ Bioactivity values are excluded from v1.0 modelling.
 
 ## 7. Endpoints and statistics
 
-- **Primary:** ΔR²(TI − size) per disease × target, averaged over repeats. 95% CI via the
+- **Primary:** ΔR²(TI+comp − comp) and ΔR²(TI − size) on class-3 targets (pooled set); per disease × target secondary, averaged over repeats. 95% CI via the
   corrected repeated k-fold t-test (Nadeau & Bengio 2003; Bouckaert & Frank 2004), using
   paired per-fold differences.
 - TIs are called *informative beyond size* for a disease × target if the CI lower bound > 0
@@ -95,7 +105,11 @@ Bioactivity values are excluded from v1.0 modelling.
 
 - **A. Cohort sensitivity:** naive vs controlled per disease: Jaccard overlap of parent InChIKeys,
   n, property distributions, top-10 correlated indices overlap, ΔR²(TI − size).
-- **B. Size confounding:** R² of M0, M_size, M_TI, M_std; ΔR²(TI − size); family-level ΔR².
+- **B. Size and composition confounding:** baseline ladder M0 → M_size → M_comp → M_TI → M_TI+comp → M_std;
+  ΔR²(TI − size), ΔR²(TI − comp), and ΔR²(TI+comp − comp) (what indices add on top of composition).
+  Run primarily on the **pooled** set of all curated approved small-molecule drugs with experimental
+  endpoints (per-disease approved cohorts are too small for stable estimates); per-disease results
+  are secondary.
 - **C. Evaluation optimism:** training R², v0.x-style CV (tuned on all data, best-of-family),
   nested R²; B_train = R²_train − R²_nested and B_CV = R²_CV − R²_nested.
 - **D. Replication:** 3–5 published disease-specific TI-QSPR studies, chosen with all co-authors,
