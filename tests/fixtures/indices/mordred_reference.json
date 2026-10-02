@@ -1,0 +1,305 @@
+{
+ "generated_with": {
+  "chembl_structure_pipeline": "1.2.4",
+  "mordredcommunity": "2.0.7",
+  "rdkit": "2026.3.6"
+ },
+ "mapping": {
+  "ABC": "ABC",
+  "BalabanJ": "J",
+  "WPath": "W",
+  "Xp-1d": "R",
+  "Zagreb1": "M1",
+  "Zagreb2": "M2"
+ },
+ "values": {
+  "acetaminophen": {
+   "canonical_smiles": "CC(=O)Nc1ccc(O)cc1",
+   "inchikey": "RZVAJINKPMORJF-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 8.10634399227556,
+    "BalabanJ": 2.1712966618489173,
+    "WPath": 166.0,
+    "Xp-1d": 5.1815405503520555,
+    "Zagreb1": 50.0,
+    "Zagreb2": 53.0
+   }
+  },
+  "amlodipine": {
+   "canonical_smiles": "CCOC(=O)C1=C(COCCN)NC(C)=C(C(=O)OC)C1c1ccccc1Cl",
+   "inchikey": "HTIQEAQVCYTUBX-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 20.620134937215546,
+    "BalabanJ": 2.37867003099374,
+    "WPath": 1836.0,
+    "Xp-1d": 13.455126120231855,
+    "Zagreb1": 136.0,
+    "Zagreb2": 160.0
+   }
+  },
+  "aspirin": {
+   "canonical_smiles": "CC(=O)Oc1ccccc1C(=O)O",
+   "inchikey": "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 9.54906712535007,
+    "BalabanJ": 2.4617583645949614,
+    "WPath": 246.0,
+    "Xp-1d": 6.109060905280622,
+    "Zagreb1": 60.0,
+    "Zagreb2": 66.0
+   }
+  },
+  "atorvastatin": {
+   "canonical_smiles": "CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CC[C@@H](O)C[C@@H](O)CC(=O)O",
+   "inchikey": "XUKUURHRXDUEBC-KAYWLYCHSA-N",
+   "mordred": {
+    "ABC": 31.623855739458577,
+    "BalabanJ": 1.61732346058558,
+    "WPath": 5382.0,
+    "Xp-1d": 19.65077480093882,
+    "Zagreb1": 210.0,
+    "Zagreb2": 245.0
+   }
+  },
+  "caffeine": {
+   "canonical_smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+   "inchikey": "RYYVLZVUVIJVGH-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 10.87046991486494,
+    "BalabanJ": 2.226351040051458,
+    "WPath": 258.0,
+    "Xp-1d": 6.5365812602091875,
+    "Zagreb1": 76.0,
+    "Zagreb2": 94.0
+   }
+  },
+  "ciprofloxacin": {
+   "canonical_smiles": "O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O",
+   "inchikey": "MYSWGUAQZAJSOK-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 19.205921374842454,
+    "BalabanJ": 1.5315391421412607,
+    "WPath": 1234.0,
+    "Xp-1d": 11.558550648063802,
+    "Zagreb1": 134.0,
+    "Zagreb2": 164.0
+   }
+  },
+  "cyclosporine": {
+   "canonical_smiles": "C/C=C/C[C@@H](C)[C@@H](O)[C@H]1C(=O)N[C@@H](CC)C(=O)N(C)CC(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@H](C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](C(C)C)C(=O)N1C",
+   "inchikey": "PMATZTZNYRCHOR-CGLBZJNRSA-N",
+   "mordred": {
+    "ABC": 62.73144650001982,
+    "BalabanJ": 4.270876470865955,
+    "WPath": 37337.0,
+    "Xp-1d": 39.209088524097595,
+    "Zagreb1": 412.0,
+    "Zagreb2": 477.0
+   }
+  },
+  "diazepam": {
+   "canonical_smiles": "CN1C(=O)CN=C(c2ccccc2)c2cc(Cl)ccc21",
+   "inchikey": "AAOVKJBEBIDNHE-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 15.68231801272818,
+    "BalabanJ": 1.7929942255770468,
+    "WPath": 726.0,
+    "Xp-1d": 9.66470379794645,
+    "Zagreb1": 106.0,
+    "Zagreb2": 126.0
+   }
+  },
+  "donepezil": {
+   "canonical_smiles": "COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2",
+   "inchikey": "ADEBPBSSDYVVLD-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 21.867939558444625,
+    "BalabanJ": 1.2301987705529924,
+    "WPath": 2333.0,
+    "Xp-1d": 13.67336639324559,
+    "Zagreb1": 148.0,
+    "Zagreb2": 175.0
+   }
+  },
+  "gemcitabine": {
+   "canonical_smiles": "Nc1ccn([C@@H]2O[C@H](CO)[C@@H](O)C2(F)F)c(=O)n1",
+   "inchikey": "SDUQYLNIPVEERB-QPPQHZFASA-N",
+   "mordred": {
+    "ABC": 13.836496029766792,
+    "BalabanJ": 2.1283329146537846,
+    "WPath": 560.0,
+    "Xp-1d": 8.374245891192093,
+    "Zagreb1": 96.0,
+    "Zagreb2": 116.0
+   }
+  },
+  "hydrochlorothiazide": {
+   "canonical_smiles": "NS(=O)(=O)c1cc2c(cc1Cl)NCNS2(=O)=O",
+   "inchikey": "JZUFKLXOESDKRF-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 13.427805631411442,
+    "BalabanJ": 2.176565420280976,
+    "WPath": 460.0,
+    "Xp-1d": 7.716162047958508,
+    "Zagreb1": 94.0,
+    "Zagreb2": 111.0
+   }
+  },
+  "ibuprofen": {
+   "canonical_smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+   "inchikey": "HEFNNWSXXWATRW-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 11.072670487464345,
+    "BalabanJ": 2.290892150463114,
+    "WPath": 404.0,
+    "Xp-1d": 7.002907755397974,
+    "Zagreb1": 70.0,
+    "Zagreb2": 77.0
+   }
+  },
+  "imatinib": {
+   "canonical_smiles": "Cc1ccc(NC(=O)c2ccc(CN3CCN(C)CC3)cc2)cc1Nc1nccc(-c2cccnc2)n1",
+   "inchikey": "KTUFNOKKBVMGRW-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 29.198227084312325,
+    "BalabanJ": 1.028965693154701,
+    "WPath": 5324.0,
+    "Xp-1d": 18.03000977870159,
+    "Zagreb1": 194.0,
+    "Zagreb2": 224.0
+   }
+  },
+  "lisinopril": {
+   "canonical_smiles": "NCCCC[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CCC[C@H]1C(=O)O",
+   "inchikey": "RLAWWYSOJDYHDC-BZSNNMDCSA-N",
+   "mordred": {
+    "ABC": 21.557951861702918,
+    "BalabanJ": 1.9872888191927838,
+    "WPath": 2362.0,
+    "Xp-1d": 13.934759407976115,
+    "Zagreb1": 138.0,
+    "Zagreb2": 156.0
+   }
+  },
+  "memantine": {
+   "canonical_smiles": "CC12CC3CC(C)(C1)CC(N)(C3)C2",
+   "inchikey": "BUGYDGFZZOZRHP-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 11.083357585591889,
+    "BalabanJ": 2.0314966899206834,
+    "WPath": 192.0,
+    "Xp-1d": 5.906725386731054,
+    "Zagreb1": 84.0,
+    "Zagreb2": 102.0
+   }
+  },
+  "metformin": {
+   "canonical_smiles": "CN(C)C(=N)N=C(N)N",
+   "inchikey": "XZWYZXLIPXDOLR-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 6.163363133678392,
+    "BalabanJ": 3.376600515177144,
+    "WPath": 96.0,
+    "Xp-1d": 4.036581260209188,
+    "Zagreb1": 36.0,
+    "Zagreb2": 36.0
+   }
+  },
+  "morphine": {
+   "canonical_smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+   "inchikey": "BQJCRHHNABKAKU-KBQPJGBKSA-N",
+   "mordred": {
+    "ABC": 17.578369571312006,
+    "BalabanJ": 1.6519620624854536,
+    "WPath": 712.0,
+    "Xp-1d": 10.125864216121359,
+    "Zagreb1": 132.0,
+    "Zagreb2": 173.0
+   }
+  },
+  "nicotine": {
+   "canonical_smiles": "CN1CCC[C@H]1c1cccnc1",
+   "inchikey": "SNICXCGAKADSCV-JTQLQIEISA-N",
+   "mordred": {
+    "ABC": 9.220897726126537,
+    "BalabanJ": 1.8857276720060387,
+    "WPath": 191.0,
+    "Xp-1d": 5.877010097711745,
+    "Zagreb1": 60.0,
+    "Zagreb2": 69.0
+   }
+  },
+  "paclitaxel": {
+   "canonical_smiles": "CC(=O)O[C@H]1C(=O)[C@@]2(C)[C@H]([C@H](OC(=O)c3ccccc3)[C@]3(O)C[C@H](OC(=O)[C@H](O)[C@@H](NC(=O)c4ccccc4)c4ccccc4)C(C)=C1C3(C)C)[C@]1(OC(C)=O)CO[C@@H]1C[C@@H]2O",
+   "inchikey": "RCINICONZNJXQF-MZXODVADSA-N",
+   "mordred": {
+    "ABC": 48.99182101980965,
+    "BalabanJ": 1.3087747649378936,
+    "WPath": 14767.0,
+    "Xp-1d": 29.272289927176125,
+    "Zagreb1": 346.0,
+    "Zagreb2": 429.0
+   }
+  },
+  "rifampicin": {
+   "canonical_smiles": "CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(O)c(c(/C=N/N5CCN(C)CC5)c(O)c4c3C2=O)NC(=O)/C(C)=C\\C=C\\[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C",
+   "inchikey": "JQXXHWHPUNPDRT-WLSIYKJHSA-N",
+   "mordred": {
+    "ABC": 45.58647078599296,
+    "BalabanJ": 1.4791991198622976,
+    "WPath": 13890.0,
+    "Xp-1d": 27.730884027626534,
+    "Zagreb1": 314.0,
+    "Zagreb2": 380.0
+   }
+  },
+  "sildenafil": {
+   "canonical_smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
+   "inchikey": "BNRNXUUZRGQAQC-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 25.73599096637845,
+    "BalabanJ": 1.4979644016816143,
+    "WPath": 3086.0,
+    "Xp-1d": 15.75558728655341,
+    "Zagreb1": 178.0,
+    "Zagreb2": 215.0
+   }
+  },
+  "sitagliptin": {
+   "canonical_smiles": "N[C@@H](CC(=O)N1CCn2c(nnc2C(F)(F)F)C1)Cc1cc(F)c(F)cc1F",
+   "inchikey": "MFFMDFFZMYYVKS-SECBINFHSA-N",
+   "mordred": {
+    "ABC": 21.973098172677947,
+    "BalabanJ": 1.4707103571396818,
+    "WPath": 2281.0,
+    "Xp-1d": 13.057569213703696,
+    "Zagreb1": 150.0,
+    "Zagreb2": 176.0
+   }
+  },
+  "vancomycin": {
+   "canonical_smiles": "CN[C@H](CC(C)C)C(=O)N[C@H]1C(=O)N[C@@H](CC(N)=O)C(=O)N[C@H]2C(=O)N[C@H]3C(=O)N[C@H](C(=O)N[C@H](C(=O)O)c4cc(O)cc(O)c4-c4cc3ccc4O)[C@H](O)c3ccc(c(Cl)c3)Oc3cc2cc(c3O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O[C@H]2C[C@](C)(N)[C@H](O)[C@H](C)O2)Oc2ccc(cc2Cl)[C@H]1O",
+   "inchikey": "MYPYJXKWCTUITO-LYRMYLQWSA-N",
+   "mordred": {
+    "ABC": 79.46205592090767,
+    "BalabanJ": 1.1188909669711782,
+    "WPath": 52810.0,
+    "Xp-1d": 47.656161092579524,
+    "Zagreb1": 550.0,
+    "Zagreb2": 662.0
+   }
+  },
+  "warfarin": {
+   "canonical_smiles": "CC(=O)CC(c1ccccc1)c1c(O)c2ccccc2oc1=O",
+   "inchikey": "PJVWKTKQMONHTI-UHFFFAOYSA-N",
+   "mordred": {
+    "ABC": 17.872588041509122,
+    "BalabanJ": 1.7782147277040985,
+    "WPath": 1092.0,
+    "Xp-1d": 11.075387400469408,
+    "Zagreb1": 120.0,
+    "Zagreb2": 142.0
+   }
+  }
+ }
+}
