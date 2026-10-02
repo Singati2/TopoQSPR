@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "topoqspr"
+version = "1.0.0.dev0"
+description = "Disease-anchored, provenance-tracked QSPR with verified graph-theoretic topological indices"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+  "rdkit>=2024.3",
+  "chembl_structure_pipeline>=1.2",
+  "numpy>=1.26",
+  "pandas>=2.1",
+  "scipy>=1.11",
+  "scikit-learn>=1.4",
+  "xgboost>=2.0",
+  "requests>=2.31",
+]
+
+[project.optional-dependencies]
+web = ["fastapi>=0.110", "uvicorn>=0.29"]
+test = ["pytest>=8", "networkx>=3.2", "mordredcommunity>=2.0"]
+
+[project.scripts]
+topoqspr = "topoqspr.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["network: test needs live web services (deselect with -m 'not network')"]

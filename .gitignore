@@ -11,3 +11,6 @@ paper/*.log
 paper/*.out
 paper/*.spl
 paper/*.pdf
+*.egg-info/
+.pytest_cache/
+build/
