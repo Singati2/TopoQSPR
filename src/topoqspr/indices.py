@@ -394,7 +394,9 @@ def _balaban_j(ctx: GraphContext) -> float:
         raise UndefinedIndex("Balaban J undefined for a graph without edges")
     mu = g.m - g.n + 1
     s = ctx.dist_sums
-    return g.m / (mu + 1) * sum(1.0 / math.sqrt(s[u] * s[v]) for u, v in g.edges)
+    # math.fsum: correctly rounded, so identical on every Python version (built-in sum() over
+    # floats changed in 3.12 and gave 1-ulp differences between the venv and the Docker image)
+    return g.m / (mu + 1) * math.fsum(1.0 / math.sqrt(s[u] * s[v]) for u, v in g.edges)
 
 
 def _szeged(ctx: GraphContext) -> int:
