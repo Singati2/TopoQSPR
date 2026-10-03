@@ -75,7 +75,9 @@ Audit note (2026-10): all v0.x indices are blind to element type and bond order 
 pentylamine and 1,4-butanediol get identical values), so polarity-type targets can only be
 predicted through their correlation with size.
 
-Duplicate targets are removed (RDKit and PubChem molecular weight are the same quantity).
+Target names must be unique across providers: the pipeline rejects a duplicated name rather than
+collapsing it. v1.0 ships no PubChem target provider, so the RDKit/PubChem molecular-weight duplicate
+of v0.x cannot arise.
 Bioactivity values are excluded from v1.0 modelling.
 
 ## 5. Feature sets (models compared on identical folds)
@@ -89,6 +91,10 @@ Bioactivity values are excluded from v1.0 modelling.
 | M_TI | all verified TIs (after removing exact duplicates) |
 | M_TI-family | one model per index family (Experiment B, family contributions) |
 | M_std | RDKit 2D descriptors, **excluding every descriptor in the target's derivation family** (e.g. for Crippen logP: MolLogP, MolMR, SlogP_VSA*, SMR_VSA*) |
+
+The baselines (M0, M_size, M_comp) are part of every run. At `v1.0-dev` they are configurable
+defaults; config validation will enforce them (code change in preparation on branch `fx-code`), and
+until then the frozen configs list them explicitly (PIPELINE.md §2).
 
 ## 6. Models and cross-validation
 
@@ -116,10 +122,13 @@ Bioactivity values are excluded from v1.0 modelling.
   for an endpoint if its two-sided corrected-t p-value survives Benjamini–Hochberg control at q = 0.05
   over the confirmatory family **and** the mean ΔR² > 0 (as implemented in `confirmatory.csv`). The
   family size m is fixed in advance (missing p-values count as non-rejections, not as a smaller m), and
-  underpowered endpoints (n < 50) are excluded from the family before testing.
+  underpowered endpoints (n < 50, or smallest outer test fold < 10 rows; EVALUATION_PROTOCOL §11.2)
+  are excluded from the family before testing.
   Sensitivity: paired bootstrap of the whole nested procedure, on the pooled set only (at per-disease
   n the resampled test folds are too small for R² to be defined; pilot: 17–19 of 19 resamples undefined)
   (CV intervals can undercover; Bates, Hastie & Tibshirani 2023), and Benjamini–Yekutieli instead of BH (dependence).
+  Frozen per-disease configs set `protocol.bootstrap.enabled = false` unless the code default is already
+  pooled-only (PIPELINE.md §9).
   **Practical significance:** ΔR² ≥ 0.05 is the pre-specified minimal meaningful gain
   (to be confirmed by co-authors before freezing).
 - **Secondary (exploratory):** ΔR²(TI+comp − comp); ΔR² per TI family; M_std vs M_TI; class-2 targets;
@@ -158,16 +167,18 @@ Bioactivity values are excluded from v1.0 modelling.
   coefficient are also reported (secondary). A permuted-target and a descriptor-pool-randomised control
   (pick the best of the same number of random indices) quantify chance correlation at the study's n.
 
-## 9. Interpretation (SHAP)
+## 9. Interpretation (attribution deferred)
 
-Secondary and descriptive only. SHAP is computed for the model refit in each outer training fold,
-evaluated on that fold's test set, summarised by index family, and its stability across folds
-is reported. If it is unstable, we say so.
+**Not part of v1.0** (pre-freeze change, 2026-10-03; see *Pre-freeze changes*). The v1.0 package has
+no SHAP or other attribution code, so no attribution analysis is run or reported. Fold-internal
+attribution (computed on the model refit in each outer training fold, evaluated on that fold's
+test set, summarised by index family, with stability across folds) is deferred to a later release
+and, if added, will be exploratory only.
 
 ## 10. Confirmatory vs exploratory
 
 Only the primary endpoint in §7 is confirmatory. Everything else (secondary endpoints, family-level
-results, class-2 targets, SHAP, per-disease results below the n threshold) is labelled exploratory
+results, class-2 targets, per-disease results below the n threshold) is labelled exploratory
 in the paper.
 
 ## 11. GO / NO-GO checkpoint
@@ -185,6 +196,17 @@ replication candidates; threats to internal and external validity; reproducibili
 
 Every result file records: git commit and tag, package version, ChEMBL release, dependency
 lock, seeds, run configuration and cohort manifest. Paper numbers come only from a tagged release.
+
+## Pre-freeze changes (logged for transparency; the plan is not yet frozen)
+
+- 2026-10-03, §9: SHAP removed from v1.0; attribution deferred (no attribution code in the v1.0
+  package). §10 no longer lists SHAP.
+- 2026-10-03, §4: "duplicate targets are removed" replaced by the implemented rule (duplicate target
+  names are rejected).
+- 2026-10-03, §7: family membership also excludes members whose smallest outer test fold has < 10
+  rows (as implemented); bootstrap restricted to the pooled set in the configs.
+- 2026-10-03: the paper's "additional annotations" (PubChem properties, UniChem, Lipinski/Veber/PAINS
+  filters) are v0.x features that are not in the v1.0 package and are not part of this plan.
 
 ## Amendments
 

@@ -225,7 +225,7 @@ as `HCM2`. The v0.x vertex forms RM1 (sum c^2) and RF (sum c^3) are dropped:
 Kulli's indices are edge sums.
 
 
-**Primary-source status (2026-10-03).** The original R_k paper (Arockiaraj, Greeni & Kalaam, *Int. J. Quantum Chem.* 123(16), 2023, doi:10.1002/qua.27136) is not open access (no PMC copy; Unpaywall: closed), so its full text has not been read. The definition used here is the one printed verbatim in the open-access follow-up by the same authors (Kalaam, Greeni & Arockiaraj, *Front. Chem.* 12:1470231, 2024, PMC11462630), and `test_modified_reverse_degree_matches_kalaam_2024_verbatim` checks the implementation against it for every Δ ≤ 8, 1 ≤ d ≤ Δ, 1 ≤ k ≤ Δ.
+**Primary-source status (superseded; kept for the record).** An earlier note of 2026-10-03 said the full text of the original R_k paper (*Int. J. Quantum Chem.* 123:e27136, 2023, doi:10.1002/qua.27136; not open access) had not been read and that the definition was taken from the verbatim restatement in the open-access follow-up (Kalaam, Greeni & Arockiaraj, *Front. Chem.* 12:1470231, 2024, PMC11462630). The full text was read later the same day (next paragraph). `test_modified_reverse_degree_matches_kalaam_2024_verbatim` still checks the implementation against the 2024 restatement for every Δ ≤ 8, 1 ≤ d ≤ Δ, 1 ≤ k ≤ Δ.
 
 
 **Original R_k paper read (2026-10-03).** The full text of Arockiaraj, Greeni & Kalaam, *Int. J. Quantum Chem.* 123:e27136 (2023) was read from a copy supplied by a co-author. Findings:
@@ -408,18 +408,18 @@ root (aspirin, imatinib, n-eicosane):
 | salts not stripped before graph construction | `ml.py` only calls `RemoveHs`; metformin HCl J = 0 | ChEMBL parent + `mixture` rejection |
 | R4_* drops zero-weight edges silently | metformin R4_A = 4.0 (3 of 8 edges kept) | k > Delta is NaN with reason |
 
-## Not registered (pending a checkable source)
+## Hybrid descriptors (resolved) and indices still not registered
 
-**Hybrid descriptors, resolved 2026-10-03.** The primary paper (Arockiaraj et al., *SAR QSAR Environ. Res.* 34:569-589, 2023) was read from page photos supplied by a co-author. It defines BM and TM plus ten hybrids (GH, GBM, GTM, HG, HBM, HTM, BMG, BMH, TMG, TMH) on pp. 571-572. All twelve are now registered and reproduce the paper's Table 2 for benzene, anthracene, anthanthrene, benzo[a]coronene and benzo[h]pentaphene (50 of 51 values compared; the exception, anthanthrene GBM, is an ambiguous digit in the photo). Real SMILES of benzene, anthracene and coronene reproduce the paper's Table 1 bond partitions. BMA and TMA, attributed to this paper by the v0.x code, **do not appear in it**; with no other source found they remain dropped. BM = M1 + M2 and TM = F + M2 identically (asserted in tests).
+**Hybrid descriptors, resolved 2026-10-03 (now registered).** The primary paper (Arockiaraj et al., *SAR QSAR Environ. Res.* 34:569-589, 2023) was read from page photos supplied by a co-author. It defines BM and TM plus ten hybrids (GH, GBM, GTM, HG, HBM, HTM, BMG, BMH, TMG, TMH) on pp. 571-572. All twelve are now registered and reproduce the paper's Table 2 for benzene, anthracene, anthanthrene, benzo[a]coronene and benzo[h]pentaphene (50 of 51 values compared; the exception, anthanthrene GBM, is an ambiguous digit in the photo). Real SMILES of benzene, anthracene and coronene reproduce the paper's Table 1 bond partitions. BMA and TMA, attributed to this paper by the v0.x code, **do not appear in it**; with no other source found they remain dropped. BM = M1 + M2 and TM = F + M2 identically (asserted in tests).
 
-The vertex-edge Wiener and Szeged
-indices (W_ve, Sz_ve) also stay out: more than one convention exists and the
+**Not registered (pending a checkable source).** The vertex-edge Wiener and Szeged
+indices (W_ve, Sz_ve) stay out: more than one convention exists and the
 v0.x choice could not be tied to a source.
 
 ## Legacy name mapping
 
 All 135 names of v0.x `config.py:TOPO_INDICES`, in their original order.
-51 map to a v1 index (some renamed); 84 are dropped with the reason given.
+58 map to a v1 index (some renamed; 7 of them, BM, TM, GH, GTM, TMG, HBM and HTM, registered on 2026-10-03 from the primary paper); 77 are dropped with the reason given.
 
 | v0.x name | v1 name or decision |
 |---|---|
@@ -521,8 +521,8 @@ All 135 names of v0.x `config.py:TOPO_INDICES`, in their original order.
 | `R1_ABC_SC` | dropped: ABC_SC has no source |
 | `R1_ISI` | `R1_ISI` (ReZ_2 in godlin2026) |
 | `R1_sigma` | dropped: R1_sigma equals `sigma` identically, since (c_u - c_v)^2 = (d_u - d_v)^2 |
-| `R1_HBM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
-| `R1_HTM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
+| `R1_HBM` | dropped: k-generalisation not defined in the primary paper (arockiaraj2023sar, read 2026-10-03, defines the hybrid itself, registered under its plain name) or in any other source found |
+| `R1_HTM` | dropped: k-generalisation not defined in the primary paper (arockiaraj2023sar, read 2026-10-03, defines the hybrid itself, registered under its plain name) or in any other source found |
 | `R1_BMA` | dropped: = 2m + 2 R1_ISI identically; formula not verifiable |
 | `R1_TMA` | dropped: = 2 R1_M1 - 2 R1_ISI identically; formula not verifiable |
 | `R2_A` | dropped: R2_A = R2_M1 / 2 exactly |
@@ -532,8 +532,8 @@ All 135 names of v0.x `config.py:TOPO_INDICES`, in their original order.
 | `R2_ABC_SC` | dropped: ABC_SC has no source |
 | `R2_ISI` | `R2_ISI` (ReZ_2 in godlin2026) |
 | `R2_sigma` | dropped: no source applies sigma to modified reverse degrees |
-| `R2_HBM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
-| `R2_HTM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
+| `R2_HBM` | dropped: k-generalisation not defined in the primary paper (arockiaraj2023sar, read 2026-10-03, defines the hybrid itself, registered under its plain name) or in any other source found |
+| `R2_HTM` | dropped: k-generalisation not defined in the primary paper (arockiaraj2023sar, read 2026-10-03, defines the hybrid itself, registered under its plain name) or in any other source found |
 | `R2_BMA` | dropped: = 2m + 2 R2_ISI identically; formula not verifiable |
 | `R2_TMA` | dropped: = 2 R2_M1 - 2 R2_ISI identically; formula not verifiable |
 | `R3_A` | dropped: R3_A = R3_M1 / 2 exactly |
@@ -543,8 +543,8 @@ All 135 names of v0.x `config.py:TOPO_INDICES`, in their original order.
 | `R3_ABC_SC` | dropped: ABC_SC has no source |
 | `R3_ISI` | `R3_ISI` (ReZ_2 in godlin2026) |
 | `R3_sigma` | dropped: no source applies sigma to modified reverse degrees |
-| `R3_HBM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
-| `R3_HTM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
+| `R3_HBM` | dropped: k-generalisation not defined in the primary paper (arockiaraj2023sar, read 2026-10-03, defines the hybrid itself, registered under its plain name) or in any other source found |
+| `R3_HTM` | dropped: k-generalisation not defined in the primary paper (arockiaraj2023sar, read 2026-10-03, defines the hybrid itself, registered under its plain name) or in any other source found |
 | `R3_BMA` | dropped: = 2m + 2 R3_ISI identically; formula not verifiable |
 | `R3_TMA` | dropped: = 2 R3_M1 - 2 R3_ISI identically; formula not verifiable |
 | `R4_A` | dropped: R4_A = R4_M1 / 2 exactly; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
@@ -554,8 +554,8 @@ All 135 names of v0.x `config.py:TOPO_INDICES`, in their original order.
 | `R4_ABC_SC` | dropped: ABC_SC has no source; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
 | `R4_ISI` | dropped: k = 4 not in the registered range 1..3 (see R_k decision) |
 | `R4_sigma` | dropped: no source applies sigma to modified reverse degrees; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
-| `R4_HBM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
-| `R4_HTM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
+| `R4_HBM` | dropped: k-generalisation not defined in the primary paper (arockiaraj2023sar, read 2026-10-03, defines the hybrid itself, registered under its plain name) or in any other source found; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
+| `R4_HTM` | dropped: k-generalisation not defined in the primary paper (arockiaraj2023sar, read 2026-10-03, defines the hybrid itself, registered under its plain name) or in any other source found; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
 | `R4_BMA` | dropped: = 2m + 2 R4_ISI identically; formula not verifiable; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
 | `R4_TMA` | dropped: = 2 R4_M1 - 2 R4_ISI identically; formula not verifiable; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
 

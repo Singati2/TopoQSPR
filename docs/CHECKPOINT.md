@@ -15,16 +15,16 @@ looking at main-panel model results; none were computed.
 | Item | Status | Evidence |
 |---|---|---|
 | v0.x defects (Hosoya Z, wrong numerators, DS1 = DS2, Balaban J on salts, zero-filled failures, non-nested CV, shared model instance, non-deterministic cohort) | fixed in the v1.0 package | `AUDIT_TOPOQSPR.md`, `INDEX_VERIFICATION.md`, regression tests |
-| Cross-version float reproducibility (Balaban J used built-in `sum()`) | fixed (`math.fsum`) | Docker (3.12) vs venv (3.10) differed by ≤ 2e-16 before |
+| Cross-version float reproducibility (Balaban J used built-in `sum()`) | fixed (`math.fsum`) | Docker (3.12) vs venv (3.10) differed by ≤ 2e-16 before; byte-identical `indices` output after (re-checked 2026-10-03, PIPELINE.md §5) |
 | Intended definitions of the v0.x SS_/reverse variants | open, optional | would need the group's original scripts; v1.0 uses published definitions only |
 | BMA / TMA | dropped | not defined in the paper the v0.x code attributed them to |
 
 ## 2. Indices
 
 - 102 indices, each traced to a primary source (`INDEX_VERIFICATION.md`).
-- Verified five ways: closed forms; brute-force matchings; networkx; Mordred (overlapping
-  indices); ChemGraphX (all 41 shared indices agree on 43 graphs, max relative difference
-  1.3e-15, `CHEMGRAPHX_CROSSCHECK.md`); and values printed in the primary papers
+- Verified six ways: (1) closed forms; (2) brute-force matchings; (3) networkx; (4) Mordred (overlapping
+  indices); (5) ChemGraphX (all 41 shared indices agree on 43 graphs, max relative difference
+  1.3e-15, `CHEMGRAPHX_CROSSCHECK.md`); and (6) values printed in the primary papers
   (IJQC 2023 R_k paper: 21 values; SAR QSAR 2023 hybrid paper: 50/51 values).
 - Errata found in a primary source: three printed values in the IJQC 2023 paper contradict its
   own definitions (recorded, not "fixed" in our code).
@@ -55,12 +55,13 @@ looking at main-panel model results; none were computed.
 | Primary endpoint | paired ΔR²(TI − size) and ΔMAE, corrected repeated k-fold t-test CI, BH (BY sensitivity) | fixed in plan; statistics code verified against independent implementations |
 | Confirmatory targets | measured: mp_bradley (711 drugs), logp_opera (505), logd74_az (369), logs_aqsoldb (351) on the pooled approved set (1,821 parents) | **decision 2** |
 | Disease panel | §3.3 rule leaves only Hypertension (85 parents); no disease × measured target reaches 50 | **decision 1** (recommended: per-disease descriptive only) |
-| Baselines | null, size, size+rings, composition, TI, TI by family, RDKit 2D minus target-derivation family; same learners and tuning for all | implemented |
+| Baselines | null, size, size+rings, composition, TI, TI by family, RDKit 2D minus target-derivation family; same learners and tuning for all | implemented as defaults; enforcement of the baseline sets in config validation is a code change in preparation (branch `fx-code`); until merged, the frozen configs list them explicitly |
 | Practical significance | ΔR² ≥ 0.05 | **decision 3** |
 | Evidence filter for cohorts | none / exclude DailyMed-only / ATC | **decision 3** |
-| Y-randomised control, bootstrap sensitivity, AD coverage reporting, confirmatory table (BH/BY, fixed m, underpowered excluded) | in plan | **implemented** in the pipeline `protocol` stage (Phase 2, adversarially verified); pilot smoke run completed |
+| Y-randomised control, bootstrap sensitivity, AD coverage reporting, confirmatory table (BH/BY, fixed m, underpowered excluded) | in plan | **implemented** in the pipeline `protocol` stage (Phase 2, adversarially verified); pilot smoke run completed. Bootstrap is planned for the pooled set only; at `v1.0-dev` it is on by default for any cohort (per-disease configs must disable it; pooled-only default in preparation on `fx-code`) |
+| Attribution (SHAP) | was §9 of the plan | **not in v1.0** (no attribution code); deferred, plan §9 updated before freezing |
 | Experiment runners A (cohort sensitivity), C (optimism chain), D (replication harness), size dependence | in plan | **implemented** (`experiments.py`, `tools/run_experiment.py`), with a quarantine guard that refuses modelling on main-panel diseases and the pooled set before freezing |
-| Replication data | 10 studies extracted from open-access full text (210 drugs, 208 resolved; 1,045 property cells re-verified); reproducibility: exact 4, approximate 5, not reproducible 1 | done (`REPLICATION_DATA.md`) |
+| Replication data | 10 studies extracted from open-access full text (210 drugs, 209 resolved, chondroitin sulfate unresolved; 1,045 property cells re-verified); reproducibility: exact 4, approximate 5, not reproducible 1 | done (`REPLICATION_DATA.md`) |
 | Compute budget | pilot: 6.4 h for n = 33 (12 feature sets × 11 learners × 4 targets); protocol extrapolation: K = B = 200 needs ≈ 5.6 h permutations + 2.5 h bootstrap per target family even at n = 10–15; pooled n is 350–700 | **decision 4**: reduced learner list and K/B fixed at freeze, or a dedicated machine |
 
 ## 6. Replication candidates (Experiment D)

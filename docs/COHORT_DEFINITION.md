@@ -97,21 +97,23 @@ gets a decision row.
 | Evidence filter | none | Dropping DailyMed-only indications removes some real noise (biotin, tyrosine, pyridoxine for T2D). It also removes genuine drugs: tolbutamide, chlorpropamide and tolazamide for T2D; propranolol, verapamil, labetalol, nadolol and fosinopril for hypertension. Requiring FDA/EMA/ATC refs is worse: it drops albuterol, budesonide and fluticasone for asthma. Section 5 has the measurements. Both filters are available for sensitivity analyses. |
 | Molecule type | `Small molecule` | Topological indices are defined on small-molecule graphs. Proteins, antibodies and oligosaccharides are excluded. |
 | Structure source | ChEMBL parent `canonical_smiles` | The ChEMBL parent is already salt-stripped by the ChEMBL structure pipeline. Using it keeps the manifest traceable to one ChEMBL record. |
-| Metal salts | excluded (`metal_containing`) | Some ChEMBL parents keep a metal counter-ion, for example sodium butyrate, potassium citrate and zinc gluconate. We exclude these rather than strip the ion silently. **Deviation from EXPERIMENT_PLAN §3.1**, which says "parent compound → largest organic fragment": see the note below the table. |
-| Mixtures | excluded | A multi-fragment *parent* is a co-crystal or multi-component product, such as omega-3-acid ethyl esters or ipragliflozin L-proline. Its graph is not one molecule. Same deviation as above. |
+| Metal salts | excluded (`metal_containing`) | Some ChEMBL parents keep a metal counter-ion, for example sodium butyrate, potassium citrate and zinc gluconate. We exclude these rather than strip the ion silently. EXPERIMENT_PLAN §3.1 originally said "parent compound → largest organic fragment" and was amended to this rule (see the note below the table). |
+| Mixtures | excluded | A multi-fragment *parent* is a co-crystal or multi-component product, such as omega-3-acid ethyl esters or ipragliflozin L-proline. Its graph is not one molecule. Same plan amendment as above. |
 | De-duplication key | full standard InChIKey | Stereoisomers are distinct compounds with distinct properties, so we do not merge on the first InChIKey block. This choice does not affect any of the four cohorts below: there were 0 InChIKey duplicates. Pairs that share the first block (identical 2D graph) are kept, and the pipeline keeps each such pair in one CV fold (PIPELINE.md §1, *Connectivity groups*). |
 | Tie-break / order | lowest ChEMBL ID; numeric ChEMBL ID sort | Deterministic and independent of API order and of `PYTHONHASHSEED`. |
 
-**Deviation from the experiment plan.** EXPERIMENT_PLAN §3.1 specifies "parent compound →
-largest organic fragment". The builder instead *excludes* parents that still have several
-fragments (`mixture`) or a metal (`metal_containing`), as the cohort task specification
-asked. The two documents conflict; we followed the task specification. The reason: the
+**Plan amended (resolved deviation).** EXPERIMENT_PLAN §3.1 originally specified "parent
+compound → largest organic fragment". The builder instead *excludes* parents that still have
+several fragments (`mixture`) or a metal (`metal_containing`), as the cohort task
+specification asked, and the plan was amended to match before freezing (commit `fba38e2`:
+"structures still containing >1 fragment, metals or no carbon are excluded with a reason, not
+reduced to a fragment"). The reason: the
 ChEMBL parent is already salt-stripped, so a fragment that remains is part of the
 registered substance, and reducing it to its largest fragment would assign the record's
 properties to a different chemical entity without trace. At the default phase 4 this
 choice changes no cohort (0 mixture or metal exclusions in all four diseases). With all
 phases it removes 3 (T2D), 5 (hypertension), 1 (asthma) and 3 (breast neoplasms) parents
-(section 5). The plan should be amended to match before it is frozen.
+(section 5).
 
 ## 3. Manifest
 

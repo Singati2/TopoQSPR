@@ -23,7 +23,7 @@ Roadmap item M6.
 chosen in the inner loop among all configured families. Every family name listed in
 `evaluation.learners` is also run on its own (inner loop tunes only its
 hyperparameters), which gives the baseline ladder per learner family. A family that
-cannot be fitted for a set (OLS when p ≥ n_inner_train) produces failed folds and NaN
+cannot be fitted for a set (OLS when n_inner_train < p + 2, i.e. p ≥ n_inner_train − 1) produces failed folds and NaN
 summaries with the reason, as specified in the protocol; nothing is dropped.
 
 **rdkit2d per target.** The `rdkit2d` set of a target is `descList` minus
@@ -100,6 +100,12 @@ what is stored and hashed.
               "expdata_cache_dir": null}   // null = <TOPOQSPR_CACHE or ~/.cache/topoqspr>/expdata
 }
 ```
+
+**Baselines.** At `v1.0-dev` (e35dc4a) `null`, `size` and `composition` are in the
+default `feature_sets`, and `evaluation.reference` (default `size`) only has to be one
+of the chosen sets; a config may leave the baselines out. A code change in preparation
+(branch `fx-code`) makes `resolve_config` enforce the baseline sets; until it is merged,
+the frozen configs must list them explicitly.
 
 `protocol: null` (the default) leaves the key out of the resolved config, so configs
 written before the protocol stage existed keep their `config_sha256` (the golden hash of
@@ -271,14 +277,16 @@ two `PYTHONHASHSEED` values). Different package versions (numpy, scikit-learn, x
 RDKit) can change floating-point results; the record lists them, and the re-run report
 names any that differ.
 
-**The Python version matters too.** `topoqspr indices` on `tests/fixtures/pipeline/tiny.csv`
-in the Docker image (Python 3.12, same locked packages) and in the venv (Python 3.10.12)
-differs in 6 of 3,564 cells, all Balaban J, by at most 2.0·10⁻¹⁶ relative (last digit
-of the shortest float repr). Python 3.12's built-in `sum()` of floats is compensated
-(Neumaier), 3.10's is not, and `indices._balaban_j` sums with `sum()`. Byte identity is
-therefore guaranteed for the same Python minor version and package versions;
-`environment.python_version` is in the record. Using `math.fsum` in the index sums would
-remove this dependence (indices module; not changed here).
+**Python version (fixed; historical note).** Before commit `069133a`, `topoqspr indices` on
+`tests/fixtures/pipeline/tiny.csv` in the Docker image (Python 3.12, same locked packages)
+and in the venv (Python 3.10.12) differed in 6 of 3,564 cells, all Balaban J, by at most
+2.0·10⁻¹⁶ relative (last digit of the shortest float repr): Python 3.12's built-in `sum()`
+of floats is compensated (Neumaier), 3.10's is not, and `indices._balaban_j` summed with
+`sum()`. `_balaban_j` now sums with `math.fsum` (correctly rounded on every version).
+Re-checked on 2026-10-03 at `v1.0-dev` (e35dc4a): an image built from that commit
+(Python 3.12.15) and the venv (Python 3.10.12) write byte-identical `indices` output and
+failure files for that fixture. Cross-version identity therefore now depends on the package
+versions only; `environment.python_version` stays in the record.
 
 ## 6. Command line
 
@@ -306,11 +314,15 @@ same CLI.
 | 2 | input or configuration error: invalid or non-mapping config, unknown key, missing file, non-empty `--out`, offline cache miss, release mismatch, missing optional dependency (parquet engine), target provider that cannot be imported or breaks its contract |
 | 3 | unexpected internal error (a bug); the traceback is printed to stderr |
 
-A run that fails leaves no results directory behind (§1, stage 7), so it can be repeated
+A run that fails leaves no results directory behind (§1, stage 8), so it can be repeated
 without `--overwrite`.
 
 ## 7. Packaging
 
+* `openpyxl` is needed to build the `mp_bradley` target from its raw Excel file
+  (`expdata`; it is in the `expdata` extra of `pyproject.toml`). Check that the lock or
+  image you install includes it before running a study with that target
+  (EXPERIMENTAL_DATA.md §2).
 * `requirements-lock.txt`: exact versions of the distributions `src/topoqspr` imports and
   their runtime requirements, from the project venv (Python 3.10.12); `xgboost` is pinned
   as `xgboost-cpu` (no CUDA wheels), so the package itself is installed with `--no-deps`.
@@ -430,6 +442,14 @@ EVALUATION_PROTOCOL.md §11). Defaults:
                 "families": null}           // null = protocol.learner's families; or a fast subset
 }
 ```
+
+**Bootstrap scope.** The plan (EXPERIMENT_PLAN §7) uses the whole-procedure bootstrap on
+the **pooled** set only; at per-disease n the resampled test folds are too small for R² to
+be defined (§10). At `v1.0-dev` (e35dc4a) the `bootstrap.enabled: true` default above
+applies to every cohort source, so a per-disease protocol config must set
+`"bootstrap": {"enabled": false}` explicitly. A code change in preparation (branch
+`fx-code`) makes the bootstrap on by default only for `cohort.source = "pooled"`; until it
+is merged, the explicit setting is required.
 
 Validation (before any work): the family's sets must be evaluated feature sets (a
 `TI_<family>` set needs `TI_family`), the reference must be `evaluation.reference`,
