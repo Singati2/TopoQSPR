@@ -113,9 +113,13 @@ Bioactivity values are excluded from v1.0 modelling.
   pooled approved-drug set, and for each main-panel disease × class-3 target with ≥ 50 measured values.
   Averaged over repeats; 95% CI via the corrected repeated k-fold t-test (Nadeau & Bengio 2003;
   Bouckaert & Frank 2004) on paired per-fold differences. TIs are called *informative beyond size*
-  if the CI lower bound > 0 after Benjamini–Hochberg control (q = 0.05) over this confirmatory family.
-  Sensitivity: paired bootstrap of the whole nested procedure on the pooled set (CV intervals can
-  undercover; Bates, Hastie & Tibshirani 2023), and Benjamini–Yekutieli instead of BH (dependence).
+  for an endpoint if its two-sided corrected-t p-value survives Benjamini–Hochberg control at q = 0.05
+  over the confirmatory family **and** the mean ΔR² > 0 (as implemented in `confirmatory.csv`). The
+  family size m is fixed in advance (missing p-values count as non-rejections, not as a smaller m), and
+  underpowered endpoints (n < 50) are excluded from the family before testing.
+  Sensitivity: paired bootstrap of the whole nested procedure, on the pooled set only (at per-disease
+  n the resampled test folds are too small for R² to be defined; pilot: 17–19 of 19 resamples undefined)
+  (CV intervals can undercover; Bates, Hastie & Tibshirani 2023), and Benjamini–Yekutieli instead of BH (dependence).
   **Practical significance:** ΔR² ≥ 0.05 is the pre-specified minimal meaningful gain
   (to be confirmed by co-authors before freezing).
 - **Secondary (exploratory):** ΔR²(TI+comp − comp); ΔR² per TI family; M_std vs M_TI; class-2 targets;

@@ -20,8 +20,8 @@ External review and its verification: [`external-review-2026-10.md`](external-re
 | M5 | **Clean annotations**: remove invented Caco-2 formula and unit-mixed bioactivity; fix model count claim in UI | §2.5 | done in v1.0 package (no Caco-2 heuristic, no bioactivity); legacy web app still shows them |
 | M6 | **Official release engineering**: `pyproject.toml` package, CLI, pytest + GitHub Actions CI, pinned environment + Dockerfile, run-record (provenance) file, docs, v1.0.0 tag, Zenodo DOI, website renamed | Code metadata, §2.1 | package, CLI (`topoqspr`), run records, lock file, Dockerfile, CI done (`docs/PIPELINE.md`); open: tag v1.0.0, Zenodo DOI, docs site, web demo hardening |
 | M6b | **GO / NO-GO checkpoint** (`docs/CHECKPOINT.md`, per RECOMMENDATIONS.md); pilot on quarantined disease; freeze experiment plan | gate for M7 | pilot smoke run done (Migraine, n = 33); `docs/CHECKPOINT.md` drafted: NO-GO pending author decisions and experiment runners (Phase 2 building) |
-| M7 | **Validation study**: 8–12 diseases above a pre-set minimum approved-cohort size, current ChEMBL release; per-disease manifests and results archived | §3 Illustrative examples | todo |
-| M7b | **Replication**: re-analyse 3–5 published disease-specific topological-index QSPR studies (chosen with all co-authors): published in-sample R² vs nested-CV R² vs size baseline | §3 | todo |
+| M7 | **Validation study**: 8–12 diseases above a pre-set minimum approved-cohort size, current ChEMBL release; per-disease manifests and results archived | §3 Illustrative examples | runners implemented (`experiments.py`, protocol stage); blocked on freeze (CHECKPOINT decisions) |
+| M7b | **Replication**: re-analyse 3–5 published disease-specific topological-index QSPR studies (chosen with all co-authors): published in-sample R² vs nested-CV R² vs size baseline | §3 | harness implemented; 10 studies extracted and verified (`REPLICATION_DATA.md`); co-authors to confirm rows 1-5 |
 | M8 | Write-up: results, impact, conclusions, figures; co-author review; submission | whole paper | todo |
 
 ## Rules for the paper

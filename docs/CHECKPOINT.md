@@ -5,9 +5,9 @@ when this report says **GO**. Status as of 2026-10-03, branch `v1.0-dev`.
 
 ## Decision: **NO-GO (not yet)**
 
-The software, the index library and the cohort and data layers are verified. The main experiment
-is blocked by (1) five decisions that only the authors can take and (2) one build step: the
-experiment runners that turn the verified modules into Experiments A–D. Nothing below required
+The software, the index library, the cohort and data layers, the confirmatory protocol and the
+experiment runners are implemented and adversarially verified. The main experiment is blocked only
+by five decisions that the authors must take (below). Nothing below required
 looking at main-panel model results; none were computed.
 
 ## 1. Code and definition issues
@@ -58,8 +58,10 @@ looking at main-panel model results; none were computed.
 | Baselines | null, size, size+rings, composition, TI, TI by family, RDKit 2D minus target-derivation family; same learners and tuning for all | implemented |
 | Practical significance | ΔR² ≥ 0.05 | **decision 3** |
 | Evidence filter for cohorts | none / exclude DailyMed-only / ATC | **decision 3** |
-| Y-randomised control, bootstrap sensitivity, AD coverage reporting, optimism chain (Exp. C) | in plan | **build step**: present in `evaluate.py`/`stats.py`, not yet wired into the pipeline |
-| Compute budget | pilot: 6.4 h for n = 33, 12 feature sets × 11 learners × 4 targets; tree ensembles 88 % of single-family time | **decision 4**: reduce learners for the main run, or a dedicated machine |
+| Y-randomised control, bootstrap sensitivity, AD coverage reporting, confirmatory table (BH/BY, fixed m, underpowered excluded) | in plan | **implemented** in the pipeline `protocol` stage (Phase 2, adversarially verified); pilot smoke run completed |
+| Experiment runners A (cohort sensitivity), C (optimism chain), D (replication harness), size dependence | in plan | **implemented** (`experiments.py`, `tools/run_experiment.py`), with a quarantine guard that refuses modelling on main-panel diseases and the pooled set before freezing |
+| Replication data | 10 studies extracted from open-access full text (210 drugs, 208 resolved; 1,045 property cells re-verified); reproducibility: exact 4, approximate 5, not reproducible 1 | done (`REPLICATION_DATA.md`) |
+| Compute budget | pilot: 6.4 h for n = 33 (12 feature sets × 11 learners × 4 targets); protocol extrapolation: K = B = 200 needs ≈ 5.6 h permutations + 2.5 h bootstrap per target family even at n = 10–15; pooled n is 350–700 | **decision 4**: reduced learner list and K/B fixed at freeze, or a dedicated machine |
 
 ## 6. Replication candidates (Experiment D)
 
