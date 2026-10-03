@@ -255,6 +255,7 @@ PHI: dict[str, tuple[Callable[[int, int], Number], str]] = {
     "BMH": (lambda a, b: (a + b + a * b) * (a + b) / 2, r"\frac{(x_u + x_v + x_u x_v)(x_u + x_v)}{2}"),
     "TMH": (lambda a, b: (a * a + b * b + a * b) * (a + b) / 2, r"\frac{(x_u^2 + x_v^2 + x_u x_v)(x_u + x_v)}{2}"),
     "HCM2": (lambda a, b: (a * b) ** 2, r"(x_u x_v)^2"),
+    "ReZ1": (lambda a, b: (a + b) / (a * b), r"\frac{x_u + x_v}{x_u x_v}"),
 }
 
 _INT_PHI = {"M1", "M2", "F", "HM", "sigma", "ReZ3", "BM", "TM", "HCM2"}
@@ -314,7 +315,8 @@ _NBR: list[tuple[str, str, str, str]] = [
 ]
 
 # --- modified reverse degree family (k = 1..3) --------------------------------
-# Kalaam et al. 2024 Eqs. (1)-(9); R, ABC, ISI from Godlin & Radha 2026; RR from Arockiaraj et al. 2025.
+# Kalaam et al. 2024 Eqs. (1)-(9); R, ABC, ISI from Godlin & Radha 2026; RR from Arockiaraj et al. 2025;
+# GA, AG, ReZ1 from the original R_k paper (Arockiaraj, Greeni & Kalaam 2023, IJQC, Eqs. (2), (3), (8)).
 _RK: list[tuple[str, str]] = [
     ("M1", "kalaam2024"),
     ("M2", "kalaam2024"),
@@ -329,6 +331,9 @@ _RK: list[tuple[str, str]] = [
     ("ABC", "godlin2026"),
     ("ISI", "godlin2026"),  # "ReZ_2" (redefined second Zagreb) in the source
     ("RR", "arockiaraj2025lung"),  # "G" (geometric) in the source
+    ("GA", "arockiaraj2023ijqc"),
+    ("AG", "arockiaraj2023ijqc"),
+    ("ReZ1", "arockiaraj2023ijqc"),  # redefined first Zagreb
 ]
 
 
