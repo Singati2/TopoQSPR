@@ -51,7 +51,7 @@
   },
   "Breast Neoplasms": {
    "coverage": {
-    "logd74_az": 8,
+    "logd74_az": 7,
     "logp_opera": 4,
     "logs68_biogen": 2,
     "logs74_az": 2,
@@ -277,70 +277,70 @@
  "pooled": {
   "coverage": {
    "logd74_az": {
-    "n": 370,
-    "n_first_block": 387
+    "n": 369,
+    "n_first_block": 399
    },
    "logp_opera": {
     "n": 505,
-    "n_first_block": 537
+    "n_first_block": 556
    },
    "logs68_biogen": {
     "n": 35,
-    "n_first_block": 38
+    "n_first_block": 40
    },
    "logs74_az": {
     "n": 84,
-    "n_first_block": 89
+    "n_first_block": 93
    },
    "logs_aqsoldb": {
     "n": 351,
-    "n_first_block": 427
+    "n_first_block": 441
    },
    "logs_opera": {
     "n": 349,
-    "n_first_block": 366
+    "n_first_block": 376
    },
    "mp_bradley": {
     "n": 711,
-    "n_first_block": 805
+    "n_first_block": 830
    },
    "mp_opera": {
     "n": 509,
-    "n_first_block": 539
+    "n_first_block": 551
    }
   },
   "coverage_incl_salt_forms_and_disagreeing": {
    "logd74_az": {
-    "n": 370,
-    "n_first_block": 387
+    "n": 369,
+    "n_first_block": 399
    },
    "logp_opera": {
     "n": 510,
-    "n_first_block": 542
+    "n_first_block": 561
    },
    "logs68_biogen": {
     "n": 36,
-    "n_first_block": 39
+    "n_first_block": 41
    },
    "logs74_az": {
     "n": 85,
-    "n_first_block": 90
+    "n_first_block": 94
    },
    "logs_aqsoldb": {
     "n": 407,
-    "n_first_block": 487
+    "n_first_block": 503
    },
    "logs_opera": {
     "n": 357,
-    "n_first_block": 375
+    "n_first_block": 386
    },
    "mp_bradley": {
     "n": 733,
-    "n_first_block": 821
+    "n_first_block": 847
    },
    "mp_opera": {
     "n": 539,
-    "n_first_block": 569
+    "n_first_block": 583
    }
   },
   "curated_parents": 1821,
@@ -395,15 +395,16 @@
  },
  "targets": {
   "logd74_az": {
-   "parents": 4195,
+   "parents": 4190,
    "parents_disagreeing": 0,
-   "parents_incl_salt_forms_and_disagreeing": 4195,
-   "parents_used": 4195,
+   "parents_incl_salt_forms_and_disagreeing": 4190,
+   "parents_used": 4190,
    "raw_hash": "ChEMBL_37:71e5e47c44b7578912be28d75120dff49e498c5fea0fed5c38e2c4661a0af33a",
    "records": 4200,
    "source": "az_logd",
    "status_counts": {
-    "ok": 4200
+    "censored_value": 5,
+    "ok": 4195
    },
    "unit": "log10"
   },
@@ -441,15 +442,16 @@
    "unit": "log10(mol/L)"
   },
   "logs74_az": {
-   "parents": 1762,
+   "parents": 1742,
    "parents_disagreeing": 0,
-   "parents_incl_salt_forms_and_disagreeing": 1763,
-   "parents_used": 1762,
+   "parents_incl_salt_forms_and_disagreeing": 1743,
+   "parents_used": 1742,
    "raw_hash": "ChEMBL_37:6f63966724685f214fbd5ce49e26b1155d51df622ceb2b2841b0a87582fde256",
    "records": 1763,
    "source": "az_solubility",
    "status_counts": {
-    "ok": 1762,
+    "censored_value": 20,
+    "ok": 1742,
     "salt_or_solvate_form": 1
    },
    "unit": "log10(mol/L)"

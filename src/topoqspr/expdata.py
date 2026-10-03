@@ -19,7 +19,8 @@ record that was not used).  :data:`TARGETS` lists the target names.
 Pipeline per record (first failure wins; nothing is imputed)
 ------------------------------------------------------------
 1. Raw value parsed from the pinned file.  Non-numeric or missing -> ``missing_value``;
-   qualified values (``>``, ``<``, ``~``) -> ``censored_value``; records the source itself
+   qualified values (``>``, ``<``, ``~``) and values at or beyond a target's
+   ``assay_range`` (AstraZeneca assay limits) -> ``censored_value``; records the source itself
    marks as bad (Bradley ``donotuse``, ChEMBL ``data_validity_comment``) ->
    ``flagged_by_source``; an OPERA record listing several alternative structures
    (``a|b``) -> ``ambiguous_structure``.
@@ -36,7 +37,8 @@ Pipeline per record (first failure wins; nothing is imputed)
 5. Aggregation by full InChIKey of the standardised parent: ``value`` is the **median**
    of the record values; ``n_measurements`` is the number of underlying measurements
    (a record that is itself an aggregate, e.g. an AqSolDB row with ``Ocurrences`` = 3,
-   counts as its number of occurrences); ``sd`` is the larger of the sample SD (ddof=1)
+   counts as its number of occurrences, an OPERA record as its number of merged PHYSPROP
+   IDs); ``sd`` is the larger of the sample SD (ddof=1)
    across records and any SD the source reports for a record (NaN if neither exists).
    ``replicates_disagree`` is ``sd > disagreement_sd`` of the target (0.5 log units for
    logS / logP / logD - the AqSolDB reliability cut-off; 10 degC for melting point).
@@ -92,6 +94,7 @@ __all__ = [
     "get_target",
     "load_records",
     "process_records",
+    "processing_fingerprint",
     "sha256_bytes",
     "standardised_keys",
     "chembl_records_sha256",
@@ -172,6 +175,10 @@ class TargetSpec:
     disagreement_sd: float
     description: str
     member: str = ""  # zip member (OPERA) or column name (Biogen)
+    #: Finite measuring range of the assay, in ``unit``.  A value at or beyond either limit
+    #: is a limit value, not a measurement, and becomes ``censored_value`` even when the
+    #: source stores it with ``=``.
+    assay_range: tuple[float, float] | None = None
 
 
 SOURCES: dict[str, Source] = {
@@ -261,7 +268,8 @@ TARGETS: dict[str, TargetSpec] = {
         TargetSpec("logs_opera", "opera", "water solubility (PHYSPROP)",
                    "log10(mol/L)", True, 0.5, "OPERA WS_QR.sdf 'LogMolar'", member="WS_QR.sdf"),
         TargetSpec("logs74_az", "az_solubility", "solubility, pH 7.4 buffer",
-                   "log10(mol/L)", True, 0.5, "ChEMBL standard_value (nM) -> log10(mol/L)"),
+                   "log10(mol/L)", True, 0.5, "ChEMBL standard_value (nM) -> log10(mol/L)",
+                   assay_range=(-7.0, math.log10(1513600e-9))),  # 100 nM .. 1.5136 mM
         TargetSpec("logs68_biogen", "biogen", "kinetic solubility, pH 6.8",
                    "log10(mol/L)", True, 0.5, "Biogen log10(ug/mL) -> log10(mol/L) with the recorded structure's MW",
                    member="LOG SOLUBILITY PH 6.8 (ug/mL)"),
@@ -272,12 +280,16 @@ TARGETS: dict[str, TargetSpec] = {
         TargetSpec("logp_opera", "opera", "octanol/water partition coefficient (PHYSPROP)",
                    "log10", False, 0.5, "OPERA LogP_QR.sdf 'LogP'", member="LogP_QR.sdf"),
         TargetSpec("logd74_az", "az_logd", "octanol/water distribution coefficient, pH 7.4",
-                   "log10", False, 0.5, "ChEMBL standard_value (LogD7.4)"),
+                   "log10", False, 0.5, "ChEMBL standard_value (LogD7.4)", assay_range=(-1.5, 4.5)),
     )
 }
 
-#: Bump when record processing changes; part of the processed-records cache key.
-PROCESSING_VERSION = "3"
+#: Bump when record processing changes; part of the processed-records cache key (which
+#: also carries :func:`processing_fingerprint`, so a code change is caught even unbumped).
+PROCESSING_VERSION = "4"
+
+#: Tolerance (target units) for "at the assay limit" (:attr:`TargetSpec.assay_range`).
+_LIMIT_TOL = 1e-6
 
 
 # ----------------------------------------------------------------------------- download
@@ -476,7 +488,12 @@ def parse_opera(df: pd.DataFrame, member: str) -> pd.DataFrame:
     """OPERA QSAR-ready SDF fields.  The structure is ``Original_SMILES`` (the recorded
     substance, salts included) when present, else ``Canonical_QSARr``.  OPERA records whose
     ``Original_SMILES`` lists several structures separated by ``|`` (stereoisomers merged
-    by the QSAR-ready workflow) -> ``ambiguous_structure``."""
+    by the QSAR-ready workflow) -> ``ambiguous_structure``.
+
+    OPERA values are pre-aggregated: a record whose ``MPID`` lists several PHYSPROP entries
+    (``a|b|c``) merges that many entries, so ``n_reported`` is the number of distinct
+    PHYSPROP IDs (1 when the field is blank).  OPERA publishes no spread for a merged
+    value, so ``sd_reported`` stays NaN."""
     col, unit = _OPERA_VALUE[member]
     rows = []
     for i, r in enumerate(df.to_dict("records")):
@@ -489,10 +506,11 @@ def parse_opera(df: pd.DataFrame, member: str) -> pd.DataFrame:
             # cannot be assigned to one full InChIKey
             status = "ambiguous_structure"
             detail = f"{smi.count('|') + 1} alternative structures in Original_SMILES"
+        mpids = {x.strip() for x in str(r.get("MPID") or "").split("|") if x.strip()}
         rows.append(
             dict(
                 record_id=f"{rid}#{i}", smiles=smi, raw_value=r.get(col), raw_unit=unit, value=v,
-                n_reported=1, sd_reported=math.nan, status=status, detail=detail,
+                n_reported=max(1, len(mpids)), sd_reported=math.nan, status=status, detail=detail,
             )
         )
     return _frame(rows)
@@ -593,7 +611,60 @@ def _std_summary(smiles: str) -> tuple[str, str, str, str, str, int]:
     return code, detail, res.inchikey or "", res.canonical_smiles or "", res.parent_note or "", n_comp
 
 
+#: Probe structures covering every branch of :func:`topoqspr.graph.standardize` (pipeline
+#: salt stripping, each parent-fallback rule, every rejection code, isotopes, stereo).
+_STD_PROBES: tuple[str, ...] = (
+    "CC(=O)Oc1ccccc1C(=O)O",
+    "C[C@H](N)C(=O)O",
+    "[2H]C([2H])([2H])c1ccccc1",
+    "CN(C)C(=N)N=C(N)N.Cl",
+    "O=C([O-])c1ccccc1.[Na+]",
+    "[H+].[O-]C(=O)c1ccccc1",
+    "CNCCC(Oc1ccc(C(F)(F)F)cc1)c1ccccc1.O=C(O)c1cc2ccccc2cc1O",
+    "CCCCN.CCCCN",
+    "C[N+](C)(C)CCO.O=C([O-])c1ccccc1O",
+    "CC(=O)Nc1ccc(O)cc1.CCCCCCCCO",
+    "CCO.c1ccccc1",
+    "[Li+].[Li+].[O-]C([O-])=O",
+    "C[Hg]C",
+    "OB(O)c1ccccc1",
+    "C[Si](C)(C)c1ccccc1",
+    "C[Se]c1ccccc1",
+    "O=S(=O)(O)O",
+    "CC",
+    "c1cccc2ncnc12",
+    "CCO junk",
+    "C[n+]1ccccc1",
+)
+
+
+def processing_fingerprint() -> str:
+    """SHA-256 identifying the structure processing in effect: the ``topoqspr`` version,
+    the source of ``graph.py`` and ``expdata.py``, and the output of the current
+    :func:`standardize` on :data:`_STD_PROBES`.  Part of the processed-records cache key,
+    so editing (or monkeypatching) the standardiser invalidates cached record tables.
+
+    The probe output (about 2 s of standardisation) is memoised per ``standardize``
+    function object and source hash, so it is recomputed whenever either changes."""
+    from . import __version__, graph
+
+    parts: list[Any] = [__version__]
+    for f in (graph.__file__, __file__):
+        parts.append(_sha256_file(Path(f)) if f and Path(f).exists() else "?")
+    memo_key = (standardize, tuple(parts))
+    probe = _PROBE_MEMO.get(memo_key)
+    if probe is None:
+        probe = [list(_std_summary(s)) for s in _STD_PROBES]
+        _PROBE_MEMO.clear()
+        _PROBE_MEMO[memo_key] = probe
+    return sha256_bytes(json.dumps([*parts, probe], separators=(",", ":")).encode())
+
+
+_PROBE_MEMO: dict[tuple, list] = {}  # (standardize, source hashes) -> probe output
+
+
 _STD_MEMO: dict[str, tuple] = {}  # per-process memo of _std_summary
+_STD_MEMO_FP: list[str] = [""]  # processing_fingerprint the memo was filled under
 _POOL_MIN = 500  # below this many distinct SMILES a pool costs more than it saves
 
 
@@ -604,6 +675,10 @@ def _std_many(smiles: Iterable[str], n_jobs: int | None = None) -> dict[str, tup
     ``None`` -> ``min(8, os.cpu_count())``.
     """
     want = sorted({s for s in smiles if s})
+    fp = processing_fingerprint()
+    if fp != _STD_MEMO_FP[0]:  # standardiser changed: memo entries are stale
+        _STD_MEMO.clear()
+        _STD_MEMO_FP[0] = fp
     uniq = [s for s in want if s not in _STD_MEMO]
     n_jobs = min(8, os.cpu_count() or 1) if n_jobs is None else int(n_jobs)
     if n_jobs <= 1 or len(uniq) < _POOL_MIN:
@@ -633,6 +708,11 @@ def process_records(
         value = r["value"]
         key, can = "", ""
         smi = (r["smiles"] or "").strip()
+        if not status and spec.assay_range is not None:
+            lo, hi = spec.assay_range
+            if value <= lo + _LIMIT_TOL or value >= hi - _LIMIT_TOL:
+                status = "censored_value"
+                detail = f"{value:.6g} at or beyond the assay range [{lo:.6g}, {hi:.6g}] {spec.unit}"
         if not status and not smi:
             status = "missing_structure"
         if not status:
@@ -747,16 +827,19 @@ def load_records(
     """Record-level audit table of target ``name`` (:data:`RECORD_COLUMNS`), in source order.
 
     Processed tables are cached as ``<cache_dir>/processed/<name>-<hash>.csv.gz`` keyed by the
-    raw data hash, ``keep_salt_forms``, :data:`PROCESSING_VERSION` and the RDKit / ChEMBL
-    structure-pipeline versions.
+    raw data hash, ``keep_salt_forms``, :data:`PROCESSING_VERSION`, the RDKit / ChEMBL
+    structure-pipeline versions and :func:`processing_fingerprint` (topoqspr version, source
+    of ``graph.py`` / ``expdata.py``, standardiser output on fixed probes).
+    ``df.attrs['processing_fingerprint']`` records the latter.
     """
     spec = TARGETS[name]
     raw, raw_hash = _raw_records(spec, cache_dir, offline, client, session)
     import chembl_structure_pipeline
 
+    fp = processing_fingerprint()
     key = json.dumps(
         [name, raw_hash, keep_salt_forms, PROCESSING_VERSION, rdBase.rdkitVersion,
-         getattr(chembl_structure_pipeline, "__version__", "?")]
+         getattr(chembl_structure_pipeline, "__version__", "?"), fp]
     )
     proc = _expdata_dir(cache_dir) / "processed" / f"{name}-{sha256_bytes(key.encode())[:16]}.csv.gz"
     if proc.exists():
@@ -770,7 +853,8 @@ def load_records(
         tmp = proc.with_suffix(f".tmp{os.getpid()}")
         df.to_csv(tmp, index=False, compression={"method": "gzip", "mtime": 0})  # repr floats round-trip
         os.replace(tmp, proc)
-    df.attrs.update(target=name, unit=spec.unit, source=spec.source, raw_sha256=raw_hash)
+    df.attrs.update(target=name, unit=spec.unit, source=spec.source, raw_sha256=raw_hash,
+                    processing_fingerprint=fp)
     return df
 
 
@@ -878,14 +962,14 @@ def standardised_keys(included: pd.DataFrame, n_jobs: int | None = None) -> pd.D
 def coverage(targets: Mapping[str, pd.DataFrame], inchikeys: Iterable[str]) -> dict[str, dict[str, int]]:
     """For each target, how many of ``inchikeys`` (full keys) have a value.
 
-    Returns ``{target: {"n": full-key matches, "n_first_block": matches on the first
-    (connectivity) block only, informational}}``.  Empty keys are ignored.
+    Returns ``{target: {"n": drugs (distinct full keys) with a full-key match,
+    "n_first_block": drugs whose first (connectivity) block matches, informational}}``.
+    Both count drugs, i.e. distinct full keys; empty keys are ignored.
     """
     keys = sorted({k for k in inchikeys if k})
-    blocks = {k.split("-")[0] for k in keys}
     out = {}
     for name, df in targets.items():
         have = set(df["inchikey"])
         have_b = {k.split("-")[0] for k in have}
-        out[name] = {"n": sum(k in have for k in keys), "n_first_block": sum(b in have_b for b in blocks)}
+        out[name] = {"n": sum(k in have for k in keys), "n_first_block": sum(k.split("-")[0] in have_b for k in keys)}
     return out
