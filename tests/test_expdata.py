@@ -329,6 +329,46 @@ def test_read_sdf_and_parse_opera():
     assert len(agg) == 2
 
 
+def test_parse_opera_counts_merged_physprop_ids():
+    """An OPERA record merging several PHYSPROP entries (MPID ``a|b|c``) counts as that many
+    measurements, like an AqSolDB row with Ocurrences > 1 (regression: was always 1)."""
+    props = pd.DataFrame(
+        {
+            "ChemID": ["1", "2", "3", "4"],
+            "Original_SMILES": ["CCCCCCO", "CCCCCCO", "OC(=O)c1ccccc1", "CCCCO"],
+            "MPID": ["303|361286|362587", "17", "", "5| 5 |"],
+            "LogP": ["2.0", "2.2", "1.9", "0.9"],
+        }
+    )
+    raw = parse_opera(props, "LogP_QR.sdf")
+    assert raw["n_reported"].tolist() == [3, 1, 1, 1]  # blank -> 1; duplicates/blanks ignored
+    assert raw["sd_reported"].isna().all()  # OPERA publishes no spread
+    agg = aggregate(process_records(raw, LOGP), LOGP)
+    hexanol = agg[agg["inchikey"] == standardize("CCCCCCO").inchikey].iloc[0]
+    assert hexanol["n_measurements"] == 4
+
+
+def test_assay_limit_values_are_censored():
+    """AstraZeneca values at (or beyond) the assay range limits are limit values, not
+    measurements, although ChEMBL stores them with '=' (regression)."""
+    logd = TARGETS["logd74_az"]
+    assert logd.assay_range == (-1.5, 4.5)
+    vals = ["-1.5", "-1.49", "2.0", "4.49", "4.5", "4.7"]
+    acts = [dict(activity_id=i, canonical_smiles="CCCCCCO", standard_relation="=", standard_value=v)
+            for i, v in enumerate(vals, 1)]
+    recs = process_records(parse_chembl_activities(acts, "log10"), logd)
+    assert recs["status"].tolist() == ["censored_value", "ok", "ok", "ok", "censored_value", "censored_value"]
+    assert recs.loc[0, "detail"].startswith("-1.5 at or beyond the assay range")
+    assert recs.loc[recs["status"] != "ok", "value"].isna().all()
+    sol = TARGETS["logs74_az"]
+    acts = [dict(activity_id=i, canonical_smiles="CCCCCCO", standard_relation="=", standard_value=v,
+                 standard_units="nM") for i, v in enumerate(["100", "101", "1513600", "1500000"], 1)]
+    recs = process_records(parse_chembl_activities(acts, sol.unit), sol)
+    assert recs["status"].tolist() == ["censored_value", "ok", "censored_value", "ok"]
+    # targets without an assay range are unaffected
+    assert all(TARGETS[t].assay_range is None for t in TARGETS if TARGETS[t].source not in ("az_logd", "az_solubility"))
+
+
 def test_parse_biogen_converts_with_recorded_mw():
     df = pd.DataFrame(
         {
@@ -472,6 +512,9 @@ def test_registry_is_complete():
         if src.key == "opera":
             assert spec.member in ed._OPERA_VALUE
     assert len({s.sha256 for s in SOURCES.values() if s.sha256}) == 4
+    for spec in TARGETS.values():
+        if spec.assay_range is not None:
+            assert spec.assay_range[0] < spec.assay_range[1]
 
 
 # ----------------------------------------------------------------------------- end to end
@@ -510,6 +553,45 @@ def test_coverage_full_key_and_first_block():
     t = {"x": pd.DataFrame({"inchikey": ["AAAAAAAAAAAAAA-BBBBBBBBBB-N", "CCCCCCCCCCCCCC-DDDDDDDDDD-N"]})}
     keys = ["AAAAAAAAAAAAAA-BBBBBBBBBB-N", "CCCCCCCCCCCCCC-EEEEEEEEEE-N", "ZZZZZZZZZZZZZZ-BBBBBBBBBB-N", ""]
     assert coverage(t, keys) == {"x": {"n": 1, "n_first_block": 2}}
+    # two drugs (stereoisomers) sharing a connectivity block count twice: the column counts
+    # drugs, not distinct blocks (regression)
+    keys2 = ["AAAAAAAAAAAAAA-FFFFFFFFFF-N", "AAAAAAAAAAAAAA-GGGGGGGGGG-N", "AAAAAAAAAAAAAA-FFFFFFFFFF-N"]
+    assert coverage(t, keys2) == {"x": {"n": 0, "n_first_block": 2}}
+
+
+def _reject_all(smiles, **kw):
+    from topoqspr.graph import Rejection, StandardizationResult
+
+    return StandardizationResult(input_smiles=smiles, rejection=Rejection("unparsable", "probe"))
+
+
+def test_processed_cache_invalidated_when_standardize_changes(aqsol_cache, monkeypatch):
+    """Regression: the processed-records cache key ignored graph.standardize, so a changed
+    standardiser silently reused stale InChIKeys/statuses."""
+    a = get_target("logs_aqsoldb", aqsol_cache, offline=True)
+    assert len(a) > 0
+    fp = a.attrs["processing_fingerprint"]
+    monkeypatch.setattr(ed, "standardize", _reject_all)
+    b = get_target("logs_aqsoldb", aqsol_cache, offline=True)
+    assert len(b) == 0 and b.attrs["processing_fingerprint"] != fp  # not served from the cache
+    recs = ed.load_records("logs_aqsoldb", aqsol_cache, offline=True)
+    assert (recs["status"] == "unparsable").sum() == recs["smiles"].ne("").sum()
+    monkeypatch.setattr(ed, "standardize", standardize)
+    c = get_target("logs_aqsoldb", aqsol_cache, offline=True)  # memo not stale either
+    pd.testing.assert_frame_equal(a, c, check_exact=True)
+    assert c.attrs["processing_fingerprint"] == fp
+    assert len(list((aqsol_cache / "processed").glob("logs_aqsoldb-*.csv.gz"))) == 2
+
+
+def test_processing_fingerprint_tracks_graph_source(tmp_path, monkeypatch):
+    from topoqspr import graph
+
+    fp = ed.processing_fingerprint()
+    assert ed.processing_fingerprint() == fp  # deterministic
+    edited = tmp_path / "graph.py"
+    edited.write_text(Path(graph.__file__).read_text() + "\n# edited\n")
+    monkeypatch.setattr(graph, "__file__", str(edited))
+    assert ed.processing_fingerprint() != fp
 
 
 class _PoolClient:

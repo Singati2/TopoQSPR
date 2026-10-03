@@ -66,10 +66,18 @@ document record (title, authors, DOI, ChEMBL 20) was read from the ChEMBL `docum
   Some `Original_SMILES` list several alternative structures separated by `|` (stereoisomers
   merged into one record). These cannot be assigned to one full InChIKey and are excluded as
   `ambiguous_structure`. `WS_QR` reports a temperature for 3,720 of 5,269 records (20–30 °C);
-  the rest are blank. `MP_QR` carries no per-record reference.
+  the rest are blank. `MP_QR` carries no per-record reference. OPERA values are
+  pre-aggregated: a record whose `MPID` lists several PHYSPROP IDs (`a|b|c`) merges that many
+  PHYSPROP entries (usable records with more than one ID: logP 856, MP 195, WS 2,966). OPERA
+  does not publish the spread of a merged value, so the disagreement rule (§2, rule 5) can
+  only fire when several OPERA records standardise to one parent. Merged entries may repeat
+  one original measurement under several PHYSPROP IDs, so `n_measurements` for OPERA counts
+  entries, not necessarily independent measurements.
 * **AstraZeneca** compounds are mostly AZ research compounds. The assays have finite ranges
-  (logD −1.5 to 4.5; solubility 0.1 µM to ≈1.5 mM), and values at the limits are stored without
-  a relation operator, so ChEMBL does not mark them as censored.
+  (logD −1.5 to 4.5; solubility 100 nM to 1,513,600 nM), and values at the limits are stored
+  with `=`, so ChEMBL does not mark them as censored. The rule `assay_range` (§2, rule 1)
+  marks them `censored_value`: logD 5 records (1 at −1.5, 4 at 4.5), solubility 20 records
+  (6 at 100 nM, 14 at 1,513,600 nM).
 * **Biogen** compounds are commercially available screening compounds (Enamine, eMolecules,
   WuXi, Mcule), not drugs. Solubility is measured at pH 6.8.
 
@@ -79,7 +87,9 @@ Applied to every record. The first failure wins, and nothing is imputed: a recor
 rule keeps `value = NaN` plus a `status` code and a `detail` text.
 
 1. **Value.** Missing or non-numeric → `missing_value`. A qualified value (ChEMBL
-   `standard_relation` other than `=`) → `censored_value`. Rows the source marks as bad
+   `standard_relation` other than `=`) → `censored_value`, and so does a value at or beyond a
+   target's assay range (`TargetSpec.assay_range`, tolerance 1e-6; set for `logd74_az`
+   [−1.5, 4.5] and `logs74_az` [log10 1e-7, log10 1.5136e-3]). Rows the source marks as bad
    (Bradley `donotuse`, ChEMBL `data_validity_comment`) → `flagged_by_source`. An OPERA record
    with `|`-separated alternative structures → `ambiguous_structure`.
 2. **Units.** Values are normalised to log10(mol/L) for solubility, degC for melting point, and
@@ -100,7 +110,7 @@ rule keeps `value = NaN` plus a `status` code and a `detail` text.
 5. **Aggregation** by the full 27-character InChIKey of the standardised parent:
    * `value` = **median** of the record values;
    * `n_measurements` = number of underlying measurements (an AqSolDB row counts as its
-     `Ocurrences`);
+     `Ocurrences`, an OPERA record as its number of distinct `MPID` PHYSPROP IDs);
    * `sd` = the larger of the sample SD (ddof = 1) across records and any SD the source
      reports for a record;
    * `replicates_disagree` = `sd > disagreement_sd`, with **0.5 log units** for logS, logP and
@@ -127,24 +137,28 @@ Targets: `logs_aqsoldb`, `logs_opera`, `logs74_az`, `logs68_biogen`, `mp_bradley
 `ChecksumError`: a bad download is never stored, and a corrupted cached file is never replaced
 silently. ChEMBL sources are checked against a SHA-256 of their records pinned per ChEMBL
 release. A release without a pin raises, so a new release has to be pinned explicitly.
-Processed record tables are cached by raw hash, processing version and RDKit /
-structure-pipeline versions. Drugs are matched to targets through the same standardisation:
+Processed record tables are cached by raw hash, processing version, RDKit /
+structure-pipeline versions and `processing_fingerprint()`: the topoqspr version, the SHA-256
+of the `graph.py` and `expdata.py` sources, and the output of the current `standardize` on a
+fixed probe panel that exercises every rejection code and parent rule. Any change to the
+standardiser therefore invalidates the cache, so target and drug InChIKeys always come from the
+same standardiser. The in-process standardisation memo is reset on the same fingerprint. Drugs are matched to targets through the same standardisation:
 `standardised_keys(cohort.included)`.
 
 ## 3. Record curation outcome (all records, before matching to drugs)
 
-Produced by `scripts/expdata_coverage.py` (ChEMBL_37, processing version 3). *Parents* means distinct full InChIKeys of standardised parents with at least one usable record. *Used* means parents left after removing those with disagreeing replicates.
+Produced by `scripts/expdata_coverage.py` (ChEMBL_37, processing version 4). *Parents* means distinct full InChIKeys of standardised parents with at least one usable record. *Used* means parents left after removing those with disagreeing replicates.
 
 | Target | Records | ok | Exclusions | Parents | Disagreeing | Used | Incl. salt forms and disagreeing |
 |---|---|---|---|---|---|---|---|
 | `logs_aqsoldb` | 9,982 | 8,747 | salt_or_solvate_form 616, disallowed_element 408, mixture 102, no_carbon 77, too_few_heavy_atoms 19, parent_ambiguous 11, unparsable 2 | 8,739 | 322 | 8,417 | 9,181 |
 | `logs_opera` | 5,269 | 5,043 | ambiguous_structure 119, salt_or_solvate_form 82, too_few_heavy_atoms 14, disallowed_element 10, mixture 1 | 5,043 | 0 | 5,043 | 5,080 |
-| `logs74_az` | 1,763 | 1,762 | salt_or_solvate_form 1 | 1,762 | 0 | 1,762 | 1,763 |
+| `logs74_az` | 1,763 | 1,742 | censored_value 20 (assay limits), salt_or_solvate_form 1 | 1,742 | 0 | 1,742 | 1,743 |
 | `logs68_biogen` | 3,521 | 2,170 | missing_value 1348, salt_or_solvate_form 3 | 2,169 | 0 | 2,169 | 2,172 |
 | `mp_bradley` | 28,645 | 27,855 | flagged_by_source 377, unparsable 292, no_carbon 74, too_few_heavy_atoms 45, disallowed_element 1, mixture 1 | 19,799 | 299 | 19,500 | 19,799 |
 | `mp_opera` | 8,698 | 8,421 | salt_or_solvate_form 151, ambiguous_structure 87, disallowed_element 23, too_few_heavy_atoms 12, mixture 4 | 8,421 | 0 | 8,421 | 8,522 |
 | `logp_opera` | 13,963 | 13,872 | ambiguous_structure 74, too_few_heavy_atoms 13, disallowed_element 2, parent_ambiguous 1, unparsable 1 | 13,860 | 12 | 13,848 | 13,860 |
-| `logd74_az` | 4,200 | 4,200 | - | 4,195 | 0 | 4,195 | 4,195 |
+| `logd74_az` | 4,200 | 4,195 | censored_value 5 (assay limits) | 4,190 | 0 | 4,190 | 4,190 |
 
 The 292 Bradley `unparsable` rows are SMILES that RDKit cannot kekulise, mostly aromatic nitrogen written without its hydrogen (e.g. `O=C2c1ncnc1N(C)C(=O)N2C` for caffeine, `c1cccc2ncnc12`). They are source defects and are excluded, not repaired. Of the 178 multi-component Bradley rows, 177 already carry `donotuse`.
 
@@ -156,18 +170,18 @@ The 292 Bradley `unparsable` rows are SMILES that RDKit cannot kekulise, mostly 
 
 Curated parents: **1,821**. All 1,821 standardise with `graph.standardize` to 1,821 distinct full InChIKeys (no rejections).
 
-| Target | Endpoint | Drugs with a value (full InChIKey) | Incl. salt forms and disagreeing | First InChIKey block only (informational) |
+| Target | Endpoint | Drugs with a value (full InChIKey) | Incl. salt forms and disagreeing | Drugs whose first InChIKey block matches (informational) |
 |---|---|---|---|---|
-| `logs_aqsoldb` | aqueous solubility | 351 **(≥ 200)** | 407 | 427 |
-| `logs_opera` | water solubility (PHYSPROP) | 349 **(≥ 200)** | 357 | 366 |
-| `logs74_az` | solubility pH 7.4 (AZ) | 84 | 85 | 89 |
-| `logs68_biogen` | solubility pH 6.8 (Biogen) | 35 | 36 | 38 |
-| `mp_bradley` | melting point | 711 **(≥ 200)** | 733 | 805 |
-| `mp_opera` | melting point (PHYSPROP) | 509 **(≥ 200)** | 539 | 539 |
-| `logp_opera` | logP (PHYSPROP) | 505 **(≥ 200)** | 510 | 537 |
-| `logd74_az` | logD7.4 (AZ) | 370 **(≥ 200)** | 370 | 387 |
+| `logs_aqsoldb` | aqueous solubility | 351 **(≥ 200)** | 407 | 441 |
+| `logs_opera` | water solubility (PHYSPROP) | 349 **(≥ 200)** | 357 | 376 |
+| `logs74_az` | solubility pH 7.4 (AZ) | 84 | 85 | 93 |
+| `logs68_biogen` | solubility pH 6.8 (Biogen) | 35 | 36 | 40 |
+| `mp_bradley` | melting point | 711 **(≥ 200)** | 733 | 830 |
+| `mp_opera` | melting point (PHYSPROP) | 509 **(≥ 200)** | 539 | 551 |
+| `logp_opera` | logP (PHYSPROP) | 505 **(≥ 200)** | 510 | 556 |
+| `logd74_az` | logD7.4 (AZ) | 369 **(≥ 200)** | 369 | 399 |
 
-Matching uses the full 27-character key, so stereochemistry must agree. The first-block column counts drugs whose connectivity matches a measured compound (e.g. a racemate was measured and an enantiomer is approved). It shows how much stereo-strict matching costs and is **not** used.
+Matching uses the full 27-character key, so stereochemistry must agree. The first-block column counts drugs (distinct full InChIKeys) whose first InChIKey block matches a measured compound (e.g. a racemate was measured and an enantiomer is approved). It shows how much stereo-strict matching costs and is **not** used.
 
 ### 4.2 Per disease (EXPERIMENT_PLAN candidate list; counts only)
 
@@ -181,7 +195,7 @@ Controlled cohort `build_cohort([mesh_id], client)` with defaults (`min_phase = 
 | Heart Failure (D006333) | 43 | 17 | 14 | 5 | 1 | 23 | 17 | 17 | 12 |
 | Asthma (D001249) | 36 | 11 | 9 | 3 | 0 | 18 | 8 | 10 | 6 |
 | HIV Infections (D015658) | 36 | 4 | 4 | 1 | 1 | 13 | 3 | 10 | 3 |
-| Breast Neoplasms (D001943) | 35 | 4 | 2 | 2 | 2 | 16 | 6 | 4 | 8 |
+| Breast Neoplasms (D001943) | 35 | 4 | 2 | 2 | 2 | 16 | 6 | 4 | 7 |
 | Diabetes Mellitus, Type 2 (D003924) | 33 | 5 | 8 | 5 | 1 | 15 | 6 | 6 | 14 |
 | Parkinson Disease (D010300) | 29 | 5 | 1 | 0 | 0 | 12 | 8 | 9 | 12 |
 | Psoriasis (D011565) | 29 | 8 | 7 | 2 | 1 | 14 | 11 | 13 | 5 |
@@ -209,7 +223,7 @@ Criteria fixed in the task: **n ≥ 200** pooled drugs for a confirmatory pooled
    |---|---|---|---|
    | Melting point | `mp_bradley` | 711 | `mp_opera` (509) |
    | logP | `logp_opera` | 505 | – |
-   | logD7.4 | `logd74_az` | 370 | – |
+   | logD7.4 | `logd74_az` | 369 | – |
    | Aqueous solubility (logS) | `logs_aqsoldb` | 351 | `logs_opera` (349) |
 
    Each endpoint gets exactly one source in the BH family, because the alternative sources
@@ -233,7 +247,8 @@ Criteria fixed in the task: **n ≥ 200** pooled drugs for a confirmatory pooled
    state it explicitly at freeze.
 
 4. **Rules to freeze with the plan:** full-InChIKey matching (the first-block column is
-   informational only); salt and solvate forms excluded for solid-state endpoints; median
+   informational only); salt and solvate forms excluded for solid-state endpoints; AstraZeneca
+   assay-limit values censored; median
    aggregation; disagreement thresholds 0.5 log units and 10 °C with disagreeing parents
    dropped; and the source hashes above (ChEMBL_37 for the AstraZeneca sets). The
    `keep_salt_forms=True` and `drop_disagreeing=False` variants are the pre-specified
