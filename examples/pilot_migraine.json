@@ -1,0 +1,25 @@
+{
+ "schema": 1,
+ "name": "pilot_migraine",
+ "cohort": {
+  "source": "chembl",
+  "mesh_ids": ["D008881"],
+  "disease_label": "Migraine Disorders (quarantined pilot, EXPERIMENT_PLAN section 2)",
+  "min_phase": 4,
+  "chembl_release": "ChEMBL_37"
+ },
+ "feature_sets": ["null", "size", "size_rings", "composition", "TI", "TI_family", "rdkit2d"],
+ "targets": [
+  {"provider": "rdkit", "names": ["MolWt", "MolLogP", "TPSA", "MolMR"]}
+ ],
+ "evaluation": {
+  "families": ["ridge", "elasticnet", "pls", "linear", "knn", "svr", "rf", "extratrees", "gbr", "xgb"],
+  "learners": ["selected", "ridge", "elasticnet", "pls", "linear", "knn", "svr", "rf", "extratrees", "gbr", "xgb"],
+  "outer_splits": 5,
+  "seeds": [0, 1, 2, 3, 4],
+  "inner_splits": 3,
+  "split": "random",
+  "reference": "size"
+ },
+ "runtime": {"n_jobs": 1}
+}
