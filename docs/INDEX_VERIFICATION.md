@@ -242,8 +242,9 @@ Kulli's indices are edge sums.
 
 The generalised reverse degree was proposed by Arockiaraj, Greeni and Kalaam,
 Int. J. Quantum Chem. 123 (2023) e27136 (`arockiaraj2023ijqc`). Its abstract
-(Crossref) says "we propose a generalized form of reverse degree parameters";
-the full text is paywalled and was not read. The definition is restated by
+(Crossref) says "we propose a generalized form of reverse degree parameters".
+The full text was later read (2026-10-03, see "Original R_k paper read" below), which confirmed
+the definition and the mod precedence. The definition is restated by
 the same group in two open-access papers, which I read in full:
 
 Kalaam, Greeni, Arockiaraj, Front. Chem. 12 (2024) 1470231 (`kalaam2024`),

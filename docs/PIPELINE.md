@@ -101,11 +101,11 @@ what is stored and hashed.
 }
 ```
 
-**Baselines.** At `v1.0-dev` (e35dc4a) `null`, `size` and `composition` are in the
-default `feature_sets`, and `evaluation.reference` (default `size`) only has to be one
-of the chosen sets; a config may leave the baselines out. A code change in preparation
-(branch `fx-code`) makes `resolve_config` enforce the baseline sets; until it is merged,
-the frozen configs must list them explicitly.
+**Baselines.** `resolve_config` requires `null`, `size` and `composition` in
+`feature_sets` and `evaluation.reference = "size"`. A config may opt out only with
+`evaluation.allow_custom_baselines: true`, which is kept in the resolved config (and so
+changes its hash) and recorded under `baselines` in the run record; compliant configs
+hash exactly as before.
 
 `protocol: null` (the default) leaves the key out of the resolved config, so configs
 written before the protocol stage existed keep their `config_sha256` (the golden hash of
@@ -438,18 +438,15 @@ EVALUATION_PROTOCOL.md §11). Defaults:
                   "learner": null,          // null = protocol.learner (must be in evaluation.learners)
                   "feature_sets": null,     // null = the sets and references of the family
                   "quantile": 0.95},
-  "bootstrap": {"enabled": true, "n_boot": 200, "seed": 0,
+  "bootstrap": {"enabled": null, "n_boot": 200, "seed": 0,  // null = on for pooled cohorts only
                 "families": null}           // null = protocol.learner's families; or a fast subset
 }
 ```
 
 **Bootstrap scope.** The plan (EXPERIMENT_PLAN §7) uses the whole-procedure bootstrap on
 the **pooled** set only; at per-disease n the resampled test folds are too small for R² to
-be defined (§10). At `v1.0-dev` (e35dc4a) the `bootstrap.enabled: true` default above
-applies to every cohort source, so a per-disease protocol config must set
-`"bootstrap": {"enabled": false}` explicitly. A code change in preparation (branch
-`fx-code`) makes the bootstrap on by default only for `cohort.source = "pooled"`; until it
-is merged, the explicit setting is required.
+be defined (§10). `bootstrap.enabled` defaults to `null`: on for `cohort.source = "pooled"`, off for every
+other cohort unless set to true explicitly; the rule is recorded in the run record.
 
 Validation (before any work): the family's sets must be evaluated feature sets (a
 `TI_<family>` set needs `TI_family`), the reference must be `evaluation.reference`,
