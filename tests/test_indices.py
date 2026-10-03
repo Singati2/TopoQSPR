@@ -238,6 +238,7 @@ def test_cycle_closed_forms_for_every_degree_index(n):
         "SC": n / 2, "H": n / 2, "GA": n, "ABC": n / r2, "AZI": 8 * n, "SO": 2 * r2 * n,
         "ISI": n, "SDD": 2 * n, "sigma": 0, "ABS": n / r2, "ReZ3": 16 * n, "AG": n,
         "HG": n / 4, "GBM": n / 4, "BMG": 4 * n, "BMH": 16 * n, "TMH": 24 * n,
+        "BM": 8 * n, "TM": 12 * n, "GH": 4 * n, "GTM": n / 6, "HBM": n / 16, "HTM": n / 24, "TMG": 6 * n,
     }
     degree_names = {s.name for s in REGISTRY if s.family == "degree"}
     assert set(expected) == degree_names
@@ -862,3 +863,69 @@ def test_dexamethasone_graph_has_ijqc_2023_partition_and_values():
     assert vals["R3_GA"] == pytest.approx(28.5037, abs=5e-4)
     # The paper prints 32.939 for k = 1, which exceeds m = 31 and is impossible; the correct value:
     assert vals["R1_GA"] == pytest.approx(29.168, abs=5e-4) and vals["R1_GA"] < 31
+
+
+# Arockiaraj et al., SAR QSAR Environ. Res. 34:569-589 (2023): hybrid geometric-harmonic-Zagreb
+# descriptors. Bond partitions (d22, d23, d33) from the paper's Table 1, values from its Table 2
+# (read from page photos supplied by a co-author; anthanthrene GBM is excluded because the photo
+# digit is ambiguous: 5.9772 printed vs 5.9722 computed, while the same formula matches elsewhere).
+_SAR_COLS = ["TM", "GH", "GBM", "GTM", "HG", "HBM", "HTM", "BMG", "BMH", "TMG", "TMH"]
+_SAR_ROWS = {
+    # name: (SMILES, (d22, d23, d33), Table 2 values in _SAR_COLS order; None = not used)
+    "benzene": ("c1ccccc1", (6, 0, 0), [72, 24, 1.5, 1, 1.5, 0.375, 0.25, 24, 96, 36, 144]),
+    "anthracene": ("c1ccc2cc3ccccc3cc2c1", (6, 8, 2),
+                   [278, 90.9898, 3.6814, 2.2536, 3.0286, 0.7104, 0.4431, 69.9258, 406, 116.0537, 686]),
+    "anthanthrene": (None, (6, 12, 9),
+                     [543, 178.4847, None, None, 4.4596, 1.0114, 0.6137, 122.8888, 831, 210.0806, 1443]),
+    "benzo[a]coronene": (None, (8, 12, 15),
+                         [None, 240.4847, 7.6722, 4.5470, 5.6263, 1.2697, 0.7712, 160.8888, 1133, 276.0806, 1977]),
+    "benzo[h]pentaphene": (None, (9, 14, 8),
+                           [590, 193.7321, 6.9675, 4.1938, 5.4251, 1.2494, 0.7685, 138.8702, 889, 234.5940, 1529]),
+}
+
+
+@pytest.mark.parametrize("name", sorted(_SAR_ROWS))
+def test_hybrid_indices_match_arockiaraj_2023_sar_qsar(name):
+    from topoqspr.indices import PHI
+
+    _, (a, b, c), values = _SAR_ROWS[name]
+    for col, expected in zip(_SAR_COLS, values):
+        if expected is None:
+            continue
+        f = PHI[col][0]
+        got = a * f(2, 2) + b * f(2, 3) + c * f(3, 3)
+        assert got == pytest.approx(expected, abs=5e-4), (name, col)
+
+
+@pytest.mark.parametrize("name", ["benzene", "anthracene"])
+def test_hybrid_indices_full_pipeline_on_benzenoids(name):
+    from collections import Counter
+    from topoqspr.graph import standardize
+    from topoqspr.indices import compute_indices
+
+    smiles, (a, b, c), values = _SAR_ROWS[name]
+    g = standardize(smiles).graph
+    part = Counter(tuple(sorted((g.degrees[u], g.degrees[v]))) for u, v in g.edges)
+    assert part.get((2, 2), 0) == a and part.get((2, 3), 0) == b and part.get((3, 3), 0) == c
+    vals, _ = compute_indices(g)
+    for col, expected in zip(_SAR_COLS, values):
+        assert vals[col] == pytest.approx(expected, abs=5e-4), col
+
+
+def test_coronene_partition_matches_table_1():
+    from collections import Counter
+    from topoqspr.graph import standardize
+
+    g = standardize("c1cc2ccc3ccc4ccc5ccc6ccc1c1c2c3c4c5c61").graph
+    part = Counter(tuple(sorted((g.degrees[u], g.degrees[v]))) for u, v in g.edges)
+    assert dict(part) == {(2, 2): 6, (2, 3): 12, (3, 3): 12}
+
+
+@pytest.mark.parametrize("smiles", ["c1ccc2cc3ccccc3cc2c1", "CC(=O)Oc1ccccc1C(=O)O", "CN(C)C(=N)N=C(N)N"])
+def test_bi_and_tri_zagreb_identities(smiles):
+    from topoqspr.graph import standardize
+    from topoqspr.indices import compute_indices
+
+    v, _ = compute_indices(standardize(smiles).graph)
+    assert v["BM"] == v["M1"] + v["M2"]
+    assert v["TM"] == v["F"] + v["M2"]

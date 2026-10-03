@@ -1,7 +1,7 @@
 # Topological index verification (TopoQSPR v1)
 
 This file is the provenance record for every index in
-`src/topoqspr/indices.py` (`REGISTRY`, 95 indices) and for every one of the
+`src/topoqspr/indices.py` (`REGISTRY`, 102 indices) and for every one of the
 135 index names of v0.x (`config.py:TOPO_INDICES`). Bibliography keys refer to
 `docs/index_refs.bib`. Test names refer to `tests/test_indices.py` (and
 `tests/test_graph.py` for standardisation). The tests
@@ -62,11 +62,11 @@ if a registry index or a legacy name is missing from this file.
   Z, ...) are returned as Python `int`. Hosoya Z is exact whenever it is
   returned; above the frontier-width cap it is NaN with a reason.
 * **Invariance and determinism.** `test_invariance_under_atom_renumbering`
-  (random RDKit atom orders, 5 drugs, all 95 indices),
+  (random RDKit atom orders, 5 drugs, all 102 indices),
   `test_invariance_under_graph_relabelling`,
   `test_values_are_in_registry_order_and_deterministic`.
 * **No duplicates.** `test_no_two_indices_are_identical_on_the_drug_panel`
-  checks every pair of the 95 indices on 24 approved drugs.
+  checks every pair of the 102 indices on 24 approved drugs.
 * **Edge-function notation.** Edge-additive indices are
   `sum_{uv in E} phi(x_u, x_v)` with x = d (degree family), S (neighbourhood
   degree sum, `S_u = sum_{w ~ u} d_w`) or `M_kR(d)` (modified reverse degree).
@@ -125,11 +125,18 @@ accessible), implementation matches it, and the listed tests pass.
 | `ABS` | $\sum_{uv \in E(G)} \sqrt{\frac{d_u + d_v - 2}{d_u + d_v}}$ | ali2022 | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_star_closed_forms_for_irregular_indices` | verified |
 | `ReZ3` | $\sum_{uv \in E(G)} d_u d_v (d_u + d_v)$ | ranjini2013 | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified |
 | `AG` | $\sum_{uv \in E(G)} \frac{d_u + d_v}{2\sqrt{d_u d_v}}$ | shegehall2015 | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified |
-| `HG` | $\sum_{uv \in E(G)} \frac{2}{\sqrt{d_u d_v}\,(d_u + d_v)}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified; primary full text not accessed (formula from godlin2026) |
-| `GBM` | $\sum_{uv \in E(G)} \frac{\sqrt{d_u d_v}}{d_u + d_v + d_u d_v}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified; primary full text not accessed (formula from godlin2026, arockiaraj2025lung) |
-| `BMG` | $\sum_{uv \in E(G)} \frac{d_u + d_v + d_u d_v}{\sqrt{d_u d_v}}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified; primary full text not accessed (formula from godlin2026) |
-| `BMH` | $\sum_{uv \in E(G)} \frac{(d_u + d_v + d_u d_v)(d_u + d_v)}{2}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index` | verified; primary full text not accessed (formula from kalaam2024, Eq. 8) |
-| `TMH` | $\sum_{uv \in E(G)} \frac{(d_u^2 + d_v^2 + d_u d_v)(d_u + d_v)}{2}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index` | verified; primary full text not accessed (formula from arockiaraj2025lung, kalaam2024 Eq. 9) |
+| `HG` | $\sum_{uv \in E(G)} \frac{2}{\sqrt{d_u d_v}\,(d_u + d_v)}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified against the paper's Table 2 (primary read 2026-10-03) |
+| `GBM` | $\sum_{uv \in E(G)} \frac{\sqrt{d_u d_v}}{d_u + d_v + d_u d_v}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified against the paper's Table 2 (primary read 2026-10-03) |
+| `BMG` | $\sum_{uv \in E(G)} \frac{d_u + d_v + d_u d_v}{\sqrt{d_u d_v}}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified against the paper's Table 2 (primary read 2026-10-03) |
+| `BMH` | $\sum_{uv \in E(G)} \frac{(d_u + d_v + d_u d_v)(d_u + d_v)}{2}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index` | verified; verified against the paper's Table 2 (primary read 2026-10-03) |
+| `TMH` | $\sum_{uv \in E(G)} \frac{(d_u^2 + d_v^2 + d_u d_v)(d_u + d_v)}{2}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index` | verified; verified against the paper's Table 2 (primary read 2026-10-03) |
+| `BM` | $\sum_{uv \in E(G)} d_u + d_v + d_u d_v$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
+| `TM` | $\sum_{uv \in E(G)} d_u^2 + d_v^2 + d_u d_v$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
+| `GH` | $\sum_{uv \in E(G)} \frac{\sqrt{d_u d_v}\,(d_u + d_v)}{2}$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
+| `GTM` | $\sum_{uv \in E(G)} \frac{\sqrt{d_u d_v}}{d_u^2 + d_v^2 + d_u d_v}$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
+| `HBM` | $\sum_{uv \in E(G)} \frac{2}{(d_u + d_v + d_u d_v)(d_u + d_v)}$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
+| `HTM` | $\sum_{uv \in E(G)} \frac{2}{(d_u^2 + d_v^2 + d_u d_v)(d_u + d_v)}$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
+| `TMG` | $\sum_{uv \in E(G)} \frac{d_u^2 + d_v^2 + d_u d_v}{\sqrt{d_u d_v}}$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
 | `HCM2` | $\sum_{uv \in E(G)} (c_u c_v)^2,\ c_u = \Delta - d_u + 1$ | kulli2018 | `_rk_func` + `modified_reverse_degree` + `PHI` | `test_star_closed_forms`, `test_cycle_closed_forms_for_every_degree_index` | verified |
 | `S_ABC` | $\sum_{uv \in E(G)} \sqrt{\frac{S_u + S_v - 2}{S_u S_v}}$ | ghorbani2010 | `_nbr_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_gemcitabine_matches_arockiaraj_2025`, `test_legacy_defects_are_fixed` | verified (v0.x numerator fixed) |
 | `S_GA` | $\sum_{uv \in E(G)} \frac{2\sqrt{S_u S_v}}{S_u + S_v}$ | graovac2011 | `_nbr_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_star_closed_forms_for_irregular_indices` | verified |
@@ -403,12 +410,9 @@ root (aspirin, imatinib, n-eicosane):
 
 ## Not registered (pending a checkable source)
 
-The twelve "hybrid geometric-harmonic-Zagreb" descriptors of Arockiaraj et al.
-2023 (`arockiaraj2023sar`) include, judging by the v0.x names, GH, GTM, TMG,
-HBM, HTM, BMA, TMA as well as HG, GBM, BMG, BMH, TMH. Only the last five could
-be checked (their formulas are printed in open-access papers of the same
-group and reproduce published values); the other seven stay out until their
-formulas are read in the primary paper. The vertex-edge Wiener and Szeged
+**Hybrid descriptors, resolved 2026-10-03.** The primary paper (Arockiaraj et al., *SAR QSAR Environ. Res.* 34:569-589, 2023) was read from page photos supplied by a co-author. It defines BM and TM plus ten hybrids (GH, GBM, GTM, HG, HBM, HTM, BMG, BMH, TMG, TMH) on pp. 571-572. All twelve are now registered and reproduce the paper's Table 2 for benzene, anthracene, anthanthrene, benzo[a]coronene and benzo[h]pentaphene (50 of 51 values compared; the exception, anthanthrene GBM, is an ambiguous digit in the photo). Real SMILES of benzene, anthracene and coronene reproduce the paper's Table 1 bond partitions. BMA and TMA, attributed to this paper by the v0.x code, **do not appear in it**; with no other source found they remain dropped. BM = M1 + M2 and TM = F + M2 identically (asserted in tests).
+
+The vertex-edge Wiener and Szeged
 indices (W_ve, Sz_ve) also stay out: more than one convention exists and the
 v0.x choice could not be tied to a source.
 
@@ -428,15 +432,15 @@ All 135 names of v0.x `config.py:TOPO_INDICES`, in their original order.
 | `AZI` | `AZI` |
 | `GA` | `GA` |
 | `SC` | `SC` |
-| `BM` | dropped: BM = M1 + M2 identically; no primary source located for the plain-degree bi-Zagreb index (the modified-reverse versions `R{k}_BM` are kept, kalaam2024) |
-| `TM` | dropped: TM = F + M2 identically; no primary source located for the plain-degree tri-Zagreb index (`R{k}_TM` kept, kalaam2024) |
-| `GH` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
+| `BM` | `BM` (registered 2026-10-03 from the primary paper) |
+| `TM` | `TM` (registered 2026-10-03 from the primary paper) |
+| `GH` | `GH` (registered 2026-10-03 from the primary paper) |
 | `GBM` | `GBM` |
-| `GTM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
+| `GTM` | `GTM` (registered 2026-10-03 from the primary paper) |
 | `HG` | `HG` |
 | `BMG` | `BMG` |
 | `BMH` | `BMH` |
-| `TMG` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
+| `TMG` | `TMG` (registered 2026-10-03 from the primary paper) |
 | `TMH` | `TMH` |
 | `SDD` | `SDD` |
 | `RM1` | dropped: vertex sum of (n+1-d_v)^2; no source defines it, and it is the size polynomial n(n+1)^2 - 4m(n+1) + M1. Kulli's first reverse Zagreb index is the edge sum `R1_M1` |
@@ -476,10 +480,10 @@ All 135 names of v0.x `config.py:TOPO_INDICES`, in their original order.
 | `ABC_SC` | dropped: sum sqrt((s-2)/p)/sqrt(s) is not the ABS index and has no source; the real ABS index is added as `ABS` |
 | `ISI` | `ISI` |
 | `sigma` | `sigma` |
-| `HBM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
-| `HTM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked |
-| `BMA` | dropped: BMA = 2m + 2 ISI identically; formula not verifiable (see GH) |
-| `TMA` | dropped: TMA = 2 M1 - 2 ISI identically; formula not verifiable (see GH) |
+| `HBM` | `HBM` (registered 2026-10-03 from the primary paper) |
+| `HTM` | `HTM` (registered 2026-10-03 from the primary paper) |
+| `BMA` | dropped: BMA = 2m + 2 ISI identically; not defined in arockiaraj2023sar (checked 2026-10-03); no source found |
+| `TMA` | dropped: TMA = 2 M1 - 2 ISI identically; not defined in arockiaraj2023sar (checked 2026-10-03); no source found |
 | `SS_M1` | dropped: sum (S_u + S_v) = 2 M2 identically |
 | `SS_M2` | dropped: sum S_u S_v (fifth M2-Zagreb index); primary source not verified |
 | `SS_BM` | dropped: = SS_M1 + SS_M2; no source |
