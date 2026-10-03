@@ -18,11 +18,12 @@ targets; none was computed.
   no cohort at all, passes). Where it applies:
   * `exp-c` and `size-dependence` with `--mesh`: checked **before** any ChEMBL access (tested
     with an empty offline cache);
-  * `--manifest`: the MeSH IDs of the included rows must all be D008881. A manifest with an
-    empty `mesh_ids` column (what `cohort.build_atc_cohort` writes for the pooled
-    approved-drug set) or without the column is refused before the freeze, so the pooled
-    set cannot reach exp-c or size-dependence through a manifest (with a measured
-    `--target-csv` or otherwise);
+  * `--manifest`: the MeSH IDs of the included rows must all be D008881. The pooled
+    approved-drug manifest (written by `expdata.approved_drug_pool`, `mesh_ids` = `*`) is
+    refused because `*` is not the pilot ID; a manifest with an empty `mesh_ids` column
+    (what `cohort.build_atc_cohort` writes for an ATC cohort) or without the column is
+    refused as "disease unknown". So before the freeze the pooled set cannot reach exp-c or
+    size-dependence through a manifest (with a measured `--target-csv` or otherwise);
   * `experiment_a` / `exp-a`: the controlled cohort's MeSH IDs (`mesh_ids` argument united
     with `cohort_mesh_ids(controlled)`: `parameters['mesh_ids']` and the manifest column)
     must be exactly D008881, and the naive cohort's (the headings its free text matched,
@@ -38,7 +39,7 @@ targets; none was computed.
   commit. A SMILES CSV carries no disease and is not checked: the guard is a seat belt, not
   a lock.
 * **Underpowered flag.** `--min-n` / `--min-n-test` (API `min_n`, `min_n_test`; default 50 and
-  10, EVALUATION_PROTOCOL §4) only set the `underpowered` flag of nested rows (n below
+  10, EVALUATION_PROTOCOL §3) only set the `underpowered` flag of nested rows (n below
   `min_n`, or a smallest outer test fold below `min_n_test`); they never block a run. At
   replication scale (Experiment D, n ≈ 10–40) every row is flagged at the defaults: that is
   the intended reading (fold-mean R² from 5-row test folds is very noisy), not an error.

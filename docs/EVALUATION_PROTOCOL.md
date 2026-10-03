@@ -347,7 +347,12 @@ plan; one full-family real-data smoke run is required before freezing.
 | AD | kNN, k = 5, 95th percentile |
 | CI | corrected repeated-CV t, α = 0.05 |
 | multiple testing | BH, q = 0.05 |
-| permutations | B = 100 |
+| `stats.y_scrambling` (stand-alone helper) | B = 100 |
+| protocol stage (§11; only with `config.protocol`) | |
+| Y-randomised control | K = 200 permutations, seed 0, 95th percentile of the null |
+| whole-procedure paired bootstrap | B = 200 resamples, seed 0; planned for the pooled set only (EXPERIMENT_PLAN §7); at `v1.0-dev` enabled by default for every cohort, so per-disease configs set `bootstrap.enabled = false` (PIPELINE.md §9) |
+| practical threshold | ΔR² ≥ 0.05 |
+| confirmatory FDR | BH (BY sensitivity), q = 0.05, fixed m |
 | underpowered | n < 50 or min n_test < 10 |
 
 ## References
@@ -499,7 +504,12 @@ AD (the zero-column `null` set) makes the summary shares NaN with the reason.
 ### 11.5 Whole-procedure paired bootstrap (`bootstrap.csv`)
 
 Sensitivity analysis for the CI of the primary ΔR²(TI − size) and ΔMAE (CV intervals can
-undercover; Bates, Hastie & Tibshirani 2023). For b = 0..B−1 (default B = 200):
+undercover; Bates, Hastie & Tibshirani 2023), with B resamples (default B = 200).
+The plan restricts it to the **pooled** set (EXPERIMENT_PLAN §7): at per-disease n the
+resampled test folds are too small for R² to be defined (PIPELINE.md §10). At `v1.0-dev`
+(e35dc4a) `protocol.bootstrap.enabled` defaults to true for every cohort, so the frozen
+per-disease configs must set it to false; a code change in preparation (branch `fx-code`)
+makes it default to on only for `cohort.source = "pooled"`. For b = 0..B−1:
 
 1. **Resample units, not rows.** The units are the connectivity groups (stereoisomers,
    racemate/enantiomer, isotopologues; PIPELINE.md §1) and every other molecule on its
