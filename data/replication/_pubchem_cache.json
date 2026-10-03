@@ -1,0 +1,5995 @@
+{
+ "/compound/cid/1046/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 1046,
+      "Complexity": 115,
+      "ConnectivitySMILES": "C1=CN=C(C=N1)C(=O)N",
+      "ExactMass": "123.043261792",
+      "HeavyAtomCount": 9,
+      "InChIKey": "IPEHBUMCGVEMRF-UHFFFAOYSA-N",
+      "MolecularFormula": "C5H5N3O",
+      "MolecularWeight": "123.11",
+      "SMILES": "C1=CN=C(C=N1)C(=O)N",
+      "TPSA": 68.9,
+      "Title": "Pyrazinamide",
+      "XLogP": -0.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/104838/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 104838,
+      "Complexity": 491,
+      "ConnectivitySMILES": "CC(C1C2CC(=C(N2C1=O)C(=O)O)SCCN=CN)O",
+      "ExactMass": "299.09397721",
+      "HeavyAtomCount": 20,
+      "InChIKey": "ZSKVGTPCRGIANV-ZXFLCMHBSA-N",
+      "MolecularFormula": "C12H17N3O4S",
+      "MolecularWeight": "299.35",
+      "SMILES": "C[C@H]([C@@H]1[C@H]2CC(=C(N2C1=O)C(=O)O)SCCN=CN)O",
+      "TPSA": 142,
+      "Title": "Imipenem",
+      "XLogP": -0.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/10607/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 10607,
+      "Complexity": 629,
+      "ConnectivitySMILES": "COC1=CC(=CC(=C1OC)OC)C2C3C(COC3=O)C(C4=CC5=C(C=C24)OCO5)O",
+      "ExactMass": "414.13146766",
+      "HeavyAtomCount": 30,
+      "InChIKey": "YJGVMLPVUAXIQN-XVVDYKMHSA-N",
+      "MolecularFormula": "C22H22O8",
+      "MolecularWeight": "414.4",
+      "SMILES": "COC1=CC(=CC(=C1OC)OC)[C@H]2[C@@H]3[C@H](COC3=O)[C@H](C4=CC5=C(C=C24)OCO5)O",
+      "TPSA": 92.7,
+      "Title": "Podophyllotoxin",
+      "XLogP": 2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/107935/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 107935,
+      "Complexity": 674,
+      "ConnectivitySMILES": "CC1(C=CC2=C(O1)C=CC3=C2OC4COC5=CC(=C(C=C5C4C3=O)OC)OC)C",
+      "ExactMass": "394.14163842",
+      "HeavyAtomCount": 29,
+      "InChIKey": "ORDAZKGHSNRHTD-UXHICEINSA-N",
+      "MolecularFormula": "C23H22O6",
+      "MolecularWeight": "394.4",
+      "SMILES": "CC1(C=CC2=C(O1)C=CC3=C2O[C@@H]4COC5=CC(=C(C=C5[C@@H]4C3=O)OC)OC)C",
+      "TPSA": 63.2,
+      "Title": "Deguelin",
+      "XLogP": 3.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/11154555/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 11154555,
+      "Complexity": 491,
+      "ConnectivitySMILES": "CN(C)C(=O)NC1CCC(CC1)CCN2CCN(CC2)C3=C(C(=CC=C3)Cl)Cl",
+      "ExactMass": "426.1953170",
+      "HeavyAtomCount": 28,
+      "InChIKey": "KPWSJANDNDDRMB-UHFFFAOYSA-N",
+      "MolecularFormula": "C21H32Cl2N4O",
+      "MolecularWeight": "427.4",
+      "SMILES": "CN(C)C(=O)NC1CCC(CC1)CCN2CCN(CC2)C3=C(C(=CC=C3)Cl)Cl",
+      "TPSA": 38.8,
+      "Title": "Cariprazine",
+      "XLogP": 4.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/114811/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 114811,
+      "Complexity": 447,
+      "ConnectivitySMILES": "CS(=O)(=O)C1=CC=C(C=C1)C(C(CF)NC(=O)C(Cl)Cl)O",
+      "ExactMass": "357.0004627",
+      "HeavyAtomCount": 21,
+      "InChIKey": "AYIRNRDRBQJXIF-NXEZZACHSA-N",
+      "MolecularFormula": "C12H14Cl2FNO4S",
+      "MolecularWeight": "358.2",
+      "SMILES": "CS(=O)(=O)C1=CC=C(C=C1)[C@H]([C@@H](CF)NC(=O)C(Cl)Cl)O",
+      "TPSA": 91.9,
+      "Title": "Florfenicol",
+      "XLogP": 0.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/11499245/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 11499245,
+      "Complexity": 155,
+      "ConnectivitySMILES": "B1(C2=C(CO1)C=C(C=C2)F)O",
+      "ExactMass": "152.0444878",
+      "HeavyAtomCount": 11,
+      "InChIKey": "LFQDNHWZDQTITF-UHFFFAOYSA-N",
+      "MolecularFormula": "C7H6BFO2",
+      "MolecularWeight": "151.93",
+      "SMILES": "B1(C2=C(CO1)C=C(C=C2)F)O",
+      "TPSA": 29.5,
+      "Title": "Tavaborole"
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/115237/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 115237,
+      "Complexity": 764,
+      "ConnectivitySMILES": "CC1=C(C(=O)N2CCCC(C2=N1)O)CCN3CCC(CC3)C4=NOC5=C4C=CC(=C5)F",
+      "ExactMass": "426.20671890",
+      "HeavyAtomCount": 31,
+      "InChIKey": "PMXMIIMHBWHSKN-UHFFFAOYSA-N",
+      "MolecularFormula": "C23H27FN4O3",
+      "MolecularWeight": "426.5",
+      "SMILES": "CC1=C(C(=O)N2CCCC(C2=N1)O)CCN3CCC(CC3)C4=NOC5=C4C=CC(=C5)F",
+      "TPSA": 82.2,
+      "Title": "Paliperidone",
+      "XLogP": 2.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/11561674/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 11561674,
+      "Complexity": 825,
+      "ConnectivitySMILES": "CCOC1=C(C=CC(=C1)C(CS(=O)(=O)C)N2C(=O)C3=C(C2=O)C(=CC=C3)NC(=O)C)OC",
+      "ExactMass": "460.13042228",
+      "HeavyAtomCount": 32,
+      "InChIKey": "IMOZEMNVLZVGJZ-QGZVFWFLSA-N",
+      "MolecularFormula": "C22H24N2O7S",
+      "MolecularWeight": "460.5",
+      "SMILES": "CCOC1=C(C=CC(=C1)[C@@H](CS(=O)(=O)C)N2C(=O)C3=C(C2=O)C(=CC=C3)NC(=O)C)OC",
+      "TPSA": 127,
+      "Title": "Apremilast",
+      "XLogP": 1.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/11978813/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 11978813,
+      "Complexity": 636,
+      "ConnectivitySMILES": "C1CN(CCN1CCCCOC2=CC3=C(C=C2)C=CC(=O)N3)C4=C5C=CSC5=CC=C4",
+      "ExactMass": "433.18239829",
+      "HeavyAtomCount": 31,
+      "InChIKey": "ZKIAIYBUSXZPLP-UHFFFAOYSA-N",
+      "MolecularFormula": "C25H27N3O2S",
+      "MolecularWeight": "433.6",
+      "SMILES": "C1CN(CCN1CCCCOC2=CC3=C(C=C2)C=CC(=O)N3)C4=C5C=CSC5=CC=C4",
+      "TPSA": 73.1,
+      "Title": "Brexpiprazole",
+      "XLogP": 4.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/123600/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 123600,
+      "Complexity": 227,
+      "ConnectivitySMILES": "CC(C)(C)NCC(C1=CC(=C(C=C1)O)CO)O",
+      "ExactMass": "239.15214353",
+      "HeavyAtomCount": 17,
+      "InChIKey": "NDAUXUAQIAJITI-LBPRGKRZSA-N",
+      "MolecularFormula": "C13H21NO3",
+      "MolecularWeight": "239.31",
+      "SMILES": "CC(C)(C)NC[C@@H](C1=CC(=C(C=C1)O)CO)O",
+      "TPSA": 72.7,
+      "Title": "(-)-Salbutamol",
+      "XLogP": 0.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/125017/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 125017,
+      "Complexity": 266,
+      "ConnectivitySMILES": "CN(C)CC(C1=CC=C(C=C1)O)C2(CCCCC2)O",
+      "ExactMass": "263.188529040",
+      "HeavyAtomCount": 19,
+      "InChIKey": "KYYIDSXMWOZKMP-UHFFFAOYSA-N",
+      "MolecularFormula": "C16H25NO2",
+      "MolecularWeight": "263.37",
+      "SMILES": "CN(C)CC(C1=CC=C(C=C1)O)C2(CCCCC2)O",
+      "TPSA": 43.7,
+      "Title": "Desvenlafaxine",
+      "XLogP": 2.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/126941/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 126941,
+      "Complexity": 704,
+      "ConnectivitySMILES": "CN(CC1=CN=C2C(=N1)C(=NC(=N2)N)N)C3=CC=C(C=C3)C(=O)NC(CCC(=O)O)C(=O)O",
+      "ExactMass": "454.17131583",
+      "HeavyAtomCount": 33,
+      "InChIKey": "FBOZXECLQNJBKD-ZDUSSCGKSA-N",
+      "MolecularFormula": "C20H22N8O5",
+      "MolecularWeight": "454.4",
+      "SMILES": "CN(CC1=CN=C2C(=N1)C(=NC(=N2)N)N)C3=CC=C(C=C3)C(=O)N[C@@H](CCC(=O)O)C(=O)O",
+      "TPSA": 211,
+      "Title": "Methotrexate",
+      "XLogP": -1.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/127151/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 127151,
+      "Complexity": 333,
+      "ConnectivitySMILES": "CCOC1=CC=CC=C1OC(C2CNCCO2)C3=CC=CC=C3",
+      "ExactMass": "313.16779360",
+      "HeavyAtomCount": 23,
+      "InChIKey": "CBQGYUDMJHNJBX-RTBURBONSA-N",
+      "MolecularFormula": "C19H23NO3",
+      "MolecularWeight": "313.4",
+      "SMILES": "CCOC1=CC=CC=C1O[C@@H]([C@H]2CNCCO2)C3=CC=CC=C3",
+      "TPSA": 39.7,
+      "Title": "Reboxetine",
+      "XLogP": 3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/135398737/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 135398737,
+      "Complexity": 446,
+      "ConnectivitySMILES": "CN1CCN(CC1)C2=NC3=C(C=CC(=C3)Cl)NC4=CC=CC=C42",
+      "ExactMass": "326.1298243",
+      "HeavyAtomCount": 23,
+      "InChIKey": "QZUDBNBUXVUHMW-UHFFFAOYSA-N",
+      "MolecularFormula": "C18H19ClN4",
+      "MolecularWeight": "326.8",
+      "SMILES": "CN1CCN(CC1)C2=NC3=C(C=CC(=C3)Cl)NC4=CC=CC=C42",
+      "TPSA": 30.9,
+      "Title": "Clozapine",
+      "XLogP": 3.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/135398738/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 135398738,
+      "Complexity": 215,
+      "ConnectivitySMILES": "CN(C)N=NC1=C(NC=N1)C(=O)N",
+      "ExactMass": "182.09160896",
+      "HeavyAtomCount": 13,
+      "InChIKey": "FDKXTQMXEQVLRF-ZHACJKMWSA-N",
+      "MolecularFormula": "C6H10N6O",
+      "MolecularWeight": "182.18",
+      "SMILES": "CN(C)/N=N/C1=C(NC=N1)C(=O)N",
+      "TPSA": 99.7,
+      "Title": "Dacarbazine",
+      "XLogP": -0.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/135398745/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 135398745,
+      "Complexity": 432,
+      "ConnectivitySMILES": "CC1=CC2=C(S1)NC3=CC=CC=C3N=C2N4CCN(CC4)C",
+      "ExactMass": "312.14086783",
+      "HeavyAtomCount": 22,
+      "InChIKey": "KVWDHTXUZHCGIO-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H20N4S",
+      "MolecularWeight": "312.4",
+      "SMILES": "CC1=CC2=C(S1)NC3=CC=CC=C3N=C2N4CCN(CC4)C",
+      "TPSA": 59.1,
+      "Title": "Olanzapine",
+      "XLogP": 2.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/14052/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 14052,
+      "Complexity": 109,
+      "ConnectivitySMILES": "CCC(CO)NCCNC(CC)CO",
+      "ExactMass": "204.183778013",
+      "HeavyAtomCount": 14,
+      "InChIKey": "AEUTYOVWOVBAKS-UWVGGRQHSA-N",
+      "MolecularFormula": "C10H24N2O2",
+      "MolecularWeight": "204.31",
+      "SMILES": "CC[C@@H](CO)NCCN[C@@H](CC)CO",
+      "TPSA": 64.5,
+      "Title": "Ethambutol",
+      "XLogP": -0.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/146570/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 146570,
+      "Complexity": 466,
+      "ConnectivitySMILES": "CN(C)CCCC1(C2=C(CO1)C=C(C=C2)C#N)C3=CC=C(C=C3)F",
+      "ExactMass": "324.16379146",
+      "HeavyAtomCount": 24,
+      "InChIKey": "WSEQXVZVJXJVFP-FQEVSTJZSA-N",
+      "MolecularFormula": "C20H21FN2O",
+      "MolecularWeight": "324.4",
+      "SMILES": "CN(C)CCC[C@@]1(C2=C(CO1)C=C(C=C2)C#N)C3=CC=C(C=C3)F",
+      "TPSA": 36.3,
+      "Title": "Escitalopram",
+      "XLogP": 3.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/148124/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 148124,
+      "Complexity": 1660,
+      "ConnectivitySMILES": "CC1=C2C(C(=O)C3(C(CC4C(C3C(C(C2(C)C)(CC1OC(=O)C(C(C5=CC=CC=C5)NC(=O)OC(C)(C)C)O)O)OC(=O)C6=CC=CC=C6)(CO4)OC(=O)C)O)C)O",
+      "ExactMass": "807.34660536",
+      "HeavyAtomCount": 58,
+      "InChIKey": "ZDZOTLJHXYCWBA-VCVYQWHSSA-N",
+      "MolecularFormula": "C43H53NO14",
+      "MolecularWeight": "807.9",
+      "SMILES": "CC1=C2[C@H](C(=O)[C@@]3([C@H](C[C@@H]4[C@]([C@H]3[C@@H]([C@@](C2(C)C)(C[C@@H]1OC(=O)[C@@H]([C@H](C5=CC=CC=C5)NC(=O)OC(C)(C)C)O)O)OC(=O)C6=CC=CC=C6)(CO4)OC(=O)C)O)C)O",
+      "TPSA": 224,
+      "Title": "Docetaxel",
+      "XLogP": 1.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/149096/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 149096,
+      "Complexity": 634,
+      "ConnectivitySMILES": "CC1COC2=C3N1C=C(C(=O)C3=CC(=C2N4CCN(CC4)C)F)C(=O)O",
+      "ExactMass": "361.14378429",
+      "HeavyAtomCount": 26,
+      "InChIKey": "GSDSWSVVBLHKDQ-JTQLQIEISA-N",
+      "MolecularFormula": "C18H20FN3O4",
+      "MolecularWeight": "361.4",
+      "SMILES": "C[C@H]1COC2=C3N1C=C(C(=O)C3=CC(=C2N4CCN(CC4)C)F)C(=O)O",
+      "TPSA": 73.3,
+      "Title": "Levofloxacin",
+      "XLogP": -0.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/151166/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 151166,
+      "Complexity": 342,
+      "ConnectivitySMILES": "CC1=CC(=C(C=C1)NC2=C(C=CC=C2Cl)F)CC(=O)O",
+      "ExactMass": "293.0618845",
+      "HeavyAtomCount": 20,
+      "InChIKey": "KHPKQFYUPIUARC-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H13ClFNO2",
+      "MolecularWeight": "293.72",
+      "SMILES": "CC1=CC(=C(C=C1)NC2=C(C=CC=C2Cl)F)CC(=O)O",
+      "TPSA": 49.3,
+      "Title": "Lumiracoxib",
+      "XLogP": 4.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/152946/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 152946,
+      "Complexity": 727,
+      "ConnectivitySMILES": "COC1=C2C(=CC(=C1N3CC4CCCNC4C3)F)C(=O)C(=CN2C5CC5)C(=O)O",
+      "ExactMass": "401.17508442",
+      "HeavyAtomCount": 29,
+      "InChIKey": "FABPRXSRWADJSP-MEDUHNTESA-N",
+      "MolecularFormula": "C21H24FN3O4",
+      "MolecularWeight": "401.4",
+      "SMILES": "COC1=C2C(=CC(=C1N3C[C@@H]4CCCN[C@@H]4C3)F)C(=O)C(=CN2C5CC5)C(=O)O",
+      "TPSA": 82.1,
+      "Title": "Moxifloxacin",
+      "XLogP": 0.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/1548887/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 1548887,
+      "Complexity": 616,
+      "ConnectivitySMILES": "CC1=C(C2=C(C1=CC3=CC=C(C=C3)S(=O)C)C=CC(=C2)F)CC(=O)O",
+      "ExactMass": "356.08824374",
+      "HeavyAtomCount": 25,
+      "InChIKey": "MLKXDPUZXIRXEP-MFOYZWKCSA-N",
+      "MolecularFormula": "C20H17FO3S",
+      "MolecularWeight": "356.4",
+      "SMILES": "CC\\1=C(C2=C(/C1=C\\C3=CC=C(C=C3)S(=O)C)C=CC(=C2)F)CC(=O)O",
+      "TPSA": 73.6,
+      "Title": "Sulindac",
+      "XLogP": 3.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/1549008/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 1549008,
+      "Complexity": 428,
+      "ConnectivitySMILES": "CC(C)(C)C#CC=CCN(C)CC1=CC=CC2=CC=CC=C21",
+      "ExactMass": "291.198699802",
+      "HeavyAtomCount": 22,
+      "InChIKey": "DOMXUEMWDBAQBQ-WEVVVXLNSA-N",
+      "MolecularFormula": "C21H25N",
+      "MolecularWeight": "291.4",
+      "SMILES": "CC(C)(C)C#C/C=C/CN(C)CC1=CC=CC2=CC=CC=C21",
+      "TPSA": 3.2,
+      "Title": "Terbinafine",
+      "XLogP": 5.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/1549789/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 1549789,
+      "Complexity": 263,
+      "ConnectivitySMILES": "CC(C)CCOC(=O)C=CC1=CC=C(C=C1)OC",
+      "ExactMass": "248.14124450",
+      "HeavyAtomCount": 18,
+      "InChIKey": "UBNYRXMKIIGMKK-RMKNXTFCSA-N",
+      "MolecularFormula": "C15H20O3",
+      "MolecularWeight": "248.32",
+      "SMILES": "CC(C)CCOC(=O)/C=C/C1=CC=C(C=C1)OC",
+      "TPSA": 35.5,
+      "Title": "Amiloxate",
+      "XLogP": 3.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/156391/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 156391,
+      "Complexity": 277,
+      "ConnectivitySMILES": "CC(C1=CC2=C(C=C1)C=C(C=C2)OC)C(=O)O",
+      "ExactMass": "230.094294304",
+      "HeavyAtomCount": 17,
+      "InChIKey": "CMWTZPSULFXXJA-VIFPVBQESA-N",
+      "MolecularFormula": "C14H14O3",
+      "MolecularWeight": "230.26",
+      "SMILES": "C[C@@H](C1=CC2=C(C=C1)C=C(C=C2)OC)C(=O)O",
+      "TPSA": 46.5,
+      "Title": "Naproxen",
+      "XLogP": 3.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/163091/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 163091,
+      "Complexity": 363,
+      "ConnectivitySMILES": "CN1CC2C(C1)C3=C(C=CC(=C3)Cl)OC4=CC=CC=C24",
+      "ExactMass": "285.0920418",
+      "HeavyAtomCount": 20,
+      "InChIKey": "VSWBSWWIRNCQIJ-HUUCEWRRSA-N",
+      "MolecularFormula": "C17H16ClNO",
+      "MolecularWeight": "285.8",
+      "SMILES": "CN1C[C@H]2[C@H](C1)C3=C(C=CC(=C3)Cl)OC4=CC=CC=C24",
+      "TPSA": 12.5,
+      "Title": "Asenapine",
+      "XLogP": 3.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/1775/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 1775,
+      "Complexity": 350,
+      "ConnectivitySMILES": "C1=CC=C(C=C1)C2(C(=O)NC(=O)N2)C3=CC=CC=C3",
+      "ExactMass": "252.089877630",
+      "HeavyAtomCount": 19,
+      "InChIKey": "CXOFVDLJLONNDW-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H12N2O2",
+      "MolecularWeight": "252.27",
+      "SMILES": "C1=CC=C(C=C1)C2(C(=O)NC(=O)N2)C3=CC=CC=C3",
+      "TPSA": 58.2,
+      "Title": "Phenytoin",
+      "XLogP": 2.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/19910/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 19910,
+      "Complexity": 229,
+      "ConnectivitySMILES": "C1=CC2=C(C=CC(=C2N=C1)O)[N+](=O)[O-]",
+      "ExactMass": "190.03784206",
+      "HeavyAtomCount": 14,
+      "InChIKey": "RJIWZDNTCBHXAL-UHFFFAOYSA-N",
+      "MolecularFormula": "C9H6N2O3",
+      "MolecularWeight": "190.16",
+      "SMILES": "C1=CC2=C(C=CC(=C2N=C1)O)[N+](=O)[O-]",
+      "TPSA": 78.9,
+      "Title": "Nitroxoline",
+      "XLogP": 2.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/20055232/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 20055232,
+      "Complexity": 326,
+      "ConnectivitySMILES": "CC1CCC(C(C1)OC(=O)C2=CC=CC=C2O)C(C)C",
+      "ExactMass": "276.17254462",
+      "HeavyAtomCount": 20,
+      "InChIKey": "SJOXEWUZWQYCGL-DVOMOZLQSA-N",
+      "MolecularFormula": "C17H24O3",
+      "MolecularWeight": "276.4",
+      "SMILES": "C[C@@H]1CC[C@H]([C@@H](C1)OC(=O)C2=CC=CC=C2O)C(C)C",
+      "TPSA": 46.5,
+      "Title": "Menthyl Salicylate",
+      "XLogP": 5.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2123/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2123,
+      "Complexity": 148,
+      "ConnectivitySMILES": "CN(C)C1=NC(=NC(=N1)N(C)C)N(C)C",
+      "ExactMass": "210.15929460",
+      "HeavyAtomCount": 15,
+      "InChIKey": "UUVWYPNAQBNQJQ-UHFFFAOYSA-N",
+      "MolecularFormula": "C9H18N6",
+      "MolecularWeight": "210.28",
+      "SMILES": "CN(C)C1=NC(=NC(=N1)N(C)C)N(C)C",
+      "TPSA": 48.4,
+      "Title": "Altretamine",
+      "XLogP": 2.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/21302490/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 21302490,
+      "Complexity": 593,
+      "ConnectivitySMILES": "CN1CCN2C3CCN(CC3C4=C2C1=CC=C4)CCCC(=O)C5=CC=C(C=C5)F",
+      "ExactMass": "393.22164069",
+      "HeavyAtomCount": 29,
+      "InChIKey": "HOIIHACBCFLJET-SFTDATJTSA-N",
+      "MolecularFormula": "C24H28FN3O",
+      "MolecularWeight": "393.5",
+      "SMILES": "CN1CCN2[C@H]3CCN(C[C@H]3C4=C2C1=CC=C4)CCCC(=O)C5=CC=C(C=C5)F",
+      "TPSA": 26.8,
+      "Title": "Lumateperone",
+      "XLogP": 3.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/213046/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 213046,
+      "Complexity": 804,
+      "ConnectivitySMILES": "C1CCC(C(C1)CN2CCN(CC2)C3=NSC4=CC=CC=C43)CN5C(=O)C6C7CCC(C7)C6C5=O",
+      "ExactMass": "492.25589758",
+      "HeavyAtomCount": 35,
+      "InChIKey": "PQXKDMSYBGKCJA-CVTJIBDQSA-N",
+      "MolecularFormula": "C28H36N4O2S",
+      "MolecularWeight": "492.7",
+      "SMILES": "C1CC[C@H]([C@@H](C1)CN2CCN(CC2)C3=NSC4=CC=CC=C43)CN5C(=O)[C@H]6[C@@H]7CC[C@@H](C7)[C@H]6C5=O",
+      "TPSA": 85,
+      "Title": "Lurasidone",
+      "XLogP": 5.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2170/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2170,
+      "Complexity": 424,
+      "ConnectivitySMILES": "C1CN(CCN1)C2=NC3=CC=CC=C3OC4=C2C=C(C=C4)Cl",
+      "ExactMass": "313.0981898",
+      "HeavyAtomCount": 22,
+      "InChIKey": "QWGDMFLQWFTERH-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H16ClN3O",
+      "MolecularWeight": "313.8",
+      "SMILES": "C1CN(CCN1)C2=NC3=CC=CC=C3OC4=C2C=C(C=C4)Cl",
+      "TPSA": 36.9,
+      "Title": "Amoxapine",
+      "XLogP": 2.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/219078/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 219078,
+      "Complexity": 275,
+      "ConnectivitySMILES": "CC(=O)NC(COC)C(=O)NCC1=CC=CC=C1",
+      "ExactMass": "250.13174244",
+      "HeavyAtomCount": 18,
+      "InChIKey": "VPPJLAIAVCUEMN-GFCCVEGCSA-N",
+      "MolecularFormula": "C13H18N2O3",
+      "MolecularWeight": "250.29",
+      "SMILES": "CC(=O)N[C@H](COC)C(=O)NCC1=CC=CC=C1",
+      "TPSA": 67.4,
+      "Title": "Lacosamide",
+      "XLogP": 0.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/23635314/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 23635314,
+      "Complexity": 540,
+      "ConnectivitySMILES": "C1COCCN1CCOC2=CC=C(C=C2)C3=CN=C(C=C3)CC(=O)NCC4=CC=CC=C4",
+      "ExactMass": "431.22089180",
+      "HeavyAtomCount": 32,
+      "InChIKey": "HUNGUWOZPQBXGX-UHFFFAOYSA-N",
+      "MolecularFormula": "C26H29N3O3",
+      "MolecularWeight": "431.5",
+      "SMILES": "C1COCCN1CCOC2=CC=C(C=C2)C3=CN=C(C=C3)CC(=O)NCC4=CC=CC=C4",
+      "TPSA": 63.7,
+      "Title": "Tirbanibulin",
+      "XLogP": 2.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2466/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2466,
+      "Complexity": 200,
+      "ConnectivitySMILES": "CCCCOC1=CC=C(C=C1)CC(=O)NO",
+      "ExactMass": "223.12084340",
+      "HeavyAtomCount": 16,
+      "InChIKey": "MXJWRABVEGLYDG-UHFFFAOYSA-N",
+      "MolecularFormula": "C12H17NO3",
+      "MolecularWeight": "223.27",
+      "SMILES": "CCCCOC1=CC=C(C=C1)CC(=O)NO",
+      "TPSA": 58.6,
+      "Title": "Bufexamac",
+      "XLogP": 1.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/24775005/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 24775005,
+      "Complexity": 691,
+      "ConnectivitySMILES": "CC1CN(CC(O1)C)C2=NC=C(C=C2)NC(=O)C3=CC=CC(=C3C)C4=CC=C(C=C4)OC(F)(F)F",
+      "ExactMass": "485.19262619",
+      "HeavyAtomCount": 35,
+      "InChIKey": "VZZJRYRQSPEMTK-CALCHBBNSA-N",
+      "MolecularFormula": "C26H26F3N3O3",
+      "MolecularWeight": "485.5",
+      "SMILES": "C[C@@H]1CN(C[C@@H](O1)C)C2=NC=C(C=C2)NC(=O)C3=CC=CC(=C3C)C4=CC=C(C=C4)OC(F)(F)F",
+      "TPSA": 63.7,
+      "Title": "Sonidegib",
+      "XLogP": 5.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2478/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2478,
+      "Complexity": 293,
+      "ConnectivitySMILES": "CS(=O)(=O)OCCCCOS(=O)(=O)C",
+      "ExactMass": "246.02318051",
+      "HeavyAtomCount": 14,
+      "InChIKey": "COVZYZSDYWQREU-UHFFFAOYSA-N",
+      "MolecularFormula": "C6H14O6S2",
+      "MolecularWeight": "246.3",
+      "SMILES": "CS(=O)(=O)OCCCCOS(=O)(=O)C",
+      "TPSA": 104,
+      "Title": "Busulfan",
+      "XLogP": -0.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2484/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2484,
+      "Complexity": 374,
+      "ConnectivitySMILES": "CC(C)(C)C1=CC=C(C=C1)CN(C)CC2=CC=CC3=CC=CC=C32",
+      "ExactMass": "317.214349865",
+      "HeavyAtomCount": 24,
+      "InChIKey": "ABJKWBDEJIDSJZ-UHFFFAOYSA-N",
+      "MolecularFormula": "C23H27N",
+      "MolecularWeight": "317.5",
+      "SMILES": "CC(C)(C)C1=CC=C(C=C1)CN(C)CC2=CC=CC3=CC=CC=C32",
+      "TPSA": 3.2,
+      "Title": "Butenafine",
+      "XLogP": 6.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2554/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2554,
+      "Complexity": 326,
+      "ConnectivitySMILES": "C1=CC=C2C(=C1)C=CC3=CC=CC=C3N2C(=O)N",
+      "ExactMass": "236.094963011",
+      "HeavyAtomCount": 18,
+      "InChIKey": "FFGPTBGBLSHEPO-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H12N2O",
+      "MolecularWeight": "236.27",
+      "SMILES": "C1=CC=C2C(=C1)C=CC3=CC=CC=C3N2C(=O)N",
+      "TPSA": 46.3,
+      "Title": "Carbamazepine",
+      "XLogP": 2.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2578/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2578,
+      "Complexity": 156,
+      "ConnectivitySMILES": "C(CCl)NC(=O)N(CCCl)N=O",
+      "ExactMass": "213.0071819",
+      "HeavyAtomCount": 12,
+      "InChIKey": "DLGOEMSEDOSKAD-UHFFFAOYSA-N",
+      "MolecularFormula": "C5H9Cl2N3O2",
+      "MolecularWeight": "214.05",
+      "SMILES": "C(CCl)NC(=O)N(CCCl)N=O",
+      "TPSA": 61.8,
+      "Title": "Carmustine",
+      "XLogP": 1.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2581/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2581,
+      "Complexity": 362,
+      "ConnectivitySMILES": "CC(C1=CC2=C(C=C1)C3=C(N2)C=CC(=C3)Cl)C(=O)O",
+      "ExactMass": "273.0556563",
+      "HeavyAtomCount": 19,
+      "InChIKey": "PUXBGTOOZJQSKH-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H12ClNO2",
+      "MolecularWeight": "273.71",
+      "SMILES": "CC(C1=CC2=C(C=C1)C3=C(N2)C=CC(=C3)Cl)C(=O)O",
+      "TPSA": 53.1,
+      "Title": "Carprofen",
+      "XLogP": 4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2662/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2662,
+      "Complexity": 577,
+      "ConnectivitySMILES": "CC1=CC=C(C=C1)C2=CC(=NN2C3=CC=C(C=C3)S(=O)(=O)N)C(F)(F)F",
+      "ExactMass": "381.07588236",
+      "HeavyAtomCount": 26,
+      "InChIKey": "RZEKVGVHFLEQIL-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H14F3N3O2S",
+      "MolecularWeight": "381.4",
+      "SMILES": "CC1=CC=C(C=C1)C2=CC(=NN2C3=CC=C(C=C3)S(=O)(=O)N)C(F)(F)F",
+      "TPSA": 86.4,
+      "Title": "Celecoxib",
+      "XLogP": 3.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2733526/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2733526,
+      "Complexity": 463,
+      "ConnectivitySMILES": "CCC(=C(C1=CC=CC=C1)C2=CC=C(C=C2)OCCN(C)C)C3=CC=CC=C3",
+      "ExactMass": "371.224914549",
+      "HeavyAtomCount": 28,
+      "InChIKey": "NKANXQFJJICGDU-QPLCGJKRSA-N",
+      "MolecularFormula": "C26H29NO",
+      "MolecularWeight": "371.5",
+      "SMILES": "CC/C(=C(\\C1=CC=CC=C1)/C2=CC=C(C=C2)OCCN(C)C)/C3=CC=CC=C3",
+      "TPSA": 12.5,
+      "Title": "Tamoxifen",
+      "XLogP": 7.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2761171/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2761171,
+      "Complexity": 147,
+      "ConnectivitySMILES": "CCC1=NC=CC(=C1)C(=S)N",
+      "ExactMass": "166.05646950",
+      "HeavyAtomCount": 11,
+      "InChIKey": "AEOCXXJPGCBFJA-UHFFFAOYSA-N",
+      "MolecularFormula": "C8H10N2S",
+      "MolecularWeight": "166.25",
+      "SMILES": "CCC1=NC=CC(=C1)C(=S)N",
+      "TPSA": 71,
+      "Title": "Ethionamide",
+      "XLogP": 1.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2771/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2771,
+      "Complexity": 466,
+      "ConnectivitySMILES": "CN(C)CCCC1(C2=C(CO1)C=C(C=C2)C#N)C3=CC=C(C=C3)F",
+      "ExactMass": "324.16379146",
+      "HeavyAtomCount": 24,
+      "InChIKey": "WSEQXVZVJXJVFP-UHFFFAOYSA-N",
+      "MolecularFormula": "C20H21FN2O",
+      "MolecularWeight": "324.4",
+      "SMILES": "CN(C)CCCC1(C2=C(CO1)C=C(C=C2)C#N)C3=CC=C(C=C3)F",
+      "TPSA": 36.3,
+      "Title": "Citalopram",
+      "XLogP": 3.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2794/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2794,
+      "Complexity": 829,
+      "ConnectivitySMILES": "CC(C)N=C1C=C2C(=NC3=CC=CC=C3N2C4=CC=C(C=C4)Cl)C=C1NC5=CC=C(C=C5)Cl",
+      "ExactMass": "472.1221521",
+      "HeavyAtomCount": 33,
+      "InChIKey": "WDQPAMHFFCXSNU-UHFFFAOYSA-N",
+      "MolecularFormula": "C27H22Cl2N4",
+      "MolecularWeight": "473.4",
+      "SMILES": "CC(C)N=C1C=C2C(=NC3=CC=CC=C3N2C4=CC=C(C=C4)Cl)C=C1NC5=CC=C(C=C5)Cl",
+      "TPSA": 40,
+      "Title": "Clofazimine",
+      "XLogP": 7.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2801/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2801,
+      "Complexity": 346,
+      "ConnectivitySMILES": "CN(C)CCCN1C2=CC=CC=C2CCC3=C1C=C(C=C3)Cl",
+      "ExactMass": "314.1549764",
+      "HeavyAtomCount": 22,
+      "InChIKey": "GDLIGKIOYRNHDA-UHFFFAOYSA-N",
+      "MolecularFormula": "C19H23ClN2",
+      "MolecularWeight": "314.9",
+      "SMILES": "CN(C)CCCN1C2=CC=CC=C2CCC3=C1C=C(C=C3)Cl",
+      "TPSA": 6.5,
+      "Title": "Clomipramine",
+      "XLogP": 5.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2802/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2802,
+      "Complexity": 491,
+      "ConnectivitySMILES": "C1C(=O)NC2=C(C=C(C=C2)[N+](=O)[O-])C(=N1)C3=CC=CC=C3Cl",
+      "ExactMass": "315.0410689",
+      "HeavyAtomCount": 22,
+      "InChIKey": "DGBIGWXXNGSACT-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H10ClN3O3",
+      "MolecularWeight": "315.71",
+      "SMILES": "C1C(=O)NC2=C(C=C(C=C2)[N+](=O)[O-])C(=N1)C3=CC=CC=C3Cl",
+      "TPSA": 87.3,
+      "Title": "Clonazepam",
+      "XLogP": 2.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2812/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2812,
+      "Complexity": 396,
+      "ConnectivitySMILES": "C1=CC=C(C=C1)C(C2=CC=CC=C2)(C3=CC=CC=C3Cl)N4C=CN=C4",
+      "ExactMass": "344.1080262",
+      "HeavyAtomCount": 25,
+      "InChIKey": "VNFPBHJOKIVQEB-UHFFFAOYSA-N",
+      "MolecularFormula": "C22H17ClN2",
+      "MolecularWeight": "344.8",
+      "SMILES": "C1=CC=C(C=C1)C(C2=CC=CC=C2)(C3=CC=CC=C3Cl)N4C=CN=C4",
+      "TPSA": 17.8,
+      "Title": "Clotrimazole",
+      "XLogP": 5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/28718/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 28718,
+      "Complexity": 301,
+      "ConnectivitySMILES": "CC1=C(C=CC=C1Cl)NC2=C(C=CC=N2)C(=O)O",
+      "ExactMass": "262.0509053",
+      "HeavyAtomCount": 18,
+      "InChIKey": "CLOMYZFHNHFSIQ-UHFFFAOYSA-N",
+      "MolecularFormula": "C13H11ClN2O2",
+      "MolecularWeight": "262.69",
+      "SMILES": "CC1=C(C=CC=C1Cl)NC2=C(C=CC=N2)C(=O)O",
+      "TPSA": 62.2,
+      "Title": "Clonixin",
+      "XLogP": 3.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2907/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2907,
+      "Complexity": 212,
+      "ConnectivitySMILES": "C1CNP(=O)(OC1)N(CCCl)CCCl",
+      "ExactMass": "260.0248201",
+      "HeavyAtomCount": 14,
+      "InChIKey": "CMSMOCZEIVJLDB-UHFFFAOYSA-N",
+      "MolecularFormula": "C7H15Cl2N2O2P",
+      "MolecularWeight": "261.08",
+      "SMILES": "C1CNP(=O)(OC1)N(CCCl)CCCl",
+      "TPSA": 41.6,
+      "Title": "Cyclophosphamide",
+      "XLogP": 0.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/2995/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 2995,
+      "Complexity": 267,
+      "ConnectivitySMILES": "CNCCCN1C2=CC=CC=C2CCC3=CC=CC=C31",
+      "ExactMass": "266.178298710",
+      "HeavyAtomCount": 20,
+      "InChIKey": "HCYAFALTSJYZDH-UHFFFAOYSA-N",
+      "MolecularFormula": "C18H22N2",
+      "MolecularWeight": "266.4",
+      "SMILES": "CNCCCN1C2=CC=CC=C2CCC3=CC=CC=C31",
+      "TPSA": 15.3,
+      "Title": "Desipramine",
+      "XLogP": 4.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3016/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3016,
+      "Complexity": 403,
+      "ConnectivitySMILES": "CN1C(=O)CN=C(C2=C1C=CC(=C2)Cl)C3=CC=CC=C3",
+      "ExactMass": "284.0716407",
+      "HeavyAtomCount": 20,
+      "InChIKey": "AAOVKJBEBIDNHE-UHFFFAOYSA-N",
+      "MolecularFormula": "C16H13ClN2O",
+      "MolecularWeight": "284.74",
+      "SMILES": "CN1C(=O)CN=C(C2=C1C=CC(=C2)Cl)C3=CC=CC=C3",
+      "TPSA": 32.7,
+      "Title": "Diazepam",
+      "XLogP": 3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3033/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3033,
+      "Complexity": 304,
+      "ConnectivitySMILES": "C1=CC=C(C(=C1)CC(=O)O)NC2=C(C=CC=C2Cl)Cl",
+      "ExactMass": "295.0166840",
+      "HeavyAtomCount": 19,
+      "InChIKey": "DCOPUUMXTXDBNB-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H11Cl2NO2",
+      "MolecularWeight": "296.1",
+      "SMILES": "C1=CC=C(C(=C1)CC(=O)O)NC2=C(C=CC=C2Cl)Cl",
+      "TPSA": 49.3,
+      "Title": "Diclofenac",
+      "XLogP": 4.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3059/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3059,
+      "Complexity": 311,
+      "ConnectivitySMILES": "C1=CC(=C(C=C1C2=C(C=C(C=C2)F)F)C(=O)O)O",
+      "ExactMass": "250.04415044",
+      "HeavyAtomCount": 18,
+      "InChIKey": "HUPFGZXOMWLGNK-UHFFFAOYSA-N",
+      "MolecularFormula": "C13H8F2O3",
+      "MolecularWeight": "250.20",
+      "SMILES": "C1=CC(=C(C=C1C2=C(C=C(C=C2)F)F)C(=O)O)O",
+      "TPSA": 57.5,
+      "Title": "Diflunisal",
+      "XLogP": 4.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3121/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3121,
+      "Complexity": 93,
+      "ConnectivitySMILES": "CCCC(CCC)C(=O)O",
+      "ExactMass": "144.115029749",
+      "HeavyAtomCount": 10,
+      "InChIKey": "NIJJYAXOARWZEE-UHFFFAOYSA-N",
+      "MolecularFormula": "C8H16O2",
+      "MolecularWeight": "144.21",
+      "SMILES": "CCCC(CCC)C(=O)O",
+      "TPSA": 37.3,
+      "Title": "Valproic Acid",
+      "XLogP": 2.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3198/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3198,
+      "Complexity": 379,
+      "ConnectivitySMILES": "C1=CC(=CC=C1COC(CN2C=CN=C2)C3=C(C=C(C=C3)Cl)Cl)Cl",
+      "ExactMass": "380.024996",
+      "HeavyAtomCount": 24,
+      "InChIKey": "LEZWWPYKPKIXLL-UHFFFAOYSA-N",
+      "MolecularFormula": "C18H15Cl3N2O",
+      "MolecularWeight": "381.7",
+      "SMILES": "C1=CC(=CC=C1COC(CN2C=CN=C2)C3=C(C=C(C=C3)Cl)Cl)Cl",
+      "TPSA": 27.1,
+      "Title": "Econazole",
+      "XLogP": 5.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3291/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3291,
+      "Complexity": 188,
+      "ConnectivitySMILES": "CCC1(CC(=O)NC1=O)C",
+      "ExactMass": "141.078978594",
+      "HeavyAtomCount": 10,
+      "InChIKey": "HAPOVYFOVVWLRS-UHFFFAOYSA-N",
+      "MolecularFormula": "C7H11NO2",
+      "MolecularWeight": "141.17",
+      "SMILES": "CCC1(CC(=O)NC1=O)C",
+      "TPSA": 46.2,
+      "Title": "Ethosuximide",
+      "XLogP": 0.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3308/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3308,
+      "Complexity": 399,
+      "ConnectivitySMILES": "CCC1=C2C(=CC=C1)C3=C(N2)C(OCC3)(CC)CC(=O)O",
+      "ExactMass": "287.15214353",
+      "HeavyAtomCount": 21,
+      "InChIKey": "NNYBQONXHNTVIJ-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H21NO3",
+      "MolecularWeight": "287.35",
+      "SMILES": "CCC1=C2C(=CC=C1)C3=C(N2)C(OCC3)(CC)CC(=O)O",
+      "TPSA": 62.3,
+      "Title": "Etodolac",
+      "XLogP": 2.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3331/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3331,
+      "Complexity": 246,
+      "ConnectivitySMILES": "C1=CC=C(C=C1)C(COC(=O)N)COC(=O)N",
+      "ExactMass": "238.09535693",
+      "HeavyAtomCount": 17,
+      "InChIKey": "WKGXYQFOCVYPAC-UHFFFAOYSA-N",
+      "MolecularFormula": "C11H14N2O4",
+      "MolecularWeight": "238.24",
+      "SMILES": "C1=CC=C(C=C1)C(COC(=O)N)COC(=O)N",
+      "TPSA": 105,
+      "Title": "Felbamate",
+      "XLogP": 0.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3335/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3335,
+      "Complexity": 310,
+      "ConnectivitySMILES": "C1=CC=C(C=C1)C2=CC=C(C=C2)C(=O)CCC(=O)O",
+      "ExactMass": "254.094294304",
+      "HeavyAtomCount": 19,
+      "InChIKey": "ZPAKPRAICRBAOD-UHFFFAOYSA-N",
+      "MolecularFormula": "C16H14O3",
+      "MolecularWeight": "254.28",
+      "SMILES": "C1=CC=C(C=C1)C2=CC=C(C=C2)C(=O)CCC(=O)O",
+      "TPSA": 54.4,
+      "Title": "Fenbufen",
+      "XLogP": 3.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3365/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3365,
+      "Complexity": 358,
+      "ConnectivitySMILES": "C1=CC(=C(C=C1F)F)C(CN2C=NC=N2)(CN3C=NC=N3)O",
+      "ExactMass": "306.10406535",
+      "HeavyAtomCount": 22,
+      "InChIKey": "RFHAOTPXVQNOHP-UHFFFAOYSA-N",
+      "MolecularFormula": "C13H12F2N6O",
+      "MolecularWeight": "306.27",
+      "SMILES": "C1=CC(=C(C=C1F)F)C(CN2C=NC=N2)(CN3C=NC=N3)O",
+      "TPSA": 81.7,
+      "Title": "Fluconazole",
+      "XLogP": 0.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3371/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3371,
+      "Complexity": 346,
+      "ConnectivitySMILES": "C1=CC=C(C(=C1)C(=O)O)NC2=CC=CC(=C2)C(F)(F)F",
+      "ExactMass": "281.06636305",
+      "HeavyAtomCount": 20,
+      "InChIKey": "LPEPZBJOKDYZAD-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H10F3NO2",
+      "MolecularWeight": "281.23",
+      "SMILES": "C1=CC=C(C(=C1)C(=O)O)NC2=CC=CC(=C2)C(F)(F)F",
+      "TPSA": 49.3,
+      "Title": "Flufenamic Acid",
+      "XLogP": 5.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3386/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3386,
+      "Complexity": 308,
+      "ConnectivitySMILES": "CNCCC(C1=CC=CC=C1)OC2=CC=C(C=C2)C(F)(F)F",
+      "ExactMass": "309.13404868",
+      "HeavyAtomCount": 22,
+      "InChIKey": "RTHCYVBBDHJXIQ-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H18F3NO",
+      "MolecularWeight": "309.33",
+      "SMILES": "CNCCC(C1=CC=CC=C1)OC2=CC=C(C=C2)C(F)(F)F",
+      "TPSA": 21.3,
+      "Title": "Fluoxetine",
+      "XLogP": 4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3394/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3394,
+      "Complexity": 286,
+      "ConnectivitySMILES": "CC(C1=CC(=C(C=C1)C2=CC=CC=C2)F)C(=O)O",
+      "ExactMass": "244.08995782",
+      "HeavyAtomCount": 18,
+      "InChIKey": "SYTBZMRGLBWNTM-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H13FO2",
+      "MolecularWeight": "244.26",
+      "SMILES": "CC(C1=CC(=C(C=C1)C2=CC=CC=C2)F)C(=O)O",
+      "TPSA": 37.3,
+      "Title": "Flurbiprofen",
+      "XLogP": 4.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/34312/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 34312,
+      "Complexity": 382,
+      "ConnectivitySMILES": "C1C2=CC=CC=C2N(C3=CC=CC=C3C1=O)C(=O)N",
+      "ExactMass": "252.089877630",
+      "HeavyAtomCount": 19,
+      "InChIKey": "CTRLABGOLIVAIY-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H12N2O2",
+      "MolecularWeight": "252.27",
+      "SMILES": "C1C2=CC=CC=C2N(C3=CC=CC=C3C1=O)C(=O)N",
+      "TPSA": 63.4,
+      "Title": "Oxcarbazepine",
+      "XLogP": 1.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3446/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3446,
+      "Complexity": 162,
+      "ConnectivitySMILES": "C1CCC(CC1)(CC(=O)O)CN",
+      "ExactMass": "171.125928785",
+      "HeavyAtomCount": 12,
+      "InChIKey": "UGJMXCAKCUNAIE-UHFFFAOYSA-N",
+      "MolecularFormula": "C9H17NO2",
+      "MolecularWeight": "171.24",
+      "SMILES": "C1CCC(CC1)(CC(=O)O)CN",
+      "TPSA": 63.3,
+      "Title": "Gabapentin",
+      "XLogP": -1.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/35455/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 35455,
+      "Complexity": 462,
+      "ConnectivitySMILES": "CC(=CCC1C(=O)N(N(C1=O)C2=CC=CC=C2)C3=CC=CC=C3)C",
+      "ExactMass": "320.152477885",
+      "HeavyAtomCount": 24,
+      "InChIKey": "RBBWCVQDXDFISW-UHFFFAOYSA-N",
+      "MolecularFormula": "C20H20N2O2",
+      "MolecularWeight": "320.4",
+      "SMILES": "CC(=CCC1C(=O)N(N(C1=O)C2=CC=CC=C2)C3=CC=CC=C3)C",
+      "TPSA": 40.6,
+      "Title": "Feprazone",
+      "XLogP": 3.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3549980/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3549980,
+      "Complexity": 87,
+      "ConnectivitySMILES": "CCCC(CCC)C(=O)[O-]",
+      "ExactMass": "143.107204717",
+      "HeavyAtomCount": 10,
+      "InChIKey": "NIJJYAXOARWZEE-UHFFFAOYSA-M",
+      "MolecularFormula": "C8H15O2-",
+      "MolecularWeight": "143.20",
+      "SMILES": "CCCC(CCC)C(=O)[O-]",
+      "TPSA": 40.1,
+      "Title": "Valproate",
+      "XLogP": 3.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3559/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3559,
+      "Complexity": 451,
+      "ConnectivitySMILES": "C1CN(CCC1(C2=CC=C(C=C2)Cl)O)CCCC(=O)C3=CC=C(C=C3)F",
+      "ExactMass": "375.1401348",
+      "HeavyAtomCount": 26,
+      "InChIKey": "LNEPOXFFQSENCJ-UHFFFAOYSA-N",
+      "MolecularFormula": "C21H23ClFNO2",
+      "MolecularWeight": "375.9",
+      "SMILES": "C1CN(CCC1(C2=CC=C(C=C2)Cl)O)CCCC(=O)C3=CC=C(C=C3)F",
+      "TPSA": 40.5,
+      "Title": "Haloperidol",
+      "XLogP": 3.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/36314/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 36314,
+      "Complexity": 1790,
+      "ConnectivitySMILES": "CC1=C2C(C(=O)C3(C(CC4C(C3C(C(C2(C)C)(CC1OC(=O)C(C(C5=CC=CC=C5)NC(=O)C6=CC=CC=C6)O)O)OC(=O)C7=CC=CC=C7)(CO4)OC(=O)C)O)C)OC(=O)C",
+      "ExactMass": "853.33095530",
+      "HeavyAtomCount": 62,
+      "InChIKey": "RCINICONZNJXQF-MZXODVADSA-N",
+      "MolecularFormula": "C47H51NO14",
+      "MolecularWeight": "853.9",
+      "SMILES": "CC1=C2[C@H](C(=O)[C@@]3([C@H](C[C@@H]4[C@]([C@H]3[C@@H]([C@@](C2(C)C)(C[C@@H]1OC(=O)[C@@H]([C@H](C5=CC=CC=C5)NC(=O)C6=CC=CC=C6)O)O)OC(=O)C7=CC=CC=C7)(CO4)OC(=O)C)O)C)OC(=O)C",
+      "TPSA": 221,
+      "Title": "Paclitaxel",
+      "XLogP": 2.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/36462/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 36462,
+      "Complexity": 969,
+      "ConnectivitySMILES": "CC1OCC2C(O1)C(C(C(O2)OC3C4COC(=O)C4C(C5=CC6=C(C=C35)OCO6)C7=CC(=C(C(=C7)OC)O)OC)O)O",
+      "ExactMass": "588.18429107",
+      "HeavyAtomCount": 42,
+      "InChIKey": "VJJPUSNTGOMMGY-MRVIYFEKSA-N",
+      "MolecularFormula": "C29H32O13",
+      "MolecularWeight": "588.6",
+      "SMILES": "C[C@@H]1OC[C@@H]2[C@@H](O1)[C@@H]([C@H]([C@@H](O2)O[C@H]3[C@H]4COC(=O)[C@@H]4[C@@H](C5=CC6=C(C=C35)OCO6)C7=CC(=C(C(=C7)OC)O)OC)O)O",
+      "TPSA": 161,
+      "Title": "Etoposide",
+      "XLogP": 0.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3652/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3652,
+      "Complexity": 331,
+      "ConnectivitySMILES": "CCN(CCCC(C)NC1=C2C=CC(=CC2=NC=C1)Cl)CCO",
+      "ExactMass": "335.1764402",
+      "HeavyAtomCount": 23,
+      "InChIKey": "XXSMGPRMXLTPCZ-UHFFFAOYSA-N",
+      "MolecularFormula": "C18H26ClN3O",
+      "MolecularWeight": "335.9",
+      "SMILES": "CCN(CCCC(C)NC1=C2C=CC(=CC2=NC=C1)Cl)CCO",
+      "TPSA": 48.4,
+      "Title": "Hydroxychloroquine",
+      "XLogP": 3.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3672/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3672,
+      "Complexity": 203,
+      "ConnectivitySMILES": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O",
+      "ExactMass": "206.130679813",
+      "HeavyAtomCount": 15,
+      "InChIKey": "HEFNNWSXXWATRW-UHFFFAOYSA-N",
+      "MolecularFormula": "C13H18O2",
+      "MolecularWeight": "206.28",
+      "SMILES": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O",
+      "TPSA": 37.3,
+      "Title": "Ibuprofen, (+-)-",
+      "XLogP": 3.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3675/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3675,
+      "Complexity": 77,
+      "ConnectivitySMILES": "C1=CC=C(C=C1)CCNN",
+      "ExactMass": "136.100048391",
+      "HeavyAtomCount": 10,
+      "InChIKey": "RMUCZJUITONUFY-UHFFFAOYSA-N",
+      "MolecularFormula": "C8H12N2",
+      "MolecularWeight": "136.19",
+      "SMILES": "C1=CC=C(C=C1)CCNN",
+      "TPSA": 38.1,
+      "Title": "Phenelzine",
+      "XLogP": 1.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3690/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3690,
+      "Complexity": 218,
+      "ConnectivitySMILES": "C1CN(P(=O)(OC1)NCCCl)CCCl",
+      "ExactMass": "260.0248201",
+      "HeavyAtomCount": 14,
+      "InChIKey": "HOMGKSMUEGBAAB-UHFFFAOYSA-N",
+      "MolecularFormula": "C7H15Cl2N2O2P",
+      "MolecularWeight": "261.08",
+      "SMILES": "C1CN(P(=O)(OC1)NCCCl)CCCl",
+      "TPSA": 41.6,
+      "Title": "Ifosfamide",
+      "XLogP": 0.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3696/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3696,
+      "Complexity": 291,
+      "ConnectivitySMILES": "CN(C)CCCN1C2=CC=CC=C2CCC3=CC=CC=C31",
+      "ExactMass": "280.193948774",
+      "HeavyAtomCount": 21,
+      "InChIKey": "BCGWQEUPMDMJNV-UHFFFAOYSA-N",
+      "MolecularFormula": "C19H24N2",
+      "MolecularWeight": "280.4",
+      "SMILES": "CN(C)CCCN1C2=CC=CC=C2CCC3=CC=CC=C31",
+      "TPSA": 6.5,
+      "Title": "Imipramine",
+      "XLogP": 4.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3715/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3715,
+      "Complexity": 506,
+      "ConnectivitySMILES": "CC1=C(C2=C(N1C(=O)C3=CC=C(C=C3)Cl)C=CC(=C2)OC)CC(=O)O",
+      "ExactMass": "357.0767857",
+      "HeavyAtomCount": 25,
+      "InChIKey": "CGIGDMFJXJATDK-UHFFFAOYSA-N",
+      "MolecularFormula": "C19H16ClNO4",
+      "MolecularWeight": "357.8",
+      "SMILES": "CC1=C(C2=C(N1C(=O)C3=CC=C(C=C3)Cl)C=CC(=C2)OC)CC(=O)O",
+      "TPSA": 68.5,
+      "Title": "Indomethacin",
+      "XLogP": 4.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3759/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3759,
+      "Complexity": 254,
+      "ConnectivitySMILES": "CC1=CC(=NO1)C(=O)NNCC2=CC=CC=C2",
+      "ExactMass": "231.100776666",
+      "HeavyAtomCount": 17,
+      "InChIKey": "XKFPYPQQHFEXRZ-UHFFFAOYSA-N",
+      "MolecularFormula": "C12H13N3O2",
+      "MolecularWeight": "231.25",
+      "SMILES": "CC1=CC(=NO1)C(=O)NNCC2=CC=CC=C2",
+      "TPSA": 67.2,
+      "Title": "Isocarboxazid",
+      "XLogP": 1.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3767/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3767,
+      "Complexity": 120,
+      "ConnectivitySMILES": "C1=CN=CC=C1C(=O)NN",
+      "ExactMass": "137.058911855",
+      "HeavyAtomCount": 10,
+      "InChIKey": "QRXWMOHMRWLFEY-UHFFFAOYSA-N",
+      "MolecularFormula": "C6H7N3O",
+      "MolecularWeight": "137.14",
+      "SMILES": "C1=CN=CC=C1C(=O)NN",
+      "TPSA": 68,
+      "Title": "Isoniazid",
+      "XLogP": -0.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/37768/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 37768,
+      "Complexity": 819,
+      "ConnectivitySMILES": "C1C(C(C(C(C1NC(=O)C(CCN)O)OC2C(C(C(C(O2)CO)O)N)O)O)OC3C(C(C(C(O3)CN)O)O)O)N",
+      "ExactMass": "585.28573644",
+      "HeavyAtomCount": 40,
+      "InChIKey": "LKCWBDHBTVXHDL-RMDFUYIESA-N",
+      "MolecularFormula": "C22H43N5O13",
+      "MolecularWeight": "585.6",
+      "SMILES": "C1[C@@H]([C@H]([C@@H]([C@H]([C@@H]1NC(=O)[C@H](CCN)O)O[C@@H]2[C@@H]([C@H]([C@@H]([C@H](O2)CO)O)N)O)O)O[C@@H]3[C@@H]([C@H]([C@@H]([C@H](O3)CN)O)O)O)N",
+      "TPSA": 332,
+      "Title": "Amikacin",
+      "XLogP": -7.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3821/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3821,
+      "Complexity": 269,
+      "ConnectivitySMILES": "CNC1(CCCCC1=O)C2=CC=CC=C2Cl",
+      "ExactMass": "237.0920418",
+      "HeavyAtomCount": 16,
+      "InChIKey": "YQEZLKZALYSWHR-UHFFFAOYSA-N",
+      "MolecularFormula": "C13H16ClNO",
+      "MolecularWeight": "237.72",
+      "SMILES": "CNC1(CCCCC1=O)C2=CC=CC=C2Cl",
+      "TPSA": 29.1,
+      "Title": "Ketamine",
+      "XLogP": 2.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3826/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3826,
+      "Complexity": 376,
+      "ConnectivitySMILES": "C1CN2C(=CC=C2C(=O)C3=CC=CC=C3)C1C(=O)O",
+      "ExactMass": "255.08954328",
+      "HeavyAtomCount": 19,
+      "InChIKey": "OZWKMVRBQXNZKK-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H13NO3",
+      "MolecularWeight": "255.27",
+      "SMILES": "C1CN2C(=CC=C2C(=O)C3=CC=CC=C3)C1C(=O)O",
+      "TPSA": 59.3,
+      "Title": "Ketorolac",
+      "XLogP": 1.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3878/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3878,
+      "Complexity": 242,
+      "ConnectivitySMILES": "C1=CC(=C(C(=C1)Cl)Cl)C2=C(N=C(N=N2)N)N",
+      "ExactMass": "255.0078506",
+      "HeavyAtomCount": 16,
+      "InChIKey": "PYZRQGJRPPTADH-UHFFFAOYSA-N",
+      "MolecularFormula": "C9H7Cl2N5",
+      "MolecularWeight": "256.09",
+      "SMILES": "C1=CC(=C(C(=C1)Cl)Cl)C2=C(N=C(N=N2)N)N",
+      "TPSA": 90.7,
+      "Title": "Lamotrigine",
+      "XLogP": 1.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3899/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3899,
+      "Complexity": 327,
+      "ConnectivitySMILES": "CC1=C(C=NO1)C(=O)NC2=CC=C(C=C2)C(F)(F)F",
+      "ExactMass": "270.06161202",
+      "HeavyAtomCount": 19,
+      "InChIKey": "VHOGYURTWQBHIL-UHFFFAOYSA-N",
+      "MolecularFormula": "C12H9F3N2O2",
+      "MolecularWeight": "270.21",
+      "SMILES": "CC1=C(C=NO1)C(=O)NC2=CC=C(C=C2)C(F)(F)F",
+      "TPSA": 55.1,
+      "Title": "Leflunomide",
+      "XLogP": 2.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/3958/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 3958,
+      "Complexity": 443,
+      "ConnectivitySMILES": "C1=CC=C(C(=C1)C2=NC(C(=O)NC3=C2C=C(C=C3)Cl)O)Cl",
+      "ExactMass": "320.0119330",
+      "HeavyAtomCount": 21,
+      "InChIKey": "DIWRORZWFLOCLC-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H10Cl2N2O2",
+      "MolecularWeight": "321.2",
+      "SMILES": "C1=CC=C(C(=C1)C2=NC(C(=O)NC3=C2C=C(C=C3)Cl)O)Cl",
+      "TPSA": 61.7,
+      "Title": "Lorazepam",
+      "XLogP": 2.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/39912/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 39912,
+      "Complexity": 203,
+      "ConnectivitySMILES": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O",
+      "ExactMass": "206.130679813",
+      "HeavyAtomCount": 15,
+      "InChIKey": "HEFNNWSXXWATRW-JTQLQIEISA-N",
+      "MolecularFormula": "C13H18O2",
+      "MolecularWeight": "206.28",
+      "SMILES": "C[C@@H](C1=CC=C(C=C1)CC(C)C)C(=O)O",
+      "TPSA": 37.3,
+      "Title": "Dexibuprofen",
+      "XLogP": 3.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/39941/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 39941,
+      "Complexity": 384,
+      "ConnectivitySMILES": "CC(C1=CC2=C(C=C1)OC(=N2)C3=CC=C(C=C3)Cl)C(=O)O",
+      "ExactMass": "301.0505709",
+      "HeavyAtomCount": 21,
+      "InChIKey": "MITFXPHMIHQXPI-UHFFFAOYSA-N",
+      "MolecularFormula": "C16H12ClNO3",
+      "MolecularWeight": "301.72",
+      "SMILES": "CC(C1=CC2=C(C=C1)OC(=N2)C3=CC=C(C=C3)Cl)C(=O)O",
+      "TPSA": 63.3,
+      "Title": "Benoxaprofen",
+      "XLogP": 4.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4011/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4011,
+      "Complexity": 339,
+      "ConnectivitySMILES": "CNCCCC12CCC(C3=CC=CC=C31)C4=CC=CC=C24",
+      "ExactMass": "277.183049738",
+      "HeavyAtomCount": 21,
+      "InChIKey": "QSLMDECMDJKHMQ-UHFFFAOYSA-N",
+      "MolecularFormula": "C20H23N",
+      "MolecularWeight": "277.4",
+      "SMILES": "CNCCCC12CCC(C3=CC=CC=C31)C4=CC=CC=C24",
+      "TPSA": 12,
+      "Title": "Maprotiline",
+      "XLogP": 4.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4033/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4033,
+      "Complexity": 43,
+      "ConnectivitySMILES": "CN(CCCl)CCCl",
+      "ExactMass": "155.0268547",
+      "HeavyAtomCount": 8,
+      "InChIKey": "HAWPXGHAZFHHAD-UHFFFAOYSA-N",
+      "MolecularFormula": "C5H11Cl2N",
+      "MolecularWeight": "156.05",
+      "SMILES": "CN(CCCl)CCCl",
+      "TPSA": 3.2,
+      "Title": "Mechlorethamine",
+      "XLogP": 0.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4037/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4037,
+      "Complexity": 327,
+      "ConnectivitySMILES": "CC1=C(C(=C(C=C1)Cl)NC2=CC=CC=C2C(=O)O)Cl",
+      "ExactMass": "295.0166840",
+      "HeavyAtomCount": 19,
+      "InChIKey": "SBDNJUWAMKYJOX-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H11Cl2NO2",
+      "MolecularWeight": "296.1",
+      "SMILES": "CC1=C(C(=C(C=C1)Cl)NC2=CC=CC=C2C(=O)O)Cl",
+      "TPSA": 49.3,
+      "Title": "Meclofenamic Acid",
+      "XLogP": 5.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4044/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4044,
+      "Complexity": 292,
+      "ConnectivitySMILES": "CC1=C(C(=CC=C1)NC2=CC=CC=C2C(=O)O)C",
+      "ExactMass": "241.110278721",
+      "HeavyAtomCount": 18,
+      "InChIKey": "HYYBABOKPJLUIN-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H15NO2",
+      "MolecularWeight": "241.28",
+      "SMILES": "CC1=C(C(=CC=C1)NC2=CC=CC=C2C(=O)O)C",
+      "TPSA": 49.3,
+      "Title": "Mefenamic Acid",
+      "XLogP": 5.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4173/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4173,
+      "Complexity": 170,
+      "ConnectivitySMILES": "CC1=NC=C(N1CCO)[N+](=O)[O-]",
+      "ExactMass": "171.06439116",
+      "HeavyAtomCount": 12,
+      "InChIKey": "VAOCPAMSLUNLGC-UHFFFAOYSA-N",
+      "MolecularFormula": "C6H9N3O3",
+      "MolecularWeight": "171.15",
+      "SMILES": "CC1=NC=C(N1CCO)[N+](=O)[O-]",
+      "TPSA": 83.9,
+      "Title": "Metronidazole",
+      "XLogP": 0
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4184/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4184,
+      "Complexity": 342,
+      "ConnectivitySMILES": "CN1CCN2C(C1)C3=CC=CC=C3CC4=CC=CC=C42",
+      "ExactMass": "264.162648646",
+      "HeavyAtomCount": 20,
+      "InChIKey": "UEQUQVLFIPOEMF-UHFFFAOYSA-N",
+      "MolecularFormula": "C18H20N2",
+      "MolecularWeight": "264.4",
+      "SMILES": "CN1CCN2C(C1)C3=CC=CC=C3CC4=CC=CC=C42",
+      "TPSA": 6.5,
+      "Title": "Mianserin",
+      "XLogP": 3.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4189/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4189,
+      "Complexity": 417,
+      "ConnectivitySMILES": "C1=CC(=C(C=C1Cl)Cl)COC(CN2C=CN=C2)C3=C(C=C(C=C3)Cl)Cl",
+      "ExactMass": "415.983074",
+      "HeavyAtomCount": 25,
+      "InChIKey": "BYBLEWFAAKGYCD-UHFFFAOYSA-N",
+      "MolecularFormula": "C18H14Cl4N2O",
+      "MolecularWeight": "416.1",
+      "SMILES": "C1=CC(=C(C=C1Cl)Cl)COC(CN2C=CN=C2)C3=C(C=C(C=C3)Cl)Cl",
+      "TPSA": 27.1,
+      "Title": "Miconazole",
+      "XLogP": 5.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4205/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4205,
+      "Complexity": 345,
+      "ConnectivitySMILES": "CN1CCN2C(C1)C3=CC=CC=C3CC4=C2N=CC=C4",
+      "ExactMass": "265.157897619",
+      "HeavyAtomCount": 20,
+      "InChIKey": "RONZAEMNMFQXRA-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H19N3",
+      "MolecularWeight": "265.35",
+      "SMILES": "CN1CCN2C(C1)C3=CC=CC=C3CC4=C2N=CC=C4",
+      "TPSA": 19.4,
+      "Title": "Mirtazapine",
+      "XLogP": 3.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/43815/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 43815,
+      "Complexity": 402,
+      "ConnectivitySMILES": "C1CNCC(C1C2=CC=C(C=C2)F)COC3=CC4=C(C=C3)OCO4",
+      "ExactMass": "329.14272166",
+      "HeavyAtomCount": 24,
+      "InChIKey": "AHOUBRCZNHFOSL-YOEHRIQHSA-N",
+      "MolecularFormula": "C19H20FNO3",
+      "MolecularWeight": "329.4",
+      "SMILES": "C1CNC[C@H]([C@@H]1C2=CC=C(C=C2)F)COC3=CC4=C(C=C3)OCO4",
+      "TPSA": 39.7,
+      "Title": "Paroxetine",
+      "XLogP": 3.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/439213/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 439213,
+      "Complexity": 155,
+      "ConnectivitySMILES": "C(C1C(C(C(C(O1)O)N)O)O)O",
+      "ExactMass": "179.07937252",
+      "HeavyAtomCount": 12,
+      "InChIKey": "MSWZFWKMSRAUBD-IVMDWMLBSA-N",
+      "MolecularFormula": "C6H13NO5",
+      "MolecularWeight": "179.17",
+      "SMILES": "C([C@@H]1[C@H]([C@@H]([C@H](C(O1)O)N)O)O)O",
+      "TPSA": 116,
+      "Title": "D-Glucosamine",
+      "XLogP": -2.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4409/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4409,
+      "Complexity": 262,
+      "ConnectivitySMILES": "CC(=O)CCC1=CC2=C(C=C1)C=C(C=C2)OC",
+      "ExactMass": "228.115029749",
+      "HeavyAtomCount": 17,
+      "InChIKey": "BLXXJMDCKKHMKV-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H16O2",
+      "MolecularWeight": "228.29",
+      "SMILES": "CC(=O)CCC1=CC2=C(C=C1)C=C(C=C2)OC",
+      "TPSA": 26.3,
+      "Title": "Nabumetone",
+      "XLogP": 3.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/440936/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 440936,
+      "Complexity": 279,
+      "ConnectivitySMILES": "C1=CC(=CC=C1O)OC2C(C(C(C(O2)CO)O)O)O",
+      "ExactMass": "272.08960285",
+      "HeavyAtomCount": 19,
+      "InChIKey": "BJRNKVDFDLYUGJ-RMPHRYRLSA-N",
+      "MolecularFormula": "C12H16O7",
+      "MolecularWeight": "272.25",
+      "SMILES": "C1=CC(=CC=C1O)O[C@H]2[C@@H]([C@H]([C@@H]([C@H](O2)CO)O)O)O",
+      "TPSA": 120,
+      "Title": "Arbutin",
+      "XLogP": -0.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/441401/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 441401,
+      "Complexity": 472,
+      "ConnectivitySMILES": "CC(=O)NCC1CN(C(=O)O1)C2=CC(=C(C=C2)N3CCOCC3)F",
+      "ExactMass": "337.14378429",
+      "HeavyAtomCount": 24,
+      "InChIKey": "TYZROVQLWOKYKF-ZDUSSCGKSA-N",
+      "MolecularFormula": "C16H20FN3O4",
+      "MolecularWeight": "337.35",
+      "SMILES": "CC(=O)NC[C@H]1CN(C(=O)O1)C2=CC(=C(C=C2)N3CCOCC3)F",
+      "TPSA": 71.1,
+      "Title": "Linezolid",
+      "XLogP": 0.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/44205240/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 44205240,
+      "Complexity": 678,
+      "ConnectivitySMILES": "CCS(=O)(=O)N1CC(C1)(CC#N)N2C=C(C=N2)C3=C4C=CNC4=NC=N3",
+      "ExactMass": "371.11644398",
+      "HeavyAtomCount": 26,
+      "InChIKey": "XUZMWHLSFXCVMG-UHFFFAOYSA-N",
+      "MolecularFormula": "C16H17N7O2S",
+      "MolecularWeight": "371.4",
+      "SMILES": "CCS(=O)(=O)N1CC(C1)(CC#N)N2C=C(C=N2)C3=C4C=CNC4=NC=N3",
+      "TPSA": 129,
+      "Title": "Baricitinib",
+      "XLogP": -0.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/444/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 444,
+      "Complexity": 247,
+      "ConnectivitySMILES": "CC(C(=O)C1=CC(=CC=C1)Cl)NC(C)(C)C",
+      "ExactMass": "239.1076919",
+      "HeavyAtomCount": 16,
+      "InChIKey": "SNPPWIUOZRMYNY-UHFFFAOYSA-N",
+      "MolecularFormula": "C13H18ClNO",
+      "MolecularWeight": "239.74",
+      "SMILES": "CC(C(=O)C1=CC(=CC=C1)Cl)NC(C)(C)C",
+      "TPSA": 29.1,
+      "Title": "Bupropion",
+      "XLogP": 3.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4449/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4449,
+      "Complexity": 649,
+      "ConnectivitySMILES": "CCC1=NN(C(=O)N1CCOC2=CC=CC=C2)CCCN3CCN(CC3)C4=CC(=CC=C4)Cl",
+      "ExactMass": "469.2244530",
+      "HeavyAtomCount": 33,
+      "InChIKey": "VRBKIVRKKCLPHA-UHFFFAOYSA-N",
+      "MolecularFormula": "C25H32ClN5O2",
+      "MolecularWeight": "470.0",
+      "SMILES": "CCC1=NN(C(=O)N1CCOC2=CC=CC=C2)CCCN3CCN(CC3)C4=CC(=CC=C4)Cl",
+      "TPSA": 51.6,
+      "Title": "Nefazodone",
+      "XLogP": 4.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/445643/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 445643,
+      "Complexity": 1480,
+      "ConnectivitySMILES": "CC1CC(C2C(CC(C(O2)(C(=O)C(=O)N3CCCCC3C(=O)OC(C(C(CC(=O)C(C=C(C1)C)CC=C)O)C)C(=CC4CCC(C(C4)OC)O)C)O)C)OC)OC",
+      "ExactMass": "803.48197664",
+      "HeavyAtomCount": 57,
+      "InChIKey": "QJJXYPPXXYFBGM-LFZNUXCKSA-N",
+      "MolecularFormula": "C44H69NO12",
+      "MolecularWeight": "804.0",
+      "SMILES": "C[C@@H]1C[C@@H]([C@@H]2[C@H](C[C@H]([C@@](O2)(C(=O)C(=O)N3CCCC[C@H]3C(=O)O[C@@H]([C@@H]([C@H](CC(=O)[C@@H](/C=C(/C1)\\C)CC=C)O)C)/C(=C/[C@@H]4CC[C@H]([C@@H](C4)OC)O)/C)O)C)OC)OC",
+      "TPSA": 178,
+      "Title": "Tacrolimus",
+      "XLogP": 2.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/449171/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 449171,
+      "Complexity": 567,
+      "ConnectivitySMILES": "CC1=C(C(CCC1)(C)C)C=CC(=CC=CC(=CC(=O)O)C)C",
+      "ExactMass": "300.208930132",
+      "HeavyAtomCount": 22,
+      "InChIKey": "SHGAZHPCJJPHSC-ZVCIMWCZSA-N",
+      "MolecularFormula": "C20H28O2",
+      "MolecularWeight": "300.4",
+      "SMILES": "CC1=C(C(CCC1)(C)C)/C=C/C(=C\\C=C\\C(=C\\C(=O)O)\\C)/C",
+      "TPSA": 37.3,
+      "Title": "9-Cis-Retinoic Acid",
+      "XLogP": 6.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4543/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4543,
+      "Complexity": 307,
+      "ConnectivitySMILES": "CNCCC=C1C2=CC=CC=C2CCC3=CC=CC=C31",
+      "ExactMass": "263.167399674",
+      "HeavyAtomCount": 20,
+      "InChIKey": "PHVGLTMQBUFIQQ-UHFFFAOYSA-N",
+      "MolecularFormula": "C19H21N",
+      "MolecularWeight": "263.4",
+      "SMILES": "CNCCC=C1C2=CC=CC=C2CCC3=CC=CC=C31",
+      "TPSA": 12,
+      "Title": "Nortriptyline",
+      "XLogP": 4.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/457193/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 457193,
+      "Complexity": 3030,
+      "ConnectivitySMILES": "CC1C(C(=O)NC(C(=O)N2CCCC2C(=O)N(CC(=O)N(C(C(=O)O1)C(C)C)C)C)C(C)C)NC(=O)C3=C4C(=C(C=C3)C)OC5=C(C(=O)C(=C(C5=N4)C(=O)NC6C(OC(=O)C(N(C(=O)CN(C(=O)C7CCCN7C(=O)C(NC6=O)C(C)C)C)C)C(C)C)C)N)C",
+      "ExactMass": "1254.62847470",
+      "HeavyAtomCount": 90,
+      "InChIKey": "RJURFGZVJUQBHK-IIXSONLDSA-N",
+      "MolecularFormula": "C62H86N12O16",
+      "MolecularWeight": "1255.4",
+      "SMILES": "C[C@@H]1[C@@H](C(=O)N[C@@H](C(=O)N2CCC[C@H]2C(=O)N(CC(=O)N([C@H](C(=O)O1)C(C)C)C)C)C(C)C)NC(=O)C3=C4C(=C(C=C3)C)OC5=C(C(=O)C(=C(C5=N4)C(=O)N[C@H]6[C@H](OC(=O)[C@@H](N(C(=O)CN(C(=O)[C@@H]7CCCN7C(=O)[C@H](NC6=O)C(C)C)C)C)C(C)C)C)N)C",
+      "TPSA": 356,
+      "Title": "Dactinomycin",
+      "XLogP": 3.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4614/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4614,
+      "Complexity": 361,
+      "ConnectivitySMILES": "C1=CC=C(C=C1)C2=C(OC(=N2)CCC(=O)O)C3=CC=CC=C3",
+      "ExactMass": "293.10519334",
+      "HeavyAtomCount": 22,
+      "InChIKey": "OFPXSFXSNFPTHF-UHFFFAOYSA-N",
+      "MolecularFormula": "C18H15NO3",
+      "MolecularWeight": "293.3",
+      "SMILES": "C1=CC=C(C=C1)C2=C(OC(=N2)CCC(=O)O)C3=CC=CC=C3",
+      "TPSA": 63.3,
+      "Title": "Oxaprozin",
+      "XLogP": 4.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4641/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4641,
+      "Complexity": 454,
+      "ConnectivitySMILES": "CCCCC1C(=O)N(N(C1=O)C2=CC=C(C=C2)O)C3=CC=CC=C3",
+      "ExactMass": "324.14739250",
+      "HeavyAtomCount": 24,
+      "InChIKey": "HFHZKZSRXITVMK-UHFFFAOYSA-N",
+      "MolecularFormula": "C19H20N2O3",
+      "MolecularWeight": "324.4",
+      "SMILES": "CCCCC1C(=O)N(N(C1=O)C2=CC=C(C=C2)O)C3=CC=CC=C3",
+      "TPSA": 60.9,
+      "Title": "Oxazolidin",
+      "XLogP": 2.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4649/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4649,
+      "Complexity": 160,
+      "ConnectivitySMILES": "C1=CC(=C(C=C1N)O)C(=O)O",
+      "ExactMass": "153.042593085",
+      "HeavyAtomCount": 11,
+      "InChIKey": "WUBBRNOQWQTFEX-UHFFFAOYSA-N",
+      "MolecularFormula": "C7H7NO3",
+      "MolecularWeight": "153.14",
+      "SMILES": "C1=CC(=C(C=C1N)O)C(=O)O",
+      "TPSA": 83.6,
+      "Title": "4-Aminosalicylic Acid",
+      "XLogP": 1.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4763/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4763,
+      "Complexity": 339,
+      "ConnectivitySMILES": "CCC1(C(=O)NC(=O)NC1=O)C2=CC=CC=C2",
+      "ExactMass": "232.08479225",
+      "HeavyAtomCount": 17,
+      "InChIKey": "DDBREPKUVSBGFI-UHFFFAOYSA-N",
+      "MolecularFormula": "C12H12N2O3",
+      "MolecularWeight": "232.23",
+      "SMILES": "CCC1(C(=O)NC(=O)NC1=O)C2=CC=CC=C2",
+      "TPSA": 75.3,
+      "Title": "Phenobarbital",
+      "XLogP": 1.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4781/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4781,
+      "Complexity": 389,
+      "ConnectivitySMILES": "CCCCC1C(=O)N(N(C1=O)C2=CC=CC=C2)C3=CC=CC=C3",
+      "ExactMass": "308.152477885",
+      "HeavyAtomCount": 23,
+      "InChIKey": "VYMDGNCVAMGZFE-UHFFFAOYSA-N",
+      "MolecularFormula": "C19H20N2O2",
+      "MolecularWeight": "308.4",
+      "SMILES": "CCCCC1C(=O)N(N(C1=O)C2=CC=CC=C2)C3=CC=CC=C3",
+      "TPSA": 40.6,
+      "Title": "Phenylbutazone",
+      "XLogP": 3.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4888/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4888,
+      "Complexity": 346,
+      "ConnectivitySMILES": "CC(C1=CC2=C(C=C1)OC3=C(C2)C=CC=N3)C(=O)O",
+      "ExactMass": "255.08954328",
+      "HeavyAtomCount": 19,
+      "InChIKey": "TVQZAMVBTVNYLA-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H13NO3",
+      "MolecularWeight": "255.27",
+      "SMILES": "CC(C1=CC2=C(C=C1)OC3=C(C2)C=CC=N3)C(=O)O",
+      "TPSA": 59.4,
+      "Title": "Pranoprofen",
+      "XLogP": 2.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/4915/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 4915,
+      "Complexity": 210,
+      "ConnectivitySMILES": "CC(C)NC(=O)C1=CC=C(C=C1)CNNC",
+      "ExactMass": "221.152812238",
+      "HeavyAtomCount": 16,
+      "InChIKey": "CPTBDICYNRMXFX-UHFFFAOYSA-N",
+      "MolecularFormula": "C12H19N3O",
+      "MolecularWeight": "221.30",
+      "SMILES": "CC(C)NC(=O)C1=CC=C(C=C1)CNNC",
+      "TPSA": 53.2,
+      "Title": "Procarbazine",
+      "XLogP": 0.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/49831411/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 49831411,
+      "Complexity": 858,
+      "ConnectivitySMILES": "CCCCCCCCCCCC(=O)OCN1C(=O)CCC2=C1C=C(C=C2)OCCCCN3CCN(CC3)C4=C(C(=CC=C4)Cl)Cl",
+      "ExactMass": "659.3256625",
+      "HeavyAtomCount": 45,
+      "InChIKey": "DDINXHAORAAYAD-UHFFFAOYSA-N",
+      "MolecularFormula": "C36H51Cl2N3O4",
+      "MolecularWeight": "660.7",
+      "SMILES": "CCCCCCCCCCCC(=O)OCN1C(=O)CCC2=C1C=C(C=C2)OCCCCN3CCN(CC3)C4=C(C(=CC=C4)Cl)Cl",
+      "TPSA": 62.3,
+      "Title": "Aripiprazole Lauroxil",
+      "XLogP": 10
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5002/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5002,
+      "Complexity": 496,
+      "ConnectivitySMILES": "C1CN(CCN1CCOCCO)C2=NC3=CC=CC=C3SC4=CC=CC=C42",
+      "ExactMass": "383.16674822",
+      "HeavyAtomCount": 27,
+      "InChIKey": "URKOMYMAXPYINW-UHFFFAOYSA-N",
+      "MolecularFormula": "C21H25N3O2S",
+      "MolecularWeight": "383.5",
+      "SMILES": "C1CN(CCN1CCOCCO)C2=NC3=CC=CC=C3SC4=CC=CC=C42",
+      "TPSA": 73.6,
+      "Title": "Quetiapine",
+      "XLogP": 2.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5073/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5073,
+      "Complexity": 731,
+      "ConnectivitySMILES": "CC1=C(C(=O)N2CCCCC2=N1)CCN3CCC(CC3)C4=NOC5=C4C=CC(=C5)F",
+      "ExactMass": "410.21180428",
+      "HeavyAtomCount": 30,
+      "InChIKey": "RAPZEAPATHNIPO-UHFFFAOYSA-N",
+      "MolecularFormula": "C23H27FN4O2",
+      "MolecularWeight": "410.5",
+      "SMILES": "CC1=C(C(=O)N2CCCCC2=N1)CCN3CCC(CC3)C4=NOC5=C4C=CC(=C5)F",
+      "TPSA": 61.9,
+      "Title": "Risperidone",
+      "XLogP": 2.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5090/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5090,
+      "Complexity": 556,
+      "ConnectivitySMILES": "CS(=O)(=O)C1=CC=C(C=C1)C2=C(C(=O)OC2)C3=CC=CC=C3",
+      "ExactMass": "314.06128010",
+      "HeavyAtomCount": 22,
+      "InChIKey": "RZJQGNCSTQAWON-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H14O4S",
+      "MolecularWeight": "314.4",
+      "SMILES": "CS(=O)(=O)C1=CC=C(C=C1)C2=C(C(=O)OC2)C3=CC=CC=C3",
+      "TPSA": 68.8,
+      "Title": "Rofecoxib",
+      "XLogP": 2.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5284373/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5284373,
+      "Complexity": 2330,
+      "ConnectivitySMILES": "CCC1C(=O)N(CC(=O)N(C(C(=O)NC(C(=O)N(C(C(=O)NC(C(=O)NC(C(=O)N(C(C(=O)N(C(C(=O)N(C(C(=O)N(C(C(=O)N1)C(C(C)CC=CC)O)C)C(C)C)C)CC(C)C)C)CC(C)C)C)C)C)CC(C)C)C)C(C)C)CC(C)C)C)C",
+      "ExactMass": "1201.84136802",
+      "HeavyAtomCount": 85,
+      "InChIKey": "PMATZTZNYRCHOR-CGLBZJNRSA-N",
+      "MolecularFormula": "C62H111N11O12",
+      "MolecularWeight": "1202.6",
+      "SMILES": "CC[C@H]1C(=O)N(CC(=O)N([C@H](C(=O)N[C@H](C(=O)N([C@H](C(=O)N[C@H](C(=O)N[C@@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N1)[C@@H]([C@H](C)C/C=C/C)O)C)C(C)C)C)CC(C)C)C)CC(C)C)C)C)C)CC(C)C)C)C(C)C)CC(C)C)C)C",
+      "TPSA": 279,
+      "Title": "Cyclosporin A",
+      "XLogP": 7.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5284583/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5284583,
+      "Complexity": 203,
+      "ConnectivitySMILES": "CCC(C(=O)N)N1CCCC1=O",
+      "ExactMass": "170.105527694",
+      "HeavyAtomCount": 12,
+      "InChIKey": "HPHUVLMMVZITSG-LURJTMIESA-N",
+      "MolecularFormula": "C8H14N2O2",
+      "MolecularWeight": "170.21",
+      "SMILES": "CC[C@@H](C(=O)N)N1CCCC1=O",
+      "TPSA": 63.4,
+      "Title": "Levetiracetam",
+      "XLogP": -0.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5311/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5311,
+      "Complexity": 276,
+      "ConnectivitySMILES": "C1=CC=C(C=C1)NC(=O)CCCCCCC(=O)NO",
+      "ExactMass": "264.14739250",
+      "HeavyAtomCount": 19,
+      "InChIKey": "WAEXFXRVDQXREF-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H20N2O3",
+      "MolecularWeight": "264.32",
+      "SMILES": "C1=CC=C(C=C1)NC(=O)CCCCCCC(=O)NO",
+      "TPSA": 78.4,
+      "Title": "Vorinostat",
+      "XLogP": 1.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5324346/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5324346,
+      "Complexity": 327,
+      "ConnectivitySMILES": "COCCCCC(=NOCCN)C1=CC=C(C=C1)C(F)(F)F",
+      "ExactMass": "318.15551240",
+      "HeavyAtomCount": 22,
+      "InChIKey": "CJOFXWAVKWHTFT-XSFVSMFZSA-N",
+      "MolecularFormula": "C15H21F3N2O2",
+      "MolecularWeight": "318.33",
+      "SMILES": "COCCCC/C(=N\\OCCN)/C1=CC=C(C=C1)C(F)(F)F",
+      "TPSA": 56.8,
+      "Title": "Fluvoxamine",
+      "XLogP": 2.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5353853/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5353853,
+      "Complexity": 481,
+      "ConnectivitySMILES": "C1=CC(=C(C=C1Cl)Cl)CON=C(CN2C=CN=C2)C3=C(C=C(C=C3)Cl)Cl",
+      "ExactMass": "428.978323",
+      "HeavyAtomCount": 26,
+      "InChIKey": "QRJJEGAJXVEBNE-HKOYGPOVSA-N",
+      "MolecularFormula": "C18H13Cl4N3O",
+      "MolecularWeight": "429.1",
+      "SMILES": "C1=CC(=C(C=C1Cl)Cl)CO/N=C(\\CN2C=CN=C2)/C3=C(C=C(C=C3)Cl)Cl",
+      "TPSA": 39.4,
+      "Title": "Oxiconazole",
+      "XLogP": 6.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5360696/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5360696,
+      "Complexity": 370,
+      "ConnectivitySMILES": "CN1CCC23CCCCC2C1CC4=C3C=C(C=C4)OC",
+      "ExactMass": "271.193614421",
+      "HeavyAtomCount": 20,
+      "InChIKey": "MKXZASYAUGDDCJ-NJAFHUGGSA-N",
+      "MolecularFormula": "C18H25NO",
+      "MolecularWeight": "271.4",
+      "SMILES": "CN1CC[C@@]23CCCC[C@@H]2[C@@H]1CC4=C3C=C(C=C4)OC",
+      "TPSA": 12.5,
+      "Title": "Dextromethorphan",
+      "XLogP": 3.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5381/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5381,
+      "Complexity": 547,
+      "ConnectivitySMILES": "CCOC(=O)C1=CN=C(C=C1)C#CC2=CC3=C(C=C2)SCCC3(C)C",
+      "ExactMass": "351.12930009",
+      "HeavyAtomCount": 25,
+      "InChIKey": "OGQICQVSFDPSEI-UHFFFAOYSA-N",
+      "MolecularFormula": "C21H21NO2S",
+      "MolecularWeight": "351.5",
+      "SMILES": "CCOC(=O)C1=CN=C(C=C1)C#CC2=CC3=C(C=C2)SCCC3(C)C",
+      "TPSA": 64.5,
+      "Title": "Tazarotene",
+      "XLogP": 4.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5388906/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5388906,
+      "Complexity": 715,
+      "ConnectivitySMILES": "CN(C)CCC(C1=CC=CC2=CC=CC=C21)(C(C3=CC=CC=C3)C4=C(N=C5C=CC(=CC5=C4)Br)OC)O",
+      "ExactMass": "554.15689",
+      "HeavyAtomCount": 37,
+      "InChIKey": "QUIJNHUBAXPXFS-XLJNKUFUSA-N",
+      "MolecularFormula": "C32H31BrN2O2",
+      "MolecularWeight": "555.5",
+      "SMILES": "CN(C)CC[C@@](C1=CC=CC2=CC=CC=C21)([C@H](C3=CC=CC=C3)C4=C(N=C5C=CC(=CC5=C4)Br)OC)O",
+      "TPSA": 45.6,
+      "Title": "Bedaquiline",
+      "XLogP": 7.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5394/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5394,
+      "Complexity": 315,
+      "ConnectivitySMILES": "CN1C(=O)N2C=NC(=C2N=N1)C(=O)N",
+      "ExactMass": "194.05522346",
+      "HeavyAtomCount": 14,
+      "InChIKey": "BPEGJWRSRHCHSN-UHFFFAOYSA-N",
+      "MolecularFormula": "C6H6N6O2",
+      "MolecularWeight": "194.15",
+      "SMILES": "CN1C(=O)N2C=NC(=C2N=N1)C(=O)N",
+      "TPSA": 106,
+      "Title": "Temozolomide",
+      "XLogP": -1.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/54454/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 54454,
+      "Complexity": 706,
+      "ConnectivitySMILES": "CCC(C)(C)C(=O)OC1CC(C=C2C1C(C(C=C2)C)CCC3CC(CC(=O)O3)O)C",
+      "ExactMass": "418.27192431",
+      "HeavyAtomCount": 30,
+      "InChIKey": "RYMZZMVNJRMUDD-HGQWONQESA-N",
+      "MolecularFormula": "C25H38O5",
+      "MolecularWeight": "418.6",
+      "SMILES": "CCC(C)(C)C(=O)O[C@H]1C[C@H](C=C2[C@H]1[C@H]([C@H](C=C2)C)CC[C@@H]3C[C@H](CC(=O)O3)O)C",
+      "TPSA": 72.8,
+      "Title": "Simvastatin",
+      "XLogP": 4.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5453/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5453,
+      "Complexity": 194,
+      "ConnectivitySMILES": "C1CN1P(=S)(N2CC2)N3CC3",
+      "ExactMass": "189.04895557",
+      "HeavyAtomCount": 11,
+      "InChIKey": "FOCVUCIESVLUNU-UHFFFAOYSA-N",
+      "MolecularFormula": "C6H12N3PS",
+      "MolecularWeight": "189.22",
+      "SMILES": "C1CN1P(=S)(N2CC2)N3CC3",
+      "TPSA": 41.1,
+      "Title": "Thiotepa",
+      "XLogP": 0.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5460407/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5460407,
+      "Complexity": 101,
+      "ConnectivitySMILES": "C(C(C(C(=O)O)O)O)O",
+      "ExactMass": "136.03717335",
+      "HeavyAtomCount": 9,
+      "InChIKey": "JPIJQSOTBSSVTP-STHAYSLISA-N",
+      "MolecularFormula": "C4H8O5",
+      "MolecularWeight": "136.10",
+      "SMILES": "C([C@@H]([C@H](C(=O)O)O)O)O",
+      "TPSA": 98,
+      "Title": "L-Threonic Acid",
+      "XLogP": -2.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/54671203/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 54671203,
+      "Complexity": 956,
+      "ConnectivitySMILES": "CC1C2C(C3C(C(=O)C(=C(C3(C(=O)C2=C(C4=C1C=CC=C4O)O)O)O)C(=O)N)N(C)C)O",
+      "ExactMass": "444.15326573",
+      "HeavyAtomCount": 32,
+      "InChIKey": "SGKRLCUYIXIAHR-AKNGSSGZSA-N",
+      "MolecularFormula": "C22H24N2O8",
+      "MolecularWeight": "444.4",
+      "SMILES": "C[C@@H]1[C@H]2[C@@H]([C@H]3[C@@H](C(=O)C(=C([C@]3(C(=O)C2=C(C4=C1C=CC=C4O)O)O)O)C(=O)N)N(C)C)O",
+      "TPSA": 182,
+      "Title": "4-(Dimethylamino)-1,5,10,11,12a-pentahydroxy-6-methyl-3,12-dioxo-3,4,4a,5,5a,6,12,12a-octahydrotetracene-2-carboximidic acid",
+      "XLogP": -0.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/54675783/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 54675783,
+      "Complexity": 971,
+      "ConnectivitySMILES": "CN(C)C1C2CC3CC4=C(C=CC(=C4C(=C3C(=O)C2(C(=C(C1=O)C(=O)N)O)O)O)O)N(C)C",
+      "ExactMass": "457.18490021",
+      "HeavyAtomCount": 33,
+      "InChIKey": "FFTVPQUHLQBXQZ-KVUCHLLUSA-N",
+      "MolecularFormula": "C23H27N3O7",
+      "MolecularWeight": "457.5",
+      "SMILES": "CN(C)[C@H]1[C@@H]2C[C@@H]3CC4=C(C=CC(=C4C(=C3C(=O)[C@@]2(C(=C(C1=O)C(=O)N)O)O)O)O)N(C)C",
+      "TPSA": 165,
+      "Title": "Minocycline",
+      "XLogP": -0.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/54676228/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 54676228,
+      "Complexity": 611,
+      "ConnectivitySMILES": "CN1C(=C(C2=CC=CC=C2S1(=O)=O)O)C(=O)NC3=CC=CC=N3",
+      "ExactMass": "331.06267708",
+      "HeavyAtomCount": 23,
+      "InChIKey": "QYSPLQLAKJAUJT-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H13N3O4S",
+      "MolecularWeight": "331.3",
+      "SMILES": "CN1C(=C(C2=CC=CC=C2S1(=O)=O)O)C(=O)NC3=CC=CC=N3",
+      "TPSA": 108,
+      "Title": "Piroxicam",
+      "XLogP": 3.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/54677470/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 54677470,
+      "Complexity": 628,
+      "ConnectivitySMILES": "CC1=CN=C(S1)NC(=O)C2=C(C3=CC=CC=C3S(=O)(=O)N2C)O",
+      "ExactMass": "351.03474825",
+      "HeavyAtomCount": 23,
+      "InChIKey": "ZRVUJXDFFKFLMG-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H13N3O4S2",
+      "MolecularWeight": "351.4",
+      "SMILES": "CC1=CN=C(S1)NC(=O)C2=C(C3=CC=CC=C3S(=O)(=O)N2C)O",
+      "TPSA": 136,
+      "Title": "Meloxicam",
+      "XLogP": 3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/54677971/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 54677971,
+      "Complexity": 599,
+      "ConnectivitySMILES": "CN1C(=C(C2=C(S1(=O)=O)C=CS2)O)C(=O)NC3=CC=CC=N3",
+      "ExactMass": "337.01909819",
+      "HeavyAtomCount": 22,
+      "InChIKey": "LZNWYQJJBLGYLT-UHFFFAOYSA-N",
+      "MolecularFormula": "C13H11N3O4S2",
+      "MolecularWeight": "337.4",
+      "SMILES": "CN1C(=C(C2=C(S1(=O)=O)C=CS2)O)C(=O)NC3=CC=CC=N3",
+      "TPSA": 136,
+      "Title": "Tenoxicam",
+      "XLogP": 1.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5468/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5468,
+      "Complexity": 323,
+      "ConnectivitySMILES": "CC(C1=CC=C(S1)C(=O)C2=CC=CC=C2)C(=O)O",
+      "ExactMass": "260.05071541",
+      "HeavyAtomCount": 18,
+      "InChIKey": "GUHPRPJDBZHYCJ-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H12O3S",
+      "MolecularWeight": "260.31",
+      "SMILES": "CC(C1=CC=C(S1)C(=O)C2=CC=CC=C2)C(=O)O",
+      "TPSA": 82.6,
+      "Title": "Tiaprofenic Acid",
+      "XLogP": 3.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5486971/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5486971,
+      "Complexity": 123,
+      "ConnectivitySMILES": "CC(C)CC(CC(=O)O)CN",
+      "ExactMass": "159.125928785",
+      "HeavyAtomCount": 11,
+      "InChIKey": "AYXYPKUFHZROOJ-ZETCQYMHSA-N",
+      "MolecularFormula": "C8H17NO2",
+      "MolecularWeight": "159.23",
+      "SMILES": "CC(C)C[C@@H](CC(=O)O)CN",
+      "TPSA": 63.3,
+      "Title": "Pregabalin",
+      "XLogP": -1.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5487/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5487,
+      "Complexity": 300,
+      "ConnectivitySMILES": "C1CN=C(N1)NC2=C(C=CC3=NSN=C32)Cl",
+      "ExactMass": "253.0188941",
+      "HeavyAtomCount": 16,
+      "InChIKey": "XFYDIVBRZNQMJC-UHFFFAOYSA-N",
+      "MolecularFormula": "C9H8ClN5S",
+      "MolecularWeight": "253.71",
+      "SMILES": "C1CN=C(N1)NC2=C(C=CC3=NSN=C32)Cl",
+      "TPSA": 90.4,
+      "Title": "Tizanidine",
+      "XLogP": 1.1
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5509/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5509,
+      "Complexity": 347,
+      "ConnectivitySMILES": "CC1=CC=C(C=C1)C(=O)C2=CC=C(N2C)CC(=O)O",
+      "ExactMass": "257.10519334",
+      "HeavyAtomCount": 19,
+      "InChIKey": "UPSPUYADGBWSHF-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H15NO3",
+      "MolecularWeight": "257.28",
+      "SMILES": "CC1=CC=C(C=C1)C(=O)C2=CC=C(N2C)CC(=O)O",
+      "TPSA": 59.3,
+      "Title": "Tolmetin",
+      "XLogP": 2.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/55191/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 55191,
+      "Complexity": 476,
+      "ConnectivitySMILES": "CC1(CC(=O)N(C(=O)C1)CCCCN2CCN(CC2)C3=NC=CC=N3)C",
+      "ExactMass": "359.23212518",
+      "HeavyAtomCount": 26,
+      "InChIKey": "QOIGKGMMAGJZNZ-UHFFFAOYSA-N",
+      "MolecularFormula": "C19H29N5O2",
+      "MolecularWeight": "359.5",
+      "SMILES": "CC1(CC(=O)N(C(=O)C1)CCCCN2CCN(CC2)C3=NC=CC=N3)C",
+      "TPSA": 69.6,
+      "Title": "Gepirone",
+      "XLogP": 1.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5530/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5530,
+      "Complexity": 116,
+      "ConnectivitySMILES": "C1C(C1N)C2=CC=CC=C2",
+      "ExactMass": "133.089149355",
+      "HeavyAtomCount": 10,
+      "InChIKey": "AELCINSCMGFISI-UHFFFAOYSA-N",
+      "MolecularFormula": "C9H11N",
+      "MolecularWeight": "133.19",
+      "SMILES": "C1C(C1N)C2=CC=CC=C2",
+      "TPSA": 26,
+      "Title": "Tranylcypromine",
+      "XLogP": 1.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5533/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5533,
+      "Complexity": 611,
+      "ConnectivitySMILES": "C1CN(CCN1CCCN2C(=O)N3C=CC=CC3=N2)C4=CC(=CC=C4)Cl",
+      "ExactMass": "371.1512880",
+      "HeavyAtomCount": 26,
+      "InChIKey": "PHLBKPHSAVXXEF-UHFFFAOYSA-N",
+      "MolecularFormula": "C19H22ClN5O",
+      "MolecularWeight": "371.9",
+      "SMILES": "C1CN(CCN1CCCN2C(=O)N3C=CC=CC3=N2)C4=CC(=CC=C4)Cl",
+      "TPSA": 42.4,
+      "Title": "Trazodone",
+      "XLogP": 2.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/56339/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 56339,
+      "Complexity": 547,
+      "ConnectivitySMILES": "C1=CC=C(C=C1)C2(C(=O)N(C(=O)N2)COP(=O)(O)O)C3=CC=CC=C3",
+      "ExactMass": "362.06677320",
+      "HeavyAtomCount": 25,
+      "InChIKey": "XWLUWCNOOVRFPX-UHFFFAOYSA-N",
+      "MolecularFormula": "C16H15N2O6P",
+      "MolecularWeight": "362.27",
+      "SMILES": "C1=CC=C(C=C1)C2(C(=O)N(C(=O)N2)COP(=O)(O)O)C3=CC=CC=C3",
+      "TPSA": 116,
+      "Title": "Fosphenytoin",
+      "XLogP": 0.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5656/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5656,
+      "Complexity": 279,
+      "ConnectivitySMILES": "CN(C)CC(C1=CC=C(C=C1)OC)C2(CCCCC2)O",
+      "ExactMass": "277.204179104",
+      "HeavyAtomCount": 20,
+      "InChIKey": "PNVNVHUZROJLTJ-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H27NO2",
+      "MolecularWeight": "277.4",
+      "SMILES": "CN(C)CC(C1=CC=C(C=C1)OC)C2(CCCCC2)O",
+      "TPSA": 32.7,
+      "Title": "Venlafaxine",
+      "XLogP": 2.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5734/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5734,
+      "Complexity": 298,
+      "ConnectivitySMILES": "C1=CC=C2C(=C1)C(=NO2)CS(=O)(=O)N",
+      "ExactMass": "212.02556330",
+      "HeavyAtomCount": 14,
+      "InChIKey": "UBQNRHZMVUUOMG-UHFFFAOYSA-N",
+      "MolecularFormula": "C8H8N2O3S",
+      "MolecularWeight": "212.23",
+      "SMILES": "C1=CC=C2C(=C1)C(=NO2)CS(=O)(=O)N",
+      "TPSA": 94.6,
+      "Title": "Zonisamide",
+      "XLogP": 0.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5743/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5743,
+      "Complexity": 805,
+      "ConnectivitySMILES": "CC1CC2C3CCC4=CC(=O)C=CC4(C3(C(CC2(C1(C(=O)CO)O)C)O)F)C",
+      "ExactMass": "392.19990218",
+      "HeavyAtomCount": 28,
+      "InChIKey": "UREBDLICKHMUKA-CXSFZGCWSA-N",
+      "MolecularFormula": "C22H29FO5",
+      "MolecularWeight": "392.5",
+      "SMILES": "C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@@]4([C@]3([C@H](C[C@@]2([C@]1(C(=O)CO)O)C)O)F)C",
+      "TPSA": 94.8,
+      "Title": "Dexamethasone",
+      "XLogP": 1.9
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/57469/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 57469,
+      "Complexity": 294,
+      "ConnectivitySMILES": "CC(C)CN1C=NC2=C1C3=CC=CC=C3N=C2N",
+      "ExactMass": "240.137496527",
+      "HeavyAtomCount": 18,
+      "InChIKey": "DOUYETYNHWVLEO-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H16N4",
+      "MolecularWeight": "240.30",
+      "SMILES": "CC(C)CN1C=NC2=C1C3=CC=CC=C3N=C2N",
+      "TPSA": 56.7,
+      "Title": "Imiquimod",
+      "XLogP": 2.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/58557659/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 58557659,
+      "Complexity": 561,
+      "ConnectivitySMILES": "CCC1CN(CC1C2=CN=C3N2C4=C(NC=C4)N=C3)C(=O)NCC(F)(F)F",
+      "ExactMass": "380.15724374",
+      "HeavyAtomCount": 27,
+      "InChIKey": "WYQFJHHDOKWSHR-MNOVXSKESA-N",
+      "MolecularFormula": "C17H19F3N6O",
+      "MolecularWeight": "380.4",
+      "SMILES": "CC[C@@H]1CN(C[C@@H]1C2=CN=C3N2C4=C(NC=C4)N=C3)C(=O)NCC(F)(F)F",
+      "TPSA": 78.3,
+      "Title": "Upadacitinib",
+      "XLogP": 2.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/5865/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 5865,
+      "Complexity": 764,
+      "ConnectivitySMILES": "CC12CC(=O)C3C(C1CCC2(C(=O)CO)O)CCC4=CC(=O)C=CC34C",
+      "ExactMass": "358.17802393",
+      "HeavyAtomCount": 26,
+      "InChIKey": "XOFYZVNMUHMLCC-ZPOLXVRWSA-N",
+      "MolecularFormula": "C21H26O5",
+      "MolecularWeight": "358.4",
+      "SMILES": "C[C@]12CC(=O)[C@H]3[C@H]([C@@H]1CC[C@@]2(C(=O)CO)O)CCC4=CC(=O)C=C[C@]34C",
+      "TPSA": 91.7,
+      "Title": "Prednisone",
+      "XLogP": 1.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/60648/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 60648,
+      "Complexity": 474,
+      "ConnectivitySMILES": "CC1=C(SC=C1)C(=CCCN2CCCC(C2)C(=O)O)C3=C(C=CS3)C",
+      "ExactMass": "375.13267139",
+      "HeavyAtomCount": 25,
+      "InChIKey": "PBJUNZJWGZTSKL-MRXNPFEDSA-N",
+      "MolecularFormula": "C20H25NO2S2",
+      "MolecularWeight": "375.6",
+      "SMILES": "CC1=C(SC=C1)C(=CCCN2CCC[C@H](C2)C(=O)O)C3=C(C=CS3)C",
+      "TPSA": 97,
+      "Title": "Tiagabine",
+      "XLogP": 2.7
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/60651/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 60651,
+      "Complexity": 636,
+      "ConnectivitySMILES": "CN1CCN(CC1)C2=C(C=C3C4=C2OCN(N4C=C(C3=O)C(=O)O)C)F",
+      "ExactMass": "362.13903326",
+      "HeavyAtomCount": 26,
+      "InChIKey": "BPFYOAJNDMUVBL-UHFFFAOYSA-N",
+      "MolecularFormula": "C17H19FN4O4",
+      "MolecularWeight": "362.4",
+      "SMILES": "CN1CCN(CC1)C2=C(C=C3C4=C2OCN(N4C=C(C3=O)C(=O)O)C)F",
+      "TPSA": 76.6,
+      "Title": "Marbofloxacin",
+      "XLogP": -0.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/60700/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 60700,
+      "Complexity": 867,
+      "ConnectivitySMILES": "CCC1(C2=C(COC1=O)C(=O)N3CC4=CC5=C(C=CC(=C5CN(C)C)O)N=C4C3=C2)O",
+      "ExactMass": "421.16377084",
+      "HeavyAtomCount": 31,
+      "InChIKey": "UCFGDBYHRUNTLO-QHCPKHFHSA-N",
+      "MolecularFormula": "C23H23N3O5",
+      "MolecularWeight": "421.4",
+      "SMILES": "CC[C@@]1(C2=C(COC1=O)C(=O)N3CC4=CC5=C(C=CC(=C5CN(C)C)O)N=C4C3=C2)O",
+      "TPSA": 103,
+      "Title": "Topotecan",
+      "XLogP": 0.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/60726/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 60726,
+      "Complexity": 366,
+      "ConnectivitySMILES": "C1=CC(=C(C(=C1)C(=O)C2=CC=C(C=C2)Br)N)CC(=O)O",
+      "ExactMass": "333.00006",
+      "HeavyAtomCount": 20,
+      "InChIKey": "ZBPLOVFIXSTCRZ-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H12BrNO3",
+      "MolecularWeight": "334.16",
+      "SMILES": "C1=CC(=C(C(=C1)C(=O)C2=CC=C(C=C2)Br)N)CC(=O)O",
+      "TPSA": 80.4,
+      "Title": "Bromfenac",
+      "XLogP": 3.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/60795/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 60795,
+      "Complexity": 559,
+      "ConnectivitySMILES": "C1CC(=O)NC2=C1C=CC(=C2)OCCCCN3CCN(CC3)C4=C(C(=CC=C4)Cl)Cl",
+      "ExactMass": "447.1480325",
+      "HeavyAtomCount": 30,
+      "InChIKey": "CEUORZQYGODEFX-UHFFFAOYSA-N",
+      "MolecularFormula": "C23H27Cl2N3O2",
+      "MolecularWeight": "448.4",
+      "SMILES": "C1CC(=O)NC2=C1C=CC(=C2)OCCCCN3CCN(CC3)C4=C(C(=CC=C4)Cl)Cl",
+      "TPSA": 44.8,
+      "Title": "Aripiprazole",
+      "XLogP": 4.6
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/60835/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 60835,
+      "Complexity": 312,
+      "ConnectivitySMILES": "CNCCC(C1=CC=CS1)OC2=CC=CC3=CC=CC=C32",
+      "ExactMass": "297.11873540",
+      "HeavyAtomCount": 21,
+      "InChIKey": "ZEUITGRIYCTCEM-KRWDZBQOSA-N",
+      "MolecularFormula": "C18H19NOS",
+      "MolecularWeight": "297.4",
+      "SMILES": "CNCC[C@@H](C1=CC=CS1)OC2=CC=CC3=CC=CC=C32",
+      "TPSA": 49.5,
+      "Title": "Duloxetine",
+      "XLogP": 4.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/60854/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 60854,
+      "Complexity": 573,
+      "ConnectivitySMILES": "C1CN(CCN1CCC2=C(C=C3C(=C2)CC(=O)N3)Cl)C4=NSC5=CC=CC=C54",
+      "ExactMass": "412.1124602",
+      "HeavyAtomCount": 28,
+      "InChIKey": "MVWVFYHBGMAFLY-UHFFFAOYSA-N",
+      "MolecularFormula": "C21H21ClN4OS",
+      "MolecularWeight": "412.9",
+      "SMILES": "C1CN(CCN1CCC2=C(C=C3C(=C2)CC(=O)N3)Cl)C4=NSC5=CC=CC=C54",
+      "TPSA": 76.7,
+      "Title": "Ziprasidone",
+      "XLogP": 4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/610479/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 610479,
+      "Complexity": 298,
+      "ConnectivitySMILES": "CC1=C(C=CC=C1Cl)NC2=CC=CC=C2C(=O)O",
+      "ExactMass": "261.0556563",
+      "HeavyAtomCount": 18,
+      "InChIKey": "YEZNLOUZAIOMLT-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H12ClNO2",
+      "MolecularWeight": "261.70",
+      "SMILES": "CC1=C(C=CC=C1Cl)NC2=CC=CC=C2C(=O)O",
+      "TPSA": 49.3,
+      "Title": "Tolfenamic Acid",
+      "XLogP": 5.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/6526/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 6526,
+      "Complexity": 119,
+      "ConnectivitySMILES": "CCC(C)(CC)OC(=O)N",
+      "ExactMass": "145.110278721",
+      "HeavyAtomCount": 10,
+      "InChIKey": "SLWGJZPKHAXZQL-UHFFFAOYSA-N",
+      "MolecularFormula": "C7H15NO2",
+      "MolecularWeight": "145.20",
+      "SMILES": "CCC(C)(CC)OC(=O)N",
+      "TPSA": 52.3,
+      "Title": "Emylcamate",
+      "XLogP": 1.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/65720/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 65720,
+      "Complexity": 441,
+      "ConnectivitySMILES": "C1C(C(=O)NO1)N=CC2=CC=C(C=C2)C=NC3CONC3=O",
+      "ExactMass": "302.10150494",
+      "HeavyAtomCount": 22,
+      "InChIKey": "ODKYYBOHSVLGNU-UHFFFAOYSA-N",
+      "MolecularFormula": "C14H14N4O4",
+      "MolecularWeight": "302.29",
+      "SMILES": "C1C(C(=O)NO1)N=CC2=CC=C(C=C2)C=NC3CONC3=O",
+      "TPSA": 101,
+      "Title": "4,4'-[1,4-Phenylenebis(methylidynenitrilo)]bis[3-isoxazolidinone]",
+      "XLogP": -0.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/65863/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 65863,
+      "Complexity": 488,
+      "ConnectivitySMILES": "C1=CC2=C(C(=C1)Cl)SC=C2COC(CN3C=CN=C3)C4=C(C=C(C=C4)Cl)Cl",
+      "ExactMass": "435.997067",
+      "HeavyAtomCount": 27,
+      "InChIKey": "JLGKQTAYUIMGRK-UHFFFAOYSA-N",
+      "MolecularFormula": "C20H15Cl3N2OS",
+      "MolecularWeight": "437.8",
+      "SMILES": "C1=CC2=C(C(=C1)Cl)SC=C2COC(CN3C=CN=C3)C4=C(C=C(C=C4)Cl)Cl",
+      "TPSA": 55.3,
+      "Title": "Sertaconazole",
+      "XLogP": 6.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/68406/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 68406,
+      "Complexity": 263,
+      "ConnectivitySMILES": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCO",
+      "ExactMass": "410.448766469",
+      "HeavyAtomCount": 29,
+      "InChIKey": "CNNRPFQICPFDPO-UHFFFAOYSA-N",
+      "MolecularFormula": "C28H58O",
+      "MolecularWeight": "410.8",
+      "SMILES": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCO",
+      "TPSA": 20.2,
+      "Title": "1-Octacosanol",
+      "XLogP": 13.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/68617/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 68617,
+      "Complexity": 322,
+      "ConnectivitySMILES": "CNC1CCC(C2=CC=CC=C12)C3=CC(=C(C=C3)Cl)Cl",
+      "ExactMass": "305.0738049",
+      "HeavyAtomCount": 20,
+      "InChIKey": "VGKDLMBJGBXTGI-SJCJKPOMSA-N",
+      "MolecularFormula": "C17H17Cl2N",
+      "MolecularWeight": "306.2",
+      "SMILES": "CN[C@H]1CC[C@H](C2=CC=CC=C12)C3=CC(=C(C=C3)Cl)Cl",
+      "TPSA": 12,
+      "Title": "Sertraline",
+      "XLogP": 4.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/68801/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 68801,
+      "Complexity": 487,
+      "ConnectivitySMILES": "CC1=CC(=NC=C1)NC(=O)C(C)C2=CC(=CC=C2)C(=O)C3=CC=CC=C3",
+      "ExactMass": "344.152477885",
+      "HeavyAtomCount": 26,
+      "InChIKey": "ASFKKFRSMGBFRO-UHFFFAOYSA-N",
+      "MolecularFormula": "C22H20N2O2",
+      "MolecularWeight": "344.4",
+      "SMILES": "CC1=CC(=NC=C1)NC(=O)C(C)C2=CC(=CC=C2)C(=O)C3=CC=CC=C3",
+      "TPSA": 59.1,
+      "Title": "Piketoprofen",
+      "XLogP": 4.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/68870/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 68870,
+      "Complexity": 654,
+      "ConnectivitySMILES": "CN1C2=CC=CC=C2C(C3=C(S1(=O)=O)C=C(C=C3)Cl)NCCCCCCC(=O)O",
+      "ExactMass": "436.1223562",
+      "HeavyAtomCount": 29,
+      "InChIKey": "JICJBGPOMZQUBB-UHFFFAOYSA-N",
+      "MolecularFormula": "C21H25ClN2O4S",
+      "MolecularWeight": "437.0",
+      "SMILES": "CN1C2=CC=CC=C2C(C3=C(S1(=O)=O)C=C(C=C3)Cl)NCCCCCCC(=O)O",
+      "TPSA": 95.1,
+      "Title": "Tianeptine",
+      "XLogP": 1.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/68942/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 68942,
+      "Complexity": 334,
+      "ConnectivitySMILES": "C1=CC=C2C(=C1)C(=O)C(C2=O)C3=CC=C(C=C3)F",
+      "ExactMass": "240.05865769",
+      "HeavyAtomCount": 18,
+      "InChIKey": "NASXCEITKQITLD-UHFFFAOYSA-N",
+      "MolecularFormula": "C15H9FO2",
+      "MolecularWeight": "240.23",
+      "SMILES": "C1=CC=C2C(=C1)C(=O)C(C2=O)C3=CC=C(C=C3)F",
+      "TPSA": 34.1,
+      "Title": "Fluindione",
+      "XLogP": 3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/6917779/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 6917779,
+      "Complexity": 295,
+      "ConnectivitySMILES": "CCN(CC)C(=O)C1(CC1CN)C2=CC=CC=C2",
+      "ExactMass": "246.173213330",
+      "HeavyAtomCount": 18,
+      "InChIKey": "GJJFMKBJSRMPLA-DZGCQCFKSA-N",
+      "MolecularFormula": "C15H22N2O",
+      "MolecularWeight": "246.35",
+      "SMILES": "CCN(CC)C(=O)[C@]1(C[C@H]1CN)C2=CC=CC=C2",
+      "TPSA": 46.3,
+      "Title": "Levomilnacipran",
+      "XLogP": 1.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/6918314/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 6918314,
+      "Complexity": 729,
+      "ConnectivitySMILES": "C1CN(CCN1CCCCC2=CNC3=C2C=C(C=C3)C#N)C4=CC5=C(C=C4)OC(=C5)C(=O)N",
+      "ExactMass": "441.21647512",
+      "HeavyAtomCount": 33,
+      "InChIKey": "SGEGOXDYSFKCPT-UHFFFAOYSA-N",
+      "MolecularFormula": "C26H27N5O2",
+      "MolecularWeight": "441.5",
+      "SMILES": "C1CN(CCN1CCCCC2=CNC3=C2C=C(C=C3)C#N)C4=CC5=C(C=C4)OC(=C5)C(=O)N",
+      "TPSA": 102,
+      "Title": "Vilazodone",
+      "XLogP": 4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/71616/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 71616,
+      "Complexity": 448,
+      "ConnectivitySMILES": "CC(C1=NC=NC=C1F)C(CN2C=NC=N2)(C3=C(C=C(C=C3)F)F)O",
+      "ExactMass": "349.11504457",
+      "HeavyAtomCount": 25,
+      "InChIKey": "BCEHBSKCWLPMDN-MGPLVRAMSA-N",
+      "MolecularFormula": "C16H14F3N5O",
+      "MolecularWeight": "349.31",
+      "SMILES": "C[C@@H](C1=NC=NC=C1F)[C@](CN2C=NC=N2)(C3=C(C=C(C=C3)F)F)O",
+      "TPSA": 76.7,
+      "Title": "Voriconazole",
+      "XLogP": 1.5
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/71771/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 71771,
+      "Complexity": 411,
+      "ConnectivitySMILES": "C1=CC=C(C(=C1)CC(=O)OCC(=O)O)NC2=C(C=CC=C2Cl)Cl",
+      "ExactMass": "353.0221633",
+      "HeavyAtomCount": 23,
+      "InChIKey": "MNIPYSSQXLZQLJ-UHFFFAOYSA-N",
+      "MolecularFormula": "C16H13Cl2NO4",
+      "MolecularWeight": "354.2",
+      "SMILES": "C1=CC=C(C(=C1)CC(=O)OCC(=O)O)NC2=C(C=CC=C2Cl)Cl",
+      "TPSA": 75.6,
+      "Title": "Aceclofenac",
+      "XLogP": 4.3
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/896/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 896,
+      "Complexity": 270,
+      "ConnectivitySMILES": "CC(=O)NCCC1=CNC2=C1C=C(C=C2)OC",
+      "ExactMass": "232.121177757",
+      "HeavyAtomCount": 17,
+      "InChIKey": "DRLFMBDRBRZALE-UHFFFAOYSA-N",
+      "MolecularFormula": "C13H16N2O2",
+      "MolecularWeight": "232.28",
+      "SMILES": "CC(=O)NCCC1=CNC2=C1C=C(C=C2)OC",
+      "TPSA": 54.1,
+      "Title": "Melatonin",
+      "XLogP": 0.8
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/936/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 936,
+      "Complexity": 114,
+      "ConnectivitySMILES": "C1=CC(=CN=C1)C(=O)N",
+      "ExactMass": "122.048012819",
+      "HeavyAtomCount": 9,
+      "InChIKey": "DFPAKSUCGFBDDF-UHFFFAOYSA-N",
+      "MolecularFormula": "C6H6N2O",
+      "MolecularWeight": "122.12",
+      "SMILES": "C1=CC(=CN=C1)C(=O)N",
+      "TPSA": 56,
+      "Title": "Nicotinamide",
+      "XLogP": -0.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/9444/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 9444,
+      "Complexity": 384,
+      "ConnectivitySMILES": "C1=NC(=NC(=O)N1C2C(C(C(O2)CO)O)O)N",
+      "ExactMass": "244.08076950",
+      "HeavyAtomCount": 17,
+      "InChIKey": "NMUSYJAQQFHJEW-KVTDHHQDSA-N",
+      "MolecularFormula": "C8H12N4O5",
+      "MolecularWeight": "244.20",
+      "SMILES": "C1=NC(=NC(=O)N1[C@H]2[C@@H]([C@@H]([C@H](O2)CO)O)O)N",
+      "TPSA": 141,
+      "Title": "Azacytidine",
+      "XLogP": -2.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/9881504/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 9881504,
+      "Complexity": 347,
+      "ConnectivitySMILES": "C1C(C2=CC=CC=C2N(C3=CC=CC=C31)C(=O)N)O",
+      "ExactMass": "254.105527694",
+      "HeavyAtomCount": 19,
+      "InChIKey": "BMPDWHIDQYTSHX-AWEZNQCLSA-N",
+      "MolecularFormula": "C15H14N2O2",
+      "MolecularWeight": "254.28",
+      "SMILES": "C1[C@@H](C2=CC=CC=C2N(C3=CC=CC=C31)C(=O)N)O",
+      "TPSA": 66.6,
+      "Title": "Eslicarbazepine",
+      "XLogP": 1.4
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/cid/9966051/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {
+   "PropertyTable": {
+    "Properties": [
+     {
+      "CID": 9966051,
+      "Complexity": 316,
+      "ConnectivitySMILES": "CC1=CC(=C(C=C1)SC2=CC=CC=C2N3CCNCC3)C",
+      "ExactMass": "298.15036988",
+      "HeavyAtomCount": 21,
+      "InChIKey": "YQNWZWMKLDQSAC-UHFFFAOYSA-N",
+      "MolecularFormula": "C18H22N2S",
+      "MolecularWeight": "298.4",
+      "SMILES": "CC1=CC(=C(C=C1)SC2=CC=CC=C2N3CCNCC3)C",
+      "TPSA": 40.6,
+      "Title": "Vortioxetine",
+      "XLogP": 4.2
+     }
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/1-Octacosanol/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     68406
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/AMIKACIN/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     37768
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Actinomycin%20D/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     457193
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Alitretinoin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     449171
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Altretamine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2123
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Amiloxate/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     1549789
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Amoxapine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2170
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Arbutin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     440936
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Aripiprazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     60795
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Azacitidine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     9444
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/BEDAQUILINE/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5388906
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Brexpiprazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     11978813
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Bupropion/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     444
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Busulfan/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2478
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Butenafine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2484
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/CLOFAZIMINE/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2794
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Carbamazepine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2554
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Cariprazine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     11154555
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Carmustine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2578
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Citalopram/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2771
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Clomipramine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2801
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Clonazepam/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2802
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Clotrimazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2812
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Cyclophosphamide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2907
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Dacarbazine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     135398738
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Deguelin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     107935
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Desipramine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2995
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Desvenlafaxine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     125017
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Dexamethasone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5743
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Dextromethorphan/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5360696
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Diazepam/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3016
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Diclofenac/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3033
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Docetaxel/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     148124
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Duloxetine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     60835
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/ETHAMBUTOL/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     14052
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/ETHIONAMIDE/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2761171
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Econazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3198
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Emylcamate/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     6526
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Escitalopram/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     146570
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Eslicarbazepine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     9881504
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Ethosuximide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3291
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Etoposide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     36462
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Felbamate/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3331
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Florfenicol/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     114811
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Fluconazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3365
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Fluindione/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     68942
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Fluoxetine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3386
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Fluvoxamine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5324346
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Fosphenytoin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     56339
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Gabapentin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3446
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Gepirone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     55191
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/ISONIAZID/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3767
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Ifosfamide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3690
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Imipramine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3696
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Imiquimod/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     57469
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Isocarboxazid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3759
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Ketamine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3821
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/L-threonic%20acid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5460407
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/LEVOFLOXACIN/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     149096
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/LINEZOLID/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     441401
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Lacosamide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     219078
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Lamotrigine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3878
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Levalbuterol/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     123600
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Levetiracetam/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5284583
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Levomilnacipran/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     6917779
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Lorazepam/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3958
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/MOXIFLOXACIN/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     152946
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Maprotiline/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4011
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Marbofloxacin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     60651
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Mechlorethamine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4033
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Melatonin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     896
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Menthyl%20Salicylate/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     20055232
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Methotrexate/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     126941
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Metronidazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4173
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Mianserin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4184
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Miconazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4189
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Mirtazapine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4205
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Nefazodone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4449
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Nicotinamide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     936
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Nitroxoline/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     19910
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Nortriptyline/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4543
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Olanzapine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     135398745
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Oxcarbazepine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     34312
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Oxiconazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5353853
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/PYRAZINAMIDE/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     1046
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Paclitaxel/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     36314
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Paroxetine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     43815
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Phenelzine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3675
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Phenobarbital/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4763
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Podophyllotoxin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     10607
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Prednisone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5865
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Pregabalin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5486971
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Procarbazine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4915
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Reboxetine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     127151
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Sertaconazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     65863
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Sertraline/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     68617
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Simvastatin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     54454
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Sonidegib/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     24775005
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/TERIZIDONE/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     65720
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Tamoxifen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2733526
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Tavaborole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     11499245
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Tazarotene/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5381
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Temozolomide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5394
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Terbinafine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     1549008
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Thiotepa/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5453
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Tiagabine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     60648
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Tianeptine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     68870
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Tirbanibulin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     23635314
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Tizanidine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5487
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Topotecan/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     60700
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Tranylcypromine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5530
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Trazodone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5533
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Valproate/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3549980
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Valproic%20acid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3121
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Venlafaxine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5656
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Vilazodone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     6918314
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Voriconazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     71616
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Vorinostat/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5311
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Vortioxetine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     9966051
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/Zonisamide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5734
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/aceclofenac/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     71771
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/apremilast/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     11561674
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/aripiprazole%20lauroxil/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     49831411
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/aripiprazole/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     60795
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/asenapine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     163091
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/baricitinib/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     44205240
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/benoxaprofen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     39941
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/bromfenac/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     60726
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/bufexamac/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2466
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/carbamazepine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2554
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/cariprazine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     11154555
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/carprofen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2581
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/celecoxib/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2662
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/clonixin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     28718
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/clozapine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     135398737
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/cyclophosphamide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     2907
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/cyclosporine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5284373
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/dexibuprofen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     39912
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/diclofenac/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3033
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/diflunisal/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3059
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/doxycycline/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     54671203
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/etodolac/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3308
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/fenbufen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3335
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/feprazone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     35455
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/flufenamic%20acid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3371
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/flurbiprofen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3394
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/glucosamine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     439213
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/haloperidol/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3559
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/hydroxychloroquine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3652
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/ibuprofen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3672
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/imipenem/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     104838
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/indomethacin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3715
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/ketorolac/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3826
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/lamotrigine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3878
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/leflunomide/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3899
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/lumateperone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     21302490
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/lumiracoxib/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     151166
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/lurasidone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     213046
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/meclofenamate/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4037
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/meclofenamic%20acid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4037
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/mefenamic%20acid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4044
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/meloxicam/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     54677470
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/methotrexate/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     126941
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/minocycline/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     54675783
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/nabumetone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4409
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/naproxen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     156391
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/olanzapine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     135398745
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/oxaprozin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4614
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/oxcarbazepine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     34312
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/oxyphenbutazone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4641
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/p-AMINOSALICYLIC%20ACID/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4649
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/paliperidone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     115237
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/paroxetine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     43815
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/phenylbutazone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4781
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/phenytoin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     1775
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/piketoprofen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     68801
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/piroxicam/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     54676228
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/pranoprofen/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     4888
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/quetiapine/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5002
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/risperidone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5073
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/rofecoxib/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5090
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/sulindac/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     1548887
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/tacrolimus/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     445643
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/tenoxicam/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     54677971
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/tiaprofenic%20acid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5468
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/tolfenamic%20acid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     610479
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/tolmetin/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     5509
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/upadacitinib/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     58557659
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/valproic%20acid/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     3121
+    ]
+   }
+  },
+  "status": 200
+ },
+ "/compound/name/ziprasidone/cids/JSON": {
+  "json": {
+   "IdentifierList": {
+    "CID": [
+     60854
+    ]
+   }
+  },
+  "status": 200
+ }
+}

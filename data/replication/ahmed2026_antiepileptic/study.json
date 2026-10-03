@@ -1,0 +1,945 @@
+{
+  "schema_version": 1,
+  "study_key": "ahmed2026_antiepileptic",
+  "shortlist_row": 9,
+  "status": "reserve",
+  "citation": {
+    "authors": [
+      "Ahmed, Wakeel",
+      "Zaman, Shahid",
+      "Abd-Elmonem, Assmaa",
+      "Siddig, Nagat A. A.",
+      "Belay, Melaku Berhe"
+    ],
+    "title": "Integrating fuzzy logic and neural networks with multi-criteria decision-making for intelligent evaluation of drug compound design attributes",
+    "journal": "Scientific Reports",
+    "year": 2026,
+    "volume": "16",
+    "article_number": "21878",
+    "doi": "10.1038/s41598-026-49153-3",
+    "pmcid": "PMC13365560",
+    "pmid": "42129246",
+    "first_publication_date": "2026-05-13"
+  },
+  "licence": {
+    "spdx": "CC-BY-NC-ND-4.0",
+    "statement_verbatim": "© The Author(s) 20262026https://creativecommons.org/licenses/by-nc-nd/4.0/Open Access This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if you modified the licensed material. You do not have permission under this licence to share adapted material derived from this article or parts of it. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.",
+    "data_redistribution": "withheld",
+    "note": "the shortlist assumed CC BY; the article is CC BY-NC-ND 4.0, so property values are not redistributed"
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13365560/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "d916e2e2cce6c69bbbbc9504f08221fce8738e8e213049fc7618dd66202e8252",
+    "other_sources": [
+      "https://github.com/TamseelaRana/wakeel-Ahmed (linked in the article; not inspected)"
+    ],
+    "properties_sha256": "35948157b035363db1b34f06c8b4cd1e7b41e989bd9a735ab167238639dd56b8"
+  },
+  "n_reported": 20,
+  "n_reported_source": "Introduction: 'twenty epilepsy drugs ... denoted as A1, ..., A20'",
+  "drug_list_source": "Introduction (text) maps A1-A20 to names; Tables 3 and 5 use the codes",
+  "property_table": {
+    "xml_table_id": "Tab5",
+    "skip_rows": 1,
+    "label_column": 0,
+    "columns": [
+      {
+        "property": "D",
+        "column": 1
+      },
+      {
+        "property": "IR",
+        "column": 2
+      },
+      {
+        "property": "MR",
+        "column": 3
+      },
+      {
+        "property": "HBA",
+        "column": 4
+      },
+      {
+        "property": "HBD",
+        "column": 5
+      },
+      {
+        "property": "LogD",
+        "column": 6
+      },
+      {
+        "property": "BCF",
+        "column": 7
+      },
+      {
+        "property": "POL",
+        "column": 8
+      },
+      {
+        "property": "ST",
+        "column": 9
+      },
+      {
+        "property": "MV",
+        "column": 10
+      }
+    ],
+    "label": "Table 5",
+    "caption_verbatim": "The physicochemical properties of drugs used in the treatment of Epilipse.",
+    "header_rows_verbatim": [
+      [
+        "Drugs",
+        "D",
+        "IR",
+        "MR",
+        "HBA",
+        "HBD",
+        "LogD",
+        "BCF",
+        "POL",
+        "ST",
+        "MV"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "D",
+      "name_verbatim": "density (D)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "IR",
+      "name_verbatim": "index of refractivity (IR)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MR",
+      "name_verbatim": "molar refractivity (MR)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "HBA",
+      "name_verbatim": "hbond acceptor (HBA)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "ChemSpider ACD/Labs H-bond acceptor count"
+    },
+    {
+      "code": "HBD",
+      "name_verbatim": "hbond donor (HBD)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "ChemSpider ACD/Labs H-bond donor count"
+    },
+    {
+      "code": "LogD",
+      "name_verbatim": "acd/logd (logD)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "named ACD/LogD in the text"
+    },
+    {
+      "code": "BCF",
+      "name_verbatim": "acd/bcf (BCF)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "named ACD/BCF in the text"
+    },
+    {
+      "code": "POL",
+      "name_verbatim": "polarizability (POL)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "ST",
+      "name_verbatim": "surface tension (ST)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MV",
+      "name_verbatim": "molar volume (MV)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Ten key physicochemical properties were retrieved from authoritative databases ... (Source: ChemSpider)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "M1",
+      "name_verbatim": "First Zagreb Index",
+      "formula_verbatim": "$M1(G) = \\sum _{mn\\in E(G)}(M_u + M_v)$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "M2",
+      "name_verbatim": "Second Zagreb Index",
+      "formula_verbatim": "$M2(G) = \\sum _{mn\\in E(G)}(M_u * M_v)$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "H",
+      "name_verbatim": "Harmonic Index",
+      "formula_verbatim": "$H(G) = \\sum _{mn\\in E(G)}\\frac{2}{(M_u + M_v)}$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "F",
+      "name_verbatim": "Forgotten Index",
+      "formula_verbatim": "$F(G) = \\sum _{mn\\in E(G)}[(M_u)^2 + (M_v)^2]$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "SS",
+      "name_verbatim": "Shilpa-Shanmukha Index",
+      "formula_verbatim": "$SS(G) = \\sum _{mn\\in E(G)}\\sqrt{\\frac{M_{u}* M_{v}}{M_u + M_v}}$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ABC",
+      "name_verbatim": "Atom Bond Connectivity Index",
+      "formula_verbatim": "$ABC(G) = \\sum _{mn\\in E(G)}\\sqrt{\\frac{M_{u}+ M_{v} -2}{M_{u}*M_{v}}}$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "RI",
+      "name_verbatim": "Randic Index",
+      "formula_verbatim": "$RI(G) = \\sum _{mn\\in E(G)}\\frac{1}{\\sqrt{M_u * M_v}}$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "SC",
+      "name_verbatim": "Sum Connectivity Index",
+      "formula_verbatim": "$SC(G) = \\sum _{mn\\in E(G)}\\frac{1}{\\sqrt{M_u + M_v}}$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "GA",
+      "name_verbatim": "Geometric Arithmetic Index",
+      "formula_verbatim": "$GA(G) = \\sum _{mn \\in E(G)} 2\\frac{\\sqrt{M_u * M_v}}{M_u + M_v}$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "HZ",
+      "name_verbatim": "Hyper Zagreb Index",
+      "formula_verbatim": "$HZ(G) = \\sum _{mn \\in E(G)} (M_u + M_v)^2$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ReZ1",
+      "name_verbatim": "Redefined First Zagreb Index",
+      "formula_verbatim": "$ReZ1(G) = \\sum _{mn\\in E(G)}\\frac{M_u * M_v}{M_u + M_v}$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ReZ2",
+      "name_verbatim": "Redefined Second Zagreb Index",
+      "formula_verbatim": "$ReZ2(G) = \\sum _{mn\\in E(G)}(M_u * M_v )* (M_u + M_v)$",
+      "family": "unclear (titled eccentricity based; M_u is not defined)",
+      "source": "Table 1"
+    }
+  ],
+  "index_values_table": "Table 3",
+  "index_computation": "RDKit graphs (text); Table 1 is titled 'Eccentricity based topological indices' but the formulas use M_u, which is not defined (the worked example uses edge partitions such as (6,7), i.e. neighborhood-degree-like values)",
+  "models": [
+    {
+      "id": "Tab9-ann-D",
+      "property": "D",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.0014",
+        "MAE": "0.0205",
+        "RMSE": "0.0375",
+        "R2": "0.9576"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-IR",
+      "property": "IR",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.0009",
+        "MAE": "0.0173",
+        "RMSE": "0.03",
+        "R2": "0.8837"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-MR",
+      "property": "MR",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.7344",
+        "MAE": "0.5905",
+        "RMSE": "0.8569",
+        "R2": "0.9975"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-HBA",
+      "property": "HBA",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.0601",
+        "MAE": "0.1734",
+        "RMSE": "0.2452",
+        "R2": "0.9681"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-HBD",
+      "property": "HBD",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.2154",
+        "MAE": "0.2915",
+        "RMSE": "0.4642",
+        "R2": "0.7823"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-LogD",
+      "property": "LogD",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.4814",
+        "MAE": "0.4221",
+        "RMSE": "0.6938",
+        "R2": "0.8051"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-BCF",
+      "property": "BCF",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "103.6332",
+        "MAE": "4.823",
+        "RMSE": "10.18",
+        "R2": "0.8010"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-POL",
+      "property": "POL",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.5535",
+        "MAE": "0.4575",
+        "RMSE": "0.7439",
+        "R2": "0.9883"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-ST",
+      "property": "ST",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "30.8496",
+        "MAE": "3.4867",
+        "RMSE": "5.5542",
+        "R2": "0.8084"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-ann-MV",
+      "property": "MV",
+      "form": "ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "47.8258",
+        "MAE": "3.9828",
+        "RMSE": "6.9156",
+        "R2": "0.9690"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). "
+    },
+    {
+      "id": "Tab9-fuzzy_ann-D",
+      "property": "D",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.0012",
+        "MAE": "0.02",
+        "RMSE": "0.0352",
+        "R2": "0.96271"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-IR",
+      "property": "IR",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.0001",
+        "MAE": "0.0083",
+        "RMSE": "0.0134",
+        "R2": "0.9767"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-MR",
+      "property": "MR",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "1.6771",
+        "MAE": "1.0307",
+        "RMSE": "1.295",
+        "R2": "0.9944"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-HBA",
+      "property": "HBA",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.0581",
+        "MAE": "0.1775",
+        "RMSE": "0.241",
+        "R2": "0.9692"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-HBD",
+      "property": "HBD",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.2356",
+        "MAE": "0.3557",
+        "RMSE": "0.4854",
+        "R2": "0.7619"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-LogD",
+      "property": "LogD",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.29",
+        "MAE": "0.2924",
+        "RMSE": "0.5385",
+        "R2": "0.8825"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-BCF",
+      "property": "BCF",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "58.166",
+        "MAE": "3.7825",
+        "RMSE": "7.6266",
+        "R2": "0.8883"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-POL",
+      "property": "POL",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.3995",
+        "MAE": "0.4562",
+        "RMSE": "0.632",
+        "R2": "0.9915"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-ST",
+      "property": "ST",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "4.1282",
+        "MAE": "1.4295",
+        "RMSE": "2.0318",
+        "R2": "0.9743"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    },
+    {
+      "id": "Tab9-fuzzy_ann-MV",
+      "property": "MV",
+      "form": "fuzzy_ann",
+      "predictors": [
+        "M1",
+        "M2",
+        "H",
+        "F",
+        "SS",
+        "ABC",
+        "RI",
+        "SC",
+        "GA",
+        "HZ",
+        "ReZ1",
+        "ReZ2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "80.7197",
+        "MAE": "6.2202",
+        "RMSE": "8.9844",
+        "R2": "0.9478"
+      },
+      "fit": "in_sample",
+      "source": "Table 9",
+      "note": "fit type not stated (text mentions 5-fold CV; Tables 7-8 give predictions for all 20 drugs). Second block is labelled \"Metrics for Traditional Artificial Neural Network\" again; by the caption and order it is the fuzzy ANN."
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "cross-validation",
+      "detail": "'5k fold cross-validation' mentioned; folds and whether Table 9 is in-sample or CV are not stated",
+      "source": "Methods"
+    },
+    {
+      "what": "hyperparameters",
+      "detail": "Table 6: ReLU, batch 32, epochs 100-1000 (ANN) / 200-1000 (FANN), Adam, MSE; FANN Gaussian membership 3-7 per input, Mamdani/Sugeno, weighted-average defuzzification; hidden layers not stated",
+      "source": "Table 6"
+    },
+    {
+      "what": "code",
+      "detail": "a GitHub repository is linked (github.com/TamseelaRana/wakeel-Ahmed); not inspected",
+      "source": "text link"
+    }
+  ],
+  "reported_tables": [],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "issue",
+      "detail": "20 codes, 19 distinct drugs."
+    },
+    {
+      "check": "licence",
+      "result": "issue",
+      "detail": "CC BY-NC-ND 4.0, not CC BY as the shortlist assumed: property values withheld."
+    },
+    {
+      "check": "index family",
+      "result": "issue",
+      "detail": "Table 1 is titled 'Eccentricity based topological indices' but every formula uses M_u, which is not defined; the worked example uses neighborhood-degree-like edge partitions."
+    },
+    {
+      "check": "identical index rows",
+      "result": "info",
+      "detail": "Oxcarbazepine (A12) and eslicarbazepine (A14) have identical index rows, as expected for the same hydrogen-suppressed graph; their properties differ."
+    },
+    {
+      "check": "Table 9 labels",
+      "result": "issue",
+      "detail": "Both blocks of Table 9 are labelled 'Metrics for Traditional Artificial Neural Network'; the second is presumably the fuzzy ANN."
+    },
+    {
+      "check": "missing values",
+      "result": "ok",
+      "detail": "No missing property values (local re-extraction)."
+    }
+  ],
+  "resolution_issues": [
+    "Lacosamide is listed twice (A10 and A18); both resolve to CID 219078 and have identical rows in Tables 3 and 5. Effective n = 19.",
+    "The Methods repeat the drug list without zonisamide (19 names, lacosamide twice)."
+  ],
+  "reproducibility": {
+    "verdict": "not_reproducible",
+    "reasons": [
+      "ANN/FANN architecture (layers, units, epochs actually used, seeds) and the evaluation protocol for Table 9 are not specified",
+      "the index family is ambiguous (M_u undefined; titled eccentricity based)",
+      "lacosamide appears twice (A10, A18) and zonisamide is missing from the second drug list, so the effective n is 19",
+      "the drug list and ChemSpider property values could still feed the size-baseline and CV chain of Experiment D"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 20,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 20
+    },
+    "duplicate_structures": [
+      [
+        "10",
+        "18"
+      ]
+    ],
+    "shared_connectivity_groups": [
+      [
+        "10",
+        "18"
+      ]
+    ],
+    "formula_checked": 0,
+    "formula_mismatch": [],
+    "cid_checked": 0,
+    "cid_mismatch": [],
+    "properties": "withheld (licence); run `extract` to rebuild locally"
+  }
+}

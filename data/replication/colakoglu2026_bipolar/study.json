@@ -1,0 +1,1400 @@
+{
+  "schema_version": 1,
+  "study_key": "colakoglu2026_bipolar",
+  "shortlist_row": 1,
+  "status": "proposed",
+  "citation": {
+    "authors": [
+      "Çolakoğlu, Özge",
+      "Benjamin, Anthuvan Joseph"
+    ],
+    "title": "Interpretable QSPR Modeling of Bipolar Disorder Drugs Using Topological Indices and Machine Learning Regression",
+    "journal": "ACS Omega",
+    "year": 2026,
+    "volume": "11",
+    "article_number": "53404",
+    "doi": "10.1021/acsomega.6c06753",
+    "pmcid": "PMC13563987",
+    "pmid": "42729831",
+    "first_publication_date": "2026-08-27"
+  },
+  "licence": {
+    "spdx": "CC-BY-4.0",
+    "statement_verbatim": "© 2026 The Authors. Published by American Chemical SocietyThis article is licensed under CC-BY 4.0",
+    "data_redistribution": "stored",
+    "note": ""
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13563987/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "f40a5ae5325f9a049a95326eb7a3e5cf92e79f6de08e2d2fc14755e509e2b55e",
+    "other_sources": [],
+    "properties_sha256": "a2d33d2cd03fba4bab9fc180f280f910c29fbaed1ff760d06683ce5723c3bd3b"
+  },
+  "n_reported": 18,
+  "n_reported_source": "Abstract: 'computed for 18 drugs used to treat bipolar disorder'; Discussion: 'n = 18'",
+  "drug_list_source": "Drugs section (text) maps the codes BD1-BD18 to names; Table 2 uses the codes",
+  "property_table": {
+    "xml_table_id": "tbl2",
+    "skip_rows": 1,
+    "label_column": 0,
+    "columns": [
+      {
+        "property": "BP",
+        "column": 1
+      },
+      {
+        "property": "EoV",
+        "column": 2
+      },
+      {
+        "property": "FP",
+        "column": 3
+      },
+      {
+        "property": "MR",
+        "column": 4
+      },
+      {
+        "property": "POL",
+        "column": 5
+      },
+      {
+        "property": "MV",
+        "column": 6
+      },
+      {
+        "property": "MW",
+        "column": 7
+      },
+      {
+        "property": "COM",
+        "column": 8
+      },
+      {
+        "property": "HAC",
+        "column": 9
+      }
+    ],
+    "label": "Table 2",
+    "caption_verbatim": "Properties of Bipolar Disorder Drugs",
+    "header_rows_verbatim": [
+      [
+        "BDs",
+        "BP",
+        "EoV",
+        "FP",
+        "MR",
+        "POL",
+        "MV",
+        "MW",
+        "COM",
+        "HAC"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "BP",
+      "name_verbatim": "boiling point (BP)",
+      "unit_verbatim": "°C at 760 mmHg",
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. Aripiprazole BP/EoV/FP/MR/POL/MV equal the values in Godlin & Radha 2026 (study godlin2026_mdd), which states ACD/Labs Percepta via ChemSpider."
+    },
+    {
+      "code": "EoV",
+      "name_verbatim": "enthalpy of vaporization (EoV)",
+      "unit_verbatim": "kJ mol–1",
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "FP",
+      "name_verbatim": "flash point (FP)",
+      "unit_verbatim": "°C",
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MR",
+      "name_verbatim": "molar refractivity (MR)",
+      "unit_verbatim": "cm3",
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "POL",
+      "name_verbatim": "polarizability (POL)",
+      "unit_verbatim": "10–24 cm3",
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MV",
+      "name_verbatim": "molar volume (MV)",
+      "unit_verbatim": "cm3",
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MW",
+      "name_verbatim": "molecular weight (MW)",
+      "unit_verbatim": "g mol–1",
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "computed_pubchem",
+      "source_evidence": "compared with PubChem MolecularWeight (automated_checks)",
+      "pubchem_field": "MolecularWeight"
+    },
+    {
+      "code": "COM",
+      "name_verbatim": "molecular complexity (COM)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "computed_pubchem",
+      "source_evidence": "compared with PubChem Complexity (automated_checks)",
+      "pubchem_field": "Complexity"
+    },
+    {
+      "code": "HAC",
+      "name_verbatim": "heavy atom count (HAC)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'obtained from PubChem and ChemSpider'",
+      "source_label": "computed_pubchem",
+      "source_evidence": "compared with PubChem HeavyAtomCount (automated_checks)",
+      "pubchem_field": "HeavyAtomCount"
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "M1",
+      "name_verbatim": "first Zagreb index",
+      "formula_verbatim": "M 1(Γ) = ∑τq∈E(Γ) (d τ + d q)",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "M2",
+      "name_verbatim": "second Zagreb index",
+      "formula_verbatim": "M 2(Γ) = ∑τq∈E(Γ) d τ d q",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "F",
+      "name_verbatim": "forgotten index",
+      "formula_verbatim": "$F(Γ)=∑_{τq∈E(Γ)}(d_{τ}^{2}+d_{q}^{2})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "SDD",
+      "name_verbatim": "symmetric division degree index",
+      "formula_verbatim": "$SDD(Γ)=∑_{τq∈E(Γ)}(d_{τ}^{2}+d_{q}^{2})/(d_{τ}d_{q})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ISI",
+      "name_verbatim": "inverse sum indeg index",
+      "formula_verbatim": "$ISI(Γ)=∑_{τq∈E(Γ)}(d_{τ}d_{q})/(d_{τ}+d_{q})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "H",
+      "name_verbatim": "harmonic index",
+      "formula_verbatim": "$H(Γ)=∑_{τq∈E(Γ)}(2)/(d_{τ}+d_{q})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "SC",
+      "name_verbatim": "sum connectivity index",
+      "formula_verbatim": "$SC(Γ)=∑_{τq∈E(Γ)}(1)/(sqrt(d_{τ}+d_{q}))$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "R",
+      "name_verbatim": "Randić index",
+      "formula_verbatim": "$R(Γ)=∑_{τq∈E(Γ)}(1)/(sqrt(d_{τ}d_{q}))$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "σ",
+      "name_verbatim": "sigma index",
+      "formula_verbatim": "$σ(Γ)=∑_{τq∈E(Γ)}(d_{τ}−d_{q})^{2}$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "SO",
+      "name_verbatim": "Sombor index",
+      "formula_verbatim": "$SO(Γ)=∑_{τq∈E(Γ)}sqrt(d_{τ}^{2}+d_{q}^{2})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ABC",
+      "name_verbatim": "atom-bond connectivity index",
+      "formula_verbatim": "$ABC(Γ)=∑_{τq∈E(Γ)}sqrt((d_{τ}+d_{q}−2)/(d_{τ}d_{q}))$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ABS",
+      "name_verbatim": "atom-bond sum-connectivity index",
+      "formula_verbatim": "$ABS(Γ)=∑_{τq∈E(Γ)}sqrt((d_{τ}+d_{q}−2)/(d_{τ}+d_{q}))$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "AZ",
+      "name_verbatim": "augmented Zagreb index",
+      "formula_verbatim": "$AZ(Γ)=∑_{τq∈E(Γ)}((d_{τ}d_{q})/(d_{τ}+d_{q}−2))^{3}$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "M1*",
+      "name_verbatim": "first Zagreb index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "M2*",
+      "name_verbatim": "second Zagreb index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "F*",
+      "name_verbatim": "forgotten index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "SDD*",
+      "name_verbatim": "symmetric division degree index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "ISI*",
+      "name_verbatim": "inverse sum indeg index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "H*",
+      "name_verbatim": "harmonic index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "SC*",
+      "name_verbatim": "sum connectivity index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "R*",
+      "name_verbatim": "Randić index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "σ*",
+      "name_verbatim": "sigma index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "SO*",
+      "name_verbatim": "Sombor index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "ABC*",
+      "name_verbatim": "atom-bond connectivity index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "ABS*",
+      "name_verbatim": "atom-bond sum-connectivity index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    },
+    {
+      "symbol_verbatim": "AZ*",
+      "name_verbatim": "augmented Zagreb index (neighborhood-degree-sum version)",
+      "formula_verbatim": "Table 1 formula with the vertex degree d replaced by the neighborhood-degree-sum S (text, section on topological indices)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 + text"
+    }
+  ],
+  "index_values_table": "Tables 5 (degree) and 6 (neighborhood-degree-sum); edge partitions in Tables 3-4",
+  "index_computation": "hydrogen-suppressed molecular graphs; edge-partition counts (Tables 3-4) times the index function",
+  "models": [
+    {
+      "id": "T9-BP",
+      "property": "BP",
+      "form": "ridge",
+      "predictors": [
+        "SDD",
+        "AZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "2771.34424",
+        "RMSE": "52.64356",
+        "R2": "0.80559"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T9-EoV",
+      "property": "EoV",
+      "form": "ridge",
+      "predictors": [
+        "M2",
+        "SDD"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "32.89351",
+        "RMSE": "5.73529",
+        "R2": "0.83784"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T9-FP",
+      "property": "FP",
+      "form": "ridge",
+      "predictors": [
+        "ABC",
+        "AZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "835.49982",
+        "RMSE": "28.90501",
+        "R2": "0.82422"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T9-MR",
+      "property": "MR",
+      "form": "ridge",
+      "predictors": [
+        "R",
+        "AZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "29.24562",
+        "RMSE": "5.40792",
+        "R2": "0.97029"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T9-POL",
+      "property": "POL",
+      "form": "ridge",
+      "predictors": [
+        "M2",
+        "R"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "3.59574",
+        "RMSE": "1.89624",
+        "R2": "0.97589"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T9-MV",
+      "property": "MV",
+      "form": "ridge",
+      "predictors": [
+        "M2",
+        "R"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "601.71363",
+        "RMSE": "24.52985",
+        "R2": "0.9325"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T9-MW",
+      "property": "MW",
+      "form": "ridge",
+      "predictors": [
+        "R",
+        "AZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "247.37188",
+        "RMSE": "15.72806",
+        "R2": "0.98027"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T9-COM",
+      "property": "COM",
+      "form": "ridge",
+      "predictors": [
+        "F",
+        "AZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "2167.17332",
+        "RMSE": "46.55291",
+        "R2": "0.94226"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T9-HAC",
+      "property": "HAC",
+      "form": "ridge",
+      "predictors": [
+        "R",
+        "σ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.03306",
+        "RMSE": "0.18183",
+        "R2": "0.99943"
+      },
+      "fit": "loocv",
+      "source": "Table 9",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-BP",
+      "property": "BP",
+      "form": "ridge",
+      "predictors": [
+        "SO*",
+        "AZ*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "2824.14948",
+        "RMSE": "53.14273",
+        "R2": "0.80188"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-EoV",
+      "property": "EoV",
+      "form": "ridge",
+      "predictors": [
+        "SO*",
+        "AZ*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "32.79377",
+        "RMSE": "5.72658",
+        "R2": "0.83833"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-FP",
+      "property": "FP",
+      "form": "ridge",
+      "predictors": [
+        "SO*",
+        "AZ*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "824.55624",
+        "RMSE": "28.71509",
+        "R2": "0.82652"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-MR",
+      "property": "MR",
+      "form": "ridge",
+      "predictors": [
+        "SC*",
+        "H*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "28.15195",
+        "RMSE": "5.30584",
+        "R2": "0.9714"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-POL",
+      "property": "POL",
+      "form": "ridge",
+      "predictors": [
+        "SC*",
+        "H*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "3.1751",
+        "RMSE": "1.78188",
+        "R2": "0.97871"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-MV",
+      "property": "MV",
+      "form": "ridge",
+      "predictors": [
+        "R*",
+        "ISI*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "470.2498",
+        "RMSE": "21.68524",
+        "R2": "0.94725"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-MW",
+      "property": "MW",
+      "form": "ridge",
+      "predictors": [
+        "F*",
+        "SDD*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "236.00097",
+        "RMSE": "15.36232",
+        "R2": "0.98118"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-COM",
+      "property": "COM",
+      "form": "ridge",
+      "predictors": [
+        "ABS*",
+        "σ*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "2007.93705",
+        "RMSE": "44.81001",
+        "R2": "0.9465"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T10-HAC",
+      "property": "HAC",
+      "form": "ridge",
+      "predictors": [
+        "R*",
+        "SDD*"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MSE": "0.0843",
+        "RMSE": "0.29034",
+        "R2": "0.99855"
+      },
+      "fit": "loocv",
+      "source": "Table 10",
+      "note": "best model of an exhaustive search (13 univariate linear, 91 two-index ridge, RF and XGBoost grids) selected by LOOCV RMSE; statistics are the LOOCV values"
+    },
+    {
+      "id": "T11-BP",
+      "property": "BP",
+      "form": "ridge",
+      "predictors": [
+        "SDD",
+        "AZ"
+      ],
+      "equation_verbatim": "BP = 5.5172(SDD) + 0.0722(AZ) + 159.021.",
+      "statistics": {
+        "R": "0.9214",
+        "R2": "0.84898",
+        "adj_R2": "0.83954",
+        "MSE": "2164.41924",
+        "RMSE": "46.52332"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    },
+    {
+      "id": "T11-EoV",
+      "property": "EoV",
+      "form": "ridge",
+      "predictors": [
+        "SO*",
+        "AZ*"
+      ],
+      "equation_verbatim": "EoV = 0.4233(SO*) – 0.0468(AZ*) + 39.9646",
+      "statistics": {
+        "R": "0.93854",
+        "R2": "0.88086",
+        "adj_R2": "0.87342",
+        "MSE": "24.52341",
+        "RMSE": "4.95211"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    },
+    {
+      "id": "T11-FP",
+      "property": "FP",
+      "form": "ridge",
+      "predictors": [
+        "SO*",
+        "AZ*"
+      ],
+      "equation_verbatim": "FP = 1.9667(SO*) – 0.2096(AZ*) + 70.5049",
+      "statistics": {
+        "R": "0.93755",
+        "R2": "0.87899",
+        "adj_R2": "0.87143",
+        "MSE": "581.93442",
+        "RMSE": "24.12332"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    },
+    {
+      "id": "T11-MR",
+      "property": "MR",
+      "form": "ridge",
+      "predictors": [
+        "SC*",
+        "H*"
+      ],
+      "equation_verbatim": "MR = 6.0835(SC*) + 9.4298(H*) – 0.971.",
+      "statistics": {
+        "R": "0.9881",
+        "R2": "0.97634",
+        "adj_R2": "0.97486",
+        "MSE": "23.29499",
+        "RMSE": "4.82649"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    },
+    {
+      "id": "T11-POL",
+      "property": "POL",
+      "form": "ridge",
+      "predictors": [
+        "SC*",
+        "H*"
+      ],
+      "equation_verbatim": "POL = 2.3151(SC*) + 3.7793(H*) + 0.4174.",
+      "statistics": {
+        "R": "0.99098",
+        "R2": "0.98205",
+        "adj_R2": "0.98093",
+        "MSE": "2.67868",
+        "RMSE": "1.63667"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    },
+    {
+      "id": "T11-MV",
+      "property": "MV",
+      "form": "ridge",
+      "predictors": [
+        "R*",
+        "ISI*"
+      ],
+      "equation_verbatim": "MV = 71.4322(R*) – 1.0325(ISI*) – 10.3471",
+      "statistics": {
+        "R": "0.98266",
+        "R2": "0.96562",
+        "adj_R2": "0.96347",
+        "MSE": "307.26858",
+        "RMSE": "17.52908"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    },
+    {
+      "id": "T11-MW",
+      "property": "MW",
+      "form": "ridge",
+      "predictors": [
+        "SDD*",
+        "F*"
+      ],
+      "equation_verbatim": "MW = 8.6927(SDD*) – 0.0794(F*) + 4.6157",
+      "statistics": {
+        "R": "0.99315",
+        "R2": "0.98634",
+        "adj_R2": "0.98548",
+        "MSE": "173.35759",
+        "RMSE": "13.16653"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    },
+    {
+      "id": "T11-COM",
+      "property": "COM",
+      "form": "ridge",
+      "predictors": [
+        "ABS*",
+        "σ*"
+      ],
+      "equation_verbatim": "COM = 19.3882(ABS*) + 1.9622(σ*) – 135.4188",
+      "statistics": {
+        "R": "0.98151",
+        "R2": "0.96336",
+        "adj_R2": "0.96107",
+        "MSE": "1375.68861",
+        "RMSE": "37.09028"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    },
+    {
+      "id": "T11-HAC",
+      "property": "HAC",
+      "form": "ridge",
+      "predictors": [
+        "R",
+        "σ"
+      ],
+      "equation_verbatim": "HAC = 1.9881(R) + 0.0305(σ) + 0.1237",
+      "statistics": {
+        "R": "0.99992",
+        "R2": "0.99984",
+        "adj_R2": "0.99983",
+        "MSE": "0.00935",
+        "RMSE": "0.0967"
+      },
+      "fit": "in_sample",
+      "source": "Table 11 (statistics); equations from the list after the Table 11 paragraph",
+      "note": "in-sample refit of the LOOCV-selected model (Tables 9/10, lower-RMSE family per property)"
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "leave-one-out cross-validation",
+      "detail": "used for all model selection and for the statistics in Tables 7-10; hyperparameters chosen by grid search inside LOOCV",
+      "source": "Methods, Algorithm 1"
+    },
+    {
+      "what": "model search",
+      "detail": "per property: 13 univariate linear models, 91 two-index ridge models, and RF/XGBoost hyperparameter grids on all indices; the lowest LOOCV RMSE is kept (the authors note possible selection bias)",
+      "source": "Algorithm section"
+    },
+    {
+      "what": "not done",
+      "detail": "no external validation, applicability domain or Y-randomisation (stated by the authors)",
+      "source": "Algorithm section"
+    }
+  ],
+  "reported_tables": [
+    {
+      "xml_table_id": "tbl7",
+      "label": "7",
+      "caption": "Models with the Lowest RMSE of Degree-Based Indices",
+      "rows": [
+        [
+          "model",
+          "BP",
+          "EoV",
+          "FP",
+          "MR",
+          "POL",
+          "MV",
+          "MW",
+          "COM",
+          "HAC"
+        ],
+        [
+          "linear",
+          "53.22729",
+          "6.25032",
+          "29.97454",
+          "5.70331",
+          "2.00184",
+          "37.22389",
+          "19.5727",
+          "48.01924",
+          "0.2227"
+        ],
+        [
+          "ridge",
+          "52.64356",
+          "5.73529",
+          "28.90501",
+          "5.40792",
+          "1.89624",
+          "24.52985",
+          "15.72806",
+          "46.55291",
+          "0.18183"
+        ],
+        [
+          "RF",
+          "77.1282",
+          "8.59615",
+          "43.5821",
+          "14.29568",
+          "5.7424",
+          "54.92338",
+          "55.06486",
+          "74.81836",
+          "3.40198"
+        ],
+        [
+          "XGB",
+          "91.76775",
+          "9.9083",
+          "50.66741",
+          "15.08319",
+          "6.04311",
+          "55.88146",
+          "60.15807",
+          "68.73905",
+          "3.44789"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "tbl8",
+      "label": "8",
+      "caption": "Models with the Lowest RMSE of Neighborhood-Degree-Sum-Based Indices",
+      "rows": [
+        [
+          "model",
+          "BP",
+          "EoV",
+          "FP",
+          "MR",
+          "POL",
+          "MV",
+          "MW",
+          "COM",
+          "HAC"
+        ],
+        [
+          "linear",
+          "55.68283",
+          "6.38721",
+          "30.95955",
+          "5.73901",
+          "2.00294",
+          "26.18349",
+          "20.67326",
+          "47.34495",
+          "0.37696"
+        ],
+        [
+          "ridge",
+          "53.14273",
+          "5.72658",
+          "28.71509",
+          "5.30584",
+          "1.78188",
+          "21.68524",
+          "15.36232",
+          "44.81001",
+          "0.29034"
+        ],
+        [
+          "RF",
+          "86.28882",
+          "9.54371",
+          "47.80099",
+          "15.86865",
+          "6.29466",
+          "56.74909",
+          "59.99278",
+          "72.10821",
+          "3.63809"
+        ],
+        [
+          "XGB",
+          "97.76274",
+          "10.74073",
+          "54.10157",
+          "18.46733",
+          "7.35454",
+          "65.10074",
+          "68.34961",
+          "73.88009",
+          "4.36712"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "tbl9",
+      "label": "9",
+      "caption": "Optimal Degree-Based Models Using Exhaustive Selection with LOOCV",
+      "rows": [
+        [
+          "property",
+          "model",
+          "indices",
+          "MSE",
+          "RMSE",
+          "R 2"
+        ],
+        [
+          "BP",
+          "ridge",
+          "SDD, AZ",
+          "2771.34424",
+          "52.64356",
+          "0.80559"
+        ],
+        [
+          "EoV",
+          "ridge",
+          "M 2, SDD",
+          "32.89351",
+          "5.73529",
+          "0.83784"
+        ],
+        [
+          "FP",
+          "ridge",
+          "ABC, AZ",
+          "835.49982",
+          "28.90501",
+          "0.82422"
+        ],
+        [
+          "MR",
+          "ridge",
+          "R, AZ",
+          "29.24562",
+          "5.40792",
+          "0.97029"
+        ],
+        [
+          "POL",
+          "ridge",
+          "M 2, R",
+          "3.59574",
+          "1.89624",
+          "0.97589"
+        ],
+        [
+          "MV",
+          "ridge",
+          "M 2, R",
+          "601.71363",
+          "24.52985",
+          "0.9325"
+        ],
+        [
+          "MW",
+          "ridge",
+          "R, AZ",
+          "247.37188",
+          "15.72806",
+          "0.98027"
+        ],
+        [
+          "COM",
+          "ridge",
+          "F, AZ",
+          "2167.17332",
+          "46.55291",
+          "0.94226"
+        ],
+        [
+          "HAC",
+          "ridge",
+          "R, σ",
+          "0.03306",
+          "0.18183",
+          "0.99943"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "tbl10",
+      "label": "10",
+      "caption": "Optimal Neighborhood-Degree-Sum-Based Models Using Exhaustive Selection with LOOCV",
+      "rows": [
+        [
+          "property",
+          "model",
+          "indices",
+          "MSE",
+          "RMSE",
+          "R 2"
+        ],
+        [
+          "BP",
+          "ridge",
+          "SO*, AZ*",
+          "2824.14948",
+          "53.14273",
+          "0.80188"
+        ],
+        [
+          "EoV",
+          "ridge",
+          "SO*, AZ*",
+          "32.79377",
+          "5.72658",
+          "0.83833"
+        ],
+        [
+          "FP",
+          "ridge",
+          "SO*, AZ*",
+          "824.55624",
+          "28.71509",
+          "0.82652"
+        ],
+        [
+          "MR",
+          "ridge",
+          "SC*, H*",
+          "28.15195",
+          "5.30584",
+          "0.9714"
+        ],
+        [
+          "POL",
+          "ridge",
+          "SC*, H*",
+          "3.1751",
+          "1.78188",
+          "0.97871"
+        ],
+        [
+          "MV",
+          "ridge",
+          "R*, ISI*",
+          "470.2498",
+          "21.68524",
+          "0.94725"
+        ],
+        [
+          "MW",
+          "ridge",
+          "F*, SDD*",
+          "236.00097",
+          "15.36232",
+          "0.98118"
+        ],
+        [
+          "COM",
+          "ridge",
+          "ABS*, σ*",
+          "2007.93705",
+          "44.81001",
+          "0.9465"
+        ],
+        [
+          "HAC",
+          "ridge",
+          "R*, SDD*",
+          "0.0843",
+          "0.29034",
+          "0.99855"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "tbl11",
+      "label": "11",
+      "caption": "Regression Results for QSPR Models",
+      "rows": [
+        [
+          "property",
+          "R",
+          "R 2",
+          "adj. R 2",
+          "MSE",
+          "RMSE"
+        ],
+        [
+          "BP",
+          "0.9214",
+          "0.84898",
+          "0.83954",
+          "2164.41924",
+          "46.52332"
+        ],
+        [
+          "EoV",
+          "0.93854",
+          "0.88086",
+          "0.87342",
+          "24.52341",
+          "4.95211"
+        ],
+        [
+          "FP",
+          "0.93755",
+          "0.87899",
+          "0.87143",
+          "581.93442",
+          "24.12332"
+        ],
+        [
+          "MR",
+          "0.9881",
+          "0.97634",
+          "0.97486",
+          "23.29499",
+          "4.82649"
+        ],
+        [
+          "POL",
+          "0.99098",
+          "0.98205",
+          "0.98093",
+          "2.67868",
+          "1.63667"
+        ],
+        [
+          "MV",
+          "0.98266",
+          "0.96562",
+          "0.96347",
+          "307.26858",
+          "17.52908"
+        ],
+        [
+          "MW",
+          "0.99315",
+          "0.98634",
+          "0.98548",
+          "173.35759",
+          "13.16653"
+        ],
+        [
+          "COM",
+          "0.98151",
+          "0.96336",
+          "0.96107",
+          "1375.68861",
+          "37.09028"
+        ],
+        [
+          "HAC",
+          "0.99992",
+          "0.99984",
+          "0.99983",
+          "0.00935",
+          "0.0967"
+        ]
+      ]
+    }
+  ],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "ok",
+      "detail": "18 drugs listed, n = 18 reported."
+    },
+    {
+      "check": "PubChem computed properties",
+      "result": "ok",
+      "detail": "MW, COM and HAC equal current PubChem values for 18/18 drugs (automated_checks), so they are computed_pubchem. Valproic acid COM 93.4 is PubChem's 1-decimal complexity (PUG-View); PUG-REST truncates it to 93."
+    },
+    {
+      "check": "ACD/ChemSpider properties",
+      "result": "info",
+      "detail": "Aripiprazole BP, EoV, FP, MR, POL and MV equal the values printed by godlin2026_mdd, which names ACD/Labs Percepta via ChemSpider as its source."
+    },
+    {
+      "check": "model selection vs Table 11",
+      "result": "ok",
+      "detail": "For each property the family used in Table 11 (degree for BP and HAC, neighborhood-degree-sum otherwise) is the one with the lower LOOCV RMSE in Tables 9-10."
+    },
+    {
+      "check": "size endpoints",
+      "result": "info",
+      "detail": "HAC is the number of vertices of the hydrogen-suppressed graph and MW is close to it; the authors themselves say these near-perfect fits reflect size."
+    },
+    {
+      "check": "Tables 3-4 formatting",
+      "result": "info",
+      "detail": "Some empty cells are printed as an en dash instead of '-'."
+    }
+  ],
+  "resolution_issues": [
+    "BD16 is printed 'riseridone'; resolved as risperidone (rule typo_corrected): Table 2 MW 410.5 and HAC 30 match risperidone."
+  ],
+  "reproducibility": {
+    "verdict": "approximate",
+    "reasons": [
+      "drug list, property values, edge partitions and index values are printed; one drug name needs a typo correction (riseridone -> risperidone)",
+      "the ridge penalty grid A and the RF/XGBoost grids are not given in the text (Algorithm 1 is not machine-readable in the XML), so the selected alpha and therefore the coefficients and in-sample statistics of Table 11 can only be matched approximately",
+      "selection of the best 2-index subset inside LOOCV is reported as the LOOCV score of the selected model (selection-biased); re-running the full search reproduces this only if the grid is known"
+    ],
+    "exact_parts": [
+      "index values from the printed edge partitions",
+      "OLS fits of single indices"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 18,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 18
+    },
+    "duplicate_structures": [],
+    "shared_connectivity_groups": [],
+    "formula_checked": 0,
+    "formula_mismatch": [],
+    "cid_checked": 0,
+    "cid_mismatch": [],
+    "properties": {
+      "BP": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": []
+      },
+      "EoV": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": []
+      },
+      "FP": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MR": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": []
+      },
+      "POL": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MV": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MW": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "MolecularWeight",
+        "pubchem_compared": 18,
+        "pubchem_match": 18,
+        "pubchem_mismatch": [],
+        "mismatch_equal_to_exact_mass": []
+      },
+      "COM": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "Complexity",
+        "pubchem_compared": 18,
+        "pubchem_match": 18,
+        "pubchem_mismatch": []
+      },
+      "HAC": {
+        "n_values": 18,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "HeavyAtomCount",
+        "pubchem_compared": 18,
+        "pubchem_match": 18,
+        "pubchem_mismatch": []
+      }
+    },
+    "identical_property_rows": []
+  }
+}

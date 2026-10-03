@@ -1,0 +1,2020 @@
+{
+  "schema_version": 1,
+  "study_key": "tang2026_arthritis",
+  "shortlist_row": 7,
+  "status": "reserve",
+  "citation": {
+    "authors": [
+      "Tang, Jiang-Hua",
+      "Noureen, Sadia",
+      "Ashraf, Nazma",
+      "Azam, Saood",
+      "Aslam, Adnan"
+    ],
+    "title": "Degree-Based Topological Indices and Machine Learning for QSPR Modeling of Arthritis Drugs",
+    "journal": "ACS Omega",
+    "year": 2026,
+    "volume": "11",
+    "article_number": "33216",
+    "doi": "10.1021/acsomega.6c03590",
+    "pmcid": "PMC13261421",
+    "pmid": "42294207",
+    "first_publication_date": "2026-05-22"
+  },
+  "licence": {
+    "spdx": "CC-BY-NC-ND-4.0",
+    "statement_verbatim": "© 2026 The Authors. Published by American Chemical SocietyThis article is licensed under CC-BY-NC-ND 4.0",
+    "data_redistribution": "withheld",
+    "note": "the shortlist assumed CC BY; the article is CC BY-NC-ND 4.0, so property values are not redistributed"
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13261421/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "0805debb954a006e731f6de19aa1251c9f1b5dd722c4f1715a024df1b198b866",
+    "other_sources": [],
+    "properties_sha256": "621ba91b769e138ff877d9daef6fcf696e4f746cc85e0d2f0a3d2164fc01e116"
+  },
+  "n_reported": 50,
+  "n_reported_source": "Abstract and Table 2 caption: '50 Arthritis Drugs'",
+  "drug_list_source": "Table 3 (property table), column drugs names",
+  "property_table": {
+    "xml_table_id": "tbl3",
+    "skip_rows": 2,
+    "label_column": 0,
+    "columns": [
+      {
+        "property": "BP",
+        "column": 1
+      },
+      {
+        "property": "MP",
+        "column": 2
+      },
+      {
+        "property": "Pc",
+        "column": 3
+      },
+      {
+        "property": "MR",
+        "column": 4
+      },
+      {
+        "property": "tPSA",
+        "column": 5
+      },
+      {
+        "property": "CLogP",
+        "column": 6
+      }
+    ],
+    "label": "Table 3",
+    "caption_verbatim": "Physicochemical Properties of Arthritis Drugs",
+    "header_rows_verbatim": [
+      [
+        "",
+        "physiochemical properties"
+      ],
+      [
+        "drugs names",
+        "BP",
+        "MP",
+        "P c",
+        "MR",
+        "tPSA",
+        "CLogP"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "BP",
+      "name_verbatim": "boiling point (BP, °C)",
+      "unit_verbatim": "°C (stated)",
+      "source_stated_verbatim": "'obtained from ChemDraw Professional 19.0 (property prediction module) and cross-validated with PubChem ...; ... the median value was used'",
+      "source_label": "predicted_chemdraw",
+      "source_evidence": "ChemDraw prediction; magnitudes (e.g. ibuprofen above 670) fit kelvin rather than the stated °C"
+    },
+    {
+      "code": "MP",
+      "name_verbatim": "melting point (MP, °C)",
+      "unit_verbatim": "°C (stated)",
+      "source_stated_verbatim": "as BP",
+      "source_label": "predicted_chemdraw",
+      "source_evidence": "ChemDraw prediction; magnitudes fit kelvin"
+    },
+    {
+      "code": "Pc",
+      "name_verbatim": "critical pressure (P c, bar)",
+      "unit_verbatim": "bar",
+      "source_stated_verbatim": "as BP",
+      "source_label": "predicted_chemdraw",
+      "source_evidence": "ChemDraw prediction"
+    },
+    {
+      "code": "MR",
+      "name_verbatim": "molar refractivity (MR, cm3/mol)",
+      "unit_verbatim": "cm3/mol",
+      "source_stated_verbatim": "as BP",
+      "source_label": "predicted_chemdraw",
+      "source_evidence": "ChemDraw prediction; missing for upadacitinib and tenoxicam"
+    },
+    {
+      "code": "tPSA",
+      "name_verbatim": "topological polar surface area (tPSA, Å2)",
+      "unit_verbatim": "Å2",
+      "source_stated_verbatim": "as BP",
+      "source_label": "predicted_chemdraw",
+      "source_evidence": "ChemDraw tPSA (not compared: values withheld)"
+    },
+    {
+      "code": "CLogP",
+      "name_verbatim": "calculated LogP (CLogP)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "as BP",
+      "source_label": "predicted_chemdraw",
+      "source_evidence": "ChemDraw CLogP"
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "EM1",
+      "name_verbatim": "reformulated first Zagreb index EM1(G)",
+      "formula_verbatim": "EM1(G) = ∑mn∈E(G)(d(m) + d(n) – 2)2",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "EM2",
+      "name_verbatim": "reformulated second Zagreb index EM2(G)",
+      "formula_verbatim": "$EM_{2}(G)=∑_{mn∈E(G)}∑_{np∈E(G),p≠m}(d(m)+d(n)−2)(d(n)+d(p)−2)$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "M1",
+      "name_verbatim": "first Zagreb index M 1(G)",
+      "formula_verbatim": "M1(G) = ∑mn∈E(G)(dm + dn)",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "M2",
+      "name_verbatim": "second Zagreb index M 2(G)",
+      "formula_verbatim": "M2(G) = ∑mn∈E(G)(dm · dn)",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "AZI",
+      "name_verbatim": "augmented Zagreb index AZI(G)",
+      "formula_verbatim": "$AZI(G)=∑_{mn∈E(G)}((d(m)d(n))/(d(m)+d(n)−2))^{3}$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "HM",
+      "name_verbatim": "hyper Zagreb index HM(G)",
+      "formula_verbatim": "HM(G) = ∑mn∈E(G)(d(m) + d(n))2",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "F",
+      "name_verbatim": "forgotten index F(G)",
+      "formula_verbatim": "$F(G)=∑_{mn∈E(G)}(d_{m}^{2}+d_{n}^{2})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "SDD",
+      "name_verbatim": "symmetric division deg index SDD(G)",
+      "formula_verbatim": "$SDD(G)=∑_{mn∈E(G)}((d(m))/(d(n))+(d(n))/(d(m)))$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ISZ",
+      "name_verbatim": "inverse sum indeg index ISZ(G)",
+      "formula_verbatim": "$ISZ(G)=∑_{mn∈E(G)}(d(m)+d(n))/(d(m)d(n))$",
+      "family": "degree",
+      "source": "Table 1"
+    }
+  ],
+  "index_values_table": "Table 2",
+  "index_computation": "structures from PubChem SDF (3D) or ChemDraw/Chem3D MM2; hydrogen-suppressed graphs",
+  "models": [
+    {
+      "id": "tbl4-BP-EM1",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "EM1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8793",
+        "r2": "0.7733",
+        "SEE": "68.2261",
+        "F": "163.6869",
+        "p": "0.00000",
+        "t": "12.7940",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl4-BP-EM2",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "EM2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8745",
+        "r2": "0.7647",
+        "SEE": "69.5051",
+        "F": "155.9680",
+        "p": "0.00000",
+        "t": "12.4887",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl4-BP-M1",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8495",
+        "r2": "0.7216",
+        "SEE": "75.5984",
+        "F": "124.4127",
+        "p": "0.00000",
+        "t": "11.1540",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl4-BP-M2",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8513",
+        "r2": "0.7247",
+        "SEE": "75.1776",
+        "F": "126.3485",
+        "p": "0.00000",
+        "t": "11.2405",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl4-BP-AZI",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "AZI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8333",
+        "r2": "0.6945",
+        "SEE": "79.1958",
+        "F": "109.1051",
+        "p": "0.00000",
+        "t": "10.4453",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl4-BP-HM",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "HM"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8713",
+        "r2": "0.7592",
+        "SEE": "70.3114",
+        "F": "151.3167",
+        "p": "0.00000",
+        "t": "12.3011",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl4-BP-F",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "F"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8743",
+        "r2": "0.7644",
+        "SEE": "69.5404",
+        "F": "155.7608",
+        "p": "0.00000",
+        "t": "12.4804",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl4-BP-SDD",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "SDD"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8697",
+        "r2": "0.7565",
+        "SEE": "70.7074",
+        "F": "149.0905",
+        "p": "0.00000",
+        "t": "12.2103",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl4-BP-ISZ",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8555",
+        "r2": "0.7319",
+        "SEE": "74.1806",
+        "F": "131.0666",
+        "p": "0.00000",
+        "t": "11.4484",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 4"
+    },
+    {
+      "id": "tbl5-MP-EM1",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "EM1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7889",
+        "r2": "0.6224",
+        "SEE": "69.1700",
+        "F": "79.1205",
+        "p": "0.00000",
+        "t": "8.8950",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl5-MP-EM2",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "EM2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7945",
+        "r2": "0.6312",
+        "SEE": "68.3626",
+        "F": "82.1410",
+        "p": "0.00000",
+        "t": "9.0632",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl5-MP-M1",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7571",
+        "r2": "0.5732",
+        "SEE": "73.5379",
+        "F": "64.4682",
+        "p": "0.00000",
+        "t": "8.0292",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl5-MP-M2",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7715",
+        "r2": "0.5951",
+        "SEE": "71.6241",
+        "F": "70.5587",
+        "p": "0.00000",
+        "t": "8.3999",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl5-MP-AZI",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "AZI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7395",
+        "r2": "0.5468",
+        "SEE": "75.7761",
+        "F": "57.9222",
+        "p": "0.00000",
+        "t": "7.6107",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl5-MP-HM",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "HM"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7735",
+        "r2": "0.5983",
+        "SEE": "71.3407",
+        "F": "71.5025",
+        "p": "0.00000",
+        "t": "8.4559",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl5-MP-F",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "F"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7728",
+        "r2": "0.5972",
+        "SEE": "71.4442",
+        "F": "71.1566",
+        "p": "0.00000",
+        "t": "8.4354",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl5-MP-SDD",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "SDD"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7391",
+        "r2": "0.5462",
+        "SEE": "75.8258",
+        "F": "57.7835",
+        "p": "0.00000",
+        "t": "7.6015",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl5-MP-ISZ",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.7180",
+        "r2": "0.5155",
+        "SEE": "78.3530",
+        "F": "51.0697",
+        "p": "0.00000",
+        "t": "7.1463",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "tbl6-Pc-EM1",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "EM1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.4616",
+        "r2": "0.2131",
+        "SEE": "8.2470",
+        "F": "12.9970",
+        "p": "0.00074",
+        "t": "–3.6051",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl6-Pc-EM2",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "EM2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.3988",
+        "r2": "0.1590",
+        "SEE": "8.5254",
+        "F": "9.0777",
+        "p": "0.00412",
+        "t": "–3.0129",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl6-Pc-M1",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.5373",
+        "r2": "0.2886",
+        "SEE": "7.8410",
+        "F": "19.4766",
+        "p": "0.00006",
+        "t": "–4.4132",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl6-Pc-M2",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.5010",
+        "r2": "0.2510",
+        "SEE": "8.0460",
+        "F": "16.0816",
+        "p": "0.00021",
+        "t": "–4.0102",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl6-Pc-AZI",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "AZI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.5315",
+        "r2": "0.2825",
+        "SEE": "7.8750",
+        "F": "18.8944",
+        "p": "0.00007",
+        "t": "–4.3468",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl6-Pc-HM",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "HM"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.5148",
+        "r2": "0.2650",
+        "SEE": "7.9701",
+        "F": "17.3079",
+        "p": "0.00013",
+        "t": "–4.1603",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl6-Pc-F",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "F"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.5135",
+        "r2": "0.2637",
+        "SEE": "7.9772",
+        "F": "17.1918",
+        "p": "0.00014",
+        "t": "–4.1463",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl6-Pc-SDD",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "SDD"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.5500",
+        "r2": "0.3025",
+        "SEE": "7.7645",
+        "F": "20.8135",
+        "p": "0.00004",
+        "t": "–4.5622",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl6-Pc-ISZ",
+      "property": "Pc",
+      "form": "linear",
+      "predictors": [
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "–0.5680",
+        "r2": "0.3226",
+        "SEE": "7.6514",
+        "F": "22.8620",
+        "p": "0.00002",
+        "t": "–4.7814",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "tbl7-MR-EM1",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "EM1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8764",
+        "r2": "0.7681",
+        "SEE": "7.5307",
+        "F": "152.3767",
+        "p": "0.00000",
+        "t": "12.3441",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl7-MR-EM2",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "EM2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.8275",
+        "r2": "0.6847",
+        "SEE": "8.7808",
+        "F": "99.9155",
+        "p": "0.00000",
+        "t": "9.9958",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl7-MR-M1",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.9286",
+        "r2": "0.8623",
+        "SEE": "5.8035",
+        "F": "288.0364",
+        "p": "0.00000",
+        "t": "16.9716",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl7-MR-M2",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.9077",
+        "r2": "0.8238",
+        "SEE": "6.5638",
+        "F": "215.1258",
+        "p": "0.00000",
+        "t": "14.6672",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl7-MR-AZI",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "AZI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.9212",
+        "r2": "0.8487",
+        "SEE": "6.0833",
+        "F": "258.0131",
+        "p": "0.00000",
+        "t": "16.0628",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl7-MR-HM",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "HM"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.9129",
+        "r2": "0.8334",
+        "SEE": "6.3837",
+        "F": "230.0738",
+        "p": "0.00000",
+        "t": "15.1682",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl7-MR-F",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "F"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.9118",
+        "r2": "0.8315",
+        "SEE": "6.4202",
+        "F": "226.9397",
+        "p": "0.00000",
+        "t": "15.0645",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl7-MR-SDD",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "SDD"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.9307",
+        "r2": "0.8662",
+        "SEE": "5.7206",
+        "F": "297.7784",
+        "p": "0.00000",
+        "t": "17.2563",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl7-MR-ISZ",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.9435",
+        "r2": "0.8903",
+        "SEE": "5.1806",
+        "F": "373.1865",
+        "p": "0.00000",
+        "t": "19.3180",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "tbl8-tPSA-EM1",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "EM1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.5302",
+        "r2": "0.2811",
+        "SEE": "24.5636",
+        "F": "18.7670",
+        "p": "0.00007",
+        "t": "4.3321",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl8-tPSA-EM2",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "EM2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.5588",
+        "r2": "0.3122",
+        "SEE": "24.0260",
+        "F": "21.7882",
+        "p": "0.00002",
+        "t": "4.6678",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl8-tPSA-M1",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.4672",
+        "r2": "0.2183",
+        "SEE": "25.6137",
+        "F": "13.4044",
+        "p": "0.00062",
+        "t": "3.6612",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl8-tPSA-M2",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.4829",
+        "r2": "0.2332",
+        "SEE": "25.3682",
+        "F": "14.5989",
+        "p": "0.00038",
+        "t": "3.8209",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl8-tPSA-AZI",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "AZI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.4150",
+        "r2": "0.1722",
+        "SEE": "26.3575",
+        "F": "9.9877",
+        "p": "0.00273",
+        "t": "3.1603",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl8-tPSA-HM",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "HM"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.4920",
+        "r2": "0.2421",
+        "SEE": "25.2206",
+        "F": "15.3337",
+        "p": "0.00028",
+        "t": "3.9158",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl8-tPSA-F",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "F"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.5055",
+        "r2": "0.2555",
+        "SEE": "24.9963",
+        "F": "16.4754",
+        "p": "0.00018",
+        "t": "4.0590",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl8-tPSA-SDD",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "SDD"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.5036",
+        "r2": "0.2536",
+        "SEE": "25.0288",
+        "F": "16.3078",
+        "p": "0.00019",
+        "t": "4.0383",
+        "indicator": "significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl8-tPSA-ISZ",
+      "property": "tPSA",
+      "form": "linear",
+      "predictors": [
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.4658",
+        "r2": "0.2170",
+        "SEE": "25.6356",
+        "F": "13.2997",
+        "p": "0.00065",
+        "t": "3.6469",
+        "indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "tbl9-CLogP-EM1",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "EM1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.1563",
+        "r2": "0.0244",
+        "SEE": "1.7470",
+        "F": "1.2022",
+        "p": "0.27835",
+        "t": "1.0965",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl9-CLogP-EM2",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "EM2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.1160",
+        "r2": "0.0134",
+        "SEE": "1.7568",
+        "F": "0.6544",
+        "p": "0.42255",
+        "t": "0.8089",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl9-CLogP-M1",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.2054",
+        "r2": "0.0422",
+        "SEE": "1.7310",
+        "F": "2.1142",
+        "p": "0.15245",
+        "t": "1.4540",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl9-CLogP-M2",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.1828",
+        "r2": "0.0334",
+        "SEE": "1.7389",
+        "F": "1.6601",
+        "p": "0.20376",
+        "t": "1.2885",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl9-CLogP-AZI",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "AZI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.2128",
+        "r2": "0.0453",
+        "SEE": "1.7282",
+        "F": "2.2758",
+        "p": "0.13796",
+        "t": "1.5086",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl9-CLogP-HM",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "HM"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.1943",
+        "r2": "0.0377",
+        "SEE": "1.7350",
+        "F": "1.8830",
+        "p": "0.17637",
+        "t": "1.3722",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl9-CLogP-F",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "F"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.1908",
+        "r2": "0.0364",
+        "SEE": "1.7362",
+        "F": "1.8138",
+        "p": "0.18437",
+        "t": "1.3468",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl9-CLogP-SDD",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "SDD"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.2063",
+        "r2": "0.0426",
+        "SEE": "1.7307",
+        "F": "2.1347",
+        "p": "0.15051",
+        "t": "1.4611",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl9-CLogP-ISZ",
+      "property": "CLogP",
+      "form": "linear",
+      "predictors": [
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "r": "0.2188",
+        "r2": "0.0479",
+        "SEE": "1.7259",
+        "F": "2.4138",
+        "p": "0.12684",
+        "t": "1.5536",
+        "indicator": "not significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 9"
+    },
+    {
+      "id": "tbl13-BP",
+      "property": "BP",
+      "form": "random_forest",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "22.489",
+        "MSE": "1106.132",
+        "RMSE": "33.259",
+        "r2": "0.9439"
+      },
+      "fit": "in_sample",
+      "source": "Table 13",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl13-MP",
+      "property": "MP",
+      "form": "random_forest",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "24.345",
+        "MSE": "1189.241",
+        "RMSE": "34.485",
+        "r2": "0.9022"
+      },
+      "fit": "in_sample",
+      "source": "Table 13",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl13-Pc",
+      "property": "Pc",
+      "form": "random_forest",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "1.946",
+        "MSE": "9.583",
+        "RMSE": "3.096",
+        "r2": "0.8845"
+      },
+      "fit": "in_sample",
+      "source": "Table 13",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl13-MR",
+      "property": "MR",
+      "form": "random_forest",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "1.793",
+        "MSE": "13.357",
+        "RMSE": "3.655",
+        "r2": "0.9430"
+      },
+      "fit": "in_sample",
+      "source": "Table 13",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl13-tPSA",
+      "property": "tPSA",
+      "form": "random_forest",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "5.697",
+        "MSE": "76.477",
+        "RMSE": "8.745",
+        "r2": "0.9051"
+      },
+      "fit": "in_sample",
+      "source": "Table 13",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl13-CLogP",
+      "property": "CLogP",
+      "form": "random_forest",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "0.516",
+        "MSE": "0.560",
+        "RMSE": "0.748",
+        "r2": "0.8137"
+      },
+      "fit": "in_sample",
+      "source": "Table 13",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl16-BP",
+      "property": "BP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "11.55633",
+        "MSE": "263.1054",
+        "RMSE": "16.22052",
+        "r2": "0.9866"
+      },
+      "fit": "in_sample",
+      "source": "Table 16",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl16-MP",
+      "property": "MP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "13.80047",
+        "MSE": "668.5443",
+        "RMSE": "25.85622",
+        "r2": "0.9450"
+      },
+      "fit": "in_sample",
+      "source": "Table 16",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl16-Pc",
+      "property": "Pc",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "0.75504",
+        "MSE": "1.383976",
+        "RMSE": "1.17643",
+        "r2": "0.9833"
+      },
+      "fit": "in_sample",
+      "source": "Table 16",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl16-MR",
+      "property": "MR",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "0.80787",
+        "MSE": "1.284866",
+        "RMSE": "1.13352",
+        "r2": "0.9945"
+      },
+      "fit": "in_sample",
+      "source": "Table 16",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl16-tPSA",
+      "property": "tPSA",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "2.37298",
+        "MSE": "19.20759",
+        "RMSE": "4.38265",
+        "r2": "0.9762"
+      },
+      "fit": "in_sample",
+      "source": "Table 16",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl16-CLogP",
+      "property": "CLogP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "0.31114",
+        "MSE": "0.3434201",
+        "RMSE": "0.58602",
+        "r2": "0.8857"
+      },
+      "fit": "in_sample",
+      "source": "Table 16",
+      "note": "fitted and evaluated on all 50 drugs (the text describes these as full-data-set results)"
+    },
+    {
+      "id": "tbl18-BP",
+      "property": "BP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "48.55274",
+        "MSE": "4325.02887",
+        "RMSE": "65.76495",
+        "r2": "0.44279"
+      },
+      "fit": "test_split",
+      "source": "Table 18",
+      "note": "70/30 split (35 train / 15 test), stratified by drug class; split membership not listed"
+    },
+    {
+      "id": "tbl18-MP",
+      "property": "MP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "65.26573",
+        "MSE": "6692.40096",
+        "RMSE": "81.80710",
+        "r2": "0.08008"
+      },
+      "fit": "test_split",
+      "source": "Table 18",
+      "note": "70/30 split (35 train / 15 test), stratified by drug class; split membership not listed"
+    },
+    {
+      "id": "tbl18-Pc",
+      "property": "Pc",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "5.09193",
+        "MSE": "53.82405",
+        "RMSE": "7.33649",
+        "r2": "0.40319"
+      },
+      "fit": "test_split",
+      "source": "Table 18",
+      "note": "70/30 split (35 train / 15 test), stratified by drug class; split membership not listed"
+    },
+    {
+      "id": "tbl18-MR",
+      "property": "MR",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "6.01003",
+        "MSE": "48.35911",
+        "RMSE": "6.95407",
+        "r2": "0.76530"
+      },
+      "fit": "test_split",
+      "source": "Table 18",
+      "note": "70/30 split (35 train / 15 test), stratified by drug class; split membership not listed"
+    },
+    {
+      "id": "tbl18-tPSA",
+      "property": "tPSA",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "13.96165",
+        "MSE": "464.37673",
+        "RMSE": "21.54940",
+        "r2": "0.26956"
+      },
+      "fit": "test_split",
+      "source": "Table 18",
+      "note": "70/30 split (35 train / 15 test), stratified by drug class; split membership not listed"
+    },
+    {
+      "id": "tbl18-CLogP",
+      "property": "CLogP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE": "1.53306",
+        "MSE": "3.53417",
+        "RMSE": "1.87994",
+        "r2": "0.11195"
+      },
+      "fit": "test_split",
+      "source": "Table 18",
+      "note": "70/30 split (35 train / 15 test), stratified by drug class; split membership not listed"
+    },
+    {
+      "id": "tbl19-BP",
+      "property": "BP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE_CV_95CI": "80.4238 (45.0749,87.4970)",
+        "MSE_CV_95CI": "16018.0659 (3896.4240,16482.8521)",
+        "RMSE_CV_95CI": "114.3152 (62.4213,128.3856)",
+        "R2_CV_95CI": "–0.6311 (−1.1236,0.4980)"
+      },
+      "fit": "bootstrap",
+      "source": "Table 19",
+      "note": "'95% CI from bootstrap and average metrics from CV (test set)'; some point estimates lie outside their CI"
+    },
+    {
+      "id": "tbl19-MP",
+      "property": "MP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE_CV_95CI": "63.1356 (49.6191,84.4457)",
+        "MSE_CV_95CI": "5930.5236 (4399.0399,9684.9497)",
+        "RMSE_CV_95CI": "75.9844 (66.3253,98.4121)",
+        "R2_CV_95CI": "0.3537 (−0.3313,0.3953)"
+      },
+      "fit": "bootstrap",
+      "source": "Table 19",
+      "note": "'95% CI from bootstrap and average metrics from CV (test set)'; some point estimates lie outside their CI"
+    },
+    {
+      "id": "tbl19-Pc",
+      "property": "Pc",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE_CV_95CI": "6.5277 (4.6736,10.7980)",
+        "MSE_CV_95CI": "130.4450 (48.3924,260.9269)",
+        "RMSE_CV_95CI": "10.0230 (6.9565,16.1532)",
+        "R2_CV_95CI": "–1.7554 (−1.8932,0.4634)"
+      },
+      "fit": "bootstrap",
+      "source": "Table 19",
+      "note": "'95% CI from bootstrap and average metrics from CV (test set)'; some point estimates lie outside their CI"
+    },
+    {
+      "id": "tbl19-MR",
+      "property": "MR",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE_CV_95CI": "6.2287 (5.1351,8.5873)",
+        "MSE_CV_95CI": "142.5574 (42.9035,102.2841)",
+        "RMSE_CV_95CI": "8.4628 (6.5501,10.1136)",
+        "R2_CV_95CI": "0.5983 (0.5036,0.7918)"
+      },
+      "fit": "bootstrap",
+      "source": "Table 19",
+      "note": "'95% CI from bootstrap and average metrics from CV (test set)'; some point estimates lie outside their CI"
+    },
+    {
+      "id": "tbl19-tPSA",
+      "property": "tPSA",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE_CV_95CI": "19.5067 (13.9193,27.5910)",
+        "MSE_CV_95CI": "1016.6808 (472.9429,1698.8988)",
+        "RMSE_CV_95CI": "27.9800 (21.7473,41.2177)",
+        "R2_CV_95CI": "–0.8131 (−1.6723,0.2561)"
+      },
+      "fit": "bootstrap",
+      "source": "Table 19",
+      "note": "'95% CI from bootstrap and average metrics from CV (test set)'; some point estimates lie outside their CI"
+    },
+    {
+      "id": "tbl19-CLogP",
+      "property": "CLogP",
+      "form": "xgboost",
+      "predictors": [
+        "EM1",
+        "EM2",
+        "M1",
+        "M2",
+        "AZI",
+        "HM",
+        "F",
+        "SDD",
+        "ISZ"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "MAE_CV_95CI": "1.2807 (1.2432,2.5113)",
+        "MSE_CV_95CI": "3.5242 (2.7409,9.6665)",
+        "RMSE_CV_95CI": "1.7645 (1.6556,3.1091)",
+        "R2_CV_95CI": "–0.7415 (−1.4289,0.3113)"
+      },
+      "fit": "bootstrap",
+      "source": "Table 19",
+      "note": "'95% CI from bootstrap and average metrics from CV (test set)'; some point estimates lie outside their CI"
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "train/test split",
+      "detail": "70/30 (35/15) stratified by drug class; split membership not given",
+      "source": "Methods; Tables 17-18"
+    },
+    {
+      "what": "bootstrap and CV",
+      "detail": "1000 bootstrap iterations for 95% CIs of test metrics; CV averages (Table 19)",
+      "source": "Table 19"
+    },
+    {
+      "what": "hyperparameters",
+      "detail": "RF n_estimators 500, max_depth 10, random_state 42; XGBoost learning rate 0.1, max depth 6, 200 rounds, early stopping 10",
+      "source": "Methods"
+    },
+    {
+      "what": "supporting information",
+      "detail": "the text says the data set and Python scripts are in the Supporting Information; the Europe PMC package contains no supplementary files and the ACS SI was not retrieved",
+      "source": "Methods"
+    }
+  ],
+  "reported_tables": [],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "ok",
+      "detail": "50 drugs listed, 50 reported."
+    },
+    {
+      "check": "licence",
+      "result": "issue",
+      "detail": "CC BY-NC-ND 4.0, not CC BY as the shortlist assumed: property values withheld."
+    },
+    {
+      "check": "duplicated property rows (local re-extraction, values not stored)",
+      "result": "issue",
+      "detail": "All six properties are identical for ibuprofen/dexibuprofen (expected for a stereo pair), celecoxib/feprazone and oxaprozin/piketoprofen (different drugs). Five of six are identical for ketorolac/diflunisal and bromfenac/etodolac, and four of six for diclofenac/tolfenamic acid. These look like copy errors."
+    },
+    {
+      "check": "missing values",
+      "result": "info",
+      "detail": "MR is empty for upadacitinib and tenoxicam (n = 48 for MR). The F statistics in Table 7 are consistent with n = 48, those in Table 4 with n = 50."
+    },
+    {
+      "check": "units",
+      "result": "issue",
+      "detail": "BP and MP are stated in °C, but the magnitudes (e.g. ibuprofen BP above 670 and MP above 400) fit kelvin."
+    },
+    {
+      "check": "ISZ formula",
+      "result": "issue",
+      "detail": "The 'inverse sum indeg' formula printed in Table 1, sum (d(m)+d(n))/(d(m)d(n)), equals the number of vertices; e.g. ibuprofen ISZ = 15 = its heavy-atom count."
+    },
+    {
+      "check": "Table 19",
+      "result": "issue",
+      "detail": "Some point estimates lie outside their own 95% CI (e.g. MR MSE 142.56 vs CI 42.90-102.28)."
+    },
+    {
+      "check": "supporting information",
+      "result": "info",
+      "detail": "The text says the data set and scripts are in the SI; Europe PMC carries no SI files and the ACS SI was not retrieved."
+    }
+  ],
+  "resolution_issues": [
+    "Chondroitin sulfate is a polymer: unresolved (rule unresolvable).",
+    "'meclofenamate' and 'meclofenamic acid' are both listed and resolve to the same CID 4037. Row 28 uses rule parent_form (anion name -> acid); its printed property values differ from row 39's in every column, so a salt was probably modelled. The two rows share one structure and must stay in one CV fold.",
+    "Ibuprofen (racemate, CID 3672) and dexibuprofen (S, CID 39912) share the InChIKey connectivity block.",
+    "Oxyphenbutazone resolves to CID 4641, whose PubChem title is the synonym 'Oxazolidin' (formula C19H20N2O3 is correct); doxycycline's CID 54671203 carries an IUPAC title."
+  ],
+  "reproducibility": {
+    "verdict": "approximate",
+    "reasons": [
+      "names and printed values allow the single-index linear statistics (Tables 4-9) to be recomputed",
+      "the RF/XGBoost results depend on the unpublished stratified split and on early stopping without a stated validation set",
+      "one drug (chondroitin sulfate) is a polymer with no single structure; several property rows are exact copies of other drugs (see automated/consistency notes)",
+      "licence CC BY-NC-ND: values are re-extracted locally, not redistributed"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 50,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 49,
+      "unresolved": 1
+    },
+    "duplicate_structures": [
+      [
+        "28",
+        "39"
+      ]
+    ],
+    "shared_connectivity_groups": [
+      [
+        "01",
+        "19"
+      ],
+      [
+        "28",
+        "39"
+      ]
+    ],
+    "formula_checked": 0,
+    "formula_mismatch": [],
+    "cid_checked": 0,
+    "cid_mismatch": [],
+    "properties": "withheld (licence); run `extract` to rebuild locally"
+  }
+}
