@@ -392,7 +392,10 @@ def _run_fold(X, y, split, families, inner_splits, groups, random_state, ad,
         ad_reason = "no feature columns"
     elif ad is not None:
         try:
-            dom = stats.ApplicabilityDomain(method=ad).fit(X[tr])
+            # same-group neighbours excluded from the training distances: a test
+            # row's group mates are never in training (grouped CV)
+            dom = stats.ApplicabilityDomain(method=ad).fit(
+                X[tr], groups=g_tr if ad == "knn" else None)
             in_dom = dom.in_domain(X[te]).astype(float)
             ad_cov = float(np.mean(in_dom))
         except ValueError as exc:  # AD undefined here: NaN plus the reason
@@ -442,7 +445,8 @@ def nested_cv(X, y, families: Sequence[str | ModelFamily] = DEFAULT_FAMILIES, *,
         inner splits then keep each group within one fold.
     random_state : seed passed to every estimator (fixed across folds).
     ad : "knn", "leverage" or None - applicability domain fitted per outer
-        training part; flags outer-test rows.
+        training part; flags outer-test rows. With ``groups``, the knn AD
+        excludes same-group training neighbours (leave-one-group-out).
     keep_models : keep the 25 refitted estimators in ``result.models``.
     n_jobs : outer folds in parallel (joblib); results are identical.
     min_n, min_n_test : the run is labelled ``meta["underpowered"] = True``
