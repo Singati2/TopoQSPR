@@ -35,13 +35,15 @@ TS = "2026-10-03T00:00:00Z"
 MIGRAINE = "D008881"
 FAST_EVAL = {"families": ["ridge"], "learners": ["selected"], "seeds": [0], "outer_splits": 3,
              "inner_splits": 2, "min_n": 10, "min_n_test": 3}
+# the small synthetic configs leave out mandatory baselines (composition) for speed
+FAST_EVAL_CUSTOM = dict(FAST_EVAL, allow_custom_baselines=True)
 
 
 def _tiny_config(**over):
     cfg = {"name": "tiny", "cohort": {"source": "smiles_csv", "path": "tiny.csv"},
            "feature_sets": ["null", "size", "TI", "TI_family", "rdkit2d"],
            "targets": [{"provider": "rdkit", "names": ["MolLogP", "MolWt"]}],
-           "evaluation": dict(FAST_EVAL)}
+           "evaluation": dict(FAST_EVAL_CUSTOM)}
     cfg.update(over)
     return cfg
 
@@ -599,7 +601,7 @@ def _pilot_manifest_copy(pilot_run, dst: Path) -> Path:
 def _manifest_config(path):
     return {"name": "from-manifest", "cohort": {"source": "manifest", "path": str(path)},
             "feature_sets": ["null", "size"], "targets": [{"provider": "rdkit", "names": ["TPSA"]}],
-            "evaluation": dict(FAST_EVAL)}
+            "evaluation": dict(FAST_EVAL_CUSTOM)}
 
 
 def test_edited_manifest_is_refused(pilot_run, tmp_path):
@@ -845,10 +847,91 @@ def test_target_with_too_few_values_is_skipped_not_crashed(tmp_path):
                        protocol={"family": ["logS_toy:size-null"],
                                  "permutation": {"n_permutations": 2},
                                  "bootstrap": {"n_boot": 2}})
-    cfg["evaluation"] = dict(FAST_EVAL, reference="null")
+    cfg["evaluation"] = dict(FAST_EVAL_CUSTOM, reference="null")
     res = pl.run_study(cfg, tmp_path / "res", timestamp_utc=TS, base_dir=FIX)
     assert "logS_toy" in res.run_record["counts"]["skipped_targets"]
     assert len(res.summary) == 0
     conf = pl.read_results(res.out_dir, "confirmatory")
     assert len(conf) == 1 and "target not evaluated" in conf["reason"].iloc[0]
     assert math.isnan(conf["d_r2_mean"].iloc[0])
+
+
+# ------------------------------------------------ regressions (audit findings)
+_CSV = {"source": "smiles_csv", "path": "x.csv"}
+
+
+@pytest.mark.parametrize("fsets, ref, match", [
+    (["null", "TI", "rdkit2d", "size"], "size", r"mandatory baseline\(s\) \['composition'\]"),
+    (["size", "composition", "TI"], "size", r"\['null'\]"),
+    (["null", "TI", "rdkit2d", "size", "composition"], "rdkit2d", "mandatory reference is 'size'"),
+    (["null", "size", "composition", "TI"], "null", "mandatory reference"),
+])
+def test_mandatory_baselines_are_enforced(fsets, ref, match):
+    # regression: resolve_config accepted feature_sets without null/size/composition and
+    # any reference, although the paper calls these baselines mandatory
+    cfg = {"cohort": _CSV, "feature_sets": fsets, "evaluation": {"reference": ref}}
+    with pytest.raises(ValueError, match=match):
+        pl.resolve_config(cfg)
+    # the explicit override is accepted and kept in the resolved (hashed) config
+    ok = pl.resolve_config({**cfg, "evaluation": {"reference": ref,
+                                                  "allow_custom_baselines": True}})
+    assert ok["evaluation"]["allow_custom_baselines"] is True
+    assert pl.resolve_config(ok) == ok
+
+
+def test_compliant_config_hash_unchanged_by_baseline_rule():
+    # the default (false) is dropped from the resolved config, so compliant configs keep
+    # their hash; false written out explicitly hashes the same as leaving it out
+    a = pl.resolve_config({"cohort": _CSV})
+    assert "allow_custom_baselines" not in a["evaluation"]
+    b = pl.resolve_config({"cohort": _CSV, "evaluation": {"allow_custom_baselines": False}})
+    assert pv.config_sha256(a) == pv.config_sha256(b)
+    with pytest.raises(ValueError, match="true or false"):
+        pl.resolve_config({"cohort": _CSV, "evaluation": {"allow_custom_baselines": "yes"}})
+
+
+def test_run_record_states_baselines(tiny_run, pilot_run):
+    custom = tiny_run.run_record["baselines"]
+    assert custom["allow_custom_baselines"] is True and custom["missing"] == ["composition"]
+    assert custom["mandatory"] == list(pl.MANDATORY_BASELINES)
+    assert tiny_run.run_record["config"]["evaluation"]["allow_custom_baselines"] is True
+    std = pilot_run.run_record["baselines"]
+    assert std["allow_custom_baselines"] is False and std["missing"] == []
+    assert std["reference"] == "size" and "allow_custom_baselines" not in \
+        pilot_run.run_record["config"]["evaluation"]
+
+
+def _lock_names(path):
+    out = {}
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith(("#", "-r")):
+            name, ver = line.split("==")
+            out[re.sub(r"[-_.]+", "-", name).lower()] = ver
+    return out
+
+
+def test_runtime_dependencies_declared_and_locked():
+    # regression: joblib (imported directly) was missing from pyproject, and openpyxl
+    # (expdata, mp_bradley workbook) from pyproject and the lock used by the Dockerfile
+    text = (REPO / "pyproject.toml").read_text()
+    block = text.split("dependencies = [", 1)[1].split("]", 1)[0]
+    deps = {re.sub(r"[-_.]+", "-", re.match(r'\s*"([A-Za-z0-9_.\-]+)', ln).group(1)).lower()
+            for ln in block.splitlines() if ln.strip().startswith('"')}
+    assert {"joblib", "openpyxl"} <= deps
+    lock = _lock_names(REPO / "requirements-lock.txt")
+    for d in deps:  # xgboost is pinned as the CPU-only distribution (same module)
+        assert (d if d != "xgboost" else "xgboost-cpu") in lock, d
+    assert "et-xmlfile" in lock  # openpyxl's own requirement
+    assert "requirements-lock.txt" in (REPO / "Dockerfile").read_text()
+    # every third-party module imported by src/topoqspr is declared
+    mods = set()
+    for f in (SRC / "topoqspr").glob("*.py"):
+        for m in re.findall(r"^\s*(?:from|import)\s+([A-Za-z_]\w*)", f.read_text(), re.M):
+            mods.add(m)
+    third = {"numpy", "pandas", "scipy", "sklearn", "rdkit", "chembl_structure_pipeline",
+             "xgboost", "requests", "joblib", "openpyxl"}
+    dist = {"sklearn": "scikit-learn", "chembl_structure_pipeline": "chembl-structure-pipeline"}
+    for m in mods & third:
+        assert dist.get(m, m).replace("_", "-") in deps, m
+    assert "openpyxl" in (SRC / "topoqspr" / "expdata.py").read_text()

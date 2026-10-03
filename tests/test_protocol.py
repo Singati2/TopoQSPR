@@ -381,14 +381,16 @@ def _protocol_config(**proto):
     p = {"family": ["MolLogP:TI-size", "MolWt:TI-size", "MolLogP:TI_degree-size"],
          "learner": "selected", "practical_threshold": 0.05,
          "permutation": {"n_permutations": 3, "seed": 3},
-         "bootstrap": {"n_boot": 2, "seed": 4}}
+         # explicit opt-in: the bootstrap defaults to the pooled cohort only
+         "bootstrap": {"enabled": True, "n_boot": 2, "seed": 4}}
     p.update(proto)
     return {"name": "tiny-protocol", "cohort": {"source": "smiles_csv", "path": "tiny.csv"},
             "feature_sets": ["null", "size", "TI", "TI_family"],
             "targets": [{"provider": "rdkit", "names": ["MolLogP", "MolWt"]}],
             "indices": {"names": ["W", "M1", "M2", "R", "J"]},
             "evaluation": {"families": ["ridge"], "learners": ["selected"], "seeds": [0],
-                           "outer_splits": 3, "inner_splits": 2, "min_n": 10, "min_n_test": 3},
+                           "outer_splits": 3, "inner_splits": 2, "min_n": 10, "min_n_test": 3,
+                           "allow_custom_baselines": True},  # no composition (speed)
             "protocol": p}
 
 
@@ -435,7 +437,8 @@ def test_protocol_disabled_components_are_explained(tmp_path):
         in r["reason"]
     assert "bootstrap disabled (protocol.bootstrap.enabled = false)" in r["reason"]
     pr = run.run_record["protocol"]
-    assert pr["bootstrap"] == {"enabled": False, "reason": "protocol.bootstrap.enabled = false"}
+    assert pr["bootstrap"] == {"enabled": False, "enabled_rule": pl.ENABLED_RULE_BOOT,
+                               "reason": "protocol.bootstrap.enabled = false"}
     assert pr["permutation"]["enabled"] is True
 
 
@@ -509,7 +512,7 @@ def test_protocol_auto_family_and_off_by_default(tmp_path):
     ({"learner": "rf"}, "not in evaluation.learners"),
     ({"permutation": {"n_permutations": 0}}, "n_permutations"),
     ({"bootstrap": {"families": ["lasso"]}}, "bootstrap.families"),
-    ({"bootstrap": {"n_boot": 1}}, "n_boot"),
+    ({"bootstrap": {"enabled": True, "n_boot": 1}}, "n_boot"),
     ({"perm": {}}, "unknown key"),
 ])
 def test_protocol_config_validation(proto, match):
@@ -524,3 +527,50 @@ def test_family_target_must_exist(tmp_path):
     with pytest.raises(ValueError, match="no provider supplies"):
         pl.run_study(cfg, tmp_path / "x", timestamp_utc=TS, base_dir=FIX)
     assert not (tmp_path / "x").exists()
+
+
+# ---------------------------------------------- regressions (audit findings)
+def test_permutation_indices_unique_size_group_is_row_wise_as_documented():
+    # regression: the scheme claimed every group keeps its within-group y structure;
+    # a group whose size no other group shares is in fact permuted row-wise with the
+    # singletons (now documented). Group a (3 rows, unique size), b, c, d singletons.
+    groups = np.array(["a", "a", "a", "b", "c", "d"], dtype=object)
+    perm = pl.permutation_indices(6, groups, np.random.default_rng([0, 1]))
+    assert sorted(perm.tolist()) == list(range(6))
+    rows = np.flatnonzero(groups == "a")
+    assert len(set(groups[perm[rows]])) > 1  # the 3-member block draws from several groups
+    # exactly the documented first draw: one row-wise permutation of the pooled rows
+    np.testing.assert_array_equal(perm, np.random.default_rng([0, 1]).permutation(6))
+    assert "within-group dependence of y is kept" not in pl.PERMUTATION_SCHEME
+    assert "group whose size is unique" in pl.PERMUTATION_SCHEME
+    assert "row-wise together with the singletons" in pl.permutation_indices.__doc__
+
+
+def test_permutation_rng_rule_describes_block_scheme(proto_run):
+    # regression: rng_rule always said default_rng([seed, b]).permutation(n), also for
+    # targets permuted with the restricted block scheme
+    rule = proto_run.run_record["protocol"]["permutation"]["rng_rule"]
+    assert "permutation_indices(n, groups" in rule and "scheme_by_target" in rule
+    assert ".permutation(n)" not in rule.split("i.e.")[0]
+
+
+@pytest.mark.parametrize("source, extra, want", [
+    ("pooled", {}, True),
+    ("smiles_csv", {"path": "x.csv"}, False),
+    ("chembl", {"mesh_ids": ["D008881"]}, False),
+])
+def test_bootstrap_defaults_to_pooled_cohort_only(source, extra, want):
+    # regression: the bootstrap ran by default for every cohort; the plan runs it on the
+    # pooled set only (per-disease n leaves most resamples undefined)
+    cfg = pl.resolve_config({"cohort": {"source": source, **extra},
+                             "protocol": {"family": "auto"}})
+    assert cfg["protocol"]["bootstrap"]["enabled"] is want
+    assert pl.resolve_config(cfg) == cfg  # idempotent: the resolved value is explicit
+    for flag in (True, False):  # an explicit value is honoured for every cohort
+        c = pl.resolve_config({"cohort": {"source": source, **extra},
+                               "protocol": {"family": "auto", "bootstrap": {"enabled": flag}}})
+        assert c["protocol"]["bootstrap"]["enabled"] is flag
+
+
+def test_bootstrap_record_states_enabled_rule(proto_run):
+    assert proto_run.run_record["protocol"]["bootstrap"]["enabled_rule"] == pl.ENABLED_RULE_BOOT

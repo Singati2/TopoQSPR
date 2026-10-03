@@ -28,6 +28,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/topoqspr
+# the lock pins every runtime dependency of pyproject.toml (incl. joblib and
+# openpyxl for expdata's mp_bradley workbook); the package goes in with --no-deps
 COPY requirements-lock.txt ./
 RUN pip install -r requirements-lock.txt
 
