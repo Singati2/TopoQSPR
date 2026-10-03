@@ -47,6 +47,7 @@ from scipy.spatial.distance import cdist as _cdist
 __all__ = [
     "corrected_ttest",
     "benjamini_hochberg",
+    "benjamini_yekutieli",
     "spearman_ci",
     "y_scrambling",
     "ApplicabilityDomain",
@@ -132,6 +133,28 @@ def benjamini_hochberg(pvals: Sequence[float], q: float = 0.05):
     reject = np.zeros(p.shape, dtype=bool)
     reject[ok] = adj[ok] <= q
     return adj, reject
+
+
+def benjamini_yekutieli(pvals: Sequence[float], q: float = 0.05):
+    """Benjamini-Yekutieli step-up procedure (valid under arbitrary dependence).
+
+    Same as :func:`benjamini_hochberg` with every p-value multiplied by
+    c(m) = sum_{i=1..m} 1/i (Benjamini & Yekutieli 2001, Thm 1.3):
+    q_(i) = min_{j >= i} min(1, c(m) * m * p_(j) / j). Used as the sensitivity
+    analysis for BH because the confirmatory endpoints share drugs and folds.
+
+    Returns (adjusted, reject) in the input order; NaN p-values stay NaN.
+    """
+    p = np.asarray(pvals, dtype=float).ravel()
+    m = int(np.sum(~np.isnan(p)))
+    if m == 0:
+        return np.full(p.shape, np.nan), np.zeros(p.shape, dtype=bool)
+    c = float(np.sum(1.0 / np.arange(1, m + 1)))
+    scaled = np.where(np.isnan(p), np.nan, np.minimum(1.0, p * c))
+    adj, _ = benjamini_hochberg(scaled, q)
+    # BH on c*p caps at 1 before the step-up; recompute the reject set on the adjusted values
+    adj = np.minimum(1.0, adj)
+    return adj, np.where(np.isnan(adj), False, adj <= q)
 
 
 def spearman_ci(x: Sequence[float], y: Sequence[float], alpha: float = 0.05,
