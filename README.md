@@ -48,3 +48,7 @@ Manuscript in preparation for SoftwareX (see `paper/` and the [paper roadmap](do
 Code: MIT; see [LICENSE](LICENSE) (pending written agreement of the original author of the v0.x code).
 
 Data: drug sets and properties retrieved from ChEMBL are licensed CC BY-SA 3.0 by EMBL-EBI. Redistributed manifests or result files that contain ChEMBL-derived data must carry attribution and the same licence.
+
+## Required Reading
+
+See [`related_papers/README.md`](related_papers/README.md) for the papers every contributor should read, starting with Arockiaraj, Greeni & Abul Kalaam (2023), *Int. J. Quantum Chem.* 123:e27136 ([doi:10.1002/qua.27136](https://doi.org/10.1002/qua.27136)).
