@@ -113,6 +113,33 @@ TARGET_EXCLUSIONS: dict[str, tuple[str, ...]] = {
     "PC_HBondAcceptorCount": ("NumHAcceptors", "NOCount") + _QED,
     "RotBonds": ("NumRotatableBonds",) + _QED,
     "PC_RotatableBondCount": ("NumRotatableBonds",) + _QED,
+    # v0.x column names (fetcher.py / config.ML_TARGETS) for the same PubChem
+    # properties as the API spellings above.
+    "PC_HBD": ("NumHDonors", "NHOHCount") + _QED,
+    "PC_HBA": ("NumHAcceptors", "NOCount") + _QED,
+    "PC_RotatableBonds": ("NumRotatableBonds",) + _QED,
+    # PubChem HeavyAtomCount = |V|. NOTE: the target is then *identical* to
+    # size.n_heavy and to the sum of the composition heavy-atom counts, so it
+    # is a sanity check, not a QSPR result (see EVALUATION_PROTOCOL.md).
+    "PC_HeavyAtomCount": ("HeavyAtomCount",),
+    # PubChem AtomStereoCount = defined + undefined stereocentres.
+    "PC_AtomStereoCount": ("NumAtomStereoCenters", "NumUnspecifiedAtomStereoCenters"),
+    # PubChem Charge = net formal charge. NumValenceElectrons subtracts each
+    # atom's formal charge, and the Gasteiger partial charges (and BCUTs
+    # weighted by them) start from the atoms' formal charges (their sum over
+    # all atoms incl. H is the net charge; acetate heavy atoms: -1.09), so
+    # all take the target as an input.
+    "PC_FormalCharge": ("NumValenceElectrons", "MaxPartialCharge", "MinPartialCharge",
+                        "MaxAbsPartialCharge", "MinAbsPartialCharge",
+                        "BCUT2D_CHGHI", "BCUT2D_CHGLO"),
+    # PubChem CovalentUnitCount = c(G). No descList entry counts fragments.
+    # NOTE: size_rings encodes it exactly (c = n_rings - n_bonds + n_heavy).
+    "PC_CovalentUnitCount": (),
+    # Measured bioactivities (v0.x BIO_*): no descriptor is computed from them.
+    "BIO_IC50": (),
+    "BIO_Ki": (),
+    "BIO_EC50": (),
+    "BIO_Kd": (),
     # PubChem complexity is the Bertz/Hendrickson/Ihlenfeldt formula.
     "PC_Complexity": ("BertzCT",),
     # Alternative estimators / measurements of logP: Crippen is a separately

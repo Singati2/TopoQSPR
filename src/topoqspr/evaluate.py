@@ -3,8 +3,9 @@
 Procedure (see docs/EVALUATION_PROTOCOL.md for the full specification):
 
 For repeat r = 0..R-1 (seed s_r) the rows are split into K outer folds by
-``KFold(K, shuffle=True, random_state=s_r)`` (or, with ``groups``,
-``GroupKFold(K, shuffle=True, random_state=s_r)``). For each outer fold k:
+``KFold(K, shuffle=True, random_state=s_r)`` (or, with ``groups``, by the
+seeded row-balancing group splitter :func:`balanced_group_kfold`). For each
+outer fold k:
 
 1. Only the outer-training part D_train^(r,k) is used for selection. It is
    split by ``KFold(L, shuffle=True, random_state=1000*s_r + k)`` (grouped if
@@ -18,6 +19,11 @@ For repeat r = 0..R-1 (seed s_r) the rows are split into K outer folds by
 
 Outputs: out-of-fold predictions per repeat, per-fold R^2/MAE/RMSE, pooled
 per-repeat R^2/MAE/RMSE, and the inner selection table.
+
+Failures are never averaged away: a failed fold (or a fold whose R^2 is
+undefined) makes the fold-mean summary NaN, with the reason recorded in
+``summary()["reason"]`` (dropping failed folds before averaging would select
+on success).
 
 ``legacy_protocol`` reproduces the v0.x procedure (tuning on all rows, then
 ``cross_val_score``, best family by the same scores) for Experiment C.
@@ -42,8 +48,7 @@ import numpy as np
 import pandas as pd
 from sklearn.base import clone
 from sklearn.exceptions import ConvergenceWarning, FitFailedWarning
-from sklearn.model_selection import (GridSearchCV, GroupKFold, KFold,
-                                     cross_val_score)
+from sklearn.model_selection import GridSearchCV, KFold, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -57,6 +62,7 @@ __all__ = [
     "ComparisonResult",
     "LegacyResult",
     "make_outer_splits",
+    "balanced_group_kfold",
     "nested_cv",
     "select_and_refit",
     "compare_feature_sets",
@@ -83,6 +89,18 @@ def _metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
     return dict(r2=1.0 - sse / sst if n >= 2 and sst > 0 else math.nan,
                 mae=float(np.mean(np.abs(err))),
                 rmse=math.sqrt(sse / n))
+
+
+def _metric_reason(y_true: np.ndarray, y_pred: np.ndarray) -> str:
+    """Why :func:`_metrics` returns NaN R^2 for finite predictions ('' if defined)."""
+    y_true = np.asarray(y_true, float)
+    if y_true.size == 0 or not np.all(np.isfinite(np.asarray(y_pred, float))):
+        return ""  # a failed fold carries its own reason
+    if y_true.size < 2:
+        return f"R2 undefined: n_test={y_true.size} < 2"
+    if float(np.sum((y_true - y_true.mean()) ** 2)) == 0.0:
+        return "R2 undefined: constant y_test (SST = 0)"
+    return ""
 
 
 def _params_json(params: dict) -> str:
@@ -112,14 +130,50 @@ def _as_xy(X, y):
     return Xa, ya, labels, columns
 
 
+def balanced_group_kfold(groups, n_splits: int, seed: int
+                         ) -> list[tuple[np.ndarray, np.ndarray]]:
+    """Seeded K-fold split that keeps groups together and balances *rows*.
+
+    Groups are ordered by size (descending); ties are broken by a random
+    permutation from ``numpy.random.default_rng(seed)``. Each group in turn
+    goes to the fold with the fewest rows so far (lowest fold index on ties):
+    the greedy "longest processing time first" rule, whose largest fold is at
+    most 4/3 of the optimum (Graham 1969, SIAM J Appl Math 17:416-429,
+    doi:10.1137/0117039). Unlike ``GroupKFold(shuffle=True)`` (scikit-learn
+    >= 1.6), which balances the number of *groups* per fold, this keeps fold
+    sizes in rows close, so a scaffold distribution with one large group and
+    many singletons does not produce 3-row test folds next to 26-row ones.
+    A single group larger than n / K still forms an oversized fold; this is
+    reported through ``meta["min_n_test"]``.
+
+    Returns [(train_idx, test_idx), ...] with sorted indices. Raises
+    ``ValueError`` if there are fewer groups than folds.
+    """
+    g = np.asarray(groups)
+    uniq, inv, counts = np.unique(g, return_inverse=True, return_counts=True)
+    inv = inv.ravel()
+    if uniq.size < n_splits:
+        raise ValueError(f"cannot split {uniq.size} groups into {n_splits} folds")
+    perm = np.random.default_rng(seed).permutation(uniq.size)
+    order = perm[np.argsort(-counts[perm], kind="stable")]
+    load = np.zeros(n_splits, dtype=np.int64)
+    fold_of = np.empty(uniq.size, dtype=np.int64)
+    for gi in order:
+        f = int(np.argmin(load))
+        fold_of[gi] = f
+        load[f] += counts[gi]
+    row_fold = fold_of[inv]
+    return [(np.flatnonzero(row_fold != f), np.flatnonzero(row_fold == f))
+            for f in range(n_splits)]
+
+
 def make_outer_splits(n: int, n_splits: int = 5, seeds: Sequence[int] = DEFAULT_SEEDS,
                  groups=None) -> list[tuple[int, int, int, np.ndarray, np.ndarray]]:
     """Outer splits as (repeat, fold, seed, train_idx, test_idx), indices sorted.
 
     Repeat r uses ``KFold(n_splits, shuffle=True, random_state=seeds[r])`` or,
-    with groups, ``GroupKFold(n_splits, shuffle=True, random_state=seeds[r])``
-    (scikit-learn >= 1.6: groups are permuted and split into n_splits blocks of
-    nearly equal *group* count, so fold sizes in rows can differ).
+    with groups, ``balanced_group_kfold(groups, n_splits, seeds[r])`` (groups
+    kept together, fold sizes balanced in rows).
     """
     out = []
     dummy = np.zeros((n, 1))
@@ -128,8 +182,9 @@ def make_outer_splits(n: int, n_splits: int = 5, seeds: Sequence[int] = DEFAULT_
             cv = KFold(n_splits, shuffle=True, random_state=seed)
             it = cv.split(dummy)
         else:
-            cv = GroupKFold(n_splits, shuffle=True, random_state=seed)
-            it = cv.split(dummy, groups=np.asarray(groups))
+            if len(groups) != n:
+                raise ValueError(f"groups has {len(groups)} labels for {n} rows")
+            it = balanced_group_kfold(groups, n_splits, seed)
         for k, (tr, te) in enumerate(it):
             out.append((r, k, int(seed), np.sort(tr), np.sort(te)))
     return out
@@ -139,8 +194,7 @@ def _inner_splits(n_train: int, n_splits: int, seed: int, groups=None):
     dummy = np.zeros((n_train, 1))
     if groups is None:
         return list(KFold(n_splits, shuffle=True, random_state=seed).split(dummy))
-    return list(GroupKFold(n_splits, shuffle=True, random_state=seed)
-                .split(dummy, groups=np.asarray(groups)))
+    return balanced_group_kfold(groups, n_splits, seed)
 
 
 # ------------------------------------------------------------ inner selection
@@ -165,9 +219,21 @@ def select_and_refit(X: np.ndarray, y: np.ndarray, families: Sequence,
     Selection criterion: mean inner-fold MSE (equal-size folds: equivalent to
     pooled inner R^2). Grid points whose fit fails in any inner fold score
     NaN and are not selectable. Every fit is on a ``clone``.
+
+    If no column of X is usable (every column is all-NaN or constant over
+    these rows, so imputation + :class:`~topoqspr.models.DropConstantAndDuplicate`
+    would leave nothing), the feature set carries no information here and
+    the null family ``mean`` is used instead, with ``Selection.reason``
+    saying so. This makes an uninformative set score like the null model
+    instead of failing.
     """
     X = np.asarray(X, dtype=float)
     y = np.asarray(y, dtype=float)
+    fallback = ""
+    if X.ndim == 2 and X.shape[1] > 0 and not _has_usable_column(X):
+        fallback = ("no usable feature in these training rows (all columns NaN "
+                    "or constant); null model 'mean' used")
+        families = ("mean",)
     if isinstance(inner, int):
         splits = _inner_splits(len(y), inner, random_state, groups)
     else:
@@ -229,7 +295,16 @@ def select_and_refit(X: np.ndarray, y: np.ndarray, families: Sequence,
         except Exception as exc:  # noqa: BLE001 - reported, never imputed
             return Selection(None, name, dict(params), mse, table,
                              f"refit of {name} failed: {exc!r}"[:300])
-    return Selection(est, name, dict(params), mse, table)
+    return Selection(est, name, dict(params), mse, table, fallback)
+
+
+def _has_usable_column(X: np.ndarray) -> bool:
+    """True if some column has two distinct finite values (survives
+    median imputation and constant-column removal)."""
+    with warnings.catch_warnings(), np.errstate(all="ignore"):
+        warnings.simplefilter("ignore", RuntimeWarning)
+        hi, lo = np.nanmax(X, axis=0), np.nanmin(X, axis=0)
+    return bool(np.any(np.isfinite(hi) & (hi > lo)))
 
 
 # ---------------------------------------------------------------- nested CV
@@ -240,7 +315,10 @@ class NestedCVResult:
     predictions : one row per (repeat, row): repeat, fold, row (label), pos
         (0-based position), y_true, y_pred, in_domain (AD flag; NaN if no AD).
     folds : one row per outer fold: repeat, fold, seed, n_train, n_test,
-        family, params, inner_mse, r2, mae, rmse, ad_coverage, status, reason.
+        family, params, inner_mse, r2, mae, rmse, ad_coverage, ad_reason,
+        status, reason. ``reason`` is also set for an ``ok`` fold when the
+        null family was substituted or R^2 is undefined (n_test < 2, SST = 0);
+        ``ad_reason`` says why the AD could not be fitted.
     repeats : one row per repeat: repeat, seed, n, r2, mae, rmse (pooled over
         that repeat's out-of-fold predictions).
     inner : the per-family inner selection table of every outer fold.
@@ -254,15 +332,47 @@ class NestedCVResult:
     models: list | None = None
 
     def summary(self) -> dict:
+        """Fold and pooled summaries; **no NaN is skipped**.
+
+        r2_fold_mean = (1/J) sum_j R2_j over all J outer folds and
+        r2_pooled_mean = (1/R) sum_r R2_pooled,r over all R repeats (likewise
+        SD, median, MAE, RMSE). If any fold failed or has an undefined metric,
+        the affected statistics are NaN (pandas ``skipna=False``) and
+        ``reason`` lists the counts; averaging only the surviving folds would
+        be a selection on success. ``n_valid_folds`` counts folds with a
+        finite R^2. ``underpowered`` / ``underpowered_reason`` repeat meta.
+        """
         f, r = self.folds, self.repeats
+
+        def mean(x):
+            return float(x.mean(skipna=False))
+
+        def sd(x):
+            return float(x.std(ddof=1, skipna=False))
+
+        n_failed = int((f["status"] != "ok").sum())
+        n_valid = int(np.isfinite(f["r2"].to_numpy(dtype=float)).sum())
+        n_undef = int(((f["status"] == "ok") & f["r2"].isna()).sum())
+        n_rep_nan = int(r["r2"].isna().sum())
+        why = []
+        if n_failed:
+            why.append(f"{n_failed} of {len(f)} outer folds failed")
+        if n_undef:
+            why.append(f"{n_undef} of {len(f)} outer folds have undefined R2 "
+                       "(n_test < 2 or constant y_test)")
+        if n_rep_nan:
+            why.append(f"{n_rep_nan} of {len(r)} repeats have undefined pooled R2")
         return dict(
-            r2_fold_mean=float(f["r2"].mean()), r2_fold_sd=float(f["r2"].std(ddof=1)),
-            r2_fold_median=float(f["r2"].median()),
-            mae_fold_mean=float(f["mae"].mean()), rmse_fold_mean=float(f["rmse"].mean()),
-            r2_pooled_mean=float(r["r2"].mean()), r2_pooled_sd=float(r["r2"].std(ddof=1)),
-            mae_pooled_mean=float(r["mae"].mean()),
-            n_folds=int(len(f)), n_failed_folds=int((f["status"] != "ok").sum()),
+            r2_fold_mean=mean(f["r2"]), r2_fold_sd=sd(f["r2"]),
+            r2_fold_median=float(f["r2"].median(skipna=False)),
+            mae_fold_mean=mean(f["mae"]), rmse_fold_mean=mean(f["rmse"]),
+            r2_pooled_mean=mean(r["r2"]), r2_pooled_sd=sd(r["r2"]),
+            mae_pooled_mean=mean(r["mae"]),
+            n_folds=int(len(f)), n_failed_folds=n_failed, n_valid_folds=n_valid,
             family_counts=f["family"].value_counts(dropna=False).sort_index().to_dict(),
+            underpowered=bool(self.meta.get("underpowered", False)),
+            underpowered_reason=str(self.meta.get("underpowered_reason", "")),
+            reason="; ".join(why),
         )
 
 
@@ -277,29 +387,35 @@ def _run_fold(X, y, split, families, inner_splits, groups, random_state, ad,
     tab.insert(0, "repeat", r)
     in_dom = np.full(te.size, np.nan)
     ad_cov = math.nan
-    if ad is not None and X.shape[1] > 0:
+    ad_reason = "" if ad is not None else "ad=None"
+    if ad is not None and X.shape[1] == 0:
+        ad_reason = "no feature columns"
+    elif ad is not None:
         try:
             dom = stats.ApplicabilityDomain(method=ad).fit(X[tr])
             in_dom = dom.in_domain(X[te]).astype(float)
             ad_cov = float(np.mean(in_dom))
-        except ValueError:
-            pass
+        except ValueError as exc:  # AD undefined here: NaN plus the reason
+            ad_reason = f"AD not fitted: {exc}"[:300]
     if sel.estimator is None:
         y_pred = np.full(te.size, np.nan)
         status, reason = "failed", sel.reason
     else:
         try:
             y_pred = np.asarray(sel.estimator.predict(X[te]), dtype=float).ravel()
-            status, reason = ("ok", "") if np.all(np.isfinite(y_pred)) else \
+            status, reason = ("ok", sel.reason) if np.all(np.isfinite(y_pred)) else \
                 ("failed", "non-finite predictions")
         except Exception as exc:  # noqa: BLE001 - reported, never imputed
             y_pred = np.full(te.size, np.nan)
             status, reason = "failed", f"predict failed: {exc!r}"[:300]
     m = _metrics(y[te], y_pred)
+    undefined = _metric_reason(y[te], y_pred) if status == "ok" else ""
+    if undefined:
+        reason = f"{reason}; {undefined}" if reason else undefined
     fold_row = dict(repeat=r, fold=k, seed=seed, n_train=int(tr.size), n_test=int(te.size),
                     family=sel.family, params=_params_json(sel.params),
                     inner_mse=sel.inner_mse, **m, ad_coverage=ad_cov,
-                    status=status, reason=reason)
+                    ad_reason=ad_reason, status=status, reason=reason)
     pred = pd.DataFrame(dict(repeat=r, fold=k, pos=te, y_true=y[te], y_pred=y_pred,
                              in_domain=in_dom))
     return fold_row, pred, tab, (sel.estimator if keep_model else None)
@@ -309,7 +425,8 @@ def nested_cv(X, y, families: Sequence[str | ModelFamily] = DEFAULT_FAMILIES, *,
               outer_splits: int = 5, seeds: Sequence[int] = DEFAULT_SEEDS,
               inner_splits: int = 3, groups=None, random_state: int = 0,
               ad: str | None = "knn", keep_models: bool = False,
-              n_jobs: int = 1) -> NestedCVResult:
+              n_jobs: int = 1, min_n: int = 50, min_n_test: int = 10
+              ) -> NestedCVResult:
     """Repeated nested cross-validation with family + hyperparameter selection.
 
     Parameters
@@ -328,6 +445,11 @@ def nested_cv(X, y, families: Sequence[str | ModelFamily] = DEFAULT_FAMILIES, *,
         training part; flags outer-test rows.
     keep_models : keep the 25 refitted estimators in ``result.models``.
     n_jobs : outer folds in parallel (joblib); results are identical.
+    min_n, min_n_test : the run is labelled ``meta["underpowered"] = True``
+        (with ``meta["underpowered_reason"]``) when n < min_n (EXPERIMENT_PLAN
+        3.3: cohorts with n < 50 are descriptive only) or the smallest outer
+        test fold has fewer than min_n_test rows. The evaluation still runs;
+        the label tells the caller that no ML claim may be made from it.
     """
     Xa, ya, labels, columns = _as_xy(X, y)
     families = ("mean",) if Xa.shape[1] == 0 else tuple(families)
@@ -354,16 +476,32 @@ def nested_cv(X, y, families: Sequence[str | ModelFamily] = DEFAULT_FAMILIES, *,
                 families=[get_family(f).name for f in families],
                 outer_splits=outer_splits, seeds=list(seeds), inner_splits=inner_splits,
                 grouped=groups is not None, random_state=random_state, ad=ad,
-                n_missing_cells=int(np.isnan(Xa).sum()))
+                n_missing_cells=int(np.isnan(Xa).sum()),
+                min_n_test=int(folds["n_test"].min()), max_n_test=int(folds["n_test"].max()),
+                n_ad_failed=int((folds["ad_reason"].str.startswith("AD not fitted")).sum()))
+    why = []
+    if len(ya) < min_n:
+        why.append(f"n={len(ya)} < min_n={min_n}")
+    if meta["min_n_test"] < min_n_test:
+        why.append(f"smallest outer test fold has {meta['min_n_test']} rows "
+                   f"< min_n_test={min_n_test}")
+    meta.update(underpowered=bool(why), underpowered_reason="; ".join(why))
     return NestedCVResult(preds, folds, pd.DataFrame(reps), inner, meta,
                           [o[3] for o in outs] if keep_models else None)
 
 
 def nested_r2_statistic(**nested_kwargs):
     """Return ``score_fn(X, y)`` = mean pooled R^2 over repeats of
-    :func:`nested_cv` (for :func:`topoqspr.stats.y_scrambling`)."""
+    :func:`nested_cv` (for :func:`topoqspr.stats.y_scrambling`).
+
+    The value is NaN whenever any outer fold failed or any repeat's pooled R^2
+    is undefined (no skipping; see :meth:`NestedCVResult.summary`).
+    :func:`~topoqspr.stats.y_scrambling` then reports the observed statistic
+    as NaN, or excludes that permutation from ``n_valid``.
+    """
     def score_fn(X, y):
-        return nested_cv(X, y, **nested_kwargs).summary()["r2_pooled_mean"]
+        s = nested_cv(X, y, **nested_kwargs).summary()
+        return s["r2_pooled_mean"] if s["n_failed_folds"] == 0 else math.nan
     return score_fn
 
 
@@ -376,8 +514,11 @@ class ComparisonResult:
     paired  : per (set, repeat, fold): d_r2 = R2_set - R2_ref,
               d_mae = MAE_ref - MAE_set, d_rmse = RMSE_ref - RMSE_set
               (positive = the set beats the reference).
-    summary : per set: fold-mean and pooled R2/MAE, and for d_r2 / d_mae the
+    summary : per set: fold-mean and pooled R2/MAE, failed/valid fold
+              counts, underpowered flag and reason, and for d_r2 / d_mae the
               mean, corrected-t CI, p, plus BH q across the non-reference sets.
+              A NaN fold difference (failed or undefined fold in either set)
+              makes that set's CI and p NaN (``nan_policy="propagate"``).
     """
 
     results: dict
@@ -422,7 +563,8 @@ def compare_feature_sets(feature_sets: Mapping[str, pd.DataFrame], y, *,
         s = results[nm].summary()
         row = dict(set=nm, p=results[nm].meta["p"], r2_fold_mean=s["r2_fold_mean"],
                    r2_pooled_mean=s["r2_pooled_mean"], mae_fold_mean=s["mae_fold_mean"],
-                   n_failed_folds=s["n_failed_folds"])
+                   n_failed_folds=s["n_failed_folds"], n_valid_folds=s["n_valid_folds"],
+                   underpowered=s["underpowered"], reason=s["reason"])
         if nm != reference:
             for met in ("d_r2", "d_mae"):
                 t = stats.corrected_ttest(d[met], d["n_train"], d["n_test"], alpha=alpha)
@@ -531,6 +673,10 @@ def optimism(legacy: LegacyResult, nested: NestedCVResult) -> dict:
     with R2_nested = mean outer-fold R^2 (same estimator type as the v0.x fold
     mean); the pooled variant (mean over repeats of pooled OOF R^2) is also
     returned as *_pooled.
+
+    Both nested terms are NaN when any outer fold failed or has an undefined
+    R^2 (:meth:`NestedCVResult.summary` does not skip NaN), so B is never
+    computed on a subset of folds; ``reason`` carries the summary's reason.
     """
     s = nested.summary()
     return dict(r2_train=legacy.train_r2, r2_cv_legacy=legacy.cv_r2,
@@ -538,7 +684,8 @@ def optimism(legacy: LegacyResult, nested: NestedCVResult) -> dict:
                 B_train=legacy.train_r2 - s["r2_fold_mean"],
                 B_CV=legacy.cv_r2 - s["r2_fold_mean"],
                 B_train_pooled=legacy.train_r2 - s["r2_pooled_mean"],
-                B_CV_pooled=legacy.cv_r2 - s["r2_pooled_mean"])
+                B_CV_pooled=legacy.cv_r2 - s["r2_pooled_mean"],
+                reason=s["reason"])
 
 
 # ------------------------------------------------------------------- groups
