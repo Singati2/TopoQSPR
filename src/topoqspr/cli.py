@@ -10,7 +10,9 @@ Subcommands::
 
 Time stamps written into outputs default to the current UTC time and can be
 fixed with ``--timestamp``. Exit status: 0 success, 1 a rerun whose result
-CSVs differ, 2 usage or input errors.
+CSVs differ, 2 usage, configuration or input errors (also a missing optional
+dependency or an unloadable target provider), 3 an unexpected internal error
+(traceback on stderr). A crash therefore never looks like a rerun mismatch.
 """
 
 from __future__ import annotations
@@ -20,12 +22,18 @@ import datetime as _dt
 import json
 import logging
 import sys
+import traceback
 from pathlib import Path
 from typing import Sequence
 
 from . import __version__
 
-__all__ = ["main", "build_parser"]
+__all__ = ["main", "build_parser", "EXIT_OK", "EXIT_RERUN_DIFFERS", "EXIT_INPUT", "EXIT_INTERNAL"]
+
+EXIT_OK = 0
+EXIT_RERUN_DIFFERS = 1
+EXIT_INPUT = 2
+EXIT_INTERNAL = 3
 
 
 def _now_utc() -> str:
@@ -149,7 +157,7 @@ def cmd_rerun(args) -> int:
     if rep["package_differences"]:
         print(f"note: {len(rep['package_differences'])} package versions differ from the record",
               file=sys.stderr)
-    return 0 if rep["ok"] else 1
+    return EXIT_OK if rep["ok"] else EXIT_RERUN_DIFFERS
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -215,10 +223,16 @@ def main(argv: Sequence[str] | None = None) -> int:
                         format="%(asctime)s %(name)s %(message)s", stream=sys.stderr)
     try:
         return int(args.func(args) or 0)
-    except (ValueError, LookupError, FileNotFoundError, FileExistsError, RuntimeError) as exc:
-        # LookupError covers KeyError and chembl.CacheMiss (offline cache miss)
+    except (ValueError, TypeError, LookupError, ImportError, FileNotFoundError,
+            FileExistsError, NotADirectoryError, IsADirectoryError, RuntimeError) as exc:
+        # LookupError covers KeyError and chembl.CacheMiss (offline cache miss);
+        # ImportError a missing optional dependency or target-provider module
         print(f"error: {exc}", file=sys.stderr)
-        return 2
+        return EXIT_INPUT
+    except Exception:  # noqa: BLE001 - anything else is a bug, not a rerun mismatch
+        traceback.print_exc(file=sys.stderr)
+        print("error: internal error (traceback above)", file=sys.stderr)
+        return EXIT_INTERNAL
 
 
 if __name__ == "__main__":  # pragma: no cover

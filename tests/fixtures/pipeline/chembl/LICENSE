@@ -1,0 +1,21 @@
+ChEMBL data in this directory
+=============================
+
+The files under ChEMBL_37/ (gzipped ChEMBL REST API responses: the MeSH
+heading index, drug_indication rows for MeSH D008881 "Migraine Disorders" and
+the molecule records of that cohort) and status.json are data from the ChEMBL
+database, release ChEMBL_37 (release date 2026-05-01),
+doi:10.6019/CHEMBL.database.37.
+
+They are licensed under the Creative Commons Attribution-ShareAlike 3.0
+Unported licence (CC BY-SA 3.0):
+https://creativecommons.org/licenses/by-sa/3.0/
+
+Attribution: ChEMBL, European Bioinformatics Institute (EMBL-EBI),
+https://www.ebi.ac.uk/chembl/
+
+They were recorded unchanged (apart from gzip compression and the cache's file
+naming) by tests/fixtures/pipeline/record.py and are redistributed here only as
+an offline test fixture. This directory is NOT covered by the repository's MIT
+licence; any redistribution of these files, or of files derived from them,
+must keep this attribution and the CC BY-SA 3.0 licence.

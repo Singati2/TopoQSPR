@@ -12,7 +12,11 @@ for the schema and every output file):
    whose standardised parents share a full InChIKey are de-duplicated (the
    first in manifest order is kept, the other is excluded as
    ``duplicate_inchikey:<kept id>``), since a duplicate would put the same
-   structure in a training and a test fold;
+   structure in a training and a test fold. Parents that share only the
+   InChIKey first block (stereoisomers, racemate and enantiomer,
+   isotopologues: the same graph, so identical 2D features) are all kept and
+   labelled with a ``connectivity_group``; the evaluation keeps every such
+   group inside one fold;
 3. **indices** - :func:`topoqspr.indices.compute_indices` (NaN + reason);
 4. **features** - the baseline ladder of :mod:`topoqspr.features` plus ``TI``
    and one ``TI_<family>`` set per index family; ``rdkit2d`` is subset per
@@ -25,7 +29,9 @@ for the schema and every output file):
    corrected repeated-CV t intervals; docs/EVALUATION_PROTOCOL.md) once per
    *learner*: ``selected`` (family and hyperparameters chosen in the inner
    loop among all configured families) and each family on its own;
-7. **write** - CSV outputs, ``run_record.json`` last.
+7. **write** - CSV outputs, ``run_record.json`` last. All files are written
+   to a staging directory and moved into the results directory only when the
+   run has succeeded, so a failed run leaves nothing behind.
 
 Every result CSV is a deterministic function of (config, input data, ChEMBL
 release, package versions): no clock, no hash-seed dependence, sorted rows,
@@ -36,6 +42,7 @@ ChEMBL cache and checks the CSVs byte for byte.
 from __future__ import annotations
 
 import copy
+import importlib.util
 import json
 import logging
 import math
@@ -56,6 +63,7 @@ from . import features as ft
 from . import provenance as pv
 from .graph import standardize
 from .indices import FAMILIES as INDEX_FAMILIES
+from .chembl import CHEMBL_DATA_LICENCE
 from .indices import INDEX_NAMES, REGISTRY, compute_indices
 from .models import DEFAULT_FAMILIES, FAMILIES as MODEL_FAMILIES
 from .target_providers import TargetSpec, get_target_provider
@@ -70,6 +78,7 @@ __all__ = [
     "run_study",
     "rerun",
     "compute_index_table",
+    "read_results",
 ]
 
 log = logging.getLogger("topoqspr.pipeline")
@@ -138,8 +147,13 @@ def load_config(path: str | os.PathLike) -> dict:
         except ImportError:
             raise RuntimeError("YAML configs need PyYAML, which is not installed; "
                                "use a JSON config") from None
-        return yaml.safe_load(text)
-    return json.loads(text)
+        cfg = yaml.safe_load(text)
+    else:
+        cfg = json.loads(text)
+    if not isinstance(cfg, Mapping):
+        raise ValueError(f"{path}: a study config must be a mapping (JSON object), "
+                         f"got {type(cfg).__name__}")
+    return cfg
 
 
 def _merge(defaults: Mapping, given: Mapping, where: str) -> dict:
@@ -166,7 +180,7 @@ def resolve_config(config: Mapping) -> dict:
     Unknown keys raise, so a typo cannot silently fall back to a default.
     """
     if not isinstance(config, Mapping):
-        raise TypeError("config must be a mapping")
+        raise ValueError(f"config must be a mapping, got {type(config).__name__}")
     cfg = _merge(_DEFAULTS, config, "config")
     if cfg["schema"] != CONFIG_SCHEMA:
         raise ValueError(f"config schema {cfg['schema']!r} not supported (expected {CONFIG_SCHEMA})")
@@ -217,8 +231,10 @@ def resolve_config(config: Mapping) -> dict:
     cfg["feature_sets"] = [s for s in _BASE_SETS if s in fsets]  # canonical order
 
     tg = cfg["targets"]
-    if not tg:
-        raise ValueError("config.targets is empty")
+    if not tg or isinstance(tg, (str, Mapping)):
+        raise ValueError("config.targets must be a non-empty list of provider entries")
+    if not all(isinstance(t, Mapping) for t in tg):
+        raise ValueError("every targets[] entry must be a mapping")
     cfg["targets"] = [
         {**_merge({"provider": None, "names": None, "options": {}}, t, "targets[]")}
         for t in tg
@@ -226,6 +242,14 @@ def resolve_config(config: Mapping) -> dict:
     for t in cfg["targets"]:
         if not t["provider"]:
             raise ValueError("every targets[] entry needs a 'provider'")
+        if t["names"] is not None:
+            names_t = [t["names"]] if isinstance(t["names"], str) else list(t["names"])
+            if not names_t:
+                raise ValueError(f"targets[] entry {t['provider']!r}: 'names' is empty "
+                                 "(null = all targets of the provider)")
+            if len(set(names_t)) != len(names_t):
+                raise ValueError(f"targets[] entry {t['provider']!r}: duplicate names {names_t}")
+            t["names"] = [str(n) for n in names_t]
         t["options"] = dict(t["options"] or {})
 
     e = cfg["evaluation"]
@@ -233,6 +257,10 @@ def resolve_config(config: Mapping) -> dict:
     unknown = [f for f in fams if f not in MODEL_FAMILIES]
     if unknown:
         raise KeyError(f"unknown model families {unknown}; known: {sorted(MODEL_FAMILIES)}")
+    if not fams:
+        raise ValueError("evaluation.families is empty")
+    if len(set(fams)) != len(fams):
+        raise ValueError(f"duplicate model families in {fams}")
     e["families"] = fams
     learners = ["selected", *fams] if e["learners"] is None else list(e["learners"])
     bad = [x for x in learners if x != "selected" and x not in MODEL_FAMILIES]
@@ -240,10 +268,21 @@ def resolve_config(config: Mapping) -> dict:
         raise ValueError(f"unknown learners {bad}: use 'selected' or a model family name")
     if len(set(learners)) != len(learners):
         raise ValueError(f"duplicate learners in {learners}")
+    if not learners:
+        raise ValueError("evaluation.learners is empty (null = ['selected', *families])")
     e["learners"] = learners
-    e["seeds"] = [int(s) for s in e["seeds"]]
+    seeds = e["seeds"]
+    if isinstance(seeds, (str, int)) or not seeds:
+        raise ValueError("evaluation.seeds must be a non-empty list of integers")
+    e["seeds"] = [int(s) for s in seeds]
+    if len(set(e["seeds"])) != len(e["seeds"]):
+        # identical repeats would be counted as independent and narrow every CI
+        raise ValueError(f"duplicate outer seeds in {e['seeds']}")
     for k in ("outer_splits", "inner_splits", "random_state", "min_n", "min_n_test"):
         e[k] = int(e[k])
+    for k in ("outer_splits", "inner_splits"):
+        if e[k] < 2:
+            raise ValueError(f"evaluation.{k} must be >= 2, got {e[k]}")
     e["alpha"] = float(e["alpha"])
     if e["split"] not in ("random", "scaffold"):
         raise ValueError("evaluation.split must be 'random' or 'scaffold'")
@@ -253,6 +292,12 @@ def resolve_config(config: Mapping) -> dict:
         raise ValueError(f"evaluation.reference {e['reference']!r} must be one of the feature sets")
     if cfg["output"]["features_format"] not in ("csv", "parquet"):
         raise ValueError("output.features_format must be 'csv' or 'parquet'")
+    if cfg["output"]["features_format"] == "parquet" and not _parquet_engine():
+        # checked here, not at the write stage, so that a missing engine cannot
+        # discard a finished evaluation
+        raise ValueError("output.features_format 'parquet' needs pyarrow or fastparquet, "
+                         "neither of which is installed (not in requirements-lock.txt); "
+                         "use 'csv'")
     cfg["runtime"]["n_jobs"] = int(cfg["runtime"]["n_jobs"])
     cfg["runtime"]["offline"] = bool(cfg["runtime"]["offline"])
     cfg["name"] = str(cfg["name"])
@@ -261,6 +306,14 @@ def resolve_config(config: Mapping) -> dict:
 
 
 # ----------------------------------------------------------------- helpers
+def _parquet_engine() -> str | None:
+    """Name of an installed pandas parquet engine, or None."""
+    for mod in ("pyarrow", "fastparquet"):
+        if importlib.util.find_spec(mod) is not None:
+            return mod
+    return None
+
+
 def _write_csv(df: pd.DataFrame, path: Path) -> None:
     df.to_csv(path, index=False, lineterminator="\n", encoding="utf-8")
 
@@ -293,6 +346,21 @@ def _read_text_csv(path: Path) -> pd.DataFrame:
     return pd.read_csv(path, dtype=str, keep_default_na=False, na_values=[])
 
 
+def read_results(out_dir: str | os.PathLike, name: str = "summary", **kwargs) -> pd.DataFrame:
+    """Read ``<out_dir>/<name>.csv`` of a results directory with the right NA rule.
+
+    Missing values are written as empty cells, and only empty cells are NaN.
+    A default ``pandas.read_csv`` also turns the strings ``"null"``, ``"NA"``,
+    ``"None"``, ``"nan"`` ... into NaN, which silently loses the ``null``
+    baseline feature set (``set == "null"``) and could hit IDs and SMILES.
+    Extra keyword arguments go to ``pandas.read_csv``.
+    """
+    path = Path(out_dir) / (name if name.endswith(".csv") else f"{name}.csv")
+    kwargs.setdefault("keep_default_na", False)
+    kwargs.setdefault("na_values", [""])
+    return pd.read_csv(path, **kwargs)
+
+
 def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
     """Write manifest.csv/.json; return (candidates frame, chembl info, inputs)."""
     coh = cfg["cohort"]
@@ -320,7 +388,8 @@ def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
                              "input_smiles": inc["canonical_smiles"].astype(str)})
         chembl = dict(release=cohort.release, release_date=cohort.release_date,
                       source="ChEMBL REST API via topoqspr.chembl.ChemblClient",
-                      offline=bool(getattr(client, "offline", False)))
+                      offline=bool(getattr(client, "offline", False)),
+                      data_licence=CHEMBL_DATA_LICENCE)
         return cand, chembl, inputs
 
     path = Path(coh["path"])
@@ -335,8 +404,18 @@ def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
         missing = [c for c in MANIFEST_COLUMNS if c not in df.columns]
         if missing:
             raise ValueError(f"{path} is not a cohort manifest; missing columns {missing}")
-        shutil.copyfile(path, out / "manifest.csv")
         side = path.with_suffix(".json")
+        side_meta: dict = {}
+        if side.exists():
+            side_meta = json.loads(side.read_text(encoding="utf-8"))
+            want = side_meta.get("manifest_sha256")
+            if want and want != inputs["cohort"]["sha256"]:
+                raise ValueError(
+                    f"{path} does not match its sidecar {side.name} (manifest_sha256 "
+                    f"{want[:12]}..., file {inputs['cohort']['sha256'][:12]}...): the manifest "
+                    "was edited after it was built. Rebuild the cohort, or remove the sidecar "
+                    "to run the edited manifest as unverified")
+        shutil.copyfile(path, out / "manifest.csv")
         if side.exists():
             shutil.copyfile(side, out / "manifest.json")
             inputs["cohort_sidecar"] = dict(path=str(Path(coh["path"]).with_suffix(".json")),
@@ -349,11 +428,17 @@ def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
         if releases:
             if len(releases) > 1:
                 raise ValueError(f"manifest mixes ChEMBL releases {releases}")
-            date = ""
-            if side.exists():
-                date = json.loads(side.read_text()).get("chembl_release_date", "")
-            chembl = dict(release=releases[0], release_date=date,
-                          source=f"cohort manifest {coh['path']}", offline=True)
+            verified = bool(side_meta.get("manifest_sha256"))
+            chembl = dict(release=releases[0],
+                          release_date=side_meta.get("chembl_release_date", ""),
+                          source=f"cohort manifest {coh['path']}", offline=True,
+                          data_licence=CHEMBL_DATA_LICENCE,
+                          # True: the CSV hashes to its sidecar's manifest_sha256;
+                          # False: no sidecar, so the release label is unverified
+                          manifest_verified=verified)
+            if not verified:
+                log.warning("%s has no sidecar with manifest_sha256; its ChEMBL release "
+                            "label %s is recorded as unverified", path, releases[0])
         return cand, chembl, inputs
 
     # smiles_csv
@@ -398,8 +483,25 @@ def _standardize_stage(cand: pd.DataFrame, min_heavy_atoms: int):
             mols.append(res.mol)
             graphs.append(res.graph)
         rows.append(row)
+    # Stereoisomers, racemate/enantiomer pairs and isotopologues have different
+    # full InChIKeys but the same first block (connectivity + H layer), hence the
+    # same molecular graph and identical 2D features. They are kept as separate
+    # molecules but labelled with a common group (the first member's id) so that
+    # the evaluation keeps each group inside one fold.
+    first: dict[str, str] = {}
+    members: dict[str, int] = {}
+    for row in rows:
+        if row["status"] == "ok" and row["inchikey"]:
+            b1 = row["inchikey"].split("-")[0]
+            first.setdefault(b1, row["id"])
+            members[b1] = members.get(b1, 0) + 1
+    for row in rows:
+        b1 = row["inchikey"].split("-")[0] if row["inchikey"] else ""
+        row["connectivity_group"] = (first[b1] if row["status"] == "ok" and b1
+                                     and members.get(b1, 0) > 1 else "")
     table = pd.DataFrame(rows, columns=["id", "input_smiles", "status", "reason", "detail",
-                                        "smiles", "inchikey", "parent_note", "n_heavy", "n_edges"])
+                                        "smiles", "inchikey", "parent_note", "n_heavy", "n_edges",
+                                        "connectivity_group"])
     table["n_heavy"] = table["n_heavy"].astype("Int64")
     table["n_edges"] = table["n_edges"].astype("Int64")
     return table, mols, graphs
@@ -499,34 +601,92 @@ def _sets_for_target(wide: pd.DataFrame, sets: Mapping, spec: TargetSpec, rows) 
 
 
 # --------------------------------------------------------------- targets
-def _target_stage(cfg, mol_table, mols):
+def _make_providers(cfg) -> list[tuple[dict, Any, list[TargetSpec]]]:
+    """Instantiate every configured provider and read its specs.
+
+    Runs before the cohort stage, so a provider that cannot be imported or
+    built, or target names that collide, fail in seconds, not after hours.
+    """
+    out, names = [], []
+    for entry in cfg["targets"]:
+        try:
+            provider = get_target_provider(entry["provider"], entry["names"], entry["options"])
+        except (ImportError, AttributeError) as exc:
+            raise ValueError(f"target provider {entry['provider']!r} could not be loaded: "
+                             f"{exc}") from exc
+        sp = list(provider.specs())
+        if not sp:
+            raise ValueError(f"target provider {entry['provider']!r} has no targets")
+        names += [s.name for s in sp]
+        out.append((entry, provider, sp))
+    if len(set(names)) != len(names):
+        raise ValueError(f"duplicate target names across providers: {names}")
+    return out
+
+
+def _check_target_contract(label: str, values: pd.DataFrame, failures: list[dict]) -> None:
+    """Every missing value must come with a reason; nothing may be +/-inf."""
+    arr = values.to_numpy(dtype=float)
+    if np.isinf(arr).any():
+        r, c = np.argwhere(np.isinf(arr))[0]
+        raise ValueError(f"target provider {label!r} returned an infinite value "
+                         f"({values.index[r]!r}, {values.columns[c]!r}); return NaN with a "
+                         "failure reason instead")
+    have = {(str(f.get("row")), str(f.get("feature"))) for f in failures
+            if str(f.get("reason") or "").strip()}
+    rows, cols = np.nonzero(np.isnan(arr))
+    missing = [(values.index[r], values.columns[c]) for r, c in zip(rows, cols)
+               if (str(values.index[r]), str(values.columns[c])) not in have]
+    if missing:
+        raise ValueError(f"target provider {label!r} returned {len(missing)} NaN value(s) "
+                         f"without a failure reason, e.g. {missing[:5]}; every missing value "
+                         "needs a {'row', 'feature', 'reason'} record (NaN + reason)")
+
+
+def _target_stage(providers, mol_table, mols):
     specs: list[TargetSpec] = []
     frames, failures, prov = [], [], []
-    for entry in cfg["targets"]:
-        provider = get_target_provider(entry["provider"], entry["names"], entry["options"])
-        sp = provider.specs()
+    for entry, provider, sp in providers:
         vals = provider.compute(mol_table, mols)
         got = list(vals.values.columns)
         if got != [s.name for s in sp] or not vals.values.index.equals(mol_table.index):
             raise ValueError(f"target provider {entry['provider']!r} returned columns {got} / "
                              "an index that does not match its specs and the molecule table")
+        v = vals.values.astype(float)
+        _check_target_contract(entry["provider"], v, vals.failures)
         specs += sp
-        frames.append(vals.values.astype(float))
+        frames.append(v)
         failures += [dict(block=f"target:{entry['provider']}", **f) for f in vals.failures]
         prov.append(provider.provenance())
-    names = [s.name for s in specs]
-    if len(set(names)) != len(names):
-        raise ValueError(f"duplicate target names across providers: {names}")
     values = pd.concat(frames, axis=1)
     return specs, values, failures, prov
 
 
 # -------------------------------------------------------------- evaluate
-def _evaluate_stage(cfg, wide, sets, specs, values, mols, timer):
+def _cv_groups(split: str, mols, conn_groups: Sequence[str], ids: Sequence[str]):
+    """Outer/inner CV group labels, or None for plain shuffled KFold.
+
+    ``conn_groups`` is the ``connectivity_group`` column of the standardised
+    molecules ("" = no other molecule shares its InChIKey first block). Members
+    of a connectivity group have identical 2D features and are always kept in
+    one fold: in ``scaffold`` mode by giving them their first member's scaffold
+    group (this matters for acyclic molecules, which are otherwise singletons);
+    in ``random`` mode by switching to grouped folds with one group per
+    connectivity group and singletons elsewhere. Without any such group,
+    ``random`` stays KFold(shuffle=True).
+    """
+    conn = [g or i for g, i in zip(conn_groups, ids)]
+    if split == "scaffold":
+        scaf = ev.scaffold_groups(mols)
+        pos = {i: k for k, i in enumerate(ids)}
+        return np.asarray([scaf[pos[g]] for g in conn], dtype=object)
+    if not any(conn_groups):
+        return None
+    return np.asarray(conn, dtype=object)
+
+
+def _evaluate_stage(cfg, wide, sets, specs, values, groups_all, timer):
     e = cfg["evaluation"]
-    groups_all = None
-    if e["split"] == "scaffold":
-        groups_all = ev.scaffold_groups(mols)
     folds, preds, paired, inner, summ = [], [], [], [], []
     n_jobs = cfg["runtime"]["n_jobs"]
     for spec in specs:
@@ -606,13 +766,49 @@ def run_study(config: Mapping, out_dir: str | os.PathLike, *, timestamp_utc: str
     """
     code = pv.git_info()  # the source tree as imported, before anything can change it
     cfg = resolve_config(config)
-    out = Path(out_dir)
-    if out.exists() and any(out.iterdir()):
-        if not overwrite:
-            raise FileExistsError(f"{out} is not empty (pass overwrite=True to replace)")
-        shutil.rmtree(out)
-    out.mkdir(parents=True, exist_ok=True)
+    final = Path(out_dir)
+    if final.exists() and (not final.is_dir() or any(final.iterdir())) and not overwrite:
+        raise FileExistsError(f"{final} is not empty (pass overwrite=True to replace)")
+    providers = _make_providers(cfg)
     base = Path(base_dir).resolve() if base_dir is not None else Path.cwd().resolve()
+    # Everything is written into a staging directory next to the results
+    # directory and moved there only when the run has finished, so a failed run
+    # leaves no partial results (and an overwritten directory stays intact).
+    final.parent.mkdir(parents=True, exist_ok=True)
+    out = final.parent / f".{final.name}.partial"
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir()
+    try:
+        record, summary, mol_table_all, written = _run_stages(
+            cfg, providers, out, base, timestamp_utc, client, code)
+        _publish(out, final, overwrite)
+    finally:
+        if out.exists():
+            shutil.rmtree(out, ignore_errors=True)
+    return StudyResult(final, record, summary, mol_table_all, written + ["run_record.json"])
+
+
+def _publish(stage: Path, final: Path, overwrite: bool) -> None:
+    """Move the staged files into ``final`` (replacing its contents if ``overwrite``)."""
+    if final.exists() and not final.is_dir():
+        if not overwrite:
+            raise FileExistsError(f"{final} exists and is not a directory")
+        final.unlink()
+    final.mkdir(parents=True, exist_ok=True)
+    old = list(final.iterdir())
+    if old and not overwrite:
+        raise FileExistsError(f"{final} is not empty (pass overwrite=True to replace)")
+    for p in old:
+        if p.is_dir() and not p.is_symlink():
+            shutil.rmtree(p)
+        else:
+            p.unlink()
+    for p in sorted(stage.iterdir()):
+        shutil.move(str(p), str(final / p.name))
+
+
+def _run_stages(cfg, providers, out: Path, base: Path, timestamp_utc: str, client, code):
     timer = _Timer()
 
     cand, chembl, inputs = timer.run("cohort", _cohort_stage, cfg, out, base, timestamp_utc,
@@ -632,16 +828,20 @@ def run_study(config: Mapping, out_dir: str | os.PathLike, *, timestamp_utc: str
                               "inchikey": ok["inchikey"].to_numpy()},
                              index=pd.Index(ids, name="id"))
     with rdBase.BlockLogs():
-        specs, tvalues, tfail, tprov = timer.run("targets", _target_stage, cfg, mol_table, mols)
+        specs, tvalues, tfail, tprov = timer.run("targets", _target_stage, providers, mol_table,
+                                                 mols)
+    e = cfg["evaluation"]
+    conn = ok["connectivity_group"].tolist()
+    groups_all = _cv_groups(e["split"], mols, conn, ids)
     t0 = time.perf_counter()
-    res = _evaluate_stage(cfg, wide, sets, specs, tvalues, mols, timer)
+    res = _evaluate_stage(cfg, wide, sets, specs, tvalues, groups_all, timer)
     timer.t["evaluate"] = time.perf_counter() - t0
 
     t0 = time.perf_counter()
     _write_csv(mol_table_all, out / "molecules.csv")
     feats = wide.reset_index()
     if cfg["output"]["features_format"] == "parquet":
-        feats.to_parquet(out / "features.parquet", index=False)
+        feats.to_parquet(out / "features.parquet", index=False, engine=_parquet_engine())
     _write_csv(feats, out / "features.csv")
     _write_csv(tvalues.reset_index(), out / "targets.csv")
     fail = pd.DataFrame(ffail + tfail, columns=["block", "row", "feature", "reason"])
@@ -665,19 +865,27 @@ def run_study(config: Mapping, out_dir: str | os.PathLike, *, timestamp_utc: str
         targets={s.name: int(np.isfinite(tvalues[s.name].to_numpy(float)).sum()) for s in specs},
         feature_set_sizes={k: len(v) for k, v in set_cols.items() if isinstance(v, list)},
         feature_failures=int(len(fail)),
+        connectivity_groups=dict(
+            groups=int(len({g for g in conn if g})),
+            molecules=int(sum(1 for g in conn if g)),
+            rule="standardised parents sharing the InChIKey first block (stereoisomers, "
+                 "racemate/enantiomer, isotopologues): all kept, always in the same CV fold"),
     )
-    e = cfg["evaluation"]
+    if e["split"] == "scaffold":
+        splitter = "balanced_group_kfold (Bemis-Murcko scaffolds; connectivity groups merged)"
+    elif groups_all is not None:
+        splitter = "balanced_group_kfold (connectivity groups; other molecules singletons)"
+    else:
+        splitter = "KFold(shuffle=True)"
     seeds = dict(outer_seeds=e["seeds"], inner_seed_rule="1000 * outer_seed + fold",
-                 estimator_random_state=e["random_state"],
-                 outer_splitter="KFold(shuffle=True)" if e["split"] == "random"
-                 else "balanced_group_kfold (Bemis-Murcko scaffolds)")
+                 estimator_random_state=e["random_state"], outer_splitter=splitter)
     record = pv.build_run_record(
         config=cfg, timestamp_utc=timestamp_utc, chembl=chembl, seeds=seeds, inputs=inputs,
         manifest_sha256=manifest_sha, outputs=pv.file_records(out, written),
         timings_s=timer.t, counts=counts, base_dir=str(base), code=code,
         extra=dict(result_csvs=[c for c in RESULT_CSVS if c in written]))
     pv.write_run_record(record, out / "run_record.json")
-    return StudyResult(out, record, res["summary"], mol_table_all, written + ["run_record.json"])
+    return record, res["summary"], mol_table_all, written
 
 
 # ----------------------------------------------------------------- rerun
