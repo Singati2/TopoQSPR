@@ -126,7 +126,7 @@ Bioactivity values are excluded from v1.0 modelling.
   Report each step's change: B_train = R²_train − R²_nested, B_CV = R²_CV − R²_nested,
   B_scaffold = R²_nested − R²_scaffold.
 - **D. Replication:** 3–5 published disease-specific TI-QSPR studies. Selection is fixed before any
-  re-analysis: a pre-written Europe PMC query (recorded here at freeze), screened in date order
+  re-analysis: the Europe PMC query fixed in `tools/replication_screen.py` (run 2026-10-03: 239 open-access candidates, `docs/replication_candidates.csv`), screened in date order
   (newest first) against eligibility criteria: (i) compound list resolvable to structures,
   (ii) property values tabulated, (iii) index formulas stated, (iv) n ≥ 10. The first eligible studies
   are taken, subject to co-author agreement, with no regard to their reported R². Chain per study:
