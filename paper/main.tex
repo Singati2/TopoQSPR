@@ -75,7 +75,7 @@ ChEMBL itself notes that indication data require controlled MeSH/EFO mapping, ha
 
 \begin{table}[t]
 \centering\small
-\caption{Related software. \checkmark: provided; --: not provided. Compiled from each tool's publication and documentation (October 2026). \todo{verify every cell against the tool papers before submission; DOPtools, QSPRpred and QSAR-in-the-Browser cells come from the landscape audit and are not yet independently checked}}
+\caption{Related software. \checkmark: provided; --: not provided. Compiled from each tool's publication and documentation (October 2026). Every cell was checked against the tool's paper or documentation on 2026-10-03. \textsuperscript{a}Removed in DOPtools 1.3.7 (June 2025).}
 \label{tab:tools}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{lcccccc}
@@ -84,7 +84,7 @@ Tool & Topological indices & SMILES input & QSPR models & Disease $\to$ drug set
 \midrule
 Mordred \cite{moriwaki2018mordred} & partial & \checkmark & -- & -- & -- & -- \\
 ChemGraphX \cite{jacob2026chemgraphx} & \checkmark & -- & -- & -- & -- & -- \\
-DOPtools \cite{byadi2025doptools} & -- & \checkmark & \checkmark & -- & -- & partial \\
+DOPtools \cite{byadi2025doptools} & via Mordred\textsuperscript{a} & \checkmark & \checkmark & -- & -- & partial (JSON config) \\
 QSPRpred \cite{vandenmaagdenberg2024qsprpred} & via plug-ins & \checkmark & \checkmark & -- & -- & \checkmark \\
 QSAR in the Browser \cite{masud2026browser} & -- & \checkmark & \checkmark & target-based & -- & -- \\
 \ml{} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
