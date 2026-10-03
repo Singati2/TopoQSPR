@@ -49,6 +49,8 @@ __all__ = [
     "MANIFEST_COLUMNS",
     "REASONS",
     "Cohort",
+    "DIAGNOSTIC_ATC_PREFIXES",
+    "KNOWN_REF_TYPES",
     "build_atc_cohort",
     "build_cohort",
     "jaccard",
@@ -69,6 +71,7 @@ MANIFEST_COLUMNS = (
     "molecule_type",
     "phase_for_indication",
     "indication_ref_types",
+    "efo_ids",
     "decision",
     "reason",
 )
@@ -89,8 +92,21 @@ REASONS = (
     "metal_containing",
     "unsupported_element",
     "mixture",
+    "inorganic_carbon",
+    "too_small",
+    "inorganic_flag",
+    "diagnostic_agent",
     "duplicate_inchikey",
 )
+
+#: ``drug_indication.indication_refs.ref_type`` values.  In ChEMBL_37 these seven types
+#: cover all 60,055 indication rows (REST filter ``indication_refs__ref_type__in``,
+#: checked 2026-10-02).  Evidence filters naming any other type raise ``ValueError``.
+KNOWN_REF_TYPES = frozenset({"ATC", "ClinicalTrials", "DailyMed", "EMA", "FDA", "INN", "USAN"})
+
+#: ATC groups of diagnostic agents (V04) and radiopharmaceuticals (V09), used by the
+#: optional ``exclude_diagnostics`` rule.
+DIAGNOSTIC_ATC_PREFIXES = ("V04", "V09")
 
 #: Elements allowed in a drug-like organic small molecule (H, B, C, N, O, F, Si, P, S, Cl,
 #: Se, Br, I).  Boron (bortezomib, dutogliptin) and selenium (ebselen) occur in drugs.
@@ -119,7 +135,12 @@ def structure_reason(smiles: str | None) -> str | None:
     fails); ``no_carbon`` (inorganic); ``metal_containing`` (any atom outside
     :data:`ORGANIC_ELEMENTS` that is a metal); ``unsupported_element`` (other non-organic
     elements, e.g. As, Te, Xe, dummy atoms); ``mixture`` (more than one connected fragment
-    in the *parent* structure, e.g. co-crystals or multi-component products).
+    in the *parent* structure, e.g. co-crystals or multi-component products);
+    ``inorganic_carbon`` (at most 3 heavy atoms and no carbon bonded to H or to another C:
+    elemental carbon ``[C]``, CO, CO2, cyanide, CS2, COS; the textbook "C-H or C-C bond"
+    criterion, restricted to tiny molecules so that urea and CCl4 stay organic);
+    ``too_small`` (a single heavy atom, e.g. methane: a one-vertex graph with no edges,
+    on which most topological indices are undefined or degenerate).
     """
     if not smiles:
         return "no_smiles"
@@ -140,7 +161,51 @@ def structure_reason(smiles: str | None) -> str | None:
         return "unsupported_element"
     if len(Chem.GetMolFrags(mol)) > 1:
         return "mixture"
+    organic_c = any(
+        a.GetTotalNumHs() > 0 or any(n.GetAtomicNum() == 6 for n in a.GetNeighbors())
+        for a in mol.GetAtoms()
+        if a.GetAtomicNum() == 6
+    )
+    if not organic_c and mol.GetNumHeavyAtoms() <= 3:
+        return "inorganic_carbon"
+    if mol.GetNumHeavyAtoms() < 2:
+        return "too_small"
     return None
+
+
+def _is_isotope_labelled(smiles: str) -> bool:
+    """True if any atom of ``smiles`` carries an explicit isotope other than deuterium.
+
+    Deuterium is excluded because deuterated drugs (deutetrabenazine, deucravacitinib) are
+    therapeutics; other labels in an organic parent (``[18F]``, ``[11C]``, ``[123I]``,
+    ``[13C]`` breath-test substrates) mark tracers and diagnostics.
+    """
+    RDLogger.DisableLog("rdApp.*")
+    try:
+        mol = Chem.MolFromSmiles(smiles) if smiles else None
+    finally:
+        RDLogger.EnableLog("rdApp.*")
+    return mol is not None and any(
+        a.GetIsotope() and not (a.GetAtomicNum() == 1 and a.GetIsotope() == 2) for a in mol.GetAtoms()
+    )
+
+
+def _is_diagnostic(members: Iterable[str], records: Mapping[str, dict | None], parent_smiles: str) -> bool:
+    """Diagnostic or tracer: the family has ATC codes and *all* are V04/V09, or the parent
+    structure is isotope-labelled (:func:`_is_isotope_labelled`).
+
+    "All" rather than "any" keeps drugs that also carry a diagnostic code, e.g. tolbutamide
+    (A10BB03 and V04CA01), folic acid (B03BB01, V04CX02) and glucose (V04CA02 among
+    B05/V06 codes).
+    """
+    codes = {
+        code
+        for cid in members
+        for code in (records.get(cid) or {}).get("atc_classifications") or []
+    }
+    if codes and all(c.startswith(DIAGNOSTIC_ATC_PREFIXES) for c in codes):
+        return True
+    return _is_isotope_labelled(parent_smiles)
 
 
 def _inchikey(rec: Mapping | None) -> str:
@@ -261,11 +326,13 @@ def _curate_families(
     release: str,
     min_phase: float | None,
     use_phase: bool,
+    exclude_diagnostics: bool = False,
 ) -> list[dict]:
     """Manifest rows for parent families.
 
-    ``families[parent][member] = {"phase": float, "qualifying": bool, "ref_types": set}``
-    where ``phase`` is the member's max phase over qualifying rows (NaN if none/unknown).
+    ``families[parent][member] = {"phase": float, "qualifying": bool, "ref_types": set,
+    "efo_ids": set}`` where ``phase`` is the member's max phase over qualifying rows (NaN if
+    none/unknown).
     """
     out: list[dict] = []
     kept: list[dict] = []
@@ -276,6 +343,7 @@ def _curate_families(
         phase = max(fam_phase) if fam_phase else math.nan
         any_qual = any(m["qualifying"] for m in members.values())
         ref_types = sorted(set().union(*(m["ref_types"] for m in members.values())))
+        efo_ids = sorted(set().union(*(m.get("efo_ids", set()) for m in members.values())))
         base = {
             "disease_label": label,
             "mesh_ids": mesh_col,
@@ -295,6 +363,10 @@ def _curate_families(
             reason = "not_small_molecule"
         else:
             reason = structure_reason(_smiles(prec))
+            if reason is None and str(prec.get("inorganic_flag")) == "1":
+                reason = "inorganic_flag"  # ChEMBL curation: 1 = inorganic, 0 = no, -1 = unknown
+            if reason is None and exclude_diagnostics and _is_diagnostic(members, records, _smiles(prec)):
+                reason = "diagnostic_agent"
         row = {
             **base,
             "molecule_chembl_id": parent,
@@ -304,6 +376,7 @@ def _curate_families(
             "molecule_type": (prec or {}).get("molecule_type") or "",
             "phase_for_indication": phase,
             "indication_ref_types": ";".join(ref_types),
+            "efo_ids": ";".join(efo_ids),
             "decision": "exclude" if reason else "include",
             "reason": reason or "included",
         }
@@ -325,6 +398,7 @@ def _curate_families(
                     "molecule_type": (mrec or {}).get("molecule_type") or "",
                     "phase_for_indication": m["phase"],
                     "indication_ref_types": ";".join(sorted(m["ref_types"])),
+                    "efo_ids": ";".join(sorted(m.get("efo_ids", set()))),
                     "decision": "exclude",
                     "reason": "collapsed_to_parent",
                 }
@@ -400,6 +474,23 @@ def _match_score(query: str, name: str) -> float:
     return 0.6 * tok + 0.4 * fuzzy
 
 
+#: Weight on a match reached through a MeSH entry term rather than the heading itself.
+SYNONYM_WEIGHT = 0.95
+
+
+def _inversions(text: str, max_tokens: int = 5) -> list[str]:
+    """MeSH-style inverted forms ``"w_k+1 .. w_n, w_1 .. w_k"`` of a 2-5 word phrase.
+
+    MeSH entry terms are often inverted ("Blood Pressure, High" for "high blood
+    pressure"); the NLM lookup does not match across the inversion.  Phrases longer than
+    ``max_tokens`` words (or containing a comma) yield nothing.
+    """
+    words = text.lower().split()
+    if "," in text or not 2 <= len(words) <= max_tokens:
+        return []
+    return [" ".join(words[k:]) + ", " + " ".join(words[:k]) for k in range(1, len(words))]
+
+
 def suggest_headings(
     free_text: str,
     client: ChemblClient,
@@ -412,20 +503,30 @@ def suggest_headings(
 
     Suggestions only - the cohort is built from the descriptor IDs the user confirms.
     Score: :func:`_match_score` against the heading; with ``mesh_client``, also against
-    every MeSH term (entry term / synonym) of descriptors whose terms contain the text
-    (NLM lookup API), taking the maximum.  Sorted by score desc, rows desc, mesh_id.
+    the MeSH terms (entry terms / synonyms) of descriptors found by the NLM lookup API,
+    taking the maximum.  Terms are looked up with ``match=contains`` on the text and with
+    ``match=exact`` on its MeSH-style inversions (``"high blood pressure"`` ->
+    ``"blood pressure, high"``, ``"pressure, high blood"``; see :func:`_inversions`).
+    A score reached through an entry term is multiplied by :data:`SYNONYM_WEIGHT`, so a
+    descriptor whose own heading matches equally well ranks first (``"diabetes"``:
+    *Diabetes Mellitus* above *Hemochromatosis* via its entry term "Bronze Diabetes").
+    Sorted by score desc, rows desc, mesh_id.
     Columns: mesh_id, mesh_heading, n_rows, score, matched_via.
     """
-    synonyms: dict[str, list[str]] = {}
+    synonyms: dict[str, set[str]] = {}
     if mesh_client is not None:
-        synonyms = mesh_client.descriptors_for_text(free_text)
+        found = [mesh_client.descriptors_for_text(free_text)]
+        found += [mesh_client.descriptors_for_text(inv, match="exact") for inv in _inversions(free_text)]
+        for f in found:
+            for did, terms in f.items():
+                synonyms.setdefault(did, set()).update(terms)
     out = []
     for h in client.mesh_headings():
         if not h["mesh_id"]:
             continue
         best, via = _match_score(free_text, h["mesh_heading"]), h["mesh_heading"]
-        for term in synonyms.get(h["mesh_id"], []):
-            s = _match_score(free_text, term)
+        for term in sorted(synonyms.get(h["mesh_id"], ())):
+            s = SYNONYM_WEIGHT * _match_score(free_text, term)
             if s > best:
                 best, via = s, f"MeSH term: {term}"
         if best >= min_score:
@@ -438,12 +539,14 @@ _MESH_ID = re.compile(r"^D\d{6,9}$")
 
 
 def _resolve_mesh_ids(
-    mesh_ids: Iterable[str],
+    mesh_ids: str | Iterable[str],
     client: ChemblClient,
     include_descendants: bool,
     mesh_client: MeshClient | None,
 ) -> tuple[list[str], dict[str, str], dict]:
-    requested = sorted({str(m).strip() for m in mesh_ids})
+    if isinstance(mesh_ids, str):  # one ID, never its characters
+        mesh_ids = [mesh_ids]
+    requested = sorted({str(m).strip().upper() for m in mesh_ids})
     if not requested:
         raise ValueError("mesh_ids is empty: a cohort needs at least one confirmed MeSH descriptor ID")
     bad = [m for m in requested if not _MESH_ID.match(m)]
@@ -478,13 +581,37 @@ def _ref_types(row: Mapping) -> set[str]:
     return {r.get("ref_type") or "" for r in (row.get("indication_refs") or [])} - {""}
 
 
+def _ref_type_set(value: str | Iterable[str] | None, name: str) -> set[str] | None:
+    """Evidence-filter argument -> set of ref types (a bare string is one type).
+
+    Every name must be in :data:`KNOWN_REF_TYPES` (case-sensitive, as ChEMBL stores them),
+    so a typo cannot silently turn the filter into a no-op or an exclude-all.
+    """
+    if value is None:
+        return None
+    out = {value} if isinstance(value, str) else {str(v) for v in value}
+    if not out:
+        raise ValueError(f"{name} is empty; pass None to disable the filter")
+    unknown = sorted(out - KNOWN_REF_TYPES)
+    if unknown:
+        lower = {k.lower(): k for k in KNOWN_REF_TYPES}
+        hints = {u: lower[u.lower()] for u in unknown if u.lower() in lower}
+        raise ValueError(
+            f"{name}: unknown ChEMBL ref_type(s) {unknown}"
+            + (f" (did you mean {hints}?)" if hints else "")
+            + f"; known: {sorted(KNOWN_REF_TYPES)}"
+        )
+    return out
+
+
 def build_cohort(
-    mesh_ids: Iterable[str],
+    mesh_ids: str | Iterable[str],
     client: ChemblClient,
     *,
     min_phase: float | None = 4.0,
-    evidence_sources: Iterable[str] | None = None,
-    exclude_sole_evidence: Iterable[str] | None = None,
+    evidence_sources: str | Iterable[str] | None = None,
+    exclude_sole_evidence: str | Iterable[str] | None = None,
+    exclude_diagnostics: bool = False,
     include_descendants: bool = False,
     mesh_client: MeshClient | None = None,
     disease_label: str | None = None,
@@ -494,7 +621,8 @@ def build_cohort(
     Parameters
     ----------
     mesh_ids:
-        MeSH descriptor IDs (``D######``) present in ChEMBL ``drug_indication``.
+        MeSH descriptor IDs (``D######``) present in ChEMBL ``drug_indication``; a single
+        string is one ID.  IDs are stripped and upper-cased.
     min_phase:
         Keep parents whose indication phase (max over the family, see module docstring)
         is ``>= min_phase``.  ``None`` disables the phase rule (unknown phases kept).
@@ -504,7 +632,12 @@ def build_cohort(
     exclude_sole_evidence:
         If given, an indication row does not qualify when *all* its ref types are in this
         set, e.g. ``{"DailyMed"}`` drops indications supported only by text-mined label
-        sections.  Rows with no refs count as sole-evidence rows.
+        sections.  Rows with no refs count as sole-evidence rows.  For both filters a single
+        string is one ref type, and every name must be in :data:`KNOWN_REF_TYPES`.
+    exclude_diagnostics:
+        Sensitivity option (default off): exclude, as ``diagnostic_agent``, parents whose
+        family ATC codes are all V04 (diagnostic agents) or V09 (radiopharmaceuticals), or
+        whose structure carries a non-deuterium isotope label (e.g. [18F]fluoroestradiol).
     include_descendants:
         Add MeSH tree descendants of each ID that have rows in this release (NLM SPARQL;
         requires ``mesh_client``).  Off by default because MeSH is a polyhierarchy.
@@ -512,18 +645,24 @@ def build_cohort(
     if min_phase is not None:
         min_phase = float(min_phase)
     used, headings, mesh_info = _resolve_mesh_ids(mesh_ids, client, include_descendants, mesh_client)
-    allow = set(evidence_sources) if evidence_sources is not None else None
-    sole = set(exclude_sole_evidence) if exclude_sole_evidence is not None else None
+    allow = _ref_type_set(evidence_sources, "evidence_sources")
+    sole = _ref_type_set(exclude_sole_evidence, "exclude_sole_evidence")
     rows = client.drug_indications(used)
 
     members: dict[str, dict] = {}
     fallback: dict[str, str] = {}
+    efo_terms: dict[str, set[str]] = {}
     for r in rows:
         cid = r["molecule_chembl_id"]
         types = _ref_types(r)
         qualifies = (allow is None or bool(types & allow)) and (sole is None or not types <= sole)
-        m = members.setdefault(cid, {"phase": math.nan, "qualifying": False, "ref_types": set()})
+        m = members.setdefault(
+            cid, {"phase": math.nan, "qualifying": False, "ref_types": set(), "efo_ids": set()}
+        )
         m["ref_types"] |= types
+        if r.get("efo_id"):
+            m["efo_ids"].add(r["efo_id"])
+            efo_terms.setdefault(r["efo_id"], set()).add(r.get("efo_term") or "")
         if qualifies:
             m["qualifying"] = True
             p = _phase(r.get("max_phase_for_ind"))
@@ -548,6 +687,7 @@ def build_cohort(
         release=client.release,
         min_phase=min_phase,
         use_phase=True,
+        exclude_diagnostics=exclude_diagnostics,
     )
     client.verify_release()
     return Cohort(
@@ -560,6 +700,7 @@ def build_cohort(
             "min_phase": min_phase,
             "evidence_sources": sorted(allow) if allow is not None else None,
             "exclude_sole_evidence": sorted(sole) if sole is not None else None,
+            "exclude_diagnostics": exclude_diagnostics,
             "include_descendants": include_descendants,
             "molecule_type": "Small molecule",
             "dedup": "standard_inchi_key, lowest parent ChEMBL ID kept",
@@ -569,6 +710,7 @@ def build_cohort(
             "mesh_headings": headings,
             **mesh_info,
             "indication_rows": len(rows),
+            "efo_terms": {k: sorted(v - {""}) for k, v in sorted(efo_terms.items())},
             "parent_mismatch_vs_drug_indication": n_mismatch,
         },
     )
@@ -659,8 +801,10 @@ def naive_cohort(free_text: str, client: ChemblClient) -> Cohort:
     headings: set[tuple[str, str]] = set()
     for r in rows:
         cid = r["molecule_chembl_id"]
-        m = info.setdefault(cid, {"phase": math.nan, "ref_types": set()})
+        m = info.setdefault(cid, {"phase": math.nan, "ref_types": set(), "efo_ids": set()})
         m["ref_types"] |= _ref_types(r)
+        if r.get("efo_id"):
+            m["efo_ids"].add(r["efo_id"])
         p = _phase(r.get("max_phase_for_ind"))
         if not math.isnan(p) and (math.isnan(m["phase"]) or p > m["phase"]):
             m["phase"] = p
@@ -696,6 +840,7 @@ def naive_cohort(free_text: str, client: ChemblClient) -> Cohort:
                 "molecule_type": (rec or {}).get("molecule_type") or "",
                 "phase_for_indication": info[cid]["phase"],
                 "indication_ref_types": ";".join(sorted(info[cid]["ref_types"])),
+                "efo_ids": ";".join(sorted(info[cid]["efo_ids"])),
                 "decision": "exclude" if reason else "include",
                 "reason": reason or "included",
             }

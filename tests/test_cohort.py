@@ -22,8 +22,12 @@ import requests
 
 from topoqspr.chembl import CacheMiss, ChemblClient, MeshClient
 from topoqspr.cohort import (
+    KNOWN_REF_TYPES,
     MANIFEST_COLUMNS,
     REASONS,
+    _curate_families,
+    _inversions,
+    _is_diagnostic,
     build_atc_cohort,
     build_cohort,
     jaccard,
@@ -242,6 +246,17 @@ def test_release_pin_mismatch_raises(tmp_path):
         ("OB(O)c1ccccc1", None),  # boron allowed (bortezomib-like)
         ("O=C1c2ccccc2[se]n1-c1ccccc1", None),  # selenium allowed (ebselen)
         ("N[C@@H](CC(=O)N1CCn2c(nnc2C(F)(F)F)C1)Cc1cc(F)c(F)cc1F", None),  # sitagliptin
+        ("[C]", "inorganic_carbon"),  # activated charcoal, CHEMBL2106049
+        ("[C-]#[O+]", "inorganic_carbon"),  # carbon monoxide
+        ("O=C=O", "inorganic_carbon"),
+        ("N#[C-]", "inorganic_carbon"),  # cyanide
+        ("C(=S)=S", "inorganic_carbon"),  # carbon disulfide
+        ("O=C=S", "inorganic_carbon"),
+        ("C", "too_small"),  # methane: one vertex, no edges
+        ("NC(N)=O", None),  # urea stays organic
+        ("ClC(Cl)(Cl)Cl", None),  # CCl4 stays organic
+        ("C#N", None),  # HCN has a C-H bond
+        ("CO", None),
     ],
 )
 def test_structure_reason(smiles, reason):
@@ -513,3 +528,184 @@ def test_live_mesh_descendants(tmp_path):
     m = MeshClient(tmp_path)
     assert {"mesh_id": ARTHRITIS_GOUTY, "mesh_heading": "Arthritis, Gouty"} in m.descendants(GOUT)
     assert "D001943" in m.descriptors_for_text("breast cancer")
+
+
+# ----------------------------------------------------------------------------- regressions
+class _SwitchSession:
+    """/status answers ``first`` once and ``then`` afterwards; data endpoints answer one row."""
+
+    def __init__(self, first="ChEMBL_37", then="ChEMBL_38"):
+        self.first, self.then, self.n_status = first, then, 0
+
+    def get(self, url, params=None, timeout=None, headers=None):
+        if url.endswith("status.json"):
+            self.n_status += 1
+            return _Resp(200, {"chembl_db_version": self.first if self.n_status == 1 else self.then})
+        if "/molecule" in url:
+            ids = (params or {}).get("molecule_chembl_id__in", "").split(",")
+            recs = [{"molecule_chembl_id": i, "pref_name": "FROM_" + self.then} for i in ids]
+            return _Resp(200, {"molecules": recs, "page_meta": {"total_count": len(recs), "next": None}})
+        row = {"drugind_id": 1, "molecule_chembl_id": "CHEMBL_FROM_" + self.then}
+        return _Resp(200, {"drug_indications": [row], "page_meta": {"total_count": 1, "next": None}})
+
+
+def _data_files(root):
+    return sorted(p for p in Path(root).rglob("*.json.gz"))
+
+
+def test_release_switch_never_poisons_old_release_cache(tmp_path):
+    c = ChemblClient(tmp_path, session=_SwitchSession())
+    assert c.release == "ChEMBL_37"
+    rows = c.drug_indications(["D000001"])  # served after the (simulated) switch to 38
+    c.molecules(["CHEMBL1"])
+    assert rows[0]["molecule_chembl_id"] == "CHEMBL_FROM_ChEMBL_38"
+    assert not (tmp_path / "ChEMBL_37" / "drug_indication").exists()  # staged, not promoted
+    with pytest.raises(RuntimeError, match="changed during the run.*2 unverified cache entries discarded"):
+        c.verify_release()
+    assert _data_files(tmp_path) == []  # nothing kept, staging removed
+    assert not list(tmp_path.glob(".staging-*"))
+    off = ChemblClient(tmp_path, offline=True, release="ChEMBL_37")
+    with pytest.raises(CacheMiss):
+        off.drug_indications(["D000001"])
+    with pytest.raises(CacheMiss):
+        off.molecules(["CHEMBL1"])
+
+
+def test_staged_entries_promoted_after_verify(tmp_path):
+    c = ChemblClient(tmp_path, session=_SwitchSession(then="ChEMBL_37"))  # no switch
+    c.drug_indications(["D000001"])
+    c.drug_indications(["D000001"])  # served from this client's staging area
+    assert not (tmp_path / "ChEMBL_37" / "drug_indication").exists()
+    c.verify_release()
+    files = _data_files(tmp_path)
+    assert [p.relative_to(tmp_path).parts[:2] for p in files] == [("ChEMBL_37", "drug_indication")]
+    assert not list(tmp_path.glob(".staging-*"))
+    off = ChemblClient(tmp_path, offline=True, release="ChEMBL_37")
+    assert off.drug_indications(["D000001"])[0]["molecule_chembl_id"] == "CHEMBL_FROM_ChEMBL_37"
+
+
+def test_build_cohort_never_files_switched_release(tmp_path):
+    """End to end: a switch during build_cohort raises and adds no cache entry."""
+    shutil.copytree(FIX / "chembl", tmp_path / "chembl")
+    before = _data_files(tmp_path / "chembl")
+    c = ChemblClient(tmp_path / "chembl", session=_SwitchSession())
+    with pytest.raises(RuntimeError, match="changed during the run"):
+        build_cohort([GOUT], c)
+    assert _data_files(tmp_path / "chembl") == before
+    assert not list((tmp_path / "chembl").glob(".staging-*"))
+
+
+def test_client_context_manager(tmp_path):
+    with pytest.raises(KeyError):
+        with ChemblClient(tmp_path, session=_SwitchSession(then="ChEMBL_37")) as c:
+            c.drug_indications(["D000001"])
+            raise KeyError("boom")
+    assert _data_files(tmp_path) == [] and not list(tmp_path.glob(".staging-*"))
+    with ChemblClient(tmp_path, session=_SwitchSession(then="ChEMBL_37")) as c:
+        c.drug_indications(["D000001"])
+    assert len(_data_files(tmp_path)) == 1
+
+
+def test_mesh_ids_bare_string_and_case(client, gout):
+    assert build_cohort(GOUT, client).to_csv_bytes() == gout.to_csv_bytes()
+    assert build_cohort([" d006073 "], client).to_csv_bytes() == gout.to_csv_bytes()
+    with pytest.raises(ValueError, match=r"not MeSH descriptor IDs: \['GOUT'\]"):
+        build_cohort("gout", client)
+
+
+def test_evidence_filter_string_and_unknown_types(client, t2d):
+    as_str = build_cohort([T2D], client, exclude_sole_evidence="DailyMed")
+    as_set = build_cohort([T2D], client, exclude_sole_evidence={"DailyMed"})
+    assert as_str.to_csv_bytes() == as_set.to_csv_bytes()
+    assert len(as_str.included) == 26
+    assert as_str.parameters["exclude_sole_evidence"] == ["DailyMed"]
+    fda = build_cohort([T2D], client, evidence_sources="FDA")
+    assert fda.parameters["evidence_sources"] == ["FDA"]
+    assert 0 < len(fda.included) < len(t2d.included)
+    with pytest.raises(ValueError, match="did you mean.*DailyMed"):
+        build_cohort([T2D], client, exclude_sole_evidence="Dailymed")
+    with pytest.raises(ValueError, match="unknown ChEMBL ref_type"):
+        build_cohort([T2D], client, evidence_sources={"FDA", "Wikipedia"})
+    with pytest.raises(ValueError, match="empty"):
+        build_cohort([T2D], client, evidence_sources=[])
+    # every ref type seen in the fixture rows is known
+    rows = client.drug_indications([GOUT, T2D])
+    seen = {x["ref_type"] for r in rows for x in r.get("indication_refs") or []}
+    assert seen <= KNOWN_REF_TYPES
+
+
+def _fam(cid):
+    return {cid: {"phase": 4.0, "qualifying": True, "ref_types": set(), "efo_ids": set()}}
+
+
+_CURATE = dict(label="x", mesh_col="", release=RELEASE, min_phase=4.0, use_phase=True)
+
+
+def test_inorganic_flag_respected():
+    rec = {
+        "molecule_type": "Small molecule",
+        "inorganic_flag": 1,
+        "molecule_structures": {"canonical_smiles": "CCO", "standard_inchi_key": "X"},
+    }
+    out = _curate_families({"CHEMBL1": _fam("CHEMBL1")}, {"CHEMBL1": rec}, **_CURATE)
+    assert out[0]["reason"] == "inorganic_flag"
+    for flag in (0, -1, None):
+        recs = {"CHEMBL1": {**rec, "inorganic_flag": flag}}
+        assert _curate_families({"CHEMBL1": _fam("CHEMBL1")}, recs, **_CURATE)[0]["reason"] == "included"
+
+
+def test_diagnostic_rule():
+    def rec(codes):
+        return {"atc_classifications": codes}
+
+    assert _is_diagnostic(["A"], {"A": rec(["V04CX03"])}, "CCO")  # methacholine
+    assert not _is_diagnostic(["A"], {"A": rec(["A10BB03", "V04CA01"])}, "CCO")  # tolbutamide
+    assert not _is_diagnostic(["A"], {"A": rec([])}, "CCO")
+    fes = "C[C@]12CC[C@@H]3c4ccc(O)cc4CC[C@H]3[C@@H]1C[C@@H]([18F])[C@@H]2O"
+    assert _is_diagnostic(["A"], {"A": rec([])}, fes)  # [18F]fluoroestradiol
+    assert not _is_diagnostic(["A"], {"A": rec([])}, "[2H]C([2H])([2H])OC")  # deuterated drug
+    # only the salt carries an ATC code: the rule is family-level
+    assert _is_diagnostic(["P", "S"], {"P": rec(None), "S": rec(["V09IX04"])}, "CCO")
+    r = {
+        "molecule_type": "Small molecule",
+        "inorganic_flag": 0,
+        "atc_classifications": ["V04CX03"],
+        "molecule_structures": {"canonical_smiles": "CCO", "standard_inchi_key": "X"},
+    }
+    fam, recs = {"CHEMBL1": _fam("CHEMBL1")}, {"CHEMBL1": r}
+    assert _curate_families(fam, recs, **_CURATE)[0]["reason"] == "included"
+    assert _curate_families(fam, recs, exclude_diagnostics=True, **_CURATE)[0]["reason"] == "diagnostic_agent"
+
+
+def test_exclude_diagnostics_option_recorded(client, t2d):
+    d = build_cohort([T2D], client, exclude_diagnostics=True)
+    assert d.parameters["exclude_diagnostics"] is True
+    assert t2d.parameters["exclude_diagnostics"] is False
+    # tolbutamide (A10BB03 + V04CA01) and folic acid (B03BB01 + V04CX02) are kept
+    assert set(d.included["pref_name"]) == set(t2d.included["pref_name"])
+
+
+def test_efo_ids_in_manifest_and_sidecar(client, t2d, gout):
+    assert (gout.manifest["efo_ids"] == "EFO:0004274").all()
+    assert set(t2d.extra["efo_terms"]) == {"MONDO:0005148", "Orphanet:552"}
+    assert t2d.extra["efo_terms"]["Orphanet:552"] == ["MODY"]
+    mody = t2d.manifest[t2d.manifest["efo_ids"].str.contains("Orphanet:552")]
+    rows = client.drug_indications([T2D])
+    expected = {r["molecule_chembl_id"] for r in rows if r.get("efo_id") == "Orphanet:552"}
+    assert len(expected) == 2 and set(mody["molecule_chembl_id"]) == expected
+
+
+def test_inversions():
+    assert _inversions("high blood pressure") == ["blood pressure, high", "pressure, high blood"]
+    assert _inversions("gout") == [] and _inversions("a, b") == []
+
+
+def test_suggest_headings_lay_phrasings(client, mesh):
+    hbp = suggest_headings("high blood pressure", client, mesh_client=mesh)
+    assert hbp.iloc[0]["mesh_id"] == "D006973"  # Hypertension via "Blood Pressure, High"
+    assert hbp.iloc[0]["matched_via"] == "MeSH term: Blood Pressure, High"
+    dm = suggest_headings("diabetes", client, mesh_client=mesh)
+    assert dm.iloc[0]["mesh_id"] == "D003920"  # Diabetes Mellitus, not Hemochromatosis
+    ids = list(dm["mesh_id"])
+    assert "D006432" not in ids or ids.index("D006432") > ids.index("D003920")
+    assert suggest_headings("T2D", client, mesh_client=mesh).empty  # documented limitation
