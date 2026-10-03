@@ -798,3 +798,18 @@ def test_hosoya_default_cap_admits_c60():
     ).graph
     assert HOSOYA_MAX_FRONTIER >= 10
     assert hosoya_z(c60) == 1417036634543488
+
+
+def test_modified_reverse_degree_matches_kalaam_2024_verbatim():
+    """Exhaustive check against the rule as printed in Kalaam, Greeni & Arockiaraj,
+    Front. Chem. 12:1470231 (2024), PMC11462630:
+    M_kR(d) = Delta - d + k if k <= d, else (Delta - d + k) mod Delta."""
+    from topoqspr.indices import modified_reverse_degree
+
+    def printed_rule(d, k, delta):
+        return delta - d + k if k <= d else (delta - d + k) % delta
+
+    for delta in range(1, 9):
+        for d in range(1, delta + 1):
+            for k in range(1, delta + 1):
+                assert modified_reverse_degree(d, k, delta) == printed_rule(d, k, delta)

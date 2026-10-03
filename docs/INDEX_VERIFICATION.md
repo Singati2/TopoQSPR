@@ -214,6 +214,9 @@ second time. HCM2 has no R_k counterpart in the R_k sources and is registered
 as `HCM2`. The v0.x vertex forms RM1 (sum c^2) and RF (sum c^3) are dropped:
 Kulli's indices are edge sums.
 
+
+**Primary-source status (2026-10-03).** The original R_k paper (Arockiaraj, Greeni & Kalaam, *Int. J. Quantum Chem.* 123(16), 2023, doi:10.1002/qua.27136) is not open access (no PMC copy; Unpaywall: closed), so its full text has not been read. The definition used here is the one printed verbatim in the open-access follow-up by the same authors (Kalaam, Greeni & Arockiaraj, *Front. Chem.* 12:1470231, 2024, PMC11462630), and `test_modified_reverse_degree_matches_kalaam_2024_verbatim` checks the implementation against it for every Δ ≤ 8, 1 ≤ d ≤ Δ, 1 ≤ k ≤ Δ.
+
 ## Decision: generalised / modified reverse degree R_k
 
 The generalised reverse degree was proposed by Arockiaraj, Greeni and Kalaam,
