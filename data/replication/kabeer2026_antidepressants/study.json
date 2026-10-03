@@ -41,7 +41,8 @@
       "https://www.nature.com/articles/s41598-026-65586-2/tables/10",
       "https://www.nature.com/articles/s41598-026-65586-2/tables/11",
       "https://www.nature.com/articles/s41598-026-65586-2/tables/14"
-    ]
+    ],
+    "properties_sha256": "d6e23dd36d75a87c793f29e413f451187e024a1834633ffc889b1f150503fbf0"
   },
   "n_reported": 25,
   "n_reported_source": "Abstract: 'Twenty-five commonly used antidepressant drugs'; N = 25 in Tables 8-10",
@@ -162,8 +163,8 @@
       "name_verbatim": "complexity",
       "unit_verbatim": null,
       "source_stated_verbatim": "not stated",
-      "source_label": "computed_pubchem",
-      "source_evidence": "compared with PubChem Complexity",
+      "source_label": "mixed",
+      "source_evidence": "compared with PubChem Complexity (automated_checks): 16/25 equal PubChem; the values for drugs 01-09 differ and their source is not identified",
       "pubchem_field": "Complexity"
     },
     {
@@ -258,7 +259,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "2.579(\\(ND_1(G)\\))+105.111",
+      "equation_verbatim": "2.579([IMG d33e4555.gif])+105.111",
       "statistics": {
         "N": "25",
         "alpha": "105.111",
@@ -270,7 +271,9 @@
         "Sres": "45.537"
       },
       "fit": "in_sample",
-      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+      "source": "Table 8",
+      "equation_interpreted": "2.579(\\(ND_1(G)\\))+105.111",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T8-MR",
@@ -279,7 +282,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.539(\\(ND_1(G)\\)) +17.589",
+      "equation_verbatim": "0.539([IMG d33e4581.gif]) +17.589",
       "statistics": {
         "N": "25",
         "alpha": "17.589",
@@ -291,7 +294,9 @@
         "Sres": "6.887"
       },
       "fit": "in_sample",
-      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+      "source": "Table 8",
+      "equation_interpreted": "0.539(\\(ND_1(G)\\)) +17.589",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T8-MW",
@@ -300,7 +305,7 @@
       "predictors": [
         "ND5(G)"
       ],
-      "equation_verbatim": "5.623(\\(ND_5(G)\\))+9.439",
+      "equation_verbatim": "5.623([IMG d33e4607.gif])+9.439",
       "statistics": {
         "N": "25",
         "alpha": "9.439",
@@ -312,7 +317,9 @@
         "Sres": "56.811"
       },
       "fit": "in_sample",
-      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+      "source": "Table 8",
+      "equation_interpreted": "5.623(\\(ND_5(G)\\))+9.439",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T8-HAC",
@@ -321,7 +328,7 @@
       "predictors": [
         "ND5(G)"
       ],
-      "equation_verbatim": "0.382(\\(ND_5(G)\\))+2.623",
+      "equation_verbatim": "0.382([IMG d33e4633.gif])+2.623",
       "statistics": {
         "N": "25",
         "alpha": "2.623",
@@ -333,7 +340,9 @@
         "Sres": "1.949"
       },
       "fit": "in_sample",
-      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+      "source": "Table 8",
+      "equation_interpreted": "0.382(\\(ND_5(G)\\))+2.623",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T8-CO",
@@ -342,7 +351,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "4.287(\\(ND_1(G)\\))−197.708",
+      "equation_verbatim": "4.287([IMG d33e4659.gif])−197.708",
       "statistics": {
         "N": "25",
         "alpha": "−197.708",
@@ -354,7 +363,9 @@
         "Sres": "88.307"
       },
       "fit": "in_sample",
-      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+      "source": "Table 8",
+      "equation_interpreted": "4.287(\\(ND_1(G)\\))−197.708",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T8-EV",
@@ -363,7 +374,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.313(\\(ND_1(G)\\))+29.804",
+      "equation_verbatim": "0.313([IMG d33e4685.gif])+29.804",
       "statistics": {
         "N": "25",
         "alpha": "29.804",
@@ -375,7 +386,9 @@
         "Sres": "6.263"
       },
       "fit": "in_sample",
-      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+      "source": "Table 8",
+      "equation_interpreted": "0.313(\\(ND_1(G)\\))+29.804",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T9-BP",
@@ -384,7 +397,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.018(\\(ND_1(G)\\))\\(^{2}\\)−1.864(\\(ND_1(G\\))+367.084",
+      "equation_verbatim": "0.018([IMG d33e4768.gif])[IMG d33e4772.gif]−1.864([IMG d33e4776.gif])+367.084",
       "statistics": {
         "N": "25",
         "alpha": "367.084",
@@ -397,7 +410,9 @@
         "gamma": "0.018"
       },
       "fit": "in_sample",
-      "source": "Table 9 (index symbols from the publisher table page)"
+      "source": "Table 9",
+      "equation_interpreted": "0.018(\\(ND_1(G)\\))\\(^{2}\\)−1.864(\\(ND_1(G\\))+367.084",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T9-MR",
@@ -406,7 +421,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.001(\\(ND_1(G)\\))\\(^{2}\\)+0.271(\\(ND_1(G)\\))+33.369",
+      "equation_verbatim": "0.001([IMG d33e4804.gif])[IMG d33e4808.gif]+0.271([IMG d33e4812.gif])+33.369",
       "statistics": {
         "N": "25",
         "alpha": "33.369",
@@ -419,7 +434,9 @@
         "gamma": "0.001"
       },
       "fit": "in_sample",
-      "source": "Table 9 (index symbols from the publisher table page)"
+      "source": "Table 9",
+      "equation_interpreted": "0.001(\\(ND_1(G)\\))\\(^{2}\\)+0.271(\\(ND_1(G)\\))+33.369",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T9-CO",
@@ -428,7 +445,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.022(\\(ND_1(G)\\))\\(^{2}\\)−1.273(\\(ND_1(G)\\))+130.115",
+      "equation_verbatim": "0.022([IMG d33e4840.gif])[IMG d33e4844.gif]−1.273([IMG d33e4848.gif])+130.115",
       "statistics": {
         "N": "25",
         "alpha": "130.115",
@@ -441,7 +458,9 @@
         "gamma": "0.022"
       },
       "fit": "in_sample",
-      "source": "Table 9 (index symbols from the publisher table page)"
+      "source": "Table 9",
+      "equation_interpreted": "0.022(\\(ND_1(G)\\))\\(^{2}\\)−1.273(\\(ND_1(G)\\))+130.115",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T9-EV",
@@ -450,7 +469,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.002(\\(ND_1(G)\\))\\(^{2}\\)−0.287(\\(ND_1(G)\\))+65.175",
+      "equation_verbatim": "0.002([IMG d33e4876.gif])[IMG d33e4880.gif]−0.287([IMG d33e4884.gif])+65.175",
       "statistics": {
         "N": "25",
         "alpha": "65.175",
@@ -463,7 +482,9 @@
         "gamma": "0.002"
       },
       "fit": "in_sample",
-      "source": "Table 9 (index symbols from the publisher table page)"
+      "source": "Table 9",
+      "equation_interpreted": "0.002(\\(ND_1(G)\\))\\(^{2}\\)−0.287(\\(ND_1(G)\\))+65.175",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T10-MR",
@@ -472,7 +493,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "−178.770+55.169(\\(lnND_1(G)\\))",
+      "equation_verbatim": "−178.770+55.169([IMG d33e4963.gif])",
       "statistics": {
         "N": "25",
         "alpha": "−178.770",
@@ -484,7 +505,9 @@
         "Sres": "8.978"
       },
       "fit": "in_sample",
-      "source": "Table 10 (index symbols from the publisher table page)"
+      "source": "Table 10",
+      "equation_interpreted": "−178.770+55.169(\\(lnND_1(G)\\))",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T10-HAC",
@@ -493,7 +516,7 @@
       "predictors": [
         "ND5(G)"
       ],
-      "equation_verbatim": "−44.647+17.125(\\(lnND_5(G)\\))",
+      "equation_verbatim": "−44.647+17.125([IMG d33e4989.gif])",
       "statistics": {
         "N": "25",
         "alpha": "−44.647",
@@ -505,7 +528,9 @@
         "Sres": "2.219"
       },
       "fit": "in_sample",
-      "source": "Table 10 (index symbols from the publisher table page)"
+      "source": "Table 10",
+      "equation_interpreted": "−44.647+17.125(\\(lnND_5(G)\\))",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-01-BP-linear",
@@ -514,7 +539,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "2.579(\\(ND_1(G)\\))+105.111",
+      "equation_verbatim": "2.579([IMG d33e5764.gif])+105.111",
       "statistics": {
         "R2": "0.773",
         "Q2": "0.7734",
@@ -523,7 +548,9 @@
         "MSE": "1907.721"
       },
       "fit": "loocv",
-      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "equation_interpreted": "2.579(\\(ND_1(G)\\))+105.111",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-02-MR-linear",
@@ -532,7 +559,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.539(\\(ND_5(G)\\)) +17.589",
+      "equation_verbatim": "0.539([IMG d33e5782.gif]) +17.589",
       "statistics": {
         "R2": "0.867",
         "Q2": "0.867",
@@ -542,7 +569,9 @@
       },
       "fit": "loocv",
       "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
-      "note": "Table 14 prints ND_5(G) for this equation; Table 8 gives the same coefficients with ND_1(G)"
+      "note": "Table 14 prints ND_5(G) for this equation; Table 8 gives the same coefficients with ND_1(G)",
+      "equation_interpreted": "0.539(\\(ND_5(G)\\)) +17.589",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-03-MW-linear",
@@ -551,7 +580,7 @@
       "predictors": [
         "ND5(G)"
       ],
-      "equation_verbatim": "5.623(\\(ND_5(G)\\))+9.439",
+      "equation_verbatim": "5.623([IMG d33e5800.gif])+9.439",
       "statistics": {
         "R2": "0.609",
         "Q2": "0.7735",
@@ -561,7 +590,9 @@
       },
       "fit": "loocv",
       "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
-      "note": "LOOCV Q2 (0.7735) exceeds the in-sample R2 (0.609), which is impossible for OLS"
+      "note": "LOOCV Q2 (0.7735) exceeds the in-sample R2 (0.609), which is impossible for OLS",
+      "equation_interpreted": "5.623(\\(ND_5(G)\\))+9.439",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-04-HAC-linear",
@@ -570,7 +601,7 @@
       "predictors": [
         "ND5(G)"
       ],
-      "equation_verbatim": "0.382(\\(ND_5(G)\\))+2.623",
+      "equation_verbatim": "0.382([IMG d33e5818.gif])+2.623",
       "statistics": {
         "R2": "0.860",
         "Q2": "0.8598",
@@ -579,7 +610,9 @@
         "MSE": "3.4941"
       },
       "fit": "loocv",
-      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "equation_interpreted": "0.382(\\(ND_5(G)\\))+2.623",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-05-CO-linear",
@@ -588,7 +621,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "4.287(\\(ND_1(G)\\))−197.708",
+      "equation_verbatim": "4.287([IMG d33e5836.gif])−197.708",
       "statistics": {
         "R2": "0.715",
         "Q2": "0.715",
@@ -597,7 +630,9 @@
         "MSE": "7174.2859"
       },
       "fit": "loocv",
-      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "equation_interpreted": "4.287(\\(ND_1(G)\\))−197.708",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-06-EV-linear",
@@ -606,7 +641,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.313(\\(ND_1(G)\\))+29.804",
+      "equation_verbatim": "0.313([IMG d33e5854.gif])+29.804",
       "statistics": {
         "R2": "0.727",
         "Q2": "0.7266",
@@ -615,7 +650,9 @@
         "MSE": "36.0848"
       },
       "fit": "loocv",
-      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "equation_interpreted": "0.313(\\(ND_1(G)\\))+29.804",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-07-BP-quadratic",
@@ -624,7 +661,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.018(\\(ND_1(G)\\))\\(^{2}\\)−1.864(\\(ND_1(G)\\))+367.084",
+      "equation_verbatim": "0.018([IMG d33e5872.gif])[IMG d33e5876.gif]−1.864([IMG d33e5880.gif])+367.084",
       "statistics": {
         "R2": "0.887",
         "Q2": "0.7109",
@@ -633,7 +670,9 @@
         "MSE": "2433.9583"
       },
       "fit": "loocv",
-      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "equation_interpreted": "0.018(\\(ND_1(G)\\))\\(^{2}\\)−1.864(\\(ND_1(G)\\))+367.084",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-08-MR-quadratic",
@@ -642,7 +681,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.001(\\(ND_1(G)\\))\\(^{2}\\)+0.271(\\(ND_1(G)\\))+33.369",
+      "equation_verbatim": "0.001([IMG d33e5898.gif])[IMG d33e5902.gif]+0.271([IMG d33e5906.gif])+33.369",
       "statistics": {
         "R2": "0.878",
         "Q2": "0.8006",
@@ -651,7 +690,9 @@
         "MSE": "65.4545"
       },
       "fit": "loocv",
-      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "equation_interpreted": "0.001(\\(ND_1(G)\\))\\(^{2}\\)+0.271(\\(ND_1(G)\\))+33.369",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-09-CO-quadratic",
@@ -660,7 +701,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "0.022(\\(ND_1(G)\\))\\(^{2}\\)−1.273(\\(ND_1(G)\\))+130.115",
+      "equation_verbatim": "0.022([IMG d33e5924.gif])[IMG d33e5928.gif]−1.273([IMG d33e5932.gif])+130.115",
       "statistics": {
         "R2": "0.774",
         "Q2": "0.6845",
@@ -669,7 +710,9 @@
         "MSE": "7941.1677"
       },
       "fit": "loocv",
-      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "equation_interpreted": "0.022(\\(ND_1(G)\\))\\(^{2}\\)−1.273(\\(ND_1(G)\\))+130.115",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-10-MR-logarithmic",
@@ -678,7 +721,7 @@
       "predictors": [
         "ND1(G)"
       ],
-      "equation_verbatim": "55.169(\\(lnND_1(G)\\))−178.770",
+      "equation_verbatim": "55.169([IMG d33e5950.gif])−178.770",
       "statistics": {
         "R2": "0.774",
         "Q2": "0.772",
@@ -687,7 +730,9 @@
         "MSE": "74.1597"
       },
       "fit": "loocv",
-      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "equation_interpreted": "55.169(\\(lnND_1(G)\\))−178.770",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     },
     {
       "id": "T14-11-HAC-logarithmic",
@@ -696,7 +741,7 @@
       "predictors": [
         "ND5(G)"
       ],
-      "equation_verbatim": "17.125(\\(lnND_1(G)\\))−44.647",
+      "equation_verbatim": "17.125([IMG d33e5968.gif])−44.647",
       "statistics": {
         "R2": "0.818",
         "Q2": "0.8182",
@@ -706,7 +751,9 @@
       },
       "fit": "loocv",
       "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
-      "note": "Table 14 prints lnND_1(G); Table 10 gives the same coefficients with lnND_5(G)"
+      "note": "Table 14 prints lnND_1(G); Table 10 gives the same coefficients with lnND_5(G)",
+      "equation_interpreted": "17.125(\\(lnND_1(G)\\))−44.647",
+      "interpretation_source": "index symbols read from the publisher's table pages (source.other_sources, same CC BY 4.0 licence); in the JATS XML they are images"
     }
   ],
   "validation_reported": [

@@ -31,7 +31,8 @@
     "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13261421/fullTextXML",
     "retrieved": "2026-10-03",
     "xml_sha256": "0805debb954a006e731f6de19aa1251c9f1b5dd722c4f1715a024df1b198b866",
-    "other_sources": []
+    "other_sources": [],
+    "properties_sha256": "621ba91b769e138ff877d9daef6fcf696e4f746cc85e0d2f0a3d2164fc01e116"
   },
   "n_reported": 50,
   "n_reported_source": "Abstract and Table 2 caption: '50 Arthritis Drugs'",
@@ -1974,7 +1975,7 @@
   ],
   "resolution_issues": [
     "Chondroitin sulfate is a polymer: unresolved (rule unresolvable).",
-    "'meclofenamate' and 'meclofenamic acid' are both listed and resolve to the same CID 4037 (the anion name maps to the acid record).",
+    "'meclofenamate' and 'meclofenamic acid' are both listed and resolve to the same CID 4037. Row 28 uses rule parent_form (anion name -> acid); its printed property values differ from row 39's in every column, so a salt was probably modelled. The two rows share one structure and must stay in one CV fold.",
     "Ibuprofen (racemate, CID 3672) and dexibuprofen (S, CID 39912) share the InChIKey connectivity block.",
     "Oxyphenbutazone resolves to CID 4641, whose PubChem title is the synonym 'Oxazolidin' (formula C19H20N2O3 is correct); doxycycline's CID 54671203 carries an IUPAC title."
   ],

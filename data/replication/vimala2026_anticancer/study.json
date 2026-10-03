@@ -28,7 +28,8 @@
     "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13388843/fullTextXML",
     "retrieved": "2026-10-03",
     "xml_sha256": "33ec5c66d1a9bcd24e77f08b9c90e03c4957cd5aa37a21c2aeb896600931e214",
-    "other_sources": []
+    "other_sources": [],
+    "properties_sha256": "e33c8d23181df7f2a3e83af636360f67a5f6a9ba42f998fef4fda5334b41eac7"
   },
   "n_reported": 23,
   "n_reported_source": "Abstract: 'predicts the properties of 23 anti-cancer drugs'",

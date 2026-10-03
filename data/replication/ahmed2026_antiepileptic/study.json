@@ -33,7 +33,8 @@
     "xml_sha256": "d916e2e2cce6c69bbbbc9504f08221fce8738e8e213049fc7618dd66202e8252",
     "other_sources": [
       "https://github.com/TamseelaRana/wakeel-Ahmed (linked in the article; not inspected)"
-    ]
+    ],
+    "properties_sha256": "35948157b035363db1b34f06c8b4cd1e7b41e989bd9a735ab167238639dd56b8"
   },
   "n_reported": 20,
   "n_reported_source": "Introduction: 'twenty epilepsy drugs ... denoted as A1, ..., A20'",

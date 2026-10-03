@@ -31,7 +31,8 @@
     "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13483912/fullTextXML",
     "retrieved": "2026-10-03",
     "xml_sha256": "6780746d338b651f82d2e8e4c116bb1a7fae0ce23ac6eb30c65845359e08d8f8",
-    "other_sources": []
+    "other_sources": [],
+    "properties_sha256": "5233775b348cd6bc376acf1d5fc70629f36d7003620097184fa4f0829e4983bd"
   },
   "n_reported": 20,
   "n_reported_source": "Abstract: 'twenty antifungal drug molecules'; N = 20 in Tables 6-8",

@@ -25,12 +25,22 @@ data/replication/
 * Every value in `properties.csv` is re-extracted from the Europe PMC JATS XML (`fullTextXML`)
   by `extract_properties` using the table and column ids recorded in `study.json`. `extract`
   checks that the committed file still matches the XML: 7/7 stored studies match. The SHA-256
-  of each XML as retrieved on 2026-10-03 is in `study.json`.
+  of each XML as retrieved on 2026-10-03 is in `study.json` (`source.xml_sha256`), and so is the
+  SHA-256 of the canonical extracted `properties.csv` (`source.properties_sha256`, written by
+  `extract --record`, for all ten studies). `validate` checks that hash offline, together with
+  row labels and row order (drug order, then property-column order), so an edited, swapped or
+  relabelled value is caught without the XML. For the three licence-withheld studies `extract`
+  compares its local re-extraction with the same hash.
+* `equation_verbatim` is a substring of the rendered XML (`extract` checks this; `validate`
+  rejects location remarks such as "(Table 20 caption)" in the field, which belong in `source`
+  or `note`).
 * Formulas are rendered from MathML (linearised: `(a)/(b)`, `sqrt()`, `_{}`, `^{}`) or from
   TeX (Springer `tex-math`). Formulas that the XML carries only as images are marked `[IMG …]`.
   For Kabeer et al., the index and property symbols that are images in the XML were read from
   the publisher's table pages, which carry the same CC BY 4.0 licence. Those URLs are listed in
-  `source.other_sources`.
+  `source.other_sources`. Their equations are stored as in the XML (`equation_verbatim`, with
+  `[IMG …]`), and the symbol-filled reading separately (`equation_interpreted`, with
+  `interpretation_source`).
 * `models[].statistics` hold the printed strings, unchanged (e.g. `"− 1.94"`).
 
 ### Commands
@@ -39,12 +49,15 @@ data/replication/
 python tools/extract_replication.py validate              # offline: schema, re-resolution from cache, checks
 python tools/extract_replication.py resolve [--offline]   # re-run PubChem resolution, refresh automated_checks
 python tools/extract_replication.py fetch-xml [study]     # network: Europe PMC XML into ~/.cache/topoqspr/replication
-python tools/extract_replication.py extract [study]       # compare properties.csv with the XML
-                                                          #  (licence-withheld studies: write it to the cache)
+python tools/extract_replication.py extract [--record] [study]
+                                                          # compare properties.csv, its SHA-256 and the
+                                                          #  equations with the XML (licence-withheld
+                                                          #  studies: write properties.csv to the cache)
 ```
 
 `resolve --offline` reproduces `drugs.csv` and `automated_checks` byte for byte from the
-committed cache. `validate` fails if anything differs.
+committed cache. `validate` fails if anything differs. An unknown study key is an error
+(exit code 2) for every command.
 
 ## 2. Structure resolution rules
 
@@ -57,13 +70,17 @@ for each drug in `drugs.csv` is one of the following.
 | `as_printed` | the printed name is queried unchanged | most drugs |
 | `code_mapped` | the table prints a code (BD1, A1). The name comes from the paper's text | Çolakoğlu, Ahmed |
 | `typo_corrected` | misspelt name. `query_name` holds the correction and `note` the evidence | 'riseridone' → risperidone (Table 2 MW 410.5 and HAC 30 match) |
-| `parent_form` | the printed name denotes an ion or salt, while the paper's own formula describes the parent | 'Valproate' → valproic acid (formula C8H16O2 printed) |
-| `unresolvable` | combination product, polymer or mixture. Status `unresolved`, never guessed | chondroitin sulfate, imipenem-cilastatin |
+| `parent_form` | the printed name denotes an ion or salt. `query_name` is the neutral parent, and `note` says whether the paper's formula or values describe the parent or the salt | 'Valproate' → valproic acid (formula C8H16O2 printed); 'meclofenamate' → meclofenamic acid (values differ from the acid's row, probably the salt) |
+| `component_by_printed_index` | combination product whose printed index values identify one component. `query_name` is that component, and `note` gives the evidence | 'IMIPENEM-CILASTATIN' → imipenem (Table 7 EDS 15088 = imipenem's EDS; cilastatin gives 43610) |
+| `unresolvable` | combination product, polymer or mixture with no identifying evidence. Status `unresolved`, never guessed | chondroitin sulfate |
+
+`validate` refuses an `as_printed` row whose printed name is an anion ('…ate') but whose PubChem
+record is the acid ('… Acid'); such a row must use `parent_form` with a note.
 
 Status values: `resolved`, `ambiguous_first_cid` (several CIDs, first taken, flagged),
 `resolved_multicomponent` (salt or mixture record) and `unresolved`. In this data set every
-query returned exactly one CID and no record is multi-component. **208 of 210 rows resolve.**
-The two unresolved rows are the polymer and the combination product. Salt-form *property values*,
+query returned exactly one CID and no record is multi-component. **209 of 210 rows resolve.**
+The unresolved row is the polymer (chondroitin sulfate). Salt-form *property values*,
 as opposed to names, are flagged in the notes, e.g. fluvoxamine maleate (Kabeer) and diclofenac
 sodium (Pavithra).
 
@@ -73,14 +90,25 @@ sodium (Pavithra).
   (EXPERIMENT_PLAN §6);
 * printed formula or CID vs PubChem;
 * per property, the count of values and missing values;
-* for MW, HAC, complexity, TPSA and logP, agreement with PubChem up to the rounding of both numbers,
-  with a flag when a printed "MW" is the monoisotopic mass;
+* for MW, HAC, complexity, TPSA and logP, agreement with PubChem at the coarser precision: the
+  more precise number, rounded to the coarser number of decimals, must give the other (a tie at
+  exactly half a unit is accepted). Numbers at the same precision must be equal, so integers
+  (HAC, integer-printed TPSA) are compared exactly. PubChem is read at its native precision
+  because PUG-REST drops trailing zeros: XLogP3 and TPSA 1 dp (XLogP '3' is 3.0), MW as given.
+  Complexity is computed by PubChem to 1 dp (PUG-View: valproic acid 93.4, phenelzine 77.3) but
+  PUG-REST returns it truncated to an integer, so a printed decimal must truncate to the PUG-REST
+  value and a printed integer must equal it. A flag is set when a printed "MW" is the
+  monoisotopic mass;
 * identical property rows.
 
 ### Source labels
 
 `source_label` per property:
-* `computed_pubchem`: confirmed by the automated comparison.
+* `computed_pubchem`: confirmed by the automated comparison. `validate` requires at least 80 %
+  (`COMPUTED_PUBCHEM_MIN_MATCH`) of the compared values to match.
+* `mixed`: part of the column equals PubChem and part does not (salt forms, monoisotopic masses,
+  mis-rounding or an unidentified source); `source_evidence` gives the split. Used for Ali MW
+  (3/10), Kabeer CO (16/25) and Pavithra MW (7/10).
 * `predicted_acd_chemspider`: ACD/Labs Percepta values as displayed by ChemSpider. Godlin & Radha
   state this source. For the other studies the label is inferred from the property set and from
   values identical to Godlin & Radha for shared drugs. ChemSpider itself was not queried because
@@ -94,7 +122,7 @@ sodium (Pavithra).
 | # | key | status | n (listed / distinct structures) | properties | indices | model forms | licence | reproducible |
 |---|---|---|---|---|---|---|---|---|
 | 1 | `colakoglu2026_bipolar` | proposed | 18 / 18 | 9 (6 ACD, 3 PubChem) | 13 degree + 13 nbhd-degree-sum | 2-index ridge (LOOCV-selected), RF, XGBoost | CC BY 4.0 | approximately |
-| 2 | `kabeer2026_antidepressants` | proposed | 25 / 25 (1 stereo pair) | 8 (4 ACD, 3 PubChem, MP measured) | 9 neighborhood | linear, quadratic, logarithmic (1 index) | CC BY 4.0 | exactly* |
+| 2 | `kabeer2026_antidepressants` | proposed | 25 / 25 (1 stereo pair) | 8 (4 ACD, 2 PubChem, CO mixed, MP measured) | 9 neighborhood | linear, quadratic, logarithmic (1 index) | CC BY 4.0 | exactly* |
 | 3 | `vimala2026_anticancer` | proposed | 23 / 23 | 8 (7 ACD, MP measured) | 13 eccentricity | linear, ridge, elastic net (1 index) | CC BY 4.0 | exactly |
 | 4 | `almulla2026_antifungal` | proposed | 20 / 20 | 9 ACD (3 modelled) | 9 neighborhood | linear, quadratic, cubic (1 index) | CC BY 4.0 | exactly* |
 | 5 | `ali2026_stiff_person` | proposed | 10 / 10 | 5 (MW only has equations) | 10 degree | linear, quadratic, exponential, power | CC BY 4.0 | approximately |
@@ -102,7 +130,7 @@ sodium (Pavithra).
 | 7 | `tang2026_arthritis` | reserve | 50 / 48 + 1 polymer | 6 ChemDraw | 9 degree | linear, RF, XGBoost | **CC BY-NC-ND 4.0** | approximately |
 | 8 | `godlin2026_mdd` | reserve | 21 / 21 (1 stereo pair) | 9 (6 ACD, 3 PubChem; sources stated) | 12 degree + 12 nbhd | linear, quadratic, logarithmic (1 index) | CC BY 4.0 | exactly |
 | 9 | `ahmed2026_antiepileptic` | reserve | 20 / 19 | 10 ACD | 12 (family unclear) | ANN, fuzzy ANN | **CC BY-NC-ND 4.0** | not at all |
-| 10 | `supriya2026_tuberculosis` | reserve | 13 / 12 + 1 combination | 6 ACD (BP/E/FP n = 11) | EDS, DESI | linear, quadratic, log, exp, MLR | **CC BY-NC-ND 4.0** | approximately |
+| 10 | `supriya2026_tuberculosis` | reserve | 13 / 13 (combination resolved to imipenem by its printed EDS) | 6 ACD (BP/E/FP n = 11) | EDS, DESI | linear, quadratic, log, exp, MLR | **CC BY-NC-ND 4.0** | approximately |
 
 \* exactly in principle: the inputs and method are fully specified. Printed tables contain
 internal contradictions, so not every printed number can be matched (details below).
@@ -134,7 +162,7 @@ hyper-Zagreb values are 9× and 4× the edge count for 8 of 10 drugs.
 
 ### 1. Çolakoğlu & Benjamin 2026, *ACS Omega* 11:53404 — bipolar disorder (proposed)
 - **n** = 18 (BD1–BD18, names in the text); all resolved. BD16 'riseridone' → risperidone (`typo_corrected`).
-- **Properties** (Table 2): BP (°C at 760 mmHg), EoV (kJ mol–1), FP (°C), MR (cm3), POL (10–24 cm3), MV (cm3) → ACD/ChemSpider; MW (g mol–1), COM, HAC → PubChem computed (18/18 equal current PubChem). The paper's source statement is "obtained from PubChem and ChemSpider".
+- **Properties** (Table 2): BP (°C at 760 mmHg), EoV (kJ mol–1), FP (°C), MR (cm3), POL (10–24 cm3), MV (cm3) → ACD/ChemSpider; MW (g mol–1), COM, HAC → PubChem computed (18/18 equal current PubChem; valproic acid COM 93.4 is PubChem's 1-decimal value, which PUG-REST truncates to 93). The paper's source statement is "obtained from PubChem and ChemSpider".
 - **Indices**: 13 degree-based (Table 1: M1, M2, F, SDD, ISI, H, SC, R, σ, SO, ABC, ABS, AZ) and the same 13 with the degree replaced by the neighborhood degree sum (M1* … AZ*). Values are in Tables 5–6 and edge partitions in Tables 3–4.
 - **Models**: exhaustive LOOCV search per property over 13 univariate linear models, 91 two-index ridge models, RF and XGBoost. The best (always ridge) is reported in Tables 9–10 (LOOCV) and the in-sample refit with its equation in Table 11.
 - **Reported statistics (verbatim, Table 11, in-sample)**: BP R2 0.84898; EoV 0.88086; FP 0.87899; MR 0.97634; POL 0.98205; MV 0.96562; MW 0.98634; COM 0.96336; HAC 0.99984. LOOCV R2 (Tables 9/10) range from 0.80188 (BP, nbhd) to 0.99943 (HAC, degree), e.g. `BP = 5.5172(SDD) + 0.0722(AZ) + 159.021.`
@@ -143,10 +171,10 @@ hyper-Zagreb values are 9× and 4× the edge count for 8 of 10 drugs.
 
 ### 2. Kabeer, Mufti, Almehizia, Assiri & Ganati 2026, *Sci Rep* 16:25505 — SSRI/SNRI/other antidepressants (proposed)
 - **n** = 25; all resolved. Citalopram/escitalopram share connectivity.
-- **Properties** (Table 3): BP (°C), MV (cm³), MR (cm³), EV (kJ/mol) → ACD (inferred; identical to Godlin & Radha for shared drugs); MW, HAC, CO → PubChem; MP (°C) → measured, partly salt forms (fluoxetine 179 and sertraline 246 match PubChem experimental entries; venlafaxine 215 is not the base). No source is stated, and the abstract calls all eight "measured".
+- **Properties** (Table 3): BP (°C), MV (cm³), MR (cm³), EV (kJ/mol) → ACD (inferred; identical to Godlin & Radha for shared drugs); MW, HAC → PubChem; CO → mixed (16/25 equal PubChem, drugs 1–9 differ); MP (°C) → measured, partly salt forms (fluoxetine 179 and sertraline 246 match PubChem experimental entries; venlafaxine 215 is not the base). No source is stated, and the abstract calls all eight "measured".
 - **Indices** (Table 1, images in the XML): NM1, NM2, NABC, NF*, ND1–ND5 (neighborhood degree).
 - **Models**: 9 indices × 8 properties × {linear, quadratic, logarithmic} (Tables 5–7). Best equations are in Tables 8–10 and LOOCV in Table 14.
-- **Reported statistics (verbatim)**: linear BP `2.579(ND_1(G))+105.111` R2 0.773; quadratic BP R2 0.887 (headline); MR quadratic 0.878; LOOCV Q2 BP-quadratic 0.7109, MR-linear 0.867, MW-linear 0.7735.
+- **Reported statistics (verbatim)**: linear BP `2.579([IMG d33e4555.gif])+105.111`, read as `2.579(ND_1(G))+105.111`, R2 0.773; quadratic BP R2 0.887 (headline); MR quadratic 0.878; LOOCV Q2 BP-quadratic 0.7109, MR-linear 0.867, MW-linear 0.7735.
 - **Issues**: fluvoxamine MW 434.4 and HAC 30 are the maleate's; fluvoxamine MV printed 27.3; CO for drugs 1–9 differs from PubChem; citalopram and escitalopram have different index values despite identical graphs; Table 14 Q2 > R2 for MW and two index-symbol mismatches; Table 11 contradicts Tables 5–10.
 - **Reproducible: exactly in principle** (all inputs printed, standard formulas, plain OLS). Some printed numbers cannot all hold at once.
 
@@ -170,7 +198,7 @@ hyper-Zagreb values are 9× and 4× the edge count for 8 of 10 drugs.
 
 ### 5. Ali, Ali, Malik & Shang 2026, *ChemistryOpen* 15:e70239 — stiff-person syndrome drugs (proposed)
 - **n** = 10; all resolved. 'Valproate' → valproic acid (`parent_form`). The printed compound ID 389 is ornithine; the other 9 printed CIDs and all formulas match.
-- **Properties** (Table 4, "from PubChem and ChemSpider"): M.W (mixed average and monoisotopic masses; diazepam 278.07 is neither), M.P (unclear), Density (ACD; gabapentin 2.60 implausible), M.V (ACD), logP (5/10 match XLogP3).
+- **Properties** (Table 4, "from PubChem and ChemSpider"): M.W (label `mixed`: 3/10 PubChem average MW, 3 monoisotopic masses, diazepam 278.07 is neither), M.P (unclear), Density (ACD; gabapentin 2.60 implausible), M.V (ACD), logP (4/10 match XLogP3; diazepam 2.82 vs 3.0 does not).
 - **Indices** (Table 1): M1, M2, mM2 (image), AZI (printed without the −2), ReZG1–3, HZ, F, SDD. **The printed SDD equals 2 × M2 for every drug.**
 - **Models**: MW only, with linear, quadratic (Table 5), exponential and power (Table 6) fits (MATLAB). Table 7 gives R2/Q2 (LOOCV) per property without naming the model.
 - **Reported statistics (verbatim)**: MW linear M1 R2 0.9795 (R 0.9595, inconsistent); quadratic M1 0.9754; exponential M1 0.9751. Table 7 Q2: MW 0.7794, Log P 0.3001, Density 0.4989, MP 0.3068, MV 0.1002.
@@ -178,14 +206,14 @@ hyper-Zagreb values are 9× and 4× the edge count for 8 of 10 drugs.
 
 ### 6. Pavithra & Ravi Sankar 2026, *Front Chem* 14:1848388 — skin cancer drugs (reserve)
 - **n** = 10; all resolved.
-- **Properties** (Table 1): MW, complexity, PSA → PubChem (diclofenac MW/C are the sodium salt's; nicotinamide 122.2 vs 122.12); MR, P, MV, ST → ACD; logP matches no XLogP3 value.
+- **Properties** (Table 1): complexity (9/10; diclofenac is the sodium salt's) and PSA (9/10; nicotinamide 57 vs TPSA 56.0) → PubChem; MW → mixed (7/10: diclofenac is the sodium salt's, nicotinamide 122.2 vs 122.12, methotrexate 454.5 vs 454.4); MR, P, MV, ST → ACD; logP matches no XLogP3 value.
 - **Indices**: chromatic modified first/second Zagreb and chromatic first/second hyper Zagreb (equations 1–4). They depend on a proper colouring drawn only in Figure 2.
 - **Models**: single-index linear fits, in-sample (SPSS/Excel), Tables 5–8.
 - **Reported statistics (verbatim)**: HM1Φ: MW R2 0.916, MR 0.9057, P 0.906, C 0.829, MV 0.735; PSA, ST and logP < 0.21.
 - **Reproducible: approximately** (the colouring is not unique). With the printed index values the fits are fully specified.
 
 ### 7. Tang, Noureen, Ashraf, Azam & Aslam 2026, *ACS Omega* 11:33216 — arthritis drugs (reserve; CC BY-NC-ND)
-- **n** = 50 listed. Chondroitin sulfate is a polymer (unresolved), meclofenamate and meclofenamic acid are the same CID, and ibuprofen/dexibuprofen share connectivity.
+- **n** = 50 listed. Chondroitin sulfate is a polymer (unresolved); 'meclofenamate' → meclofenamic acid (`parent_form`; its printed values differ from the acid's row, probably the salt), so rows 28 and 39 share a CID; and ibuprofen/dexibuprofen share connectivity.
 - **Properties** (Table 3, ChemDraw 19.0 predictions "cross-validated with PubChem", median when sources differ): BP, MP (stated °C, magnitudes fit kelvin), Pc (bar), MR (cm3/mol; missing for 2), tPSA (Å2), CLogP. **Values not stored (licence).** A local re-extraction shows whole-row copies (celecoxib = feprazone, oxaprozin = piketoprofen) and near-copies.
 - **Indices** (Table 1): EM1, EM2, M1, M2, AZI, HM, F, SDD, ISZ. The printed ISZ formula equals the vertex count.
 - **Models**: single-index linear (Tables 4–9), RF and XGBoost on all 9 indices (Tables 13, 16, full data), XGBoost 70/30 test split (Table 18) and bootstrap/CV (Table 19).
@@ -209,12 +237,12 @@ hyper-Zagreb values are 9× and 4× the edge count for 8 of 10 drugs.
 - **Reproducible: not at all** (architecture, epochs, seeds and fold use unspecified). The drug list could still serve the baseline/CV chain (n = 19).
 
 ### 10. Supriya & Iyer 2026, *Sci Rep* 16:20043 — tuberculosis subset (reserve; CC BY-NC-ND)
-- **n** = 13 tuberculosis drugs (the SARS-CoV-2 subset, n = 8, is out of scope). Imipenem-cilastatin is unresolved (combination); BP, E and FP are missing for isoniazid and terizidone.
+- **n** = 13 tuberculosis drugs (the SARS-CoV-2 subset, n = 8, is out of scope). Imipenem-cilastatin is resolved to imipenem (`component_by_printed_index`): the printed Table 7 EDS 15088 equals imipenem's eccentric distance sum (cilastatin: 43610), and the same computation reproduces the printed EDS of ethambutol, isoniazid, pyrazinamide and ethionamide. BP, E and FP are missing for isoniazid and terizidone.
 - **Properties** (Table 8, "obtained from Chem Spider", called experimental): BP, E, FP, MR, P, MV, all ACD. **Values not stored (licence).**
 - **Indices**: EDS (eccentric distance sum) and DESI (detour eccentric sum, which needs longest-path distances); values in Table 7. Ethambutol (a tree) has DESI = EDS, as it should.
 - **Models**: logarithmic, exponential, polynomial (order 1–3) and two-index MLR; best per property in Table 13; LOOCV in Table 16.
 - **Reported statistics (verbatim, tuberculosis columns)**: R2 BP 0.85 (P2, EDS), E 0.82 (MLR), FP 0.84, MR 0.94 (P1, DESI), P 0.94, MV 0.92. LOOCV Q2_val: BP **− 1.94**, FP **− 1.803**, MR 0.919, MV 0.72.
-- **Reproducible: approximately** (combination product; log/exp fitting method not stated; coefficient tables contradict their captions).
+- **Reproducible: approximately** (combination product: the indices describe imipenem, but which component the property values describe is not stated; log/exp fitting method not stated; coefficient tables contradict their captions).
 
 ## 5. Open points for the co-authors
 
