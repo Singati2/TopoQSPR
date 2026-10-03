@@ -14,11 +14,36 @@ targets; none was computed.
 
 * **Quarantine guard.** `experiments.check_modelling_allowed(mesh_ids, plan_frozen=False)`
   raises `QuarantineError` for any MeSH ID other than the pilot **D008881** (Migraine
-  Disorders). It is called by `experiment_a(model=True)` and, in the command line, by
-  `exp-a --model`, `exp-c` and `size-dependence` on a `--mesh` or `--manifest` input,
-  **before** any ChEMBL access (tested with an empty offline cache). `--plan-frozen` lifts
-  it; use it only after the plan header records the frozen commit. A SMILES CSV carries no
-  disease and is not checked: the guard is a seat belt, not a lock.
+  Disorders). An **empty or blank** list is refused as "disease unknown" (only `None`, i.e.
+  no cohort at all, passes). Where it applies:
+  * `exp-c` and `size-dependence` with `--mesh`: checked **before** any ChEMBL access (tested
+    with an empty offline cache);
+  * `--manifest`: the MeSH IDs of the included rows must all be D008881. A manifest with an
+    empty `mesh_ids` column (what `cohort.build_atc_cohort` writes for the pooled
+    approved-drug set) or without the column is refused before the freeze, so the pooled
+    set cannot reach exp-c or size-dependence through a manifest (with a measured
+    `--target-csv` or otherwise);
+  * `experiment_a` / `exp-a`: the controlled cohort's MeSH IDs (`mesh_ids` argument united
+    with `cohort_mesh_ids(controlled)`: `parameters['mesh_ids']` and the manifest column)
+    must be exactly D008881, and the naive cohort's (the headings its free text matched,
+    from its manifest) must lie in `PILOT_NAIVE_MESH_IDS` = D008881 plus its two MeSH
+    children with ChEMBL rows, D020325 (Migraine with Aura) and D020326 (Migraine without
+    Aura). Otherwise exp-a runs only in **counts-only** mode (`counts_only=True`,
+    `--counts-only`): cohort sizes, overlaps, membership and size distributions, but no
+    targets, correlations, top-k or models (EXPERIMENT_PLAN §3.3 step 2: "counts only; no
+    properties, no models"). The CLI refuses a non-pilot `--mesh` without `--counts-only`
+    before any retrieval; the naive cohort is checked once it is retrieved.
+
+  `--plan-frozen` lifts the guard; use it only after the plan header records the frozen
+  commit. A SMILES CSV carries no disease and is not checked: the guard is a seat belt, not
+  a lock.
+* **Underpowered flag.** `--min-n` / `--min-n-test` (API `min_n`, `min_n_test`; default 50 and
+  10, EVALUATION_PROTOCOL §4) only set the `underpowered` flag of nested rows (n below
+  `min_n`, or a smallest outer test fold below `min_n_test`); they never block a run. At
+  replication scale (Experiment D, n ≈ 10–40) every row is flagged at the defaults: that is
+  the intended reading (fold-mean R² from 5-row test folds is very noisy), not an error.
+  Pass smaller values only to silence the flag deliberately, and report the values used
+  (`summary.json` → `settings`).
 * **Structures.** `prepare_structures` re-implements the pipeline's standardise stage
   (docs/PIPELINE.md §1; the stage function there is private): `graph.standardize`,
   rejections kept with their code, full-InChIKey duplicates rejected as
@@ -41,7 +66,7 @@ targets; none was computed.
 ### Command line
 
 ```
-PYTHONPATH=src python tools/run_experiment.py exp-a --mesh D008881 --naive-text migraine --out DIR [--model]
+PYTHONPATH=src python tools/run_experiment.py exp-a --mesh D008881 --naive-text migraine --out DIR [--model | --counts-only]
 PYTHONPATH=src python tools/run_experiment.py exp-c (--mesh ID.. | --manifest F | --smiles-csv F)
         (--target NAME [--provider rdkit] | --target-csv F --target-column C) [--feature-set TI] --out DIR
 PYTHONPATH=src python tools/run_experiment.py exp-d --spec study.json --out DIR
@@ -50,7 +75,8 @@ PYTHONPATH=src python tools/run_experiment.py size-dependence (--mesh ID.. | --m
 
 Shared options: `--families` (inner-loop candidates; `poly2_ridge` names the degree-2 ridge
 family below), `--seeds`, `--outer-splits`, `--inner-splits`, `--alpha`, `--n-jobs` (outer
-folds in parallel; results identical), `--plan-frozen`, `--cache-dir`, `--offline`,
+folds in parallel; results identical), `--min-n`, `--min-n-test`, `--plan-frozen`,
+`--cache-dir`, `--offline`,
 `--release`, `--timestamp`, `--overwrite`. Defaults: `ridge pls knn` (A, C), `ridge pls linear`
 (D), `linear poly2_ridge knn` (size dependence), seeds 0–4, 5 outer × 3 inner folds.
 
@@ -72,18 +98,27 @@ is documented in the audit and not repeated here.)
 
 | output | content |
 |---|---|
-| `summary.json` | `counts` per cohort (manifest rows included, distinct parent ChEMBL IDs, standardised, rejections by code, connectivity groups); `jaccard`: `parent_chembl_id`, `structures_used` (the ChEMBL `standard_inchi_key` of the structures each retrieval returns: naive salts vs controlled parents; COHORT_DEFINITION §5's InChIKey column), `standardised_parent_inchikey` (after v1.0 standardisation); `intersection_standardised`; `controlled_in_naive_share` |
+| `summary.json` | `mode` (`full` or `counts_only`), `quarantine` (why counts-only was required, else empty), `mesh_ids` of both cohorts; `counts` per cohort (manifest rows included, distinct parent ChEMBL IDs, standardised, rejections by code, connectivity groups); `jaccard`: `parent_chembl_id`, `structures_used` (the ChEMBL `standard_inchi_key` of the structures each retrieval returns: naive salts vs controlled parents; COHORT_DEFINITION §5's InChIKey column), `standardised_parent_inchikey` (after v1.0 standardisation); `intersection_standardised`; `controlled_in_naive_share` |
 | `membership.csv` | one row per standardised parent InChIKey: naive id, controlled id, membership flags |
 | `distributions.csv` | per variable (`n_heavy`, `n_bonds`, `n_rings`, each target): n, mean, SD, median, quartiles, range per cohort; two-sample KS statistic and p (`scipy.stats.ks_2samp`), BH `ks_q` across the variables. The two samples overlap, so the p values are descriptive |
 | `correlations.csv` | per cohort × target × index: Spearman ρ, Fisher-z CI, p, n, BH `q` across the indices of that cohort × target, reason if undefined |
-| `top_overlap.csv` | per target: the top-k indices by \|ρ\| in each cohort (`all`: every defined ρ; `bh_significant`: only q ≤ α, so possibly fewer than k), the overlap count and its Jaccard. Ties in \|ρ\| (many indices are rank-identical on small cohorts) are broken by registry order |
+| `top_overlap.csv` | per target: the top-k indices by \|ρ\| in each cohort (`all`: every defined ρ; `bh_significant`: only q ≤ α, so possibly fewer than k), the overlap count and its Jaccard. In the strict columns ties in \|ρ\| are broken by registry order. Many indices are rank-identical on small cohorts, so the `*_with_ties` columns repeat the comparison with every index tied with the k-th \|ρ\| included (realised set sizes `n_naive_with_ties`, `n_controlled_with_ties`, which can exceed k); read the tie-inclusive overlap when the two disagree |
 | `model.csv` (only `model=True`) | per cohort × target: nested `compare_feature_sets({size, TI})` with identical folds and connectivity groups: R² of each set, ΔR²(TI − size) with the corrected-t CI and p, `underpowered` |
 | `molecules_naive.csv`, `molecules_controlled.csv` | the standardisation tables |
 | `manifest_naive.csv`, `manifest_controlled.csv` (CLI) | both cohort manifests (ChEMBL data, CC BY-SA 3.0) |
 
 Targets come from any target provider (`--provider`, `--targets`; default the RDKit computed
-targets). Descriptive steps (counts, overlap, distributions, correlations) run for any disease;
-the modelling step is quarantined (§0).
+targets). Before the plan is frozen, only the counts-only steps (counts, overlaps, membership,
+size distributions) run for a non-pilot disease; targets, correlations, top-k and `--model`
+are quarantined (§0). In counts-only mode `correlations.csv`, `top_overlap.csv` and
+`model.csv` are not written and `distributions.csv` holds the size variables only.
+
+On the pilot, exp-a needs the naive `migraine` query (`drug_indication` with
+`mesh_heading__icontains=migraine` and its molecule records), which the test fixture cache
+(`tests/fixtures/pipeline/chembl`) does not contain: run it online once with a writable
+`--cache-dir` (it can be seeded with a copy of the fixture cache); later runs can be
+`--offline` against that cache. Offline against the fixture cache alone it exits 2 with a
+`CacheMiss`.
 
 ## C. Optimism chain (`experiment_c`, `exp-c`)
 
@@ -108,10 +143,19 @@ errors as if the two CV estimates were independent (df = the smaller df); they s
 so this is approximate (likely conservative). Undefined steps are NaN with a reason (e.g. fewer
 scaffold groups than folds).
 
+**Same rows.** The v0.x protocol drops every row with a NaN feature (as v0.x did), nested CV
+median-imputes them. B_train and B_CV must subtract R² values estimated on the same molecules,
+so when the v0.x protocol drops rows, the nested CV is re-run on its complete-case rows (chain
+step `nested_random_legacy_rows`) and B_train/B_CV use it; `B_rows` in `summary.json` and the
+`rows` column of `optimism.csv` say which rows were used, and `B_train_all_rows` /
+`B_CV_all_rows` keep the all-rows contrast for comparison. B_scaffold compares two all-rows
+nested runs. If fewer than 10 complete-case rows remain, the v0.x protocol does not run:
+`r2_train`, `r2_cv`, B_train and B_CV are NaN with `legacy_reason`.
+
 | output | content |
 |---|---|
-| `chain.csv` | the five R² values with CIs where defined |
-| `optimism.csv` | B_train, B_CV, B_scaffold, CI, pooled variant, CI method |
+| `chain.csv` | the five R² values with CIs where defined (six when `nested_random_legacy_rows` is needed) |
+| `optimism.csv` | B_train, B_CV, B_scaffold, CI, pooled variant, CI method, rows used |
 | `nested.csv` | both nested runs: n, p, fold-mean R² + CI, pooled R², MAE, failed/valid folds, smallest test fold, underpowered, chosen families |
 | `legacy.csv` | the v0.x per-family table |
 | `folds_random.csv`, `folds_scaffold.csv` | outer folds (`NestedCVResult.folds`) |
@@ -137,7 +181,11 @@ scaffold groups than folds).
 }
 ```
 
-Unknown keys raise. Drug names are **not** resolved automatically: each compound needs a
+Unknown keys raise. Compound names are used as `str(name).strip()` everywhere (in
+`compounds` and as keys of `reported_index_values`), so numbered compounds (`"name": 1`) work;
+names must be unique after this normalisation. Model forms are case-insensitive and must be
+`linear`, `quadratic` or `cubic` (in `model_forms` and in every reported fit). Drug names are
+**not** resolved automatically: each compound needs a
 SMILES written into the spec with its source (a compound without one is reported, not
 guessed). Index labels are mapped by `map_index_name`: exact registry name; literature name
 recorded in the registry (`ABC_4`, `GA_5`, `ND_1`–`ND_5`, …); the alias table
@@ -151,11 +199,16 @@ Anything else is `unmappable` with the reason.
    (`index_check.csv`: agree if |diff| ≤ 0.01 or relative diff ≤ 10⁻³).
 2. **In-sample fit** of the property on each mapped index for each model form
    (least squares; `fits.csv`: n, R², adjusted R², coefficients in ascending powers of the
-   index, reported R², difference). Undefined when n < degree + 2 or fewer than degree + 1
-   distinct index values.
+   index, reported R², difference). Each index is fitted on the compounds where it is
+   defined (n per row). Undefined when n < degree + 2 or fewer than degree + 1
+   distinct index values. Every reported fit is listed in `reported_fits.csv` with
+   `compared` and, if it could not be compared, the reason (property not analysed, index
+   label unmappable or not among the study's indices, form not in `model_forms`, no r2/r,
+   duplicate); `summary.json` → `reported_fits_unmatched` repeats the uncompared ones.
 3. **LOOCV** of the same fit (`loo_q2` = 1 − PRESS/SST, `loo_rmse`, `loo_q2_f3`, `loo_ccc`).
 4. **Nested CV** (`nested.csv`), outer `seeds` × `outer_splits`, connectivity groups kept
-   together, no applicability domain (n is genre-sized):
+   together, no applicability domain (n is genre-sized; at the default `min_n` = 50 every
+   row is flagged `underpowered`, see §0):
    * learner `genre`: the genre's own procedure made honest: index **and** form are chosen by
      inner CV (`single_index_family`: `SingleIndexPolynomial` over every column × form) and the
      choice is scored on the outer fold. Applied to `TI_study` (the mapped indices), and as
@@ -167,11 +220,18 @@ Anything else is `unmappable` with the reason.
      the group statistics); NaN + reason if there are fewer scaffold groups than folds;
    * `q2_f3` and `ccc` of the out-of-fold predictions (mean over repeats).
 5. **Chance controls** for the best in-sample R² over the study's k indices × forms
-   (`controls.csv`; p = (1 + #{null ≥ observed})/(1 + B), Phipson & Smyth 2010):
-   * `pseudo_*`: best R² among k i.i.d. N(0, 1) pseudo-descriptors, `n_random` draws
-     (descriptor-pool randomisation, Rücker et al. 2007);
+   (`controls.csv`; p = (1 + #{null ≥ observed})/(1 + B), Phipson & Smyth 2010). The
+   observed statistic and every null use the same rule as `fits.csv`: each index is fitted
+   on the rows where it is finite. `observed_best` / `observed_best_r2` / `observed_best_n`
+   come from one computation; `observed_matches_fits` checks them against the best R² in
+   `fits.csv` (`observed_reason` if not); `rows_per_index` gives the rows each study index
+   used and `excluded_indices` any index with no defined fit, with the reason:
+   * `pseudo_*`: best R² among k i.i.d. N(0, 1) pseudo-descriptors, pseudo-descriptor j
+     missing on the same rows as study index j, `n_random` draws (descriptor-pool
+     randomisation, Rücker et al. 2007);
    * `registry_*`: best R² among k indices drawn without replacement from the full TopoQSPR
-     registry (indices defined and non-constant on these compounds), `n_random` draws. This is
+     registry (every index with a defined fit on its finite rows; `registry_pool`, of which
+     `registry_pool_partial_nan` are undefined for some compounds), `n_random` draws. This is
      not a chance control (registry indices correlate with size); it asks whether the study's
      index choice beats an arbitrary choice of the same number of indices;
    * `perm_*`: y-permutation, best R² over the study's own indices and forms,
