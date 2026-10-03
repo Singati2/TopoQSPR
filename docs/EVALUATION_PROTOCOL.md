@@ -374,3 +374,19 @@ Every DOI above was checked against Crossref on 2026-10-02 (Cawley & Talbot has 
 ## Benjamini–Yekutieli (sensitivity analysis)
 
 `stats.benjamini_yekutieli(pvals, q)` applies the BY step-up procedure, valid under arbitrary dependence (Benjamini & Yekutieli 2001): BH applied to c(m)·p with c(m) = Σ_{i=1..m} 1/i. It is reported next to BH for the confirmatory family because those endpoints share drugs and CV folds (EXPERIMENT_PLAN §7). Verified against a brute-force implementation of the definition (`test_benjamini_yekutieli_matches_definition`).
+
+## Sanity check: pure-noise targets (synthetic, run 2026-10-03)
+
+n = 80 molecules, p = 60 i.i.d. standard-normal features, y independent standard normal; families
+ridge + random forest; one outer repeat (seed 0). Script: session scratch `probe.py` (to be added
+to `tools/` with the pipeline package).
+
+| Data seed | Nested CV R² (pooled) | Nested CV R² (fold mean) | v0.x protocol CV R² | v0.x training R² |
+|---|---|---|---|---|
+| 0 | −0.16 | −0.23 | −0.30 | 0.84 |
+| 1 | −0.06 | −0.09 | −0.25 | 0.85 |
+
+Nested CV correctly reports no signal. The v0.x cross-validated score is not optimistic in this
+setting (its tuning leak is small relative to split-to-split variance, as the audit also found), but
+the **in-sample R² of a random forest on pure noise is about 0.85**: in-sample fit statistics, as
+reported by most published disease-specific TI-QSPR studies, carry no evidence of predictive power.
