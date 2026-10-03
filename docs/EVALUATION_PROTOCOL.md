@@ -378,8 +378,7 @@ Every DOI above was checked against Crossref on 2026-10-02 (Cawley & Talbot has 
 ## Sanity check: pure-noise targets (synthetic, run 2026-10-03)
 
 n = 80 molecules, p = 60 i.i.d. standard-normal features, y independent standard normal; families
-ridge + random forest; one outer repeat (seed 0). Script: session scratch `probe.py` (to be added
-to `tools/` with the pipeline package).
+ridge + random forest; one outer repeat (seed 0). Script: `tools/noise_sanity.py`.
 
 | Data seed | Nested CV R² (pooled) | Nested CV R² (fold mean) | v0.x protocol CV R² | v0.x training R² |
 |---|---|---|---|---|
