@@ -384,6 +384,7 @@ ridge + random forest; one outer repeat (seed 0). Script: `tools/noise_sanity.py
 |---|---|---|---|---|
 | 0 | −0.16 | −0.23 | −0.30 | 0.84 |
 | 1 | −0.06 | −0.09 | −0.25 | 0.85 |
+| 2 | −0.08 | −0.13 | −0.22 | 0.84 |
 
 Nested CV correctly reports no signal. The v0.x cross-validated score is not optimistic in this
 setting (its tuning leak is small relative to split-to-split variance, as the audit also found), but
