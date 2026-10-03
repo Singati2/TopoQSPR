@@ -1,4 +1,4 @@
-"""Check every BibTeX entry against Crossref: DOI resolves, title, year, volume, first author.
+"""Check every BibTeX entry against Crossref (falling back to DataCite, then to the doi.org handle API): DOI resolves, title, year, volume, first author.
 
 Usage: python tools/check_refs.py paper/refs.bib [paper/main.tex]
 """
@@ -39,6 +39,27 @@ def norm(t):
     return re.sub(r'\s+', ' ', re.sub(r'[^a-z0-9 ]', ' ', re.sub(r'[{}\\]|\$[^$]*\$', '', t.lower()))).strip()
 
 
+def datacite(doi):
+    """DataCite record of ``doi`` in Crossref's field layout (None if absent)."""
+    r = requests.get(f'https://api.datacite.org/dois/{doi}', timeout=30)
+    if r.status_code != 200:
+        return None
+    a = r.json()['data']['attributes']
+    year = a.get('publicationYear')
+    return {
+        'title': [t['title'] for t in a.get('titles', []) if t.get('title')][:1],
+        'issued': {'date-parts': [[int(year)]] if year else []},
+        'volume': None,
+        'author': [{'family': c.get('familyName') or c.get('name', '')} for c in a.get('creators', [])],
+    }
+
+
+def handle_exists(doi):
+    """True if doi.org knows the handle, whichever agency registered it."""
+    r = requests.get(f'https://doi.org/api/handles/{doi}', timeout=30)
+    return r.status_code == 200 and r.json().get('responseCode') == 1
+
+
 def main(bibpath, texpath=None):
     bib = entries(bibpath)
     if texpath:
@@ -53,9 +74,18 @@ def main(bibpath, texpath=None):
             print(f'NO-DOI   {key} ({typ}): {f.get("title", "")[:70]}')
             continue
         r = requests.get(f'https://api.crossref.org/works/{doi}', timeout=30)
-        if r.status_code != 200:
-            print(f'BAD-DOI  {key}: {doi}'); problems += 1; continue
-        m = r.json()['message']
+        if r.status_code == 200:
+            m = r.json()['message']
+        else:
+            m = datacite(doi)
+            if m is None:
+                if handle_exists(doi):
+                    # registered with another agency (e.g. mEDRA, a journal's own
+                    # prefix): it resolves, but there is no metadata to compare
+                    print(f'NO-META  {key}: {doi} resolves via doi.org; metadata not checked')
+                else:
+                    print(f'BAD-DOI  {key}: {doi}'); problems += 1
+                continue
         issues = []
         ct = (m.get('title') or [''])[0]
         sim = difflib.SequenceMatcher(None, norm(ct), norm(f.get('title', ''))).ratio()
