@@ -251,7 +251,10 @@ collapses to d̄ and p = 0 (d̄ ≠ 0) or 1. NaN differences propagate by defaul
 
 For m non-missing p-values sorted p₍₁₎ ≤ … ≤ p₍ₘ₎:
 q₍ᵢ₎ = min_{j ≥ i} min(1, m·p₍ⱼ₎/j); reject iff q ≤ α (default 0.05).
-NaN p-values stay NaN and do not count towards m. Tested against the
+NaN p-values stay NaN, are never rejected and by default do not count towards m;
+`benjamini_hochberg(p, q, m=M)` uses a fixed family size M ≥ #finite p instead (an
+untestable member then acts as p = 1; used by the confirmatory table, §11.2; the same
+`m=` for `benjamini_yekutieli`, where c(M) uses M). Tested against the
 15-p-value example of Benjamini & Hochberg (1995), which rejects four.
 
 ### Spearman correlation
@@ -413,8 +416,22 @@ family, the learner, the threshold and the rules below are written to the run re
 
 One row per family member. From the main analysis of that learner: n, `d_r2_mean`
 (mean of the R·K paired fold differences R²_set − R²_ref), its corrected repeated-CV t CI
-and p (§5), and the same for d_MAE = MAE_ref − MAE_set. Then, **across the family**
-(m = number of finite p values):
+and p (§5), and the same for d_MAE = MAE_ref − MAE_set. Then, **across the family**.
+
+**Family membership and m** (`pipeline.FAMILY_RULE`, written to the run record as
+`protocol.family_membership`). EXPERIMENT_PLAN §7 restricts the confirmatory family to
+targets with ≥ 50 measured values, and an underpowered result carries no ML claim (§3).
+So a pre-specified member is left out of the multiplicity family (`in_family` = False) when
+its result is underpowered (n < `evaluation.min_n` or smallest outer test fold <
+`evaluation.min_n_test`) or its target was not evaluated and has fewer than `min_n` values;
+it keeps its d_R² estimate and CI (descriptive) but gets NaN q, `informative_*` = None,
+`practically_significant` = None and the reason "underpowered: not in confirmatory
+family". Membership depends only on n and the fold sizes, never on an outcome. Every other
+member counts in m = `family_m`, **including** a member whose p is undefined (e.g. an
+undefined fold R²) or that has no result: it is never rejected (equivalent to p = 1 in the
+step-up), keeps NaN q and says why in `reason`. An evaluation failure therefore cannot
+shrink m and loosen the correction for the other members (`stats.benjamini_hochberg(...,
+m=)`, `stats.benjamini_yekutieli(..., m=)`).
 
 | column | definition |
 |---|---|
@@ -427,7 +444,10 @@ and p (§5), and the same for d_MAE = MAE_ref − MAE_set. Then, **across the fa
 | `boot_*` | §11.5 |
 | `reason` | everything that makes a value missing or qualifies it (target not evaluated, failed folds, underpowered, failed bootstrap resamples) |
 
-A row whose p is NaN keeps NaN q values and NaN flags and does not count towards m.
+A row whose p is NaN keeps NaN q values and None flags and counts towards m (see above).
+A missing permutation, bootstrap or AD value is explained in `reason` (component disabled,
+set not in `protocol.permutation.feature_sets`, AD not fitted, failed permutations, ...),
+and the run record says `enabled: false` for a disabled permutation or bootstrap.
 
 ### 11.3 Y-randomised control (`permutation.csv`, `permutation_summary.csv`)
 
@@ -436,8 +456,18 @@ For every target of the family and every set in it (both the set and the referen
 EXPERIMENT_PLAN §7; Rücker et al. 2007) and the **whole** nested procedure is rerun with
 the learner's families, the same outer seeds, inner rule and groups:
 
-* permutation b of a target is `numpy.random.default_rng([seed, b]).permutation(n)`, the
-  same for every set of that target, so sets are compared on identical nulls;
+* permutation b of a target uses `numpy.random.default_rng([seed, b])`
+  (`pipeline.permutation_indices`), the same for every set of that target, so sets are
+  compared on identical nulls. Without CV groups it is `rng.permutation(n)`. **With CV
+  groups** (connectivity groups in the random split, scaffold groups in the scaffold
+  split) it is a restricted (block) permutation: whole groups' y blocks are exchanged
+  among groups of equal size, and the rows of singleton groups and of groups whose size is
+  unique are permuted row-wise among themselves. A row-wise permutation would break the
+  within-group dependence of y that the real data have, and the test would be conservative:
+  on a synthetic null with 18 pairs (identical X within a pair, y = u_g + 0.1ε, y
+  independent of X; OLS, 3 outer folds, K = 19, 60 data sets) the row-wise mean p was
+  0.737 (P(p ≤ 0.25) = 0.10) against 0.525 expected; the block permutation gives 0.544
+  (P(p ≤ 0.25) = 0.23). The run record gives the scheme per target;
 * X, its rows and the CV group labels are not moved, so outer and inner folds are those of
   the real analysis (they depend only on n, seeds and groups);
 * statistic: mean over repeats of the pooled out-of-fold R² (NaN if any outer fold

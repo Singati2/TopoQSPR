@@ -222,17 +222,158 @@ def test_confirmatory_table_bh_by_and_flags():
           [dict(target="e", set="TI", reference="size")]
     tab = pl.confirmatory_table(fam, summary, None, learner="L", practical_threshold=0.05,
                                 q=0.05, skipped={"e": "too few rows"})
-    p = tab["d_r2_p"].to_numpy(dtype=float)
-    bh, _ = stats.benjamini_hochberg(p, 0.05)
-    by, _ = stats.benjamini_yekutieli(p, 0.05)
+    # d is underpowered: out of the family; e was not evaluated (n unknown): in the
+    # family, untestable, counted in m
+    assert tab["in_family"].tolist() == [True, True, True, False, True]
+    assert (tab["family_m"] == 4).all()
+    p = np.where(tab["in_family"], tab["d_r2_p"].to_numpy(dtype=float), np.nan)
+    bh, _ = stats.benjamini_hochberg(p, 0.05, m=4)
+    by, _ = stats.benjamini_yekutieli(p, 0.05, m=4)
     np.testing.assert_allclose(tab["d_r2_q_bh"].to_numpy(dtype=float), bh, equal_nan=True)
     np.testing.assert_allclose(tab["d_r2_q_by"].to_numpy(dtype=float), by, equal_nan=True)
+    # c: 0.04 * 4 / 2 = 0.08 > 0.05 -> not rejected (m = 4: e counts, d does not); a rejected
+    assert tab.loc[2, "d_r2_q_bh"] == pytest.approx(0.08)
     assert math.isnan(tab.loc[4, "d_r2_q_bh"]) and "too few rows" in tab.loc[4, "reason"]
-    # c has p < q after BH (0.04 * 4 / 2 = 0.08 > 0.05 -> not rejected); a is rejected
-    assert tab["informative_bh"].tolist() == [True, False, False, False, None]
-    assert tab["practically_significant"].tolist() == [True, False, False, True, None]
+    assert math.isnan(tab.loc[3, "d_r2_q_bh"])
+    assert tab["informative_bh"].tolist() == [True, False, False, None, None]
+    assert tab["practically_significant"].tolist() == [True, False, False, None, None]
     assert "underpowered" in tab.loc[3, "reason"]
+    assert "not in confirmatory family" in tab.loc[3, "reason"]
     assert list(tab.columns) == pl.CONFIRMATORY_COLUMNS
+
+
+def _summ(rows):
+    d = pd.DataFrame(rows)
+    d["learner"], d["set"], d["reason"] = "L", "TI", ""
+    for c in ("d_r2_ci_low", "d_r2_ci_high", "d_mae_mean", "d_mae_ci_low", "d_mae_ci_high",
+              "d_mae_p"):
+        d[c] = 0.0
+    d["underpowered_reason"] = np.where(d["underpowered"], "n < min_n=50", "")
+    return d
+
+
+def _fam(targets):
+    return [dict(target=t, set="TI", reference="size") for t in targets]
+
+
+def test_underpowered_rows_are_not_in_the_bh_family():
+    # regression: an underpowered row (n < min_n) with a tiny p used to be BH-tested,
+    # flagged informative, and to lower the other members' q
+    s = _summ([dict(target="a", n=12, underpowered=True, d_r2_p=0.001, d_r2_mean=0.3),
+               dict(target="b", n=200, underpowered=False, d_r2_p=0.04, d_r2_mean=0.06)])
+    tab = pl.confirmatory_table(_fam("ab"), s, None, learner="L").set_index("target")
+    assert not tab.loc["a", "in_family"] and tab.loc["b", "in_family"]
+    assert (tab["family_m"] == 1).all()
+    assert math.isnan(tab.loc["a", "d_r2_q_bh"]) and math.isnan(tab.loc["a", "d_r2_q_by"])
+    assert tab.loc["a", "informative_bh"] is None and tab.loc["a", "informative_by"] is None
+    assert tab.loc["a", "practically_significant"] is None
+    assert "underpowered: not in confirmatory family" in tab.loc["a", "reason"]
+    assert tab.loc["a", "d_r2_mean"] == pytest.approx(0.3)  # estimate kept (descriptive)
+    assert tab.loc["b", "d_r2_q_bh"] == pytest.approx(0.04)
+    s = _summ([dict(target="a", n=200, underpowered=False, d_r2_p=0.04, d_r2_mean=0.06),
+               dict(target="b", n=200, underpowered=False, d_r2_p=0.5, d_r2_mean=0.0),
+               dict(target="c", n=20, underpowered=True, d_r2_p=0.001, d_r2_mean=0.3)])
+    tab = pl.confirmatory_table(_fam("abc"), s, None, learner="L").set_index("target")
+    assert tab.loc["a", "d_r2_q_bh"] == pytest.approx(0.08)  # m = 2 (c excluded)
+    assert tab.loc["c", "informative_bh"] is None
+    # a target not evaluated with n < min_n is excluded; with n >= min_n it stays in m
+    tab = pl.confirmatory_table(_fam("abxy"), s, None, learner="L", min_n=50,
+                                skipped={"x": "too few CV units", "y": "too few CV units"},
+                                n_values={"x": 4, "y": 60}).set_index("target")
+    assert tab["in_family"].to_dict() == {"a": True, "b": True, "x": False, "y": True}
+    assert tab.loc["x", "n"] == 4 and tab.loc["x", "underpowered"] is True
+    assert (tab["family_m"] == 3).all()
+    assert tab.loc["a", "d_r2_q_bh"] == pytest.approx(0.04 * 3)
+
+
+def test_untestable_member_counts_in_m():
+    # regression: a NaN p used to shrink m (anti-conservative)
+    def run(last):
+        s = _summ([dict(target=t, n=200, underpowered=False, d_r2_p=p, d_r2_mean=0.1)
+                   for t, p in zip("abcd", [0.02, 0.03, 0.04, last])])
+        return pl.confirmatory_table(_fam("abcd"), s, None, learner="L")
+    nan, one = run(math.nan), run(1.0)
+    np.testing.assert_allclose(nan["d_r2_q_bh"][:3], one["d_r2_q_bh"][:3])
+    np.testing.assert_allclose(nan["d_r2_q_by"][:3], one["d_r2_q_by"][:3])
+    np.testing.assert_allclose(nan["d_r2_q_bh"][:3], [0.04 * 4 / 3] * 3)
+    assert nan["informative_bh"].tolist() == [False, False, False, None]
+    assert (nan["family_m"] == 4).all() and nan["in_family"].all()
+    assert math.isnan(nan.loc[3, "d_r2_q_bh"])
+    assert "d_r2_p undefined" in nan.loc[3, "reason"]
+
+
+def test_bh_by_fixed_family_size():
+    p = np.array([0.01, np.nan, 0.03, 0.2])
+    for f in (stats.benjamini_hochberg, stats.benjamini_yekutieli):
+        a, ra = f(p, 0.05, m=4)
+        b, rb = f(np.where(np.isnan(p), 1.0, p), 0.05)
+        assert math.isnan(a[1]) and not ra[1]
+        np.testing.assert_allclose(np.delete(a, 1), np.delete(b, 1))
+        assert (np.delete(ra, 1) == np.delete(rb, 1)).all()
+        # default m = number of finite p (unchanged behaviour)
+        np.testing.assert_allclose(f(p, 0.05)[0], f(p, 0.05, m=3)[0], equal_nan=True)
+        with pytest.raises(ValueError, match="smaller than"):
+            f(p, 0.05, m=2)
+
+
+def test_confirmatory_table_explains_missing_components():
+    s = _summ([dict(target="a", n=200, underpowered=False, d_r2_p=0.04, d_r2_mean=0.06)])
+    ps = pd.DataFrame(dict(target="a", learner="L", set=["TI"], n_permutations=5, p=0.5,
+                           uninformative=True, reason="2 of 5 permutations failed (excluded)"))
+    tab = pl.confirmatory_table(_fam("a"), s, None, learner="L", perm_summary=ps,
+                                permutation_note="set not in protocol.permutation.feature_sets",
+                                bootstrap_note="bootstrap disabled", ad_note="AD not fitted")
+    why = tab.loc[0, "reason"]
+    assert "permutation set: 2 of 5 permutations failed" in why
+    assert "permutation reference (size): set not in protocol.permutation.feature_sets" in why
+    assert "bootstrap disabled" in why and "AD set: AD not fitted" in why
+
+
+# ------------------------------------------------- restricted permutation
+def test_permutation_indices_row_wise_without_groups():
+    a = pl.permutation_indices(20, None, np.random.default_rng([3, 1]))
+    np.testing.assert_array_equal(a, np.random.default_rng([3, 1]).permutation(20))
+
+
+def test_permutation_indices_moves_whole_blocks_among_equal_sizes():
+    # pairs, triples, singletons and one group whose size (4) no other group shares
+    groups = np.array(["p0", "p0", "p1", "p1", "p2", "p2", "t0", "t0", "t0", "t1", "t1", "t1",
+                       "s0", "s1", "s2", "q", "q", "q", "q"], dtype=object)
+    groups = groups[np.random.default_rng(0).permutation(groups.size)]  # non-contiguous groups
+    codes = {g: float(i) for i, g in enumerate(sorted(set(groups)))}
+    y = np.array([codes[g] for g in groups])  # y shared within a group
+    rest = np.flatnonzero(np.isin(groups, ["q", "s0", "s1", "s2"]))
+    seen = set()
+    for b in range(30):
+        perm = pl.permutation_indices(groups.size, groups, np.random.default_rng([7, b]))
+        assert sorted(perm.tolist()) == list(range(groups.size))
+        yp = y[perm]
+        for g in set(groups):
+            rows = np.flatnonzero(groups == g)
+            if len(rows) in (2, 3):
+                # a pair / triple receives the whole y block of one group of its own size
+                src = set(groups[perm[rows]])
+                assert len(src) == 1 and (groups == src.pop()).sum() == len(rows)
+                assert len(set(yp[rows])) == 1
+        # singletons and the unique-size group are permuted row-wise among themselves
+        assert set(perm[rest]) == set(rest)
+        seen.add(tuple(perm))
+        np.testing.assert_array_equal(
+            perm, pl.permutation_indices(groups.size, groups, np.random.default_rng([7, b])))
+    assert len(seen) > 10  # it does permute
+
+
+def test_permutation_control_uses_block_permutation_with_groups():
+    X, y = _null_data(5)
+    n = len(y)
+    groups = np.array([f"g{i // 2}" for i in range(n)], dtype=object)
+    perm = pl.permutation_control({"X": X}, y, families=("linear",), n_permutations=2, seed=4,
+                                  groups=groups, **KW)
+    idx = pl.permutation_indices(n, groups, np.random.default_rng([4, 1]))
+    assert not np.array_equal(idx, np.random.default_rng([4, 1]).permutation(n))
+    want = pl._nested_stat(ev.nested_cv(X, y[idx], ("linear",), groups=groups, ad=None, **KW))
+    got = perm.loc[perm["permutation"] == 1, "r2_pooled_mean"].iloc[0]
+    assert got == pytest.approx(want["r2_pooled_mean"], abs=0)
 
 
 # ----------------------------------------------------- run_study integration
@@ -273,6 +414,29 @@ def test_protocol_outputs_and_record(proto_run):
                                                       "reference": "size"}
     assert any(k.startswith("protocol:permutation") for k in rec["timings_s"])
     assert {t["name"]: t["target_class"] for t in rec["targets"]} == {"MolLogP": 2, "MolWt": 1}
+    assert pr["family_membership"] == pl.FAMILY_RULE and pr["min_n"] == 10
+    assert pr["permutation"]["enabled"] is True and pr["bootstrap"]["enabled"] is True
+    assert pr["permutation"]["scheme"] == pl.PERMUTATION_SCHEME
+    assert set(pr["permutation"]["scheme_by_target"]) == {"MolLogP", "MolWt"}
+    assert set(pr["permutation"]["scheme_by_target"].values()) <= {"block", "row-wise"}
+
+
+def test_protocol_disabled_components_are_explained(tmp_path):
+    # regression: perm/boot columns were NaN with an empty reason, and the record had
+    # no 'bootstrap' key when the bootstrap was off
+    cfg = _protocol_config(family=["MolLogP:TI-size"],
+                           permutation={"n_permutations": 2, "seed": 3, "feature_sets": ["TI"]},
+                           bootstrap={"enabled": False})
+    run = pl.run_study(cfg, tmp_path / "res", timestamp_utc=TS, base_dir=FIX)
+    conf = pl.read_results(run.out_dir, "confirmatory")
+    r = conf.iloc[0]
+    assert math.isnan(r["perm_p_reference"]) and math.isnan(r["boot_d_r2_ci_low"])
+    assert "permutation reference (size): set not in protocol.permutation.feature_sets" \
+        in r["reason"]
+    assert "bootstrap disabled (protocol.bootstrap.enabled = false)" in r["reason"]
+    pr = run.run_record["protocol"]
+    assert pr["bootstrap"] == {"enabled": False, "reason": "protocol.bootstrap.enabled = false"}
+    assert pr["permutation"]["enabled"] is True
 
 
 def test_protocol_confirmatory_consistent_with_components(proto_run):
