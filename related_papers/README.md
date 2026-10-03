@@ -14,8 +14,10 @@ These papers are required background for anyone contributing to TopoQSPR.
 
 **DOI:** https://doi.org/10.1002/qua.27136
 
-**PDF:** [`Arockiaraj_2023_IJQC_reverse_degree_indices.pdf`](Arockiaraj_2023_IJQC_reverse_degree_indices.pdf) (© 2023 Wiley Periodicals LLC)
+**Access:** Paywalled (© 2023 Wiley Periodicals LLC). Read it through the DOI with institutional access. The PDF is deliberately not stored in this public repository.
 
 #### Relevance to TopoQSPR
 
 This paper is directly related to TopoQSPR because it develops generalized/modified reverse-degree topological descriptors for molecular graphs and evaluates them using QSPR analysis. It compares linear and cubic regression models for predicting physicochemical properties of drug molecules from graph-theoretic topological indices. This makes it a useful methodological and literature reference for TopoQSPR's broader automated molecular-descriptor and predictive-modeling framework.
+
+> Note: Only bibliographic references are kept here. Publisher PDFs must not be committed unless their license (e.g., CC BY) permits public redistribution.
