@@ -1,0 +1,8742 @@
+{
+ "chemgraphx": {
+  "commit": "d8fea04ffc90ec4acb93748a79392c45c93adc1d",
+  "file_sha256": {
+   "server/basic_values.py": "cd88e256c9bf26d2aa00c6b1941f2a52eb0593a00ae7f3ce81c9c3a82baf0aa3",
+   "server/column_ab.py": "f23a64671218fef7247724d8eef6282b0815e88cf1ee74e264274d570e5dddf6",
+   "server/column_cd.py": "e4067cf76bbc6bf5f5c7bae77fabb018a65479532743313e5b55c28d17a4af2a",
+   "server/column_e.py": "7741521de9f0f1a46add965a65e3b623c058403d4254af6e3bea2d6199d1d394",
+   "server/column_f.py": "8c4bbd6d8c6f13824c29eb881664ad9fd802f23c470b4ed0564bda6420b3e773",
+   "server/four_columns.py": "8b33c5222f715536c7f10a63af7074dc46ada7adb97f4cef246dba867337dffe",
+   "server/graph.py": "1a4290992a3edc35b48e58f1083e9010cf3fba965ecd99799ea0192c7959852d"
+  },
+  "url": "https://github.com/aditya-jindal/chemgraphx"
+ },
+ "generated_with": {
+  "chembl_structure_pipeline": "1.2.4",
+  "igraph": "0.11.8",
+  "networkx": "3.4.2",
+  "numpy": "2.2.6",
+  "rdkit": "2026.3.6"
+ },
+ "mapping": [
+  [
+   "degree",
+   "first_zagreb",
+   "M1",
+   "equal"
+  ],
+  [
+   "degree",
+   "second_zagreb",
+   "M2",
+   "equal"
+  ],
+  [
+   "degree",
+   "randić",
+   "R",
+   "equal"
+  ],
+  [
+   "degree",
+   "atom_bond_connectivity",
+   "ABC",
+   "equal"
+  ],
+  [
+   "degree",
+   "harmonic",
+   "H",
+   "equal"
+  ],
+  [
+   "degree",
+   "sum_connectivity",
+   "SC",
+   "equal"
+  ],
+  [
+   "degree",
+   "hyper_zagreb",
+   "HM",
+   "equal"
+  ],
+  [
+   "degree",
+   "geometric_arithmetic",
+   "GA",
+   "equal"
+  ],
+  [
+   "degree",
+   "sigma",
+   "sigma",
+   "equal"
+  ],
+  [
+   "degree",
+   "somber",
+   "SO",
+   "equal"
+  ],
+  [
+   "degree",
+   "forgotten",
+   "F",
+   "equal"
+  ],
+  [
+   "degree",
+   "symmetric_division_degree",
+   "SDD",
+   "equal"
+  ],
+  [
+   "degree",
+   "augmented_zagreb",
+   "AZI",
+   "equal"
+  ],
+  [
+   "degree",
+   "bi_zagreb",
+   "BM",
+   "equal"
+  ],
+  [
+   "degree",
+   "tri_zagreb",
+   "TM",
+   "equal"
+  ],
+  [
+   "degree",
+   "geometric_harmonic",
+   "GH",
+   "equal"
+  ],
+  [
+   "degree",
+   "geometric_bi_zagreb",
+   "GBM",
+   "equal"
+  ],
+  [
+   "degree",
+   "geometric_tri_zagreb",
+   "GTM",
+   "equal"
+  ],
+  [
+   "degree",
+   "harmonic_geometric",
+   "HG",
+   "equal"
+  ],
+  [
+   "degree",
+   "harmonic_bi_zagreb",
+   "HBM",
+   "equal"
+  ],
+  [
+   "degree",
+   "harmonic_tri_zagreb",
+   "HTM",
+   "equal"
+  ],
+  [
+   "degree",
+   "bi_zagreb_geometric",
+   "BMG",
+   "equal"
+  ],
+  [
+   "degree",
+   "bi_zagreb_harmonic",
+   "BMH",
+   "equal"
+  ],
+  [
+   "degree",
+   "tri_zagreb_geometric",
+   "TMG",
+   "equal"
+  ],
+  [
+   "degree",
+   "tri_zagreb_harmonic",
+   "TMH",
+   "equal"
+  ],
+  [
+   "degree_sum",
+   "randić",
+   "S_R",
+   "equal"
+  ],
+  [
+   "degree_sum",
+   "atom_bond_connectivity",
+   "S_ABC",
+   "equal"
+  ],
+  [
+   "degree_sum",
+   "harmonic",
+   "S_H",
+   "equal"
+  ],
+  [
+   "degree_sum",
+   "sum_connectivity",
+   "S_SC",
+   "equal"
+  ],
+  [
+   "degree_sum",
+   "geometric_arithmetic",
+   "S_GA",
+   "equal"
+  ],
+  [
+   "degree_sum",
+   "symmetric_division_degree",
+   "S_SDD",
+   "equal"
+  ],
+  [
+   "degree_sum",
+   "geometric_bi_zagreb",
+   "S_GBM",
+   "equal"
+  ],
+  [
+   "degree_sum",
+   "tri_zagreb_harmonic",
+   "S_TMH",
+   "equal"
+  ],
+  [
+   "distance",
+   "wiener_index",
+   "W",
+   "equal"
+  ],
+  [
+   "distance",
+   "szeged",
+   "Sz",
+   "equal"
+  ],
+  [
+   "distance",
+   "edge_szeged",
+   "Sz_e",
+   "equal"
+  ],
+  [
+   "distance",
+   "PI",
+   "PI_v",
+   "equal"
+  ],
+  [
+   "distance",
+   "edge_PI",
+   "PI",
+   "equal"
+  ],
+  [
+   "distance",
+   "mostar",
+   "Mo",
+   "equal"
+  ],
+  [
+   "distance",
+   "edge_mostar",
+   "Mo_e",
+   "equal"
+  ],
+  [
+   "distance",
+   "edge_wiener",
+   "W_e",
+   "W_e - m(m-1)/2"
+  ]
+ ],
+ "panel": [
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 1.4142135623730951,
+     "augmented_zagreb": 16.0,
+     "bi_zagreb": 10.0,
+     "bi_zagreb_geometric": 7.071067811865475,
+     "bi_zagreb_harmonic": 15.0,
+     "first_zagreb": 6.0,
+     "forgotten": 10.0,
+     "geometric_arithmetic": 1.885618083164127,
+     "geometric_bi_zagreb": 0.565685424949238,
+     "geometric_harmonic": 4.242640687119286,
+     "geometric_tri_zagreb": 0.4040610178208843,
+     "harmonic": 1.3333333333333333,
+     "harmonic_bi_zagreb": 0.26666666666666666,
+     "harmonic_geometric": 0.9428090415820632,
+     "harmonic_tri_zagreb": 0.19047619047619047,
+     "hyper_zagreb": 18.0,
+     "irregularity_measure": 2.0,
+     "randić": 1.414213562373095,
+     "second_zagreb": 4.0,
+     "sigma": 2.0,
+     "somber": 4.47213595499958,
+     "sum_connectivity": 1.1547005383792517,
+     "symmetric_division_degree": 5.0,
+     "tri_zagreb": 14.0,
+     "tri_zagreb_geometric": 9.899494936611665,
+     "tri_zagreb_harmonic": 21.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 1.4142135623730951,
+     "augmented_zagreb": 16.0,
+     "bi_zagreb": 16.0,
+     "bi_zagreb_geometric": 8.0,
+     "bi_zagreb_harmonic": 32.0,
+     "first_zagreb": 8.0,
+     "forgotten": 16.0,
+     "geometric_arithmetic": 2.0,
+     "geometric_bi_zagreb": 0.5,
+     "geometric_harmonic": 8.0,
+     "geometric_tri_zagreb": 0.3333333333333333,
+     "harmonic": 1.0,
+     "harmonic_bi_zagreb": 0.125,
+     "harmonic_geometric": 0.5,
+     "harmonic_tri_zagreb": 0.08333333333333333,
+     "hyper_zagreb": 32.0,
+     "irregularity_measure": 0.0,
+     "randić": 1.0,
+     "second_zagreb": 8.0,
+     "sigma": 0.0,
+     "somber": 5.656854249492381,
+     "sum_connectivity": 1.0,
+     "symmetric_division_degree": 4.0,
+     "tri_zagreb": 24.0,
+     "tri_zagreb_geometric": 12.0,
+     "tri_zagreb_harmonic": 48.0
+    },
+    "distance": {
+     "PI": 6.0,
+     "PI_mul": 12.0,
+     "PI_plus": 18.0,
+     "edge_PI": 2.0,
+     "edge_PI_mul": 4.0,
+     "edge_PI_plus": 6.0,
+     "edge_mostar": 2.0,
+     "edge_mostar_mul": 4.0,
+     "edge_mostar_plus": 6.0,
+     "edge_szeged": 0.0,
+     "edge_szeged_mul": 0.0,
+     "edge_szeged_plus": 0.0,
+     "edge_vertex_szeged": 1.0,
+     "edge_wiener": 0.0,
+     "mostar": 2.0,
+     "mostar_mul": 4.0,
+     "mostar_plus": 6.0,
+     "szeged": 4.0,
+     "szeged_mul": 8.0,
+     "szeged_plus": 12.0,
+     "total_mostar": 4.0,
+     "total_szeged": 6.0,
+     "vertex_edge_wiener": 1.0,
+     "wiener_index": 4.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 3,
+   "name": "P3",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 2.8284271247461903,
+     "augmented_zagreb": 32.0,
+     "bi_zagreb": 26.0,
+     "bi_zagreb_geometric": 15.071067811865476,
+     "bi_zagreb_harmonic": 47.0,
+     "first_zagreb": 14.0,
+     "forgotten": 26.0,
+     "geometric_arithmetic": 3.885618083164127,
+     "geometric_bi_zagreb": 1.065685424949238,
+     "geometric_harmonic": 12.242640687119284,
+     "geometric_tri_zagreb": 0.7373943511542176,
+     "harmonic": 2.333333333333333,
+     "harmonic_bi_zagreb": 0.3916666666666666,
+     "harmonic_geometric": 1.4428090415820631,
+     "harmonic_tri_zagreb": 0.2738095238095238,
+     "hyper_zagreb": 50.0,
+     "irregularity_measure": 2.0,
+     "randić": 2.414213562373095,
+     "second_zagreb": 12.0,
+     "sigma": 2.0,
+     "somber": 10.12899020449196,
+     "sum_connectivity": 2.1547005383792515,
+     "symmetric_division_degree": 9.0,
+     "tri_zagreb": 38.0,
+     "tri_zagreb_geometric": 21.899494936611667,
+     "tri_zagreb_harmonic": 69.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 2.7052080111089007,
+     "augmented_zagreb": 43.647999999999996,
+     "bi_zagreb": 60.0,
+     "bi_zagreb_geometric": 19.951117504807875,
+     "bi_zagreb_harmonic": 188.0,
+     "first_zagreb": 24.0,
+     "forgotten": 76.0,
+     "geometric_arithmetic": 3.9390784314481166,
+     "geometric_bi_zagreb": 0.8100040466927816,
+     "geometric_harmonic": 36.49616001988017,
+     "geometric_tri_zagreb": 0.4450897615095161,
+     "harmonic": 1.3714285714285714,
+     "harmonic_bi_zagreb": 0.10280246069719753,
+     "harmonic_geometric": 0.49155585213955494,
+     "harmonic_tri_zagreb": 0.057549278601910184,
+     "hyper_zagreb": 148.0,
+     "irregularity_measure": 4.0,
+     "randić": 1.393846850117352,
+     "second_zagreb": 36.0,
+     "sigma": 4.0,
+     "somber": 17.21110255092798,
+     "sum_connectivity": 1.6503561370183704,
+     "symmetric_division_degree": 8.5,
+     "tri_zagreb": 112.0,
+     "tri_zagreb_geometric": 36.87539499764295,
+     "tri_zagreb_harmonic": 354.0
+    },
+    "distance": {
+     "PI": 20.0,
+     "PI_mul": 60.0,
+     "PI_plus": 70.0,
+     "edge_PI": 12.0,
+     "edge_PI_mul": 36.0,
+     "edge_PI_plus": 42.0,
+     "edge_mostar": 8.0,
+     "edge_mostar_mul": 20.0,
+     "edge_mostar_plus": 26.0,
+     "edge_szeged": 4.0,
+     "edge_szeged_mul": 16.0,
+     "edge_szeged_plus": 16.0,
+     "edge_vertex_szeged": 10.0,
+     "edge_wiener": 4.0,
+     "mostar": 8.0,
+     "mostar_mul": 20.0,
+     "mostar_plus": 26.0,
+     "szeged": 20.0,
+     "szeged_mul": 64.0,
+     "szeged_plus": 72.0,
+     "total_mostar": 16.0,
+     "total_szeged": 44.0,
+     "vertex_edge_wiener": 10.0,
+     "wiener_index": 20.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 5,
+   "name": "P5",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 4.949747468305834,
+     "augmented_zagreb": 56.0,
+     "bi_zagreb": 50.0,
+     "bi_zagreb_geometric": 27.071067811865476,
+     "bi_zagreb_harmonic": 95.0,
+     "first_zagreb": 26.0,
+     "forgotten": 50.0,
+     "geometric_arithmetic": 6.885618083164127,
+     "geometric_bi_zagreb": 1.8156854249492378,
+     "geometric_harmonic": 24.242640687119284,
+     "geometric_tri_zagreb": 1.2373943511542176,
+     "harmonic": 3.833333333333333,
+     "harmonic_bi_zagreb": 0.5791666666666666,
+     "harmonic_geometric": 2.192809041582063,
+     "harmonic_tri_zagreb": 0.3988095238095238,
+     "hyper_zagreb": 98.0,
+     "irregularity_measure": 2.0,
+     "randić": 3.914213562373095,
+     "second_zagreb": 24.0,
+     "sigma": 2.0,
+     "somber": 18.61427157873053,
+     "sum_connectivity": 3.6547005383792515,
+     "symmetric_division_degree": 15.0,
+     "tri_zagreb": 74.0,
+     "tri_zagreb_geometric": 39.89949493661166,
+     "tri_zagreb_harmonic": 141.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 4.542325318196284,
+     "augmented_zagreb": 100.53688888888888,
+     "bi_zagreb": 132.0,
+     "bi_zagreb_geometric": 37.951117504807875,
+     "bi_zagreb_harmonic": 476.0,
+     "first_zagreb": 48.0,
+     "forgotten": 172.0,
+     "geometric_arithmetic": 6.939078431448117,
+     "geometric_bi_zagreb": 1.3100040466927814,
+     "geometric_harmonic": 84.49616001988018,
+     "geometric_tri_zagreb": 0.6950897615095162,
+     "harmonic": 2.1214285714285714,
+     "harmonic_bi_zagreb": 0.13405246069719753,
+     "harmonic_geometric": 0.6790558521395549,
+     "harmonic_tri_zagreb": 0.07317427860191018,
+     "hyper_zagreb": 340.0,
+     "irregularity_measure": 4.0,
+     "randić": 2.143846850117352,
+     "second_zagreb": 84.0,
+     "sigma": 4.0,
+     "somber": 34.18166529940512,
+     "sum_connectivity": 2.7110163087981913,
+     "symmetric_division_degree": 14.5,
+     "tri_zagreb": 256.0,
+     "tri_zagreb_geometric": 72.87539499764296,
+     "tri_zagreb_harmonic": 930.0
+    },
+    "distance": {
+     "PI": 56.0,
+     "PI_mul": 192.0,
+     "PI_plus": 208.0,
+     "edge_PI": 42.0,
+     "edge_PI_mul": 144.0,
+     "edge_PI_plus": 156.0,
+     "edge_mostar": 24.0,
+     "edge_mostar_mul": 72.0,
+     "edge_mostar_plus": 84.0,
+     "edge_szeged": 35.0,
+     "edge_szeged_mul": 140.0,
+     "edge_szeged_plus": 140.0,
+     "edge_vertex_szeged": 56.0,
+     "edge_wiener": 35.0,
+     "mostar": 24.0,
+     "mostar_mul": 72.0,
+     "mostar_plus": 84.0,
+     "szeged": 84.0,
+     "szeged_mul": 308.0,
+     "szeged_plus": 322.0,
+     "total_mostar": 48.0,
+     "total_szeged": 231.0,
+     "vertex_edge_wiener": 56.0,
+     "wiener_index": 84.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 8,
+   "name": "P8",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 3.5355339059327378,
+     "augmented_zagreb": 40.0,
+     "bi_zagreb": 40.0,
+     "bi_zagreb_geometric": 20.0,
+     "bi_zagreb_harmonic": 80.0,
+     "first_zagreb": 20.0,
+     "forgotten": 40.0,
+     "geometric_arithmetic": 5.0,
+     "geometric_bi_zagreb": 1.25,
+     "geometric_harmonic": 20.0,
+     "geometric_tri_zagreb": 0.8333333333333333,
+     "harmonic": 2.5,
+     "harmonic_bi_zagreb": 0.3125,
+     "harmonic_geometric": 1.25,
+     "harmonic_tri_zagreb": 0.20833333333333331,
+     "hyper_zagreb": 80.0,
+     "irregularity_measure": 0.0,
+     "randić": 2.5,
+     "second_zagreb": 20.0,
+     "sigma": 0.0,
+     "somber": 14.142135623730951,
+     "sum_connectivity": 2.5,
+     "symmetric_division_degree": 10.0,
+     "tri_zagreb": 60.0,
+     "tri_zagreb_geometric": 30.0,
+     "tri_zagreb_harmonic": 120.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 3.0618621784789726,
+     "augmented_zagreb": 94.8148148148148,
+     "bi_zagreb": 120.0,
+     "bi_zagreb_geometric": 30.0,
+     "bi_zagreb_harmonic": 480.0,
+     "first_zagreb": 40.0,
+     "forgotten": 160.0,
+     "geometric_arithmetic": 5.0,
+     "geometric_bi_zagreb": 0.8333333333333333,
+     "geometric_harmonic": 80.0,
+     "geometric_tri_zagreb": 0.41666666666666663,
+     "harmonic": 1.25,
+     "harmonic_bi_zagreb": 0.05208333333333333,
+     "harmonic_geometric": 0.3125,
+     "harmonic_tri_zagreb": 0.026041666666666664,
+     "hyper_zagreb": 320.0,
+     "irregularity_measure": 0.0,
+     "randić": 1.25,
+     "second_zagreb": 80.0,
+     "sigma": 0.0,
+     "somber": 28.284271247461902,
+     "sum_connectivity": 1.7677669529663687,
+     "symmetric_division_degree": 10.0,
+     "tri_zagreb": 240.0,
+     "tri_zagreb_geometric": 60.0,
+     "tri_zagreb_harmonic": 960.0
+    },
+    "distance": {
+     "PI": 20.0,
+     "PI_mul": 80.0,
+     "PI_plus": 80.0,
+     "edge_PI": 20.0,
+     "edge_PI_mul": 80.0,
+     "edge_PI_plus": 80.0,
+     "edge_mostar": 0.0,
+     "edge_mostar_mul": 0.0,
+     "edge_mostar_plus": 0.0,
+     "edge_szeged": 20.0,
+     "edge_szeged_mul": 80.0,
+     "edge_szeged_plus": 80.0,
+     "edge_vertex_szeged": 20.0,
+     "edge_wiener": 5.0,
+     "mostar": 0.0,
+     "mostar_mul": 0.0,
+     "mostar_plus": 0.0,
+     "szeged": 20.0,
+     "szeged_mul": 80.0,
+     "szeged_plus": 80.0,
+     "total_mostar": 0.0,
+     "total_szeged": 80.0,
+     "vertex_edge_wiener": 10.0,
+     "wiener_index": 15.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     4
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 5,
+   "name": "C5",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 4.242640687119286,
+     "augmented_zagreb": 48.0,
+     "bi_zagreb": 48.0,
+     "bi_zagreb_geometric": 24.0,
+     "bi_zagreb_harmonic": 96.0,
+     "first_zagreb": 24.0,
+     "forgotten": 48.0,
+     "geometric_arithmetic": 6.0,
+     "geometric_bi_zagreb": 1.5,
+     "geometric_harmonic": 24.0,
+     "geometric_tri_zagreb": 0.9999999999999999,
+     "harmonic": 3.0,
+     "harmonic_bi_zagreb": 0.375,
+     "harmonic_geometric": 1.5,
+     "harmonic_tri_zagreb": 0.24999999999999997,
+     "hyper_zagreb": 96.0,
+     "irregularity_measure": 0.0,
+     "randić": 3.0,
+     "second_zagreb": 24.0,
+     "sigma": 0.0,
+     "somber": 16.970562748477143,
+     "sum_connectivity": 3.0,
+     "symmetric_division_degree": 12.0,
+     "tri_zagreb": 72.0,
+     "tri_zagreb_geometric": 36.0,
+     "tri_zagreb_harmonic": 144.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 3.6742346141747673,
+     "augmented_zagreb": 113.77777777777776,
+     "bi_zagreb": 144.0,
+     "bi_zagreb_geometric": 36.0,
+     "bi_zagreb_harmonic": 576.0,
+     "first_zagreb": 48.0,
+     "forgotten": 192.0,
+     "geometric_arithmetic": 6.0,
+     "geometric_bi_zagreb": 0.9999999999999999,
+     "geometric_harmonic": 96.0,
+     "geometric_tri_zagreb": 0.49999999999999994,
+     "harmonic": 1.5,
+     "harmonic_bi_zagreb": 0.06249999999999999,
+     "harmonic_geometric": 0.375,
+     "harmonic_tri_zagreb": 0.031249999999999997,
+     "hyper_zagreb": 384.0,
+     "irregularity_measure": 0.0,
+     "randić": 1.5,
+     "second_zagreb": 96.0,
+     "sigma": 0.0,
+     "somber": 33.941125496954285,
+     "sum_connectivity": 2.1213203435596424,
+     "symmetric_division_degree": 12.0,
+     "tri_zagreb": 288.0,
+     "tri_zagreb_geometric": 72.0,
+     "tri_zagreb_harmonic": 1152.0
+    },
+    "distance": {
+     "PI": 36.0,
+     "PI_mul": 144.0,
+     "PI_plus": 144.0,
+     "edge_PI": 24.0,
+     "edge_PI_mul": 96.0,
+     "edge_PI_plus": 96.0,
+     "edge_mostar": 0.0,
+     "edge_mostar_mul": 0.0,
+     "edge_mostar_plus": 0.0,
+     "edge_szeged": 24.0,
+     "edge_szeged_mul": 96.0,
+     "edge_szeged_plus": 96.0,
+     "edge_vertex_szeged": 36.0,
+     "edge_wiener": 12.0,
+     "mostar": 0.0,
+     "mostar_mul": 0.0,
+     "mostar_plus": 0.0,
+     "szeged": 54.0,
+     "szeged_mul": 216.0,
+     "szeged_plus": 216.0,
+     "total_mostar": 0.0,
+     "total_szeged": 150.0,
+     "vertex_edge_wiener": 18.0,
+     "wiener_index": 27.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 6,
+   "name": "C6",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 6.3639610306789285,
+     "augmented_zagreb": 72.0,
+     "bi_zagreb": 72.0,
+     "bi_zagreb_geometric": 36.0,
+     "bi_zagreb_harmonic": 144.0,
+     "first_zagreb": 36.0,
+     "forgotten": 72.0,
+     "geometric_arithmetic": 9.0,
+     "geometric_bi_zagreb": 2.25,
+     "geometric_harmonic": 36.0,
+     "geometric_tri_zagreb": 1.5,
+     "harmonic": 4.5,
+     "harmonic_bi_zagreb": 0.5625,
+     "harmonic_geometric": 2.25,
+     "harmonic_tri_zagreb": 0.375,
+     "hyper_zagreb": 144.0,
+     "irregularity_measure": 0.0,
+     "randić": 4.5,
+     "second_zagreb": 36.0,
+     "sigma": 0.0,
+     "somber": 25.455844122715714,
+     "sum_connectivity": 4.5,
+     "symmetric_division_degree": 18.0,
+     "tri_zagreb": 108.0,
+     "tri_zagreb_geometric": 54.0,
+     "tri_zagreb_harmonic": 216.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 5.5113519212621505,
+     "augmented_zagreb": 170.66666666666663,
+     "bi_zagreb": 216.0,
+     "bi_zagreb_geometric": 54.0,
+     "bi_zagreb_harmonic": 864.0,
+     "first_zagreb": 72.0,
+     "forgotten": 288.0,
+     "geometric_arithmetic": 9.0,
+     "geometric_bi_zagreb": 1.5,
+     "geometric_harmonic": 144.0,
+     "geometric_tri_zagreb": 0.75,
+     "harmonic": 2.25,
+     "harmonic_bi_zagreb": 0.09375,
+     "harmonic_geometric": 0.5625,
+     "harmonic_tri_zagreb": 0.046875,
+     "hyper_zagreb": 576.0,
+     "irregularity_measure": 0.0,
+     "randić": 2.25,
+     "second_zagreb": 144.0,
+     "sigma": 0.0,
+     "somber": 50.91168824543143,
+     "sum_connectivity": 3.181980515339464,
+     "symmetric_division_degree": 18.0,
+     "tri_zagreb": 432.0,
+     "tri_zagreb_geometric": 108.0,
+     "tri_zagreb_harmonic": 1728.0
+    },
+    "distance": {
+     "PI": 72.0,
+     "PI_mul": 288.0,
+     "PI_plus": 288.0,
+     "edge_PI": 72.0,
+     "edge_PI_mul": 288.0,
+     "edge_PI_plus": 288.0,
+     "edge_mostar": 0.0,
+     "edge_mostar_mul": 0.0,
+     "edge_mostar_plus": 0.0,
+     "edge_szeged": 144.0,
+     "edge_szeged_mul": 576.0,
+     "edge_szeged_plus": 576.0,
+     "edge_vertex_szeged": 144.0,
+     "edge_wiener": 54.0,
+     "mostar": 0.0,
+     "mostar_mul": 0.0,
+     "mostar_plus": 0.0,
+     "szeged": 144.0,
+     "szeged_mul": 576.0,
+     "szeged_plus": 576.0,
+     "total_mostar": 0.0,
+     "total_szeged": 576.0,
+     "vertex_edge_wiener": 72.0,
+     "wiener_index": 90.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     8
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 9,
+   "name": "C9",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 3.4641016151377544,
+     "augmented_zagreb": 9.48148148148148,
+     "bi_zagreb": 36.0,
+     "bi_zagreb_geometric": 18.0,
+     "bi_zagreb_harmonic": 90.0,
+     "first_zagreb": 20.0,
+     "forgotten": 68.0,
+     "geometric_arithmetic": 3.2,
+     "geometric_bi_zagreb": 0.8888888888888888,
+     "geometric_harmonic": 20.0,
+     "geometric_tri_zagreb": 0.38095238095238093,
+     "harmonic": 1.6,
+     "harmonic_bi_zagreb": 0.17777777777777778,
+     "harmonic_geometric": 0.8,
+     "harmonic_tri_zagreb": 0.0761904761904762,
+     "hyper_zagreb": 100.0,
+     "irregularity_measure": 12.0,
+     "randić": 2.0,
+     "second_zagreb": 16.0,
+     "sigma": 36.0,
+     "somber": 16.492422502470642,
+     "sum_connectivity": 1.7888543819998317,
+     "symmetric_division_degree": 17.0,
+     "tri_zagreb": 84.0,
+     "tri_zagreb_geometric": 42.0,
+     "tri_zagreb_harmonic": 210.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 2.449489742783178,
+     "augmented_zagreb": 75.85185185185183,
+     "bi_zagreb": 96.0,
+     "bi_zagreb_geometric": 24.0,
+     "bi_zagreb_harmonic": 384.0,
+     "first_zagreb": 32.0,
+     "forgotten": 128.0,
+     "geometric_arithmetic": 4.0,
+     "geometric_bi_zagreb": 0.6666666666666666,
+     "geometric_harmonic": 64.0,
+     "geometric_tri_zagreb": 0.3333333333333333,
+     "harmonic": 1.0,
+     "harmonic_bi_zagreb": 0.041666666666666664,
+     "harmonic_geometric": 0.25,
+     "harmonic_tri_zagreb": 0.020833333333333332,
+     "hyper_zagreb": 256.0,
+     "irregularity_measure": 0.0,
+     "randić": 1.0,
+     "second_zagreb": 64.0,
+     "sigma": 0.0,
+     "somber": 22.627416997969522,
+     "sum_connectivity": 1.414213562373095,
+     "symmetric_division_degree": 8.0,
+     "tri_zagreb": 192.0,
+     "tri_zagreb_geometric": 48.0,
+     "tri_zagreb_harmonic": 768.0
+    },
+    "distance": {
+     "PI": 20.0,
+     "PI_mul": 80.0,
+     "PI_plus": 100.0,
+     "edge_PI": 12.0,
+     "edge_PI_mul": 48.0,
+     "edge_PI_plus": 60.0,
+     "edge_mostar": 12.0,
+     "edge_mostar_mul": 48.0,
+     "edge_mostar_plus": 60.0,
+     "edge_szeged": 0.0,
+     "edge_szeged_mul": 0.0,
+     "edge_szeged_plus": 0.0,
+     "edge_vertex_szeged": 6.0,
+     "edge_wiener": 0.0,
+     "mostar": 12.0,
+     "mostar_mul": 48.0,
+     "mostar_plus": 60.0,
+     "szeged": 16.0,
+     "szeged_mul": 64.0,
+     "szeged_plus": 80.0,
+     "total_mostar": 24.0,
+     "total_szeged": 28.0,
+     "vertex_edge_wiener": 6.0,
+     "wiener_index": 16.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     0,
+     4
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 5,
+   "name": "K1,4",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 3.9999999999999996,
+     "augmented_zagreb": 68.34375,
+     "bi_zagreb": 90.0,
+     "bi_zagreb_geometric": 30.0,
+     "bi_zagreb_harmonic": 270.0,
+     "first_zagreb": 36.0,
+     "forgotten": 108.0,
+     "geometric_arithmetic": 6.0,
+     "geometric_bi_zagreb": 1.2,
+     "geometric_harmonic": 54.0,
+     "geometric_tri_zagreb": 0.6666666666666667,
+     "harmonic": 1.9999999999999998,
+     "harmonic_bi_zagreb": 0.13333333333333333,
+     "harmonic_geometric": 0.6666666666666667,
+     "harmonic_tri_zagreb": 0.07407407407407407,
+     "hyper_zagreb": 216.0,
+     "irregularity_measure": 0.0,
+     "randić": 1.9999999999999998,
+     "second_zagreb": 54.0,
+     "sigma": 0.0,
+     "somber": 25.455844122715707,
+     "sum_connectivity": 2.4494897427831783,
+     "symmetric_division_degree": 12.0,
+     "tri_zagreb": 162.0,
+     "tri_zagreb_geometric": 54.0,
+     "tri_zagreb_harmonic": 486.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 2.666666666666667,
+     "augmented_zagreb": 778.47802734375,
+     "bi_zagreb": 594.0,
+     "bi_zagreb_geometric": 66.0,
+     "bi_zagreb_harmonic": 5346.0,
+     "first_zagreb": 108.0,
+     "forgotten": 972.0,
+     "geometric_arithmetic": 6.0,
+     "geometric_bi_zagreb": 0.5454545454545455,
+     "geometric_harmonic": 486.0,
+     "geometric_tri_zagreb": 0.2222222222222222,
+     "harmonic": 0.6666666666666667,
+     "harmonic_bi_zagreb": 0.006734006734006735,
+     "harmonic_geometric": 0.07407407407407407,
+     "harmonic_tri_zagreb": 0.0027434842249657062,
+     "hyper_zagreb": 1944.0,
+     "irregularity_measure": 0.0,
+     "randić": 0.6666666666666667,
+     "second_zagreb": 486.0,
+     "sigma": 0.0,
+     "somber": 76.36753236814714,
+     "sum_connectivity": 1.4142135623730951,
+     "symmetric_division_degree": 12.0,
+     "tri_zagreb": 1458.0,
+     "tri_zagreb_geometric": 162.0,
+     "tri_zagreb_harmonic": 13122.0
+    },
+    "distance": {
+     "PI": 12.0,
+     "PI_mul": 108.0,
+     "PI_plus": 72.0,
+     "edge_PI": 24.0,
+     "edge_PI_mul": 216.0,
+     "edge_PI_plus": 144.0,
+     "edge_mostar": 0.0,
+     "edge_mostar_mul": 0.0,
+     "edge_mostar_plus": 0.0,
+     "edge_szeged": 24.0,
+     "edge_szeged_mul": 216.0,
+     "edge_szeged_plus": 144.0,
+     "edge_vertex_szeged": 12.0,
+     "edge_wiener": 3.0,
+     "mostar": 0.0,
+     "mostar_mul": 0.0,
+     "mostar_plus": 0.0,
+     "szeged": 6.0,
+     "szeged_mul": 54.0,
+     "szeged_plus": 36.0,
+     "total_mostar": 0.0,
+     "total_szeged": 54.0,
+     "vertex_edge_wiener": 6.0,
+     "wiener_index": 6.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     2,
+     3
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 4,
+   "name": "K4",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 4.242640687119286,
+     "augmented_zagreb": 48.0,
+     "bi_zagreb": 66.0,
+     "bi_zagreb_geometric": 26.944387170614963,
+     "bi_zagreb_harmonic": 165.0,
+     "first_zagreb": 30.0,
+     "forgotten": 78.0,
+     "geometric_arithmetic": 5.878775382679627,
+     "geometric_bi_zagreb": 1.3360853142453695,
+     "geometric_harmonic": 36.74234614174767,
+     "geometric_tri_zagreb": 0.7735230766683718,
+     "harmonic": 2.4,
+     "harmonic_bi_zagreb": 0.2181818181818182,
+     "harmonic_geometric": 0.9797958971132712,
+     "harmonic_tri_zagreb": 0.12631578947368421,
+     "hyper_zagreb": 150.0,
+     "irregularity_measure": 6.0,
+     "randić": 2.4494897427831783,
+     "second_zagreb": 36.0,
+     "sigma": 6.0,
+     "somber": 21.633307652783934,
+     "sum_connectivity": 2.6832815729997477,
+     "symmetric_division_degree": 12.999999999999998,
+     "tri_zagreb": 114.0,
+     "tri_zagreb_geometric": 46.54030511288038,
+     "tri_zagreb_harmonic": 285.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 3.162277660168379,
+     "augmented_zagreb": 279.93600000000004,
+     "bi_zagreb": 288.0,
+     "bi_zagreb_geometric": 48.0,
+     "bi_zagreb_harmonic": 1728.0,
+     "first_zagreb": 72.0,
+     "forgotten": 432.0,
+     "geometric_arithmetic": 6.0,
+     "geometric_bi_zagreb": 0.75,
+     "geometric_harmonic": 216.0,
+     "geometric_tri_zagreb": 0.33333333333333337,
+     "harmonic": 0.9999999999999999,
+     "harmonic_bi_zagreb": 0.020833333333333336,
+     "harmonic_geometric": 0.16666666666666669,
+     "harmonic_tri_zagreb": 0.009259259259259259,
+     "hyper_zagreb": 864.0,
+     "irregularity_measure": 0.0,
+     "randić": 0.9999999999999999,
+     "second_zagreb": 216.0,
+     "sigma": 0.0,
+     "somber": 50.911688245431414,
+     "sum_connectivity": 1.7320508075688774,
+     "symmetric_division_degree": 12.0,
+     "tri_zagreb": 648.0,
+     "tri_zagreb_geometric": 108.0,
+     "tri_zagreb_harmonic": 3888.0
+    },
+    "distance": {
+     "PI": 30.0,
+     "PI_mul": 180.0,
+     "PI_plus": 150.0,
+     "edge_PI": 18.0,
+     "edge_PI_mul": 108.0,
+     "edge_PI_plus": 90.0,
+     "edge_mostar": 6.0,
+     "edge_mostar_mul": 36.0,
+     "edge_mostar_plus": 30.0,
+     "edge_szeged": 12.0,
+     "edge_szeged_mul": 72.0,
+     "edge_szeged_plus": 60.0,
+     "edge_vertex_szeged": 21.0,
+     "edge_wiener": 6.0,
+     "mostar": 6.0,
+     "mostar_mul": 36.0,
+     "mostar_plus": 30.0,
+     "szeged": 36.0,
+     "szeged_mul": 216.0,
+     "szeged_plus": 180.0,
+     "total_mostar": 12.0,
+     "total_szeged": 90.0,
+     "vertex_edge_wiener": 9.0,
+     "wiener_index": 14.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     3
+    ],
+    [
+     0,
+     4
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     1,
+     4
+    ]
+   ],
+   "kind": "closed_form",
+   "n": 5,
+   "name": "K2,3",
+   "smiles": null
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 4.242640687119286,
+     "augmented_zagreb": 48.0,
+     "bi_zagreb": 48.0,
+     "bi_zagreb_geometric": 24.0,
+     "bi_zagreb_harmonic": 96.0,
+     "first_zagreb": 24.0,
+     "forgotten": 48.0,
+     "geometric_arithmetic": 6.0,
+     "geometric_bi_zagreb": 1.5,
+     "geometric_harmonic": 24.0,
+     "geometric_tri_zagreb": 0.9999999999999999,
+     "harmonic": 3.0,
+     "harmonic_bi_zagreb": 0.375,
+     "harmonic_geometric": 1.5,
+     "harmonic_tri_zagreb": 0.24999999999999997,
+     "hyper_zagreb": 96.0,
+     "irregularity_measure": 0.0,
+     "randić": 3.0,
+     "second_zagreb": 24.0,
+     "sigma": 0.0,
+     "somber": 16.970562748477143,
+     "sum_connectivity": 3.0,
+     "symmetric_division_degree": 12.0,
+     "tri_zagreb": 72.0,
+     "tri_zagreb_geometric": 36.0,
+     "tri_zagreb_harmonic": 144.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 3.6742346141747673,
+     "augmented_zagreb": 113.77777777777776,
+     "bi_zagreb": 144.0,
+     "bi_zagreb_geometric": 36.0,
+     "bi_zagreb_harmonic": 576.0,
+     "first_zagreb": 48.0,
+     "forgotten": 192.0,
+     "geometric_arithmetic": 6.0,
+     "geometric_bi_zagreb": 0.9999999999999999,
+     "geometric_harmonic": 96.0,
+     "geometric_tri_zagreb": 0.49999999999999994,
+     "harmonic": 1.5,
+     "harmonic_bi_zagreb": 0.06249999999999999,
+     "harmonic_geometric": 0.375,
+     "harmonic_tri_zagreb": 0.031249999999999997,
+     "hyper_zagreb": 384.0,
+     "irregularity_measure": 0.0,
+     "randić": 1.5,
+     "second_zagreb": 96.0,
+     "sigma": 0.0,
+     "somber": 33.941125496954285,
+     "sum_connectivity": 2.1213203435596424,
+     "symmetric_division_degree": 12.0,
+     "tri_zagreb": 288.0,
+     "tri_zagreb_geometric": 72.0,
+     "tri_zagreb_harmonic": 1152.0
+    },
+    "distance": {
+     "PI": 36.0,
+     "PI_mul": 144.0,
+     "PI_plus": 144.0,
+     "edge_PI": 24.0,
+     "edge_PI_mul": 96.0,
+     "edge_PI_plus": 96.0,
+     "edge_mostar": 0.0,
+     "edge_mostar_mul": 0.0,
+     "edge_mostar_plus": 0.0,
+     "edge_szeged": 24.0,
+     "edge_szeged_mul": 96.0,
+     "edge_szeged_plus": 96.0,
+     "edge_vertex_szeged": 36.0,
+     "edge_wiener": 12.0,
+     "mostar": 0.0,
+     "mostar_mul": 0.0,
+     "mostar_plus": 0.0,
+     "szeged": 54.0,
+     "szeged_mul": 216.0,
+     "szeged_plus": 216.0,
+     "total_mostar": 0.0,
+     "total_szeged": 150.0,
+     "vertex_edge_wiener": 18.0,
+     "wiener_index": 27.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ]
+   ],
+   "kind": "pah",
+   "n": 6,
+   "name": "benzene",
+   "smiles": "c1ccccc1"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 7.737734478532143,
+     "augmented_zagreb": 91.390625,
+     "bi_zagreb": 107.0,
+     "bi_zagreb_geometric": 46.96292478040997,
+     "bi_zagreb_harmonic": 251.0,
+     "first_zagreb": 50.0,
+     "forgotten": 118.0,
+     "geometric_arithmetic": 10.919183588453086,
+     "geometric_bi_zagreb": 2.590723542830246,
+     "geometric_harmonic": 57.49489742783178,
+     "geometric_tri_zagreb": 1.6267931622233591,
+     "harmonic": 4.933333333333334,
+     "harmonic_bi_zagreb": 0.5426767676767676,
+     "harmonic_geometric": 2.264308375853292,
+     "harmonic_tri_zagreb": 0.3465562053281352,
+     "hyper_zagreb": 232.0,
+     "irregularity_measure": 4.0,
+     "randić": 4.9663264951887856,
+     "second_zagreb": 57.0,
+     "sigma": 4.0,
+     "somber": 35.635408537452385,
+     "sum_connectivity": 5.197102672463695,
+     "symmetric_division_degree": 22.666666666666668,
+     "tri_zagreb": 175.0,
+     "tri_zagreb_geometric": 76.0268700752536,
+     "tri_zagreb_harmonic": 415.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 6.224138379236225,
+     "augmented_zagreb": 370.8042986043623,
+     "bi_zagreb": 415.0,
+     "bi_zagreb_geometric": 78.71618851678979,
+     "bi_zagreb_harmonic": 2283.0,
+     "first_zagreb": 114.0,
+     "forgotten": 622.0,
+     "geometric_arithmetic": 10.919285148732703,
+     "geometric_bi_zagreb": 1.5647869348182348,
+     "geometric_harmonic": 303.4843619843832,
+     "geometric_tri_zagreb": 0.7246443762583603,
+     "harmonic": 2.198412698412698,
+     "harmonic_bi_zagreb": 0.0679366451887676,
+     "harmonic_geometric": 0.4568569952290896,
+     "harmonic_tri_zagreb": 0.03207664091426342,
+     "hyper_zagreb": 1224.0,
+     "irregularity_measure": 12.0,
+     "randić": 2.213407737639872,
+     "second_zagreb": 301.0,
+     "sigma": 20.0,
+     "somber": 81.23500145349833,
+     "sum_connectivity": 3.4624018948115567,
+     "symmetric_division_degree": 22.65714285714286,
+     "tri_zagreb": 923.0,
+     "tri_zagreb_geometric": 173.2575096633215,
+     "tri_zagreb_harmonic": 5127.0
+    },
+    "distance": {
+     "PI": 110.0,
+     "PI_mul": 570.0,
+     "PI_plus": 500.0,
+     "edge_PI": 96.0,
+     "edge_PI_mul": 496.0,
+     "edge_PI_plus": 436.0,
+     "edge_mostar": 40.0,
+     "edge_mostar_mul": 200.0,
+     "edge_mostar_plus": 180.0,
+     "edge_szeged": 160.0,
+     "edge_szeged_mul": 832.0,
+     "edge_szeged_plus": 728.0,
+     "edge_vertex_szeged": 200.0,
+     "edge_wiener": 72.0,
+     "mostar": 32.0,
+     "mostar_mul": 160.0,
+     "mostar_plus": 144.0,
+     "szeged": 243.0,
+     "szeged_mul": 1265.0,
+     "szeged_plus": 1106.0,
+     "total_mostar": 72.0,
+     "total_szeged": 803.0,
+     "vertex_edge_wiener": 90.0,
+     "wiener_index": 109.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     9
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     8
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "kind": "pah",
+   "n": 10,
+   "name": "naphthalene",
+   "smiles": "c1ccc2ccccc2c1"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 11.232828269945,
+     "augmented_zagreb": 134.78125,
+     "bi_zagreb": 166.0,
+     "bi_zagreb_geometric": 69.92584956081996,
+     "bi_zagreb_harmonic": 406.0,
+     "first_zagreb": 76.0,
+     "forgotten": 188.0,
+     "geometric_arithmetic": 15.83836717690617,
+     "geometric_bi_zagreb": 3.6814470856604933,
+     "geometric_harmonic": 90.98979485566356,
+     "geometric_tri_zagreb": 2.2535863244467182,
+     "harmonic": 6.866666666666667,
+     "harmonic_bi_zagreb": 0.7103535353535353,
+     "harmonic_geometric": 3.0286167517065836,
+     "harmonic_tri_zagreb": 0.4431124106562703,
+     "hyper_zagreb": 368.0,
+     "irregularity_measure": 8.0,
+     "randić": 6.932652990377571,
+     "second_zagreb": 90.0,
+     "sigma": 8.0,
+     "somber": 54.30025432642763,
+     "sum_connectivity": 7.394205344927389,
+     "symmetric_division_degree": 33.33333333333333,
+     "tri_zagreb": 278.0,
+     "tri_zagreb_geometric": 116.05374015050718,
+     "tri_zagreb_harmonic": 686.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 8.766075301418253,
+     "augmented_zagreb": 661.5418545181838,
+     "bi_zagreb": 698.0,
+     "bi_zagreb_geometric": 121.66292550845,
+     "bi_zagreb_harmonic": 4154.0,
+     "first_zagreb": 180.0,
+     "forgotten": 1060.0,
+     "geometric_arithmetic": 15.907433270829848,
+     "geometric_bi_zagreb": 2.14722464217719,
+     "geometric_harmonic": 520.9836201429875,
+     "geometric_tri_zagreb": 0.9763812411500963,
+     "harmonic": 2.9566544566544564,
+     "harmonic_bi_zagreb": 0.08139303007372392,
+     "harmonic_geometric": 0.5722210661633753,
+     "harmonic_tri_zagreb": 0.0378940063652461,
+     "hyper_zagreb": 2096.0,
+     "irregularity_measure": 16.0,
+     "randić": 2.9734782803453825,
+     "second_zagreb": 518.0,
+     "sigma": 24.0,
+     "somber": 128.01267421928154,
+     "sum_connectivity": 4.839063529174439,
+     "symmetric_division_degree": 32.752380952380946,
+     "tri_zagreb": 1578.0,
+     "tri_zagreb_geometric": 272.6436114440642,
+     "tri_zagreb_harmonic": 9458.0
+    },
+    "distance": {
+     "PI": 224.0,
+     "PI_mul": 1260.0,
+     "PI_plus": 1064.0,
+     "edge_PI": 216.0,
+     "edge_PI_mul": 1208.0,
+     "edge_PI_plus": 1024.0,
+     "edge_mostar": 80.0,
+     "edge_mostar_mul": 400.0,
+     "edge_mostar_plus": 360.0,
+     "edge_szeged": 532.0,
+     "edge_szeged_mul": 3072.0,
+     "edge_szeged_plus": 2564.0,
+     "edge_vertex_szeged": 596.0,
+     "edge_wiener": 230.0,
+     "mostar": 64.0,
+     "mostar_mul": 320.0,
+     "mostar_plus": 288.0,
+     "szeged": 656.0,
+     "szeged_mul": 3770.0,
+     "szeged_plus": 3148.0,
+     "total_mostar": 144.0,
+     "total_szeged": 2380.0,
+     "vertex_edge_wiener": 256.0,
+     "wiener_index": 279.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     12
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     10
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ]
+   ],
+   "kind": "pah",
+   "n": 14,
+   "name": "anthracene",
+   "smiles": "c1ccc2cc3ccccc3cc2c1"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 11.192388155425117,
+     "augmented_zagreb": 138.171875,
+     "bi_zagreb": 167.0,
+     "bi_zagreb_geometric": 69.94438717061496,
+     "bi_zagreb_harmonic": 412.0,
+     "first_zagreb": 76.0,
+     "forgotten": 188.0,
+     "geometric_arithmetic": 15.878775382679628,
+     "geometric_bi_zagreb": 3.6860853142453696,
+     "geometric_harmonic": 91.74234614174767,
+     "geometric_tri_zagreb": 2.273523076668372,
+     "harmonic": 6.9,
+     "harmonic_bi_zagreb": 0.7223484848484848,
+     "harmonic_geometric": 3.0631292304466045,
+     "harmonic_tri_zagreb": 0.4550194931773879,
+     "hyper_zagreb": 370.0,
+     "irregularity_measure": 6.0,
+     "randić": 6.949489742783178,
+     "second_zagreb": 91.0,
+     "sigma": 6.0,
+     "somber": 54.16021958736512,
+     "sum_connectivity": 7.408026444391337,
+     "symmetric_division_degree": 33.0,
+     "tri_zagreb": 279.0,
+     "tri_zagreb_geometric": 115.54030511288039,
+     "tri_zagreb_harmonic": 696.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 8.775092278056395,
+     "augmented_zagreb": 684.8086990574561,
+     "bi_zagreb": 715.0,
+     "bi_zagreb_geometric": 122.45180829146432,
+     "bi_zagreb_harmonic": 4411.0,
+     "first_zagreb": 182.0,
+     "forgotten": 1106.0,
+     "geometric_arithmetic": 15.86085277665422,
+     "geometric_bi_zagreb": 2.145993030737505,
+     "geometric_harmonic": 537.9533027519793,
+     "geometric_tri_zagreb": 0.9719737213666727,
+     "harmonic": 2.9549145299145296,
+     "harmonic_bi_zagreb": 0.08250724099098664,
+     "harmonic_geometric": 0.5763590897598254,
+     "harmonic_tri_zagreb": 0.038385652907003076,
+     "hyper_zagreb": 2172.0,
+     "irregularity_measure": 20.0,
+     "randić": 2.9790396027119916,
+     "second_zagreb": 533.0,
+     "sigma": 40.0,
+     "somber": 129.8485367173194,
+     "sum_connectivity": 4.832466394635522,
+     "symmetric_division_degree": 33.14285714285714,
+     "tri_zagreb": 1639.0,
+     "tri_zagreb_geometric": 277.2180413626933,
+     "tri_zagreb_harmonic": 10221.0
+    },
+    "distance": {
+     "PI": 224.0,
+     "PI_mul": 1274.0,
+     "PI_plus": 1064.0,
+     "edge_PI": 218.0,
+     "edge_PI_mul": 1236.0,
+     "edge_PI_plus": 1034.0,
+     "edge_mostar": 110.0,
+     "edge_mostar_mul": 590.0,
+     "edge_mostar_plus": 510.0,
+     "edge_szeged": 506.0,
+     "edge_szeged_mul": 2965.0,
+     "edge_szeged_plus": 2434.0,
+     "edge_vertex_szeged": 573.0,
+     "edge_wiener": 217.0,
+     "mostar": 88.0,
+     "mostar_mul": 472.0,
+     "mostar_plus": 408.0,
+     "szeged": 632.0,
+     "szeged_mul": 3667.0,
+     "szeged_plus": 3028.0,
+     "total_mostar": 198.0,
+     "total_szeged": 2284.0,
+     "vertex_edge_wiener": 246.0,
+     "wiener_index": 271.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     13
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     13
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ]
+   ],
+   "kind": "pah",
+   "n": 14,
+   "name": "phenanthrene",
+   "smiles": "c1ccc2c(c1)ccc1ccccc12"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 14.727922061357857,
+     "augmented_zagreb": 178.171875,
+     "bi_zagreb": 225.0,
+     "bi_zagreb_geometric": 92.88877434122993,
+     "bi_zagreb_harmonic": 561.0,
+     "first_zagreb": 102.0,
+     "forgotten": 258.0,
+     "geometric_arithmetic": 20.75755076535925,
+     "geometric_bi_zagreb": 4.77217062849074,
+     "geometric_harmonic": 124.48469228349535,
+     "geometric_tri_zagreb": 2.880379486670077,
+     "harmonic": 8.8,
+     "harmonic_bi_zagreb": 0.878030303030303,
+     "harmonic_geometric": 3.792925127559876,
+     "harmonic_tri_zagreb": 0.5396686159844055,
+     "hyper_zagreb": 504.0,
+     "irregularity_measure": 12.0,
+     "randić": 8.898979485566358,
+     "second_zagreb": 123.0,
+     "sigma": 12.0,
+     "somber": 72.96510011540286,
+     "sum_connectivity": 9.591308017391084,
+     "symmetric_division_degree": 43.99999999999999,
+     "tri_zagreb": 381.0,
+     "tri_zagreb_geometric": 156.08061022576075,
+     "tri_zagreb_harmonic": 957.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 11.308012223600281,
+     "augmented_zagreb": 952.2794104320052,
+     "bi_zagreb": 981.0,
+     "bi_zagreb_geometric": 164.6096625001102,
+     "bi_zagreb_harmonic": 6025.0,
+     "first_zagreb": 246.0,
+     "forgotten": 1498.0,
+     "geometric_arithmetic": 20.895581392926996,
+     "geometric_bi_zagreb": 2.729662349536146,
+     "geometric_harmonic": 738.482878301592,
+     "geometric_tri_zagreb": 1.2281181060418322,
+     "harmonic": 3.714896214896215,
+     "harmonic_bi_zagreb": 0.09484941495868024,
+     "harmonic_geometric": 0.6875851370976612,
+     "harmonic_tri_zagreb": 0.043711371816228785,
+     "hyper_zagreb": 2968.0,
+     "irregularity_measure": 20.0,
+     "randić": 3.733548823050893,
+     "second_zagreb": 735.0,
+     "sigma": 28.0,
+     "somber": 174.79034698506476,
+     "sum_connectivity": 6.215725163537321,
+     "symmetric_division_degree": 42.84761904761904,
+     "tri_zagreb": 2233.0,
+     "tri_zagreb_geometric": 372.0297132248069,
+     "tri_zagreb_harmonic": 13789.0
+    },
+    "distance": {
+     "PI": 378.0,
+     "PI_mul": 2214.0,
+     "PI_plus": 1836.0,
+     "edge_PI": 384.0,
+     "edge_PI_mul": 2232.0,
+     "edge_PI_plus": 1860.0,
+     "edge_mostar": 160.0,
+     "edge_mostar_mul": 840.0,
+     "edge_mostar_plus": 740.0,
+     "edge_szeged": 1264.0,
+     "edge_szeged_mul": 7632.0,
+     "edge_szeged_plus": 6248.0,
+     "edge_vertex_szeged": 1328.0,
+     "edge_wiener": 536.0,
+     "mostar": 128.0,
+     "mostar_mul": 672.0,
+     "mostar_plus": 592.0,
+     "szeged": 1381.0,
+     "szeged_mul": 8331.0,
+     "szeged_plus": 6806.0,
+     "total_mostar": 288.0,
+     "total_szeged": 5301.0,
+     "vertex_edge_wiener": 556.0,
+     "wiener_index": 569.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     17
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     16
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     14
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     12
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ]
+   ],
+   "kind": "pah",
+   "n": 18,
+   "name": "tetracene",
+   "smiles": "c1ccc2cc3cc4ccccc4cc3cc2c1"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 13.232828269945001,
+     "augmented_zagreb": 168.953125,
+     "bi_zagreb": 211.0,
+     "bi_zagreb_geometric": 84.92584956081996,
+     "bi_zagreb_harmonic": 541.0,
+     "first_zagreb": 94.0,
+     "forgotten": 242.0,
+     "geometric_arithmetic": 18.838367176906168,
+     "geometric_bi_zagreb": 4.281447085660493,
+     "geometric_harmonic": 117.98979485566358,
+     "geometric_tri_zagreb": 2.5869196577800517,
+     "harmonic": 7.866666666666667,
+     "harmonic_bi_zagreb": 0.777020202020202,
+     "harmonic_geometric": 3.361950085039917,
+     "harmonic_tri_zagreb": 0.48014944769330736,
+     "hyper_zagreb": 476.0,
+     "irregularity_measure": 8.0,
+     "randić": 7.932652990377571,
+     "second_zagreb": 117.0,
+     "sigma": 8.0,
+     "somber": 67.02817638778548,
+     "sum_connectivity": 8.61895021631898,
+     "symmetric_division_degree": 39.33333333333333,
+     "tri_zagreb": 359.0,
+     "tri_zagreb_geometric": 143.05374015050717,
+     "tri_zagreb_harmonic": 929.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 10.104045161345685,
+     "augmented_zagreb": 991.5759547820244,
+     "bi_zagreb": 977.0,
+     "bi_zagreb_geometric": 154.30624631822062,
+     "bi_zagreb_harmonic": 6547.0,
+     "first_zagreb": 234.0,
+     "forgotten": 1538.0,
+     "geometric_arithmetic": 18.831965304062667,
+     "geometric_bi_zagreb": 2.402348293848745,
+     "geometric_harmonic": 749.4624026409747,
+     "geometric_tri_zagreb": 1.062335549784923,
+     "harmonic": 3.233333333333333,
+     "harmonic_bi_zagreb": 0.07790015513069957,
+     "harmonic_geometric": 0.5794758237748027,
+     "harmonic_tri_zagreb": 0.03518561917960966,
+     "hyper_zagreb": 3024.0,
+     "irregularity_measure": 28.0,
+     "randić": 3.2617377403556236,
+     "second_zagreb": 743.0,
+     "sigma": 52.0,
+     "somber": 166.90817377512673,
+     "sum_connectivity": 5.5108922025210285,
+     "symmetric_division_degree": 39.36825396825397,
+     "tri_zagreb": 2281.0,
+     "tri_zagreb_geometric": 356.21781839668927,
+     "tri_zagreb_harmonic": 15443.0
+    },
+    "distance": {
+     "PI": 304.0,
+     "PI_mul": 1872.0,
+     "PI_plus": 1504.0,
+     "edge_PI": 308.0,
+     "edge_PI_mul": 1896.0,
+     "edge_PI_plus": 1524.0,
+     "edge_mostar": 148.0,
+     "edge_mostar_mul": 920.0,
+     "edge_mostar_plus": 740.0,
+     "edge_szeged": 888.0,
+     "edge_szeged_mul": 5456.0,
+     "edge_szeged_plus": 4376.0,
+     "edge_vertex_szeged": 958.0,
+     "edge_wiener": 316.0,
+     "mostar": 112.0,
+     "mostar_mul": 696.0,
+     "mostar_plus": 560.0,
+     "szeged": 1008.0,
+     "szeged_mul": 6204.0,
+     "szeged_plus": 4976.0,
+     "total_mostar": 260.0,
+     "total_szeged": 3812.0,
+     "vertex_edge_wiener": 343.0,
+     "wiener_index": 362.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     14
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     15
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     15
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     12,
+     14
+    ],
+    [
+     14,
+     15
+    ]
+   ],
+   "kind": "pah",
+   "n": 16,
+   "name": "pyrene",
+   "smiles": "c1cc2ccc3cccc4ccc(c1)c2c34"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 14.647041832318097,
+     "augmented_zagreb": 184.953125,
+     "bi_zagreb": 227.0,
+     "bi_zagreb_geometric": 92.92584956081996,
+     "bi_zagreb_harmonic": 573.0,
+     "first_zagreb": 102.0,
+     "forgotten": 258.0,
+     "geometric_arithmetic": 20.838367176906168,
+     "geometric_bi_zagreb": 4.781447085660493,
+     "geometric_harmonic": 125.98979485566358,
+     "geometric_tri_zagreb": 2.9202529911133848,
+     "harmonic": 8.866666666666667,
+     "harmonic_bi_zagreb": 0.9020202020202019,
+     "harmonic_geometric": 3.861950085039917,
+     "harmonic_tri_zagreb": 0.5634827810266406,
+     "hyper_zagreb": 508.0,
+     "irregularity_measure": 8.0,
+     "randić": 8.932652990377571,
+     "second_zagreb": 125.0,
+     "sigma": 8.0,
+     "somber": 72.68503063727785,
+     "sum_connectivity": 9.618950216318979,
+     "symmetric_division_degree": 43.33333333333333,
+     "tri_zagreb": 383.0,
+     "tri_zagreb_geometric": 155.05374015050717,
+     "tri_zagreb_harmonic": 977.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 11.325000897869272,
+     "augmented_zagreb": 1002.5616270914439,
+     "bi_zagreb": 1016.0,
+     "bi_zagreb_geometric": 166.21187989035673,
+     "bi_zagreb_harmonic": 6555.0,
+     "first_zagreb": 250.0,
+     "forgotten": 1590.0,
+     "geometric_arithmetic": 20.8068697982963,
+     "geometric_bi_zagreb": 2.727512638513016,
+     "geometric_harmonic": 773.1725219163571,
+     "geometric_tri_zagreb": 1.2200288426122037,
+     "harmonic": 3.7126068376068373,
+     "harmonic_bi_zagreb": 0.09715204194474987,
+     "harmonic_geometric": 0.6962595153008775,
+     "harmonic_tri_zagreb": 0.04473961459454035,
+     "hyper_zagreb": 3122.0,
+     "irregularity_measure": 26.0,
+     "randić": 3.74526736872883,
+     "second_zagreb": 766.0,
+     "sigma": 58.0,
+     "somber": 178.41498379126762,
+     "sum_connectivity": 6.203394356877589,
+     "symmetric_division_degree": 43.59285714285714,
+     "tri_zagreb": 2356.0,
+     "tri_zagreb_geometric": 381.01142317886547,
+     "tri_zagreb_harmonic": 15345.0
+    },
+    "distance": {
+     "PI": 378.0,
+     "PI_mul": 2250.0,
+     "PI_plus": 1836.0,
+     "edge_PI": 390.0,
+     "edge_PI_mul": 2316.0,
+     "edge_PI_plus": 1892.0,
+     "edge_mostar": 200.0,
+     "edge_mostar_mul": 1110.0,
+     "edge_mostar_plus": 940.0,
+     "edge_szeged": 1187.0,
+     "edge_szeged_mul": 7373.0,
+     "edge_szeged_plus": 5880.0,
+     "edge_vertex_szeged": 1255.0,
+     "edge_wiener": 497.0,
+     "mostar": 160.0,
+     "mostar_mul": 888.0,
+     "mostar_plus": 752.0,
+     "szeged": 1301.0,
+     "szeged_mul": 7973.0,
+     "szeged_plus": 6406.0,
+     "total_mostar": 360.0,
+     "total_szeged": 4998.0,
+     "vertex_edge_wiener": 526.0,
+     "wiener_index": 545.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     17
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     17
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     14
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ]
+   ],
+   "kind": "pah",
+   "n": 18,
+   "name": "chrysene",
+   "smiles": "c1ccc2c(c1)ccc1c3ccccc3ccc21"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 14.606601717798215,
+     "augmented_zagreb": 188.34375,
+     "bi_zagreb": 228.0,
+     "bi_zagreb_geometric": 92.94438717061497,
+     "bi_zagreb_harmonic": 579.0,
+     "first_zagreb": 102.0,
+     "forgotten": 258.0,
+     "geometric_arithmetic": 20.878775382679628,
+     "geometric_bi_zagreb": 4.78608531424537,
+     "geometric_harmonic": 126.74234614174767,
+     "geometric_tri_zagreb": 2.9401897433350386,
+     "harmonic": 8.9,
+     "harmonic_bi_zagreb": 0.9140151515151516,
+     "harmonic_geometric": 3.8964625637799375,
+     "harmonic_tri_zagreb": 0.5753898635477582,
+     "hyper_zagreb": 510.0,
+     "irregularity_measure": 6.0,
+     "randić": 8.949489742783179,
+     "second_zagreb": 126.0,
+     "sigma": 6.0,
+     "somber": 72.54499589821533,
+     "sum_connectivity": 9.632771315782927,
+     "symmetric_division_degree": 42.99999999999999,
+     "tri_zagreb": 384.0,
+     "tri_zagreb_geometric": 154.54030511288036,
+     "tri_zagreb_harmonic": 987.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 11.33943476153806,
+     "augmented_zagreb": 1058.5366295779518,
+     "bi_zagreb": 1044.0,
+     "bi_zagreb_geometric": 167.18779760517356,
+     "bi_zagreb_harmonic": 6978.0,
+     "first_zagreb": 252.0,
+     "forgotten": 1644.0,
+     "geometric_arithmetic": 20.800899004925682,
+     "geometric_bi_zagreb": 2.7412569026860516,
+     "geometric_harmonic": 799.4053282781223,
+     "geometric_tri_zagreb": 1.234047588818519,
+     "harmonic": 3.7564102564102564,
+     "harmonic_bi_zagreb": 0.10401855721268537,
+     "harmonic_geometric": 0.725343673623128,
+     "harmonic_tri_zagreb": 0.048544808559879575,
+     "hyper_zagreb": 3228.0,
+     "irregularity_measure": 24.0,
+     "randić": 3.7903240845503885,
+     "second_zagreb": 792.0,
+     "sigma": 60.0,
+     "somber": 179.8754459593224,
+     "sum_connectivity": 6.224760760455507,
+     "symmetric_division_degree": 43.64999999999999,
+     "tri_zagreb": 2436.0,
+     "tri_zagreb_geometric": 384.2202334250086,
+     "tri_zagreb_harmonic": 16470.0
+    },
+    "distance": {
+     "PI": 378.0,
+     "PI_mul": 2268.0,
+     "PI_plus": 1836.0,
+     "edge_PI": 390.0,
+     "edge_PI_mul": 2328.0,
+     "edge_PI_plus": 1890.0,
+     "edge_mostar": 180.0,
+     "edge_mostar_mul": 900.0,
+     "edge_mostar_plus": 810.0,
+     "edge_szeged": 1137.0,
+     "edge_szeged_mul": 7386.0,
+     "edge_szeged_plus": 5724.0,
+     "edge_vertex_szeged": 1215.0,
+     "edge_wiener": 447.0,
+     "mostar": 144.0,
+     "mostar_mul": 720.0,
+     "mostar_plus": 648.0,
+     "szeged": 1269.0,
+     "szeged_mul": 8046.0,
+     "szeged_plus": 6318.0,
+     "total_mostar": 324.0,
+     "total_szeged": 4836.0,
+     "vertex_edge_wiener": 486.0,
+     "wiener_index": 513.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     17
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     11
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     12,
+     17
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ]
+   ],
+   "kind": "pah",
+   "n": 18,
+   "name": "triphenylene",
+   "smiles": "c1ccc2c(c1)c1ccccc1c1ccccc21"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 16.687481946837977,
+     "augmented_zagreb": 215.734375,
+     "bi_zagreb": 271.0,
+     "bi_zagreb_geometric": 107.90731195102494,
+     "bi_zagreb_harmonic": 702.0,
+     "first_zagreb": 120.0,
+     "forgotten": 312.0,
+     "geometric_arithmetic": 23.79795897113271,
+     "geometric_bi_zagreb": 5.376808857075616,
+     "geometric_harmonic": 152.23724356957945,
+     "geometric_tri_zagreb": 3.2336495722250644,
+     "harmonic": 9.833333333333334,
+     "harmonic_bi_zagreb": 0.9566919191919192,
+     "harmonic_geometric": 4.160770939633229,
+     "harmonic_tri_zagreb": 0.5886127355425601,
+     "hyper_zagreb": 614.0,
+     "irregularity_measure": 10.0,
+     "randić": 9.915816237971963,
+     "second_zagreb": 151.0,
+     "sigma": 10.0,
+     "somber": 85.55298743769822,
+     "sum_connectivity": 10.829873988246622,
+     "symmetric_division_degree": 49.666666666666664,
+     "tri_zagreb": 463.0,
+     "tri_zagreb_geometric": 182.56717518813397,
+     "tri_zagreb_harmonic": 1210.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 12.654264281973315,
+     "augmented_zagreb": 1327.2190179720424,
+     "bi_zagreb": 1284.0,
+     "bi_zagreb_geometric": 198.17424664362886,
+     "bi_zagreb_harmonic": 8780.0,
+     "first_zagreb": 302.0,
+     "forgotten": 2026.0,
+     "geometric_arithmetic": 23.803916750846522,
+     "geometric_bi_zagreb": 2.991860118693937,
+     "geometric_harmonic": 989.6900145045462,
+     "geometric_tri_zagreb": 1.3211546372116854,
+     "harmonic": 4.016365007541477,
+     "harmonic_bi_zagreb": 0.09580457690640978,
+     "harmonic_geometric": 0.7133193214340156,
+     "harmonic_tri_zagreb": 0.04347831455406413,
+     "hyper_zagreb": 3990.0,
+     "irregularity_measure": 32.0,
+     "randić": 4.0490040978894655,
+     "second_zagreb": 982.0,
+     "sigma": 62.0,
+     "somber": 215.25112330875317,
+     "sum_connectivity": 6.897230231158629,
+     "symmetric_division_degree": 49.605555555555554,
+     "tri_zagreb": 3008.0,
+     "tri_zagreb_geometric": 459.19708136132243,
+     "tri_zagreb_harmonic": 20759.0
+    },
+    "distance": {
+     "PI": 480.0,
+     "PI_mul": 3020.0,
+     "PI_plus": 2400.0,
+     "edge_PI": 508.0,
+     "edge_PI_mul": 3190.0,
+     "edge_PI_plus": 2538.0,
+     "edge_mostar": 258.0,
+     "edge_mostar_mul": 1562.0,
+     "edge_mostar_plus": 1268.0,
+     "edge_szeged": 1830.0,
+     "edge_szeged_mul": 11827.0,
+     "edge_szeged_plus": 9263.0,
+     "edge_vertex_szeged": 1875.5,
+     "edge_wiener": 657.0,
+     "mostar": 198.0,
+     "mostar_mul": 1196.0,
+     "mostar_plus": 972.0,
+     "szeged": 1887.0,
+     "szeged_mul": 12106.0,
+     "szeged_plus": 9518.0,
+     "total_mostar": 456.0,
+     "total_szeged": 7468.0,
+     "vertex_edge_wiener": 675.5,
+     "wiener_index": 680.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     17
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     18
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     19
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     19
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ]
+   ],
+   "kind": "pah",
+   "n": 20,
+   "name": "benzo[a]pyrene",
+   "smiles": "c1ccc2c(c1)cc1ccc3cccc4ccc2c1c34"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 20.727922061357855,
+     "augmented_zagreb": 280.6875,
+     "bi_zagreb": 360.0,
+     "bi_zagreb_geometric": 137.88877434122992,
+     "bi_zagreb_harmonic": 966.0,
+     "first_zagreb": 156.0,
+     "forgotten": 420.0,
+     "geometric_arithmetic": 29.75755076535925,
+     "geometric_bi_zagreb": 6.572170628490741,
+     "geometric_harmonic": 205.48469228349535,
+     "geometric_tri_zagreb": 3.8803794866700776,
+     "harmonic": 11.800000000000002,
+     "harmonic_bi_zagreb": 1.0780303030303031,
+     "harmonic_geometric": 4.792925127559876,
+     "harmonic_tri_zagreb": 0.6507797270955165,
+     "hyper_zagreb": 828.0,
+     "irregularity_measure": 12.0,
+     "randić": 11.89897948556636,
+     "second_zagreb": 204.0,
+     "sigma": 12.0,
+     "somber": 111.14886629947645,
+     "sum_connectivity": 13.265542631565854,
+     "symmetric_division_degree": 61.99999999999999,
+     "tri_zagreb": 624.0,
+     "tri_zagreb_geometric": 237.08061022576075,
+     "tri_zagreb_harmonic": 1686.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 15.303476147006473,
+     "augmented_zagreb": 2022.83349609375,
+     "bi_zagreb": 1842.0,
+     "bi_zagreb_geometric": 263.05178666883455,
+     "bi_zagreb_harmonic": 13572.0,
+     "first_zagreb": 408.0,
+     "forgotten": 2940.0,
+     "geometric_arithmetic": 29.785100016094564,
+     "geometric_bi_zagreb": 3.5159152705045074,
+     "geometric_harmonic": 1442.9459331764733,
+     "geometric_tri_zagreb": 1.520287766262125,
+     "harmonic": 4.616666666666667,
+     "harmonic_bi_zagreb": 0.09306658339515866,
+     "harmonic_geometric": 0.7466268942177876,
+     "harmonic_tri_zagreb": 0.04097811844087103,
+     "hyper_zagreb": 5808.0,
+     "irregularity_measure": 36.0,
+     "randić": 4.650965824033561,
+     "second_zagreb": 1434.0,
+     "sigma": 72.0,
+     "somber": 290.43236794979975,
+     "sum_connectivity": 8.275681773611879,
+     "symmetric_division_degree": 61.752380952380946,
+     "tri_zagreb": 4374.0,
+     "tri_zagreb_geometric": 618.9866396185417,
+     "tri_zagreb_harmonic": 32484.0
+    },
+    "distance": {
+     "PI": 720.0,
+     "PI_mul": 4896.0,
+     "PI_plus": 3744.0,
+     "edge_PI": 798.0,
+     "edge_PI_mul": 5430.0,
+     "edge_PI_plus": 4152.0,
+     "edge_mostar": 342.0,
+     "edge_mostar_mul": 2394.0,
+     "edge_mostar_plus": 1824.0,
+     "edge_szeged": 3684.0,
+     "edge_szeged_mul": 24774.0,
+     "edge_szeged_plus": 18972.0,
+     "edge_vertex_szeged": 3591.0,
+     "edge_wiener": 1059.0,
+     "mostar": 252.0,
+     "mostar_mul": 1764.0,
+     "mostar_plus": 1344.0,
+     "szeged": 3438.0,
+     "szeged_mul": 23202.0,
+     "szeged_plus": 17760.0,
+     "total_mostar": 594.0,
+     "total_szeged": 14304.0,
+     "vertex_edge_wiener": 1041.0,
+     "wiener_index": 1002.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     17
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     19
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     20
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     21
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     22
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     23
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     18,
+     23
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ]
+   ],
+   "kind": "pah",
+   "n": 24,
+   "name": "coronene",
+   "smiles": "c1cc2ccc3ccc4ccc5ccc6ccc1c1c2c3c4c5c61"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 9.54906712535007,
+     "augmented_zagreb": 92.28125,
+     "bi_zagreb": 126.0,
+     "bi_zagreb_geometric": 56.128732317719496,
+     "bi_zagreb_harmonic": 304.0,
+     "first_zagreb": 60.0,
+     "forgotten": 152.0,
+     "geometric_arithmetic": 12.383285203590841,
+     "geometric_bi_zagreb": 3.0304668614410333,
+     "geometric_harmonic": 68.35130388838279,
+     "geometric_tri_zagreb": 1.7708429833556631,
+     "harmonic": 5.7666666666666675,
+     "harmonic_bi_zagreb": 0.6631132756132756,
+     "harmonic_geometric": 2.7801200253436553,
+     "harmonic_tri_zagreb": 0.3877480381866347,
+     "hyper_zagreb": 284.0,
+     "irregularity_measure": 12.0,
+     "randić": 6.109060905280623,
+     "second_zagreb": 66.0,
+     "sigma": 20.0,
+     "somber": 44.041878491006614,
+     "sum_connectivity": 6.105350962927558,
+     "symmetric_division_degree": 31.999999999999996,
+     "tri_zagreb": 218.0,
+     "tri_zagreb_geometric": 97.04908407311413,
+     "tri_zagreb_harmonic": 528.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 7.505753877852377,
+     "augmented_zagreb": 426.1493548447285,
+     "bi_zagreb": 479.0,
+     "bi_zagreb_geometric": 91.43519917950336,
+     "bi_zagreb_harmonic": 2705.0,
+     "first_zagreb": 132.0,
+     "forgotten": 734.0,
+     "geometric_arithmetic": 12.810232839927721,
+     "geometric_bi_zagreb": 1.9083678552688927,
+     "geometric_harmonic": 351.9420723026874,
+     "geometric_tri_zagreb": 0.8873911928936152,
+     "harmonic": 2.7274114774114775,
+     "harmonic_bi_zagreb": 0.09746576011039576,
+     "harmonic_geometric": 0.6151409197651644,
+     "harmonic_tri_zagreb": 0.046688589205031536,
+     "hyper_zagreb": 1428.0,
+     "irregularity_measure": 20.0,
+     "randić": 2.768278377296683,
+     "second_zagreb": 347.0,
+     "sigma": 40.0,
+     "somber": 94.65608686616002,
+     "sum_connectivity": 4.178407869161598,
+     "symmetric_division_degree": 27.57261904761905,
+     "tri_zagreb": 1081.0,
+     "tri_zagreb_geometric": 202.85676047440145,
+     "tri_zagreb_harmonic": 6196.0
+    },
+    "distance": {
+     "PI": 169.0,
+     "PI_mul": 858.0,
+     "PI_plus": 780.0,
+     "edge_PI": 150.0,
+     "edge_PI_mul": 759.0,
+     "edge_PI_plus": 692.0,
+     "edge_mostar": 100.0,
+     "edge_mostar_mul": 453.0,
+     "edge_mostar_plus": 446.0,
+     "edge_szeged": 199.0,
+     "edge_szeged_mul": 1212.0,
+     "edge_szeged_plus": 979.0,
+     "edge_vertex_szeged": 270.5,
+     "edge_wiener": 133.0,
+     "mostar": 93.0,
+     "mostar_mul": 420.0,
+     "mostar_plus": 414.0,
+     "szeged": 348.0,
+     "szeged_mul": 1956.0,
+     "szeged_plus": 1662.0,
+     "total_mostar": 193.0,
+     "total_szeged": 1088.0,
+     "vertex_edge_wiener": 188.0,
+     "wiener_index": 246.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     9
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     12
+    ]
+   ],
+   "kind": "drug",
+   "n": 13,
+   "name": "aspirin",
+   "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 11.072670487464345,
+     "augmented_zagreb": 103.65625,
+     "bi_zagreb": 147.0,
+     "bi_zagreb_geometric": 65.15164659225186,
+     "bi_zagreb_harmonic": 357.0,
+     "first_zagreb": 70.0,
+     "forgotten": 180.0,
+     "geometric_arithmetic": 14.208902401601824,
+     "geometric_bi_zagreb": 3.4732644625088533,
+     "geometric_harmonic": 80.06285421743642,
+     "geometric_tri_zagreb": 1.9952520197504184,
+     "harmonic": 6.566666666666666,
+     "harmonic_bi_zagreb": 0.7447691197691197,
+     "harmonic_geometric": 3.1453937923095587,
+     "harmonic_tri_zagreb": 0.4266481731394012,
+     "hyper_zagreb": 334.0,
+     "irregularity_measure": 16.0,
+     "randić": 7.002907755397975,
+     "second_zagreb": 77.0,
+     "sigma": 26.0,
+     "somber": 51.586831577356776,
+     "sum_connectivity": 6.999778153927474,
+     "symmetric_division_degree": 37.66666666666667,
+     "tri_zagreb": 257.0,
+     "tri_zagreb_geometric": 114.06807261020607,
+     "tri_zagreb_harmonic": 625.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 8.602770534224627,
+     "augmented_zagreb": 482.4600329861111,
+     "bi_zagreb": 553.0,
+     "bi_zagreb_geometric": 106.35621279999245,
+     "bi_zagreb_harmonic": 3018.0,
+     "first_zagreb": 154.0,
+     "forgotten": 842.0,
+     "geometric_arithmetic": 14.762047628907409,
+     "geometric_bi_zagreb": 2.1599653361724256,
+     "geometric_harmonic": 404.37927139959595,
+     "geometric_tri_zagreb": 0.9875116370402979,
+     "harmonic": 3.0445887445887445,
+     "harmonic_bi_zagreb": 0.10082412906927582,
+     "harmonic_geometric": 0.6576170512824946,
+     "harmonic_tri_zagreb": 0.047242842061188374,
+     "hyper_zagreb": 1640.0,
+     "irregularity_measure": 20.0,
+     "randić": 3.097854818182902,
+     "second_zagreb": 399.0,
+     "sigma": 44.0,
+     "somber": 110.44316653400486,
+     "sum_connectivity": 4.752931260719557,
+     "symmetric_division_degree": 32.03809523809524,
+     "tri_zagreb": 1241.0,
+     "tri_zagreb_geometric": 236.91968960273317,
+     "tri_zagreb_harmonic": 6816.0
+    },
+    "distance": {
+     "PI": 225.0,
+     "PI_mul": 1155.0,
+     "PI_plus": 1050.0,
+     "edge_PI": 204.0,
+     "edge_PI_mul": 1046.0,
+     "edge_PI_plus": 952.0,
+     "edge_mostar": 110.0,
+     "edge_mostar_mul": 494.0,
+     "edge_mostar_plus": 494.0,
+     "edge_szeged": 373.0,
+     "edge_szeged_mul": 2262.0,
+     "edge_szeged_plus": 1845.0,
+     "edge_vertex_szeged": 469.5,
+     "edge_wiener": 247.0,
+     "mostar": 101.0,
+     "mostar_mul": 449.0,
+     "mostar_plus": 452.0,
+     "szeged": 572.0,
+     "szeged_mul": 3256.0,
+     "szeged_plus": 2764.0,
+     "total_mostar": 211.0,
+     "total_szeged": 1884.0,
+     "vertex_edge_wiener": 324.0,
+     "wiener_index": 404.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     9
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     10
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     12,
+     14
+    ]
+   ],
+   "kind": "drug",
+   "n": 15,
+   "name": "ibuprofen",
+   "smiles": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 8.10634399227556,
+     "augmented_zagreb": 74.125,
+     "bi_zagreb": 103.0,
+     "bi_zagreb_geometric": 47.0687428235971,
+     "bi_zagreb_harmonic": 239.0,
+     "first_zagreb": 50.0,
+     "forgotten": 124.0,
+     "geometric_arithmetic": 10.476851594032945,
+     "geometric_bi_zagreb": 2.5783928032034598,
+     "geometric_harmonic": 55.13465098716093,
+     "geometric_tri_zagreb": 1.5065604425175998,
+     "harmonic": 4.9,
+     "harmonic_bi_zagreb": 0.5574675324675324,
+     "harmonic_geometric": 2.3458213008977102,
+     "harmonic_tri_zagreb": 0.32503373819163295,
+     "hyper_zagreb": 230.0,
+     "irregularity_measure": 12.0,
+     "randić": 5.181540550352056,
+     "second_zagreb": 53.0,
+     "sigma": 18.0,
+     "somber": 36.77699488278145,
+     "sum_connectivity": 5.183281572999748,
+     "symmetric_division_degree": 27.0,
+     "tri_zagreb": 177.0,
+     "tri_zagreb_geometric": 81.0569656112758,
+     "tri_zagreb_harmonic": 411.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 6.386033341461121,
+     "augmented_zagreb": 313.0733865740741,
+     "bi_zagreb": 365.0,
+     "bi_zagreb_geometric": 74.81953375514782,
+     "bi_zagreb_harmonic": 1834.0,
+     "first_zagreb": 106.0,
+     "forgotten": 530.0,
+     "geometric_arithmetic": 10.919246761814577,
+     "geometric_bi_zagreb": 1.6407307942729132,
+     "geometric_harmonic": 260.485023444194,
+     "geometric_tri_zagreb": 0.7733502750849274,
+     "harmonic": 2.351731601731602,
+     "harmonic_bi_zagreb": 0.08202565080874458,
+     "harmonic_geometric": 0.524500162060348,
+     "harmonic_tri_zagreb": 0.03938351574692426,
+     "hyper_zagreb": 1048.0,
+     "irregularity_measure": 8.0,
+     "randić": 2.371488342505496,
+     "second_zagreb": 259.0,
+     "sigma": 12.0,
+     "somber": 75.43210641928705,
+     "sum_connectivity": 3.5823189904462582,
+     "symmetric_division_degree": 22.666666666666664,
+     "tri_zagreb": 789.0,
+     "tri_zagreb_geometric": 160.7556424172339,
+     "tri_zagreb_harmonic": 3984.0
+    },
+    "distance": {
+     "PI": 121.0,
+     "PI_mul": 583.0,
+     "PI_plus": 550.0,
+     "edge_PI": 104.0,
+     "edge_PI_mul": 498.0,
+     "edge_PI_plus": 472.0,
+     "edge_mostar": 58.0,
+     "edge_mostar_mul": 246.0,
+     "edge_mostar_plus": 254.0,
+     "edge_szeged": 145.0,
+     "edge_szeged_mul": 798.0,
+     "edge_szeged_plus": 689.0,
+     "edge_vertex_szeged": 194.5,
+     "edge_wiener": 91.0,
+     "mostar": 53.0,
+     "mostar_mul": 225.0,
+     "mostar_plus": 232.0,
+     "szeged": 250.0,
+     "szeged_mul": 1298.0,
+     "szeged_plus": 1164.0,
+     "total_mostar": 111.0,
+     "total_szeged": 784.0,
+     "vertex_edge_wiener": 127.0,
+     "wiener_index": 166.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     9
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     10
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "kind": "drug",
+   "n": 11,
+   "name": "acetaminophen",
+   "smiles": "CC(=O)NC1=CC=C(C=C1)O"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 10.870469914864941,
+     "augmented_zagreb": 120.609375,
+     "bi_zagreb": 170.0,
+     "bi_zagreb_geometric": 68.1887218118419,
+     "bi_zagreb_harmonic": 456.0,
+     "first_zagreb": 76.0,
+     "forgotten": 210.0,
+     "geometric_arithmetic": 14.289718813148738,
+     "geometric_bi_zagreb": 3.332540919678607,
+     "geometric_harmonic": 96.56795678960464,
+     "geometric_tri_zagreb": 1.8684588575270595,
+     "harmonic": 6.133333333333333,
+     "harmonic_bi_zagreb": 0.6479256854256853,
+     "harmonic_geometric": 2.797752083122933,
+     "harmonic_tri_zagreb": 0.3624993752186735,
+     "hyper_zagreb": 398.0,
+     "irregularity_measure": 12.0,
+     "randić": 6.536581260209189,
+     "second_zagreb": 94.0,
+     "sigma": 22.0,
+     "somber": 55.54940278635105,
+     "sum_connectivity": 6.752165224246958,
+     "symmetric_division_degree": 37.0,
+     "tri_zagreb": 304.0,
+     "tri_zagreb_geometric": 122.04120253495248,
+     "tri_zagreb_harmonic": 816.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 8.115195970982496,
+     "augmented_zagreb": 762.5687129415517,
+     "bi_zagreb": 777.0,
+     "bi_zagreb_geometric": 122.60785665069545,
+     "bi_zagreb_harmonic": 5248.0,
+     "first_zagreb": 188.0,
+     "forgotten": 1276.0,
+     "geometric_arithmetic": 14.545733642703166,
+     "geometric_bi_zagreb": 1.8852576688653204,
+     "geometric_harmonic": 600.8390503969352,
+     "geometric_tri_zagreb": 0.7855951347871399,
+     "harmonic": 2.4957717119481826,
+     "harmonic_bi_zagreb": 0.06060571547920815,
+     "harmonic_geometric": 0.45127274450666377,
+     "harmonic_tri_zagreb": 0.025185148011848565,
+     "hyper_zagreb": 2454.0,
+     "irregularity_measure": 30.0,
+     "randić": 2.5913859910660553,
+     "second_zagreb": 589.0,
+     "sigma": 98.0,
+     "somber": 136.075228254529,
+     "sum_connectivity": 4.304050736375829,
+     "symmetric_division_degree": 34.06785714285714,
+     "tri_zagreb": 1865.0,
+     "tri_zagreb_geometric": 294.560174719781,
+     "tri_zagreb_harmonic": 12603.0
+    },
+    "distance": {
+     "PI": 195.0,
+     "PI_mul": 1227.0,
+     "PI_plus": 991.0,
+     "edge_PI": 195.0,
+     "edge_PI_mul": 1216.0,
+     "edge_PI_plus": 987.0,
+     "edge_mostar": 111.0,
+     "edge_mostar_mul": 514.0,
+     "edge_mostar_plus": 503.0,
+     "edge_szeged": 336.0,
+     "edge_szeged_mul": 2805.0,
+     "edge_szeged_plus": 1936.0,
+     "edge_vertex_szeged": 382.0,
+     "edge_wiener": 152.0,
+     "mostar": 93.0,
+     "mostar_mul": 423.0,
+     "mostar_plus": 419.0,
+     "szeged": 423.0,
+     "szeged_mul": 3225.0,
+     "szeged_plus": 2338.0,
+     "total_mostar": 204.0,
+     "total_szeged": 1523.0,
+     "vertex_edge_wiener": 208.5,
+     "wiener_index": 258.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     11
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     13
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     11
+    ],
+    [
+     11,
+     12
+    ]
+   ],
+   "kind": "drug",
+   "n": 14,
+   "name": "caffeine",
+   "smiles": "CN1C=NC2=C1C(=O)N(C(=O)N2C)C"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 6.163363133678392,
+     "augmented_zagreb": 44.265625,
+     "bi_zagreb": 72.0,
+     "bi_zagreb_geometric": 34.18872181184189,
+     "bi_zagreb_harmonic": 170.0,
+     "first_zagreb": 36.0,
+     "forgotten": 94.0,
+     "geometric_arithmetic": 7.289718813148736,
+     "geometric_bi_zagreb": 1.882540919678607,
+     "geometric_harmonic": 38.567956789604665,
+     "geometric_tri_zagreb": 1.0351255241937263,
+     "harmonic": 3.6333333333333333,
+     "harmonic_bi_zagreb": 0.4520923520923521,
+     "harmonic_geometric": 1.881085416456266,
+     "harmonic_tri_zagreb": 0.24675863447793273,
+     "hyper_zagreb": 166.0,
+     "irregularity_measure": 12.0,
+     "randić": 4.036581260209188,
+     "second_zagreb": 36.0,
+     "sigma": 22.0,
+     "somber": 27.265131538889158,
+     "sum_connectivity": 3.802675481463779,
+     "symmetric_division_degree": 23.0,
+     "tri_zagreb": 130.0,
+     "tri_zagreb_geometric": 62.041202534952475,
+     "tri_zagreb_harmonic": 306.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 4.831634180655002,
+     "augmented_zagreb": 186.5939524889321,
+     "bi_zagreb": 234.0,
+     "bi_zagreb_geometric": 51.636527630774175,
+     "bi_zagreb_harmonic": 1122.0,
+     "first_zagreb": 72.0,
+     "forgotten": 348.0,
+     "geometric_arithmetic": 7.834442444484555,
+     "geometric_bi_zagreb": 1.2612367756937202,
+     "geometric_harmonic": 164.9440992582763,
+     "geometric_tri_zagreb": 0.592878295808086,
+     "harmonic": 1.842135642135642,
+     "harmonic_bi_zagreb": 0.0738339360434467,
+     "harmonic_geometric": 0.44823285806956614,
+     "harmonic_tri_zagreb": 0.035348224759252325,
+     "hyper_zagreb": 672.0,
+     "irregularity_measure": 12.0,
+     "randić": 1.8828153068131175,
+     "second_zagreb": 162.0,
+     "sigma": 24.0,
+     "somber": 51.876741323263175,
+     "sum_connectivity": 2.70278330572775,
+     "symmetric_division_degree": 17.4,
+     "tri_zagreb": 510.0,
+     "tri_zagreb_geometric": 111.64237950877227,
+     "tri_zagreb_harmonic": 2463.0
+    },
+    "distance": {
+     "PI": 72.0,
+     "PI_mul": 324.0,
+     "PI_plus": 324.0,
+     "edge_PI": 56.0,
+     "edge_PI_mul": 252.0,
+     "edge_PI_plus": 252.0,
+     "edge_mostar": 42.0,
+     "edge_mostar_mul": 156.0,
+     "edge_mostar_plus": 178.0,
+     "edge_szeged": 32.0,
+     "edge_szeged_mul": 222.0,
+     "edge_szeged_plus": 170.0,
+     "edge_vertex_szeged": 60.0,
+     "edge_wiener": 32.0,
+     "mostar": 42.0,
+     "mostar_mul": 156.0,
+     "mostar_plus": 178.0,
+     "szeged": 96.0,
+     "szeged_mul": 510.0,
+     "szeged_plus": 458.0,
+     "total_mostar": 84.0,
+     "total_szeged": 248.0,
+     "vertex_edge_wiener": 60.0,
+     "wiener_index": 96.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     8
+    ]
+   ],
+   "kind": "drug",
+   "n": 9,
+   "name": "metformin",
+   "smiles": "CN(C)C(=N)N=C(N)N"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 29.19822708431234,
+     "augmented_zagreb": 324.296875,
+     "bi_zagreb": 418.0,
+     "bi_zagreb_geometric": 178.901904335442,
+     "bi_zagreb_harmonic": 1013.0,
+     "first_zagreb": 194.0,
+     "forgotten": 484.0,
+     "geometric_arithmetic": 40.11317774207183,
+     "geometric_bi_zagreb": 9.436648745939568,
+     "geometric_harmonic": 228.36168941240396,
+     "geometric_tri_zagreb": 5.660463005856049,
+     "harmonic": 17.6,
+     "harmonic_bi_zagreb": 1.8411796536796536,
+     "harmonic_geometric": 7.868542325570857,
+     "harmonic_tri_zagreb": 1.1160181436497225,
+     "hyper_zagreb": 932.0,
+     "irregularity_measure": 30.0,
+     "randić": 18.03000977870159,
+     "second_zagreb": 224.0,
+     "sigma": 36.0,
+     "somber": 139.86068402520684,
+     "sum_connectivity": 18.95787116339058,
+     "symmetric_division_degree": 90.0,
+     "tri_zagreb": 708.0,
+     "tri_zagreb_geometric": 301.6778809499169,
+     "tri_zagreb_harmonic": 1725.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 22.68034691665913,
+     "augmented_zagreb": 1541.1014904883923,
+     "bi_zagreb": 1682.0,
+     "bi_zagreb_geometric": 305.1593476110165,
+     "bi_zagreb_harmonic": 9507.0,
+     "first_zagreb": 448.0,
+     "forgotten": 2526.0,
+     "geometric_arithmetic": 40.71536188650096,
+     "geometric_bi_zagreb": 5.57261555265288,
+     "geometric_harmonic": 1241.1537975896285,
+     "geometric_tri_zagreb": 2.524675691345868,
+     "harmonic": 7.668148518148518,
+     "harmonic_bi_zagreb": 0.20814691319140705,
+     "harmonic_geometric": 1.4798415609715365,
+     "harmonic_tri_zagreb": 0.0952744924189745,
+     "hyper_zagreb": 4994.0,
+     "irregularity_measure": 34.0,
+     "randić": 7.728244716446281,
+     "second_zagreb": 1234.0,
+     "sigma": 58.0,
+     "somber": 318.7486008009243,
+     "sum_connectivity": 12.502947293555284,
+     "symmetric_division_degree": 84.39047619047619,
+     "tri_zagreb": 3760.0,
+     "tri_zagreb_geometric": 679.3144864267077,
+     "tri_zagreb_harmonic": 21336.0
+    },
+    "distance": {
+     "PI": 1517.0,
+     "PI_mul": 8288.0,
+     "PI_plus": 7178.0,
+     "edge_PI": 1610.0,
+     "edge_PI_mul": 8799.0,
+     "edge_PI_plus": 7620.0,
+     "edge_mostar": 986.0,
+     "edge_mostar_mul": 5199.0,
+     "edge_mostar_plus": 4596.0,
+     "edge_szeged": 8464.0,
+     "edge_szeged_mul": 48753.0,
+     "edge_szeged_plus": 40961.0,
+     "edge_vertex_szeged": 8406.0,
+     "edge_wiener": 5516.0,
+     "mostar": 873.0,
+     "mostar_mul": 4606.0,
+     "mostar_plus": 4070.0,
+     "szeged": 8302.0,
+     "szeged_mul": 47232.0,
+     "szeged_plus": 39954.0,
+     "total_mostar": 1859.0,
+     "total_szeged": 33578.0,
+     "vertex_edge_wiener": 5432.0,
+     "wiener_index": 5324.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     24
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     7
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     15
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     13,
+     16
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     17,
+     22
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     20,
+     23
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     25,
+     30
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     27,
+     28
+    ],
+    [
+     28,
+     29
+    ],
+    [
+     29,
+     30
+    ],
+    [
+     29,
+     31
+    ],
+    [
+     31,
+     32
+    ],
+    [
+     31,
+     36
+    ],
+    [
+     32,
+     33
+    ],
+    [
+     33,
+     34
+    ],
+    [
+     34,
+     35
+    ],
+    [
+     35,
+     36
+    ]
+   ],
+   "kind": "drug",
+   "n": 37,
+   "name": "imatinib",
+   "smiles": "CC1=C(C=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)NC4=NC=CC(=N4)C5=CN=CC=C5"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 31.623855739458588,
+     "augmented_zagreb": 345.515625,
+     "bi_zagreb": 455.0,
+     "bi_zagreb_geometric": 193.18331419625895,
+     "bi_zagreb_harmonic": 1133.0,
+     "first_zagreb": 210.0,
+     "forgotten": 538.0,
+     "geometric_arithmetic": 42.60493758408784,
+     "geometric_bi_zagreb": 10.092380808542561,
+     "geometric_harmonic": 250.69240263242915,
+     "geometric_tri_zagreb": 5.961938957824712,
+     "harmonic": 18.9,
+     "harmonic_bi_zagreb": 2.0407467532467534,
+     "harmonic_geometric": 8.672190135727227,
+     "harmonic_tri_zagreb": 1.2139788573999102,
+     "hyper_zagreb": 1028.0,
+     "irregularity_measure": 32.0,
+     "randić": 19.650774800938816,
+     "second_zagreb": 245.0,
+     "sigma": 48.0,
+     "somber": 152.28350624505248,
+     "sum_connectivity": 20.329652142174094,
+     "symmetric_division_degree": 101.33333333333333,
+     "tri_zagreb": 783.0,
+     "tri_zagreb_geometric": 331.1519082967354,
+     "tri_zagreb_harmonic": 1961.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 24.515530313622,
+     "augmented_zagreb": 1917.188698192247,
+     "bi_zagreb": 1939.0,
+     "bi_zagreb_geometric": 331.5591832957016,
+     "bi_zagreb_harmonic": 12397.0,
+     "first_zagreb": 490.0,
+     "forgotten": 3002.0,
+     "geometric_arithmetic": 43.53387141739973,
+     "geometric_bi_zagreb": 6.073804050250409,
+     "geometric_harmonic": 1461.8296266637471,
+     "geometric_tri_zagreb": 2.77799850614577,
+     "harmonic": 8.490294672647615,
+     "harmonic_bi_zagreb": 0.2648730789667318,
+     "harmonic_geometric": 1.7639190820670039,
+     "harmonic_tri_zagreb": 0.12438084568207179,
+     "hyper_zagreb": 5900.0,
+     "irregularity_measure": 50.0,
+     "randić": 8.589205734908912,
+     "second_zagreb": 1449.0,
+     "sigma": 104.0,
+     "somber": 349.788227915805,
+     "sum_connectivity": 13.552766281631559,
+     "symmetric_division_degree": 91.89246031746032,
+     "tri_zagreb": 4451.0,
+     "tri_zagreb_geometric": 747.2675434132583,
+     "tri_zagreb_harmonic": 28949.0
+    },
+    "distance": {
+     "PI": 1763.0,
+     "PI_mul": 9676.0,
+     "PI_plus": 8364.0,
+     "edge_PI": 1835.0,
+     "edge_PI_mul": 10096.0,
+     "edge_PI_plus": 8716.0,
+     "edge_mostar": 1429.0,
+     "edge_mostar_mul": 7154.0,
+     "edge_mostar_plus": 6538.0,
+     "edge_szeged": 6073.0,
+     "edge_szeged_mul": 41299.0,
+     "edge_szeged_plus": 31592.0,
+     "edge_vertex_szeged": 6503.0,
+     "edge_wiener": 4759.0,
+     "mostar": 1299.0,
+     "mostar_mul": 6502.0,
+     "mostar_plus": 5942.0,
+     "szeged": 6854.0,
+     "szeged_mul": 43704.0,
+     "szeged_plus": 34624.0,
+     "total_mostar": 2726.0,
+     "total_szeged": 25933.0,
+     "vertex_edge_wiener": 5104.5,
+     "wiener_index": 5382.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     32
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     26
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     19
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     18
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     12,
+     17
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     16
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     19,
+     24
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     22,
+     25
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     26,
+     31
+    ],
+    [
+     27,
+     28
+    ],
+    [
+     28,
+     29
+    ],
+    [
+     29,
+     30
+    ],
+    [
+     30,
+     31
+    ],
+    [
+     32,
+     33
+    ],
+    [
+     32,
+     34
+    ],
+    [
+     34,
+     35
+    ],
+    [
+     35,
+     36
+    ],
+    [
+     35,
+     40
+    ],
+    [
+     36,
+     37
+    ],
+    [
+     37,
+     38
+    ],
+    [
+     38,
+     39
+    ],
+    [
+     39,
+     40
+    ]
+   ],
+   "kind": "drug",
+   "n": 41,
+   "name": "atorvastatin",
+   "smiles": "CC(C)C1=C(C(=C(N1CC[C@H](C[C@H](CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 21.867939558444622,
+     "augmented_zagreb": 256.9375,
+     "bi_zagreb": 323.0,
+     "bi_zagreb_geometric": 135.94568120803774,
+     "bi_zagreb_harmonic": 800.0,
+     "first_zagreb": 148.0,
+     "forgotten": 374.0,
+     "geometric_arithmetic": 30.387969634987442,
+     "geometric_bi_zagreb": 7.121377197338044,
+     "geometric_harmonic": 177.93378072750008,
+     "geometric_tri_zagreb": 4.302309369775743,
+     "harmonic": 13.366666666666669,
+     "harmonic_bi_zagreb": 1.4565295815295816,
+     "harmonic_geometric": 6.115316311961136,
+     "harmonic_tri_zagreb": 0.9072678134081641,
+     "hyper_zagreb": 724.0,
+     "irregularity_measure": 22.0,
+     "randić": 13.673366393245589,
+     "second_zagreb": 175.0,
+     "sigma": 24.0,
+     "somber": 106.47546207047404,
+     "sum_connectivity": 14.337538419233947,
+     "symmetric_division_degree": 67.33333333333331,
+     "tri_zagreb": 549.0,
+     "tri_zagreb_geometric": 229.02596377471792,
+     "tri_zagreb_harmonic": 1370.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 17.096091558859488,
+     "augmented_zagreb": 1296.1285930924814,
+     "bi_zagreb": 1363.0,
+     "bi_zagreb_geometric": 236.13189080192132,
+     "bi_zagreb_harmonic": 8214.0,
+     "first_zagreb": 350.0,
+     "forgotten": 2088.0,
+     "geometric_arithmetic": 30.656603254658023,
+     "geometric_bi_zagreb": 4.179016072769408,
+     "geometric_harmonic": 1020.5836690914317,
+     "geometric_tri_zagreb": 1.8850503220154586,
+     "harmonic": 5.783971583971584,
+     "harmonic_bi_zagreb": 0.17538483076114494,
+     "harmonic_geometric": 1.1744572959033608,
+     "harmonic_tri_zagreb": 0.08165997098318827,
+     "hyper_zagreb": 4114.0,
+     "irregularity_measure": 32.0,
+     "randić": 5.8690810496387265,
+     "second_zagreb": 1013.0,
+     "sigma": 62.0,
+     "somber": 249.6405435306471,
+     "sum_connectivity": 9.399351581145284,
+     "symmetric_division_degree": 64.96666666666665,
+     "tri_zagreb": 3101.0,
+     "tri_zagreb_geometric": 533.2626964974925,
+     "tri_zagreb_harmonic": 18798.0
+    },
+    "distance": {
+     "PI": 825.0,
+     "PI_mul": 4534.0,
+     "PI_plus": 3893.0,
+     "edge_PI": 871.0,
+     "edge_PI_mul": 4794.0,
+     "edge_PI_plus": 4113.0,
+     "edge_mostar": 493.0,
+     "edge_mostar_mul": 2452.0,
+     "edge_mostar_plus": 2217.0,
+     "edge_szeged": 3596.0,
+     "edge_szeged_mul": 21695.0,
+     "edge_szeged_plus": 17821.0,
+     "edge_vertex_szeged": 3611.0,
+     "edge_wiener": 2260.0,
+     "mostar": 429.0,
+     "mostar_mul": 2134.0,
+     "mostar_plus": 1929.0,
+     "szeged": 3601.0,
+     "szeged_mul": 21087.0,
+     "szeged_plus": 17576.0,
+     "total_mostar": 922.0,
+     "total_szeged": 14419.0,
+     "vertex_edge_wiener": 2309.0,
+     "wiener_index": 2333.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     26
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     10
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     12
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     13,
+     18
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     16,
+     19
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     20,
+     25
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     26,
+     27
+    ]
+   ],
+   "kind": "drug",
+   "n": 28,
+   "name": "donepezil",
+   "smiles": "COC1=C(C=C2C(=C1)CC(C2=O)CC3CCN(CC3)CC4=CC=CC=C4)OC"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 11.083357585591889,
+     "augmented_zagreb": 103.1111111111111,
+     "bi_zagreb": 186.0,
+     "bi_zagreb_geometric": 71.51992080005996,
+     "bi_zagreb_harmonic": 528.0,
+     "first_zagreb": 84.0,
+     "forgotten": 270.0,
+     "geometric_arithmetic": 13.824669065578384,
+     "geometric_bi_zagreb": 3.1529839039833316,
+     "geometric_harmonic": 109.73870543902096,
+     "geometric_tri_zagreb": 1.581613114145462,
+     "harmonic": 5.4,
+     "harmonic_bi_zagreb": 0.4567099567099568,
+     "harmonic_geometric": 2.1505581203364565,
+     "harmonic_tri_zagreb": 0.2274436090225564,
+     "hyper_zagreb": 474.0,
+     "irregularity_measure": 30.0,
+     "randić": 5.906725386731054,
+     "second_zagreb": 102.0,
+     "sigma": 66.0,
+     "somber": 63.435194298241164,
+     "sum_connectivity": 6.357516187174516,
+     "symmetric_division_degree": 41.75,
+     "tri_zagreb": 372.0,
+     "tri_zagreb_geometric": 143.86560698594516,
+     "tri_zagreb_harmonic": 1056.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 7.611626388593474,
+     "augmented_zagreb": 941.1861540371776,
+     "bi_zagreb": 897.0,
+     "bi_zagreb_geometric": 131.49761894213137,
+     "bi_zagreb_harmonic": 6234.0,
+     "first_zagreb": 204.0,
+     "forgotten": 1422.0,
+     "geometric_arithmetic": 14.864037067936174,
+     "geometric_bi_zagreb": 1.7262597415245329,
+     "geometric_harmonic": 697.4334016937394,
+     "geometric_tri_zagreb": 0.7323189532290553,
+     "harmonic": 2.2355644355644353,
+     "harmonic_bi_zagreb": 0.040447949099860575,
+     "harmonic_geometric": 0.3424271372242303,
+     "harmonic_tri_zagreb": 0.01714844345946688,
+     "hyper_zagreb": 2808.0,
+     "irregularity_measure": 18.0,
+     "randić": 2.260211913708818,
+     "second_zagreb": 693.0,
+     "sigma": 36.0,
+     "somber": 145.32476630301719,
+     "sum_connectivity": 4.087561392291374,
+     "symmetric_division_degree": 31.142857142857146,
+     "tri_zagreb": 2115.0,
+     "tri_zagreb_geometric": 310.01706996994335,
+     "tri_zagreb_harmonic": 14703.0
+    },
+    "distance": {
+     "PI": 195.0,
+     "PI_mul": 1326.0,
+     "PI_plus": 1092.0,
+     "edge_PI": 186.0,
+     "edge_PI_mul": 1248.0,
+     "edge_PI_plus": 1038.0,
+     "edge_mostar": 96.0,
+     "edge_mostar_mul": 576.0,
+     "edge_mostar_plus": 522.0,
+     "edge_szeged": 369.0,
+     "edge_szeged_mul": 2760.0,
+     "edge_szeged_plus": 2118.0,
+     "edge_vertex_szeged": 439.5,
+     "edge_wiener": 123.0,
+     "mostar": 75.0,
+     "mostar_mul": 450.0,
+     "mostar_plus": 408.0,
+     "szeged": 504.0,
+     "szeged_mul": 3648.0,
+     "szeged_plus": 2868.0,
+     "total_mostar": 171.0,
+     "total_szeged": 1752.0,
+     "vertex_edge_wiener": 160.5,
+     "wiener_index": 192.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     1,
+     10
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     9
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     5,
+     12
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     10
+    ],
+    [
+     8,
+     11
+    ]
+   ],
+   "kind": "drug",
+   "n": 13,
+   "name": "memantine",
+   "smiles": "CC12CC3CC(C1)(CC(C3)(C2)N)C"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 21.97309817267794,
+     "augmented_zagreb": 222.7632361111111,
+     "bi_zagreb": 326.0,
+     "bi_zagreb_geometric": 135.06232371037328,
+     "bi_zagreb_harmonic": 846.0,
+     "first_zagreb": 150.0,
+     "forgotten": 414.0,
+     "geometric_arithmetic": 28.437012897118773,
+     "geometric_bi_zagreb": 6.703699352474844,
+     "geometric_harmonic": 183.17700472608217,
+     "geometric_tri_zagreb": 3.7392881089992307,
+     "harmonic": 12.252380952380953,
+     "harmonic_bi_zagreb": 1.250715804663173,
+     "harmonic_geometric": 5.4676002650114865,
+     "harmonic_tri_zagreb": 0.6969711276728819,
+     "hyper_zagreb": 766.0,
+     "irregularity_measure": 34.0,
+     "randić": 13.057569213703692,
+     "second_zagreb": 176.0,
+     "sigma": 62.0,
+     "somber": 110.52848071927957,
+     "sum_connectivity": 13.521837048827827,
+     "symmetric_division_degree": 75.83333333333333,
+     "tri_zagreb": 590.0,
+     "tri_zagreb_geometric": 245.30279274072126,
+     "tri_zagreb_harmonic": 1535.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 16.330337913258365,
+     "augmented_zagreb": 1315.7736166633388,
+     "bi_zagreb": 1390.0,
+     "bi_zagreb_geometric": 234.53664198252415,
+     "bi_zagreb_harmonic": 8602.0,
+     "first_zagreb": 352.0,
+     "forgotten": 2180.0,
+     "geometric_arithmetic": 29.531999818203236,
+     "geometric_bi_zagreb": 3.906095026458801,
+     "geometric_harmonic": 1050.7657928020853,
+     "geometric_tri_zagreb": 1.7078225059200698,
+     "harmonic": 5.273285864462336,
+     "harmonic_bi_zagreb": 0.13342895585913958,
+     "harmonic_geometric": 0.976042032042582,
+     "harmonic_tri_zagreb": 0.05872745173061175,
+     "hyper_zagreb": 4256.0,
+     "irregularity_measure": 44.0,
+     "randić": 5.370493469842751,
+     "second_zagreb": 1038.0,
+     "sigma": 104.0,
+     "somber": 252.22603989316897,
+     "sum_connectivity": 8.859419518561397,
+     "symmetric_division_degree": 63.983730158730154,
+     "tri_zagreb": 3218.0,
+     "tri_zagreb_geometric": 540.5792649619561,
+     "tri_zagreb_harmonic": 20012.0
+    },
+    "distance": {
+     "PI": 811.0,
+     "PI_mul": 4754.0,
+     "PI_plus": 4056.0,
+     "edge_PI": 834.0,
+     "edge_PI_mul": 4885.0,
+     "edge_PI_plus": 4170.0,
+     "edge_mostar": 520.0,
+     "edge_mostar_mul": 2813.0,
+     "edge_mostar_plus": 2548.0,
+     "edge_szeged": 3014.0,
+     "edge_szeged_mul": 20040.0,
+     "edge_szeged_plus": 15620.0,
+     "edge_vertex_szeged": 3147.5,
+     "edge_wiener": 2013.0,
+     "mostar": 469.0,
+     "mostar_mul": 2538.0,
+     "mostar_plus": 2298.0,
+     "szeged": 3257.0,
+     "szeged_mul": 21072.0,
+     "szeged_plus": 16751.0,
+     "total_mostar": 989.0,
+     "total_szeged": 12566.0,
+     "vertex_edge_wiener": 2159.5,
+     "wiener_index": 2281.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     12
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     6
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     11
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     9
+    ],
+    [
+     7,
+     10
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     13,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     16,
+     27
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     18,
+     23
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     20,
+     26
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     21,
+     25
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     23,
+     24
+    ]
+   ],
+   "kind": "drug",
+   "n": 28,
+   "name": "sitagliptin",
+   "smiles": "C1CN2C(=NN=C2C(F)(F)F)CN1C(=O)C[C@@H](CC3=CC(=C(C=C3F)F)F)N"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 13.427805631411442,
+     "augmented_zagreb": 129.65610185185184,
+     "bi_zagreb": 205.0,
+     "bi_zagreb_geometric": 82.91451044274856,
+     "bi_zagreb_harmonic": 561.0,
+     "first_zagreb": 94.0,
+     "forgotten": 282.0,
+     "geometric_arithmetic": 16.687300568154434,
+     "geometric_bi_zagreb": 3.938624153489717,
+     "geometric_harmonic": 117.81671608013033,
+     "geometric_tri_zagreb": 2.0978472635502534,
+     "harmonic": 7.071428571428572,
+     "harmonic_bi_zagreb": 0.6987981316928684,
+     "harmonic_geometric": 3.110202287710984,
+     "harmonic_tri_zagreb": 0.3743362603011725,
+     "hyper_zagreb": 504.0,
+     "irregularity_measure": 26.0,
+     "randić": 7.716162047958507,
+     "second_zagreb": 111.0,
+     "sigma": 60.0,
+     "somber": 70.41983374430714,
+     "sum_connectivity": 7.9528097724096245,
+     "symmetric_division_degree": 50.08333333333333,
+     "tri_zagreb": 393.0,
+     "tri_zagreb_geometric": 160.05059599015993,
+     "tri_zagreb_harmonic": 1079.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 9.649035997949063,
+     "augmented_zagreb": 878.3484397864426,
+     "bi_zagreb": 909.0,
+     "bi_zagreb_geometric": 145.73284648910374,
+     "bi_zagreb_harmonic": 5980.0,
+     "first_zagreb": 222.0,
+     "forgotten": 1468.0,
+     "geometric_arithmetic": 17.663567821701765,
+     "geometric_bi_zagreb": 2.272534751207288,
+     "geometric_harmonic": 698.5988610037693,
+     "geometric_tri_zagreb": 0.978329766658627,
+     "harmonic": 3.0324397824397824,
+     "harmonic_bi_zagreb": 0.07225346168112155,
+     "harmonic_geometric": 0.5415908624287341,
+     "harmonic_tri_zagreb": 0.03151598943614518,
+     "hyper_zagreb": 2842.0,
+     "irregularity_measure": 38.0,
+     "randić": 3.094381698910304,
+     "second_zagreb": 687.0,
+     "sigma": 94.0,
+     "somber": 159.6770732336588,
+     "sum_connectivity": 5.199446444293044,
+     "symmetric_division_degree": 38.815079365079356,
+     "tri_zagreb": 2155.0,
+     "tri_zagreb_geometric": 343.0231459377659,
+     "tri_zagreb_harmonic": 14272.0
+    },
+    "distance": {
+     "PI": 306.0,
+     "PI_mul": 1887.0,
+     "PI_plus": 1598.0,
+     "edge_PI": 292.0,
+     "edge_PI_mul": 1789.0,
+     "edge_PI_plus": 1524.0,
+     "edge_mostar": 176.0,
+     "edge_mostar_mul": 977.0,
+     "edge_mostar_plus": 910.0,
+     "edge_szeged": 596.0,
+     "edge_szeged_mul": 4276.0,
+     "edge_szeged_plus": 3190.0,
+     "edge_vertex_szeged": 719.0,
+     "edge_wiener": 294.0,
+     "mostar": 154.0,
+     "mostar_mul": 853.0,
+     "mostar_plus": 796.0,
+     "szeged": 838.0,
+     "szeged_mul": 5720.0,
+     "szeged_plus": 4446.0,
+     "total_mostar": 330.0,
+     "total_szeged": 2872.0,
+     "vertex_edge_wiener": 380.0,
+     "wiener_index": 460.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     11
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     12
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     10
+    ],
+    [
+     8,
+     11
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     12,
+     14
+    ],
+    [
+     12,
+     15
+    ]
+   ],
+   "kind": "drug",
+   "n": 17,
+   "name": "hydrochlorothiazide",
+   "smiles": "C1NC2=CC(=C(C=C2S(=O)(=O)N1)S(=O)(=O)N)Cl"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 13.83649602976679,
+     "augmented_zagreb": 148.68561574074073,
+     "bi_zagreb": 212.0,
+     "bi_zagreb_geometric": 86.06466303923524,
+     "bi_zagreb_harmonic": 571.0,
+     "first_zagreb": 96.0,
+     "forgotten": 272.0,
+     "geometric_arithmetic": 17.97894316994985,
+     "geometric_bi_zagreb": 4.243003121107743,
+     "geometric_harmonic": 120.62840699364281,
+     "geometric_tri_zagreb": 2.3819030573023534,
+     "harmonic": 7.83809523809524,
+     "harmonic_bi_zagreb": 0.8502952456899825,
+     "harmonic_geometric": 3.6288156909760847,
+     "harmonic_tri_zagreb": 0.4902340889182994,
+     "hyper_zagreb": 504.0,
+     "irregularity_measure": 22.0,
+     "randić": 8.374245891192093,
+     "second_zagreb": 116.0,
+     "sigma": 40.0,
+     "somber": 70.76432032359223,
+     "sum_connectivity": 8.58294644609929,
+     "symmetric_division_degree": 48.333333333333336,
+     "tri_zagreb": 388.0,
+     "tri_zagreb_geometric": 157.12539055841117,
+     "tri_zagreb_harmonic": 1052.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 10.35587897535908,
+     "augmented_zagreb": 936.0393769376161,
+     "bi_zagreb": 953.0,
+     "bi_zagreb_geometric": 152.47946123886962,
+     "bi_zagreb_harmonic": 6393.0,
+     "first_zagreb": 232.0,
+     "forgotten": 1552.0,
+     "geometric_arithmetic": 18.52205298116355,
+     "geometric_bi_zagreb": 2.456128147208231,
+     "geometric_harmonic": 734.3437512101781,
+     "geometric_tri_zagreb": 1.0588901872811647,
+     "harmonic": 3.328520335873277,
+     "harmonic_bi_zagreb": 0.09569815602092085,
+     "harmonic_geometric": 0.6541519741479994,
+     "harmonic_tri_zagreb": 0.042887595658562434,
+     "hyper_zagreb": 2994.0,
+     "irregularity_measure": 36.0,
+     "randić": 3.430525610675091,
+     "second_zagreb": 721.0,
+     "sigma": 110.0,
+     "somber": 167.44098665488025,
+     "sum_connectivity": 5.571580451646517,
+     "symmetric_division_degree": 42.20753968253968,
+     "tri_zagreb": 2273.0,
+     "tri_zagreb_geometric": 361.3443979961581,
+     "tri_zagreb_harmonic": 15326.0
+    },
+    "distance": {
+     "PI": 324.0,
+     "PI_mul": 1929.0,
+     "PI_plus": 1621.0,
+     "edge_PI": 322.0,
+     "edge_PI_mul": 1928.0,
+     "edge_PI_plus": 1615.0,
+     "edge_mostar": 218.0,
+     "edge_mostar_mul": 1100.0,
+     "edge_mostar_plus": 1029.0,
+     "edge_szeged": 616.0,
+     "edge_szeged_mul": 4788.0,
+     "edge_szeged_plus": 3430.0,
+     "edge_vertex_szeged": 709.5,
+     "edge_wiener": 378.0,
+     "mostar": 194.0,
+     "mostar_mul": 977.0,
+     "mostar_plus": 915.0,
+     "szeged": 796.0,
+     "szeged_mul": 5530.0,
+     "szeged_plus": 4224.0,
+     "total_mostar": 412.0,
+     "total_szeged": 2831.0,
+     "vertex_edge_wiener": 473.5,
+     "wiener_index": 560.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     6
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     8
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     12
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     16
+    ],
+    [
+     9,
+     17
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     15
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     13
+    ],
+    [
+     13,
+     14
+    ]
+   ],
+   "kind": "drug",
+   "n": 18,
+   "name": "gemcitabine",
+   "smiles": "C1=CN(C(=O)N=C1N)[C@H]2C([C@@H]([C@H](O2)CO)O)(F)F"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 15.68231801272818,
+     "augmented_zagreb": 179.078125,
+     "bi_zagreb": 232.0,
+     "bi_zagreb_geometric": 97.0502052138021,
+     "bi_zagreb_harmonic": 583.0,
+     "first_zagreb": 106.0,
+     "forgotten": 272.0,
+     "geometric_arithmetic": 21.436443388259484,
+     "geometric_bi_zagreb": 5.023754574618583,
+     "geometric_harmonic": 128.3820997010768,
+     "geometric_tri_zagreb": 2.986623690295946,
+     "harmonic": 9.366666666666667,
+     "harmonic_bi_zagreb": 0.9913059163059162,
+     "harmonic_geometric": 4.227975488824356,
+     "harmonic_tri_zagreb": 0.5955340630779227,
+     "hyper_zagreb": 524.0,
+     "irregularity_measure": 14.0,
+     "randić": 9.664703797946448,
+     "second_zagreb": 126.0,
+     "sigma": 20.0,
+     "somber": 76.51500936829059,
+     "sum_connectivity": 10.118950216318979,
+     "symmetric_division_degree": 49.33333333333333,
+     "tri_zagreb": 398.0,
+     "tri_zagreb_geometric": 165.57040064890256,
+     "tri_zagreb_harmonic": 1007.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 12.10239930410585,
+     "augmented_zagreb": 953.4334438037145,
+     "bi_zagreb": 993.0,
+     "bi_zagreb_geometric": 169.06770078407763,
+     "bi_zagreb_harmonic": 6187.0,
+     "first_zagreb": 252.0,
+     "forgotten": 1548.0,
+     "geometric_arithmetic": 21.707278959475907,
+     "geometric_bi_zagreb": 2.941645112038265,
+     "geometric_harmonic": 749.0795351885813,
+     "geometric_tri_zagreb": 1.3144058794552211,
+     "harmonic": 4.0346986346986355,
+     "harmonic_bi_zagreb": 0.11260260399895522,
+     "harmonic_geometric": 0.7875804967690471,
+     "harmonic_tri_zagreb": 0.05135961467840929,
+     "hyper_zagreb": 3030.0,
+     "irregularity_measure": 28.0,
+     "randić": 4.094672634628905,
+     "second_zagreb": 741.0,
+     "sigma": 66.0,
+     "somber": 180.28845457339892,
+     "sum_connectivity": 6.621653509936916,
+     "symmetric_division_degree": 46.51666666666666,
+     "tri_zagreb": 2289.0,
+     "tri_zagreb_geometric": 386.01647508938635,
+     "tri_zagreb_harmonic": 14387.0
+    },
+    "distance": {
+     "PI": 419.0,
+     "PI_mul": 2367.0,
+     "PI_plus": 2007.0,
+     "edge_PI": 436.0,
+     "edge_PI_mul": 2477.0,
+     "edge_PI_plus": 2094.0,
+     "edge_mostar": 276.0,
+     "edge_mostar_mul": 1389.0,
+     "edge_mostar_plus": 1262.0,
+     "edge_szeged": 1126.0,
+     "edge_szeged_mul": 7429.0,
+     "edge_szeged_plus": 5766.0,
+     "edge_vertex_szeged": 1188.5,
+     "edge_wiener": 582.0,
+     "mostar": 237.0,
+     "mostar_mul": 1191.0,
+     "mostar_plus": 1083.0,
+     "szeged": 1237.0,
+     "szeged_mul": 7660.0,
+     "szeged_plus": 6155.0,
+     "total_mostar": 513.0,
+     "total_szeged": 4740.0,
+     "vertex_edge_wiener": 662.0,
+     "wiener_index": 726.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     8
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     14
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     12
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     13
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     19
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ]
+   ],
+   "kind": "drug",
+   "n": 20,
+   "name": "diazepam",
+   "smiles": "CN1C(=O)CN=C(C2=C1C=CC(=C2)Cl)C3=CC=CC=C3"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 17.872588041509115,
+     "augmented_zagreb": 201.84375,
+     "bi_zagreb": 262.0,
+     "bi_zagreb_geometric": 110.09165709812947,
+     "bi_zagreb_harmonic": 658.0,
+     "first_zagreb": 120.0,
+     "forgotten": 308.0,
+     "geometric_arithmetic": 24.302468792043925,
+     "geometric_bi_zagreb": 5.72119040427128,
+     "geometric_harmonic": 144.84620131621458,
+     "geometric_tri_zagreb": 3.397636145579022,
+     "harmonic": 10.7,
+     "harmonic_bi_zagreb": 1.14745670995671,
+     "harmonic_geometric": 4.87776173453028,
+     "harmonic_tri_zagreb": 0.6880079472184736,
+     "hyper_zagreb": 592.0,
+     "irregularity_measure": 16.0,
+     "randić": 11.075387400469408,
+     "second_zagreb": 142.0,
+     "sigma": 24.0,
+     "somber": 86.74835484032447,
+     "sum_connectivity": 11.527198506782842,
+     "symmetric_division_degree": 56.666666666666664,
+     "tri_zagreb": 450.0,
+     "tri_zagreb_geometric": 188.0759541483677,
+     "tri_zagreb_harmonic": 1138.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 13.843430904867338,
+     "augmented_zagreb": 1096.1433624458239,
+     "bi_zagreb": 1127.0,
+     "bi_zagreb_geometric": 190.92082741047759,
+     "bi_zagreb_harmonic": 7163.0,
+     "first_zagreb": 284.0,
+     "forgotten": 1764.0,
+     "geometric_arithmetic": 24.675214371564515,
+     "geometric_bi_zagreb": 3.400574079086819,
+     "geometric_harmonic": 852.579125084193,
+     "geometric_tri_zagreb": 1.5416089964088293,
+     "harmonic": 4.725736191912662,
+     "harmonic_bi_zagreb": 0.1451259009754402,
+     "harmonic_geometric": 0.9702525257624398,
+     "harmonic_tri_zagreb": 0.06816754724631036,
+     "hyper_zagreb": 3450.0,
+     "irregularity_measure": 36.0,
+     "randić": 4.7911496900487665,
+     "second_zagreb": 843.0,
+     "sigma": 78.0,
+     "somber": 203.2143621465953,
+     "sum_connectivity": 7.617704477040501,
+     "symmetric_division_degree": 52.76785714285714,
+     "tri_zagreb": 2607.0,
+     "tri_zagreb_geometric": 435.0624610191451,
+     "tri_zagreb_harmonic": 16775.0
+    },
+    "distance": {
+     "PI": 575.0,
+     "PI_mul": 3266.0,
+     "PI_plus": 2760.0,
+     "edge_PI": 580.0,
+     "edge_PI_mul": 3286.0,
+     "edge_PI_plus": 2782.0,
+     "edge_mostar": 406.0,
+     "edge_mostar_mul": 2058.0,
+     "edge_mostar_plus": 1862.0,
+     "edge_szeged": 1497.0,
+     "edge_szeged_mul": 10267.0,
+     "edge_szeged_plus": 7801.0,
+     "edge_vertex_szeged": 1673.5,
+     "edge_wiener": 885.0,
+     "mostar": 363.0,
+     "mostar_mul": 1850.0,
+     "mostar_plus": 1668.0,
+     "szeged": 1828.0,
+     "szeged_mul": 11790.0,
+     "szeged_plus": 9260.0,
+     "total_mostar": 769.0,
+     "total_szeged": 6672.0,
+     "vertex_edge_wiener": 997.0,
+     "wiener_index": 1092.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     11
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     10
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     20
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     12,
+     22
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     13,
+     18
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ]
+   ],
+   "kind": "drug",
+   "n": 23,
+   "name": "warfarin",
+   "smiles": "CC(=O)CC(C1=CC=CC=C1)C2=C(C3=CC=CC=C3OC2=O)O"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 21.557951861702904,
+     "augmented_zagreb": 233.828125,
+     "bi_zagreb": 294.0,
+     "bi_zagreb_geometric": 129.15937408349208,
+     "bi_zagreb_harmonic": 710.0,
+     "first_zagreb": 138.0,
+     "forgotten": 342.0,
+     "geometric_arithmetic": 29.091099134523695,
+     "geometric_bi_zagreb": 7.024149832106158,
+     "geometric_harmonic": 159.55534763186995,
+     "geometric_tri_zagreb": 4.250710733661714,
+     "harmonic": 13.433333333333334,
+     "harmonic_bi_zagreb": 1.5538600288600288,
+     "harmonic_geometric": 6.440029594990559,
+     "harmonic_tri_zagreb": 0.9554145334847086,
+     "hyper_zagreb": 654.0,
+     "irregularity_measure": 20.0,
+     "randić": 13.93475940797611,
+     "second_zagreb": 156.0,
+     "sigma": 30.0,
+     "somber": 99.99489244057591,
+     "sum_connectivity": 14.143514081008563,
+     "symmetric_division_degree": 68.66666666666666,
+     "tri_zagreb": 498.0,
+     "tri_zagreb_geometric": 217.28797263495204,
+     "tri_zagreb_harmonic": 1213.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 17.148354073289386,
+     "augmented_zagreb": 1045.3037040735423,
+     "bi_zagreb": 1152.0,
+     "bi_zagreb_geometric": 214.8088217033212,
+     "bi_zagreb_harmonic": 6617.0,
+     "first_zagreb": 312.0,
+     "forgotten": 1764.0,
+     "geometric_arithmetic": 29.584570025515212,
+     "geometric_bi_zagreb": 4.328866056084255,
+     "geometric_harmonic": 850.318727723152,
+     "geometric_tri_zagreb": 2.006052295317531,
+     "harmonic": 6.162701187701188,
+     "harmonic_bi_zagreb": 0.22056231977662444,
+     "harmonic_geometric": 1.381977907922228,
+     "harmonic_tri_zagreb": 0.10721461821532634,
+     "hyper_zagreb": 3444.0,
+     "irregularity_measure": 40.0,
+     "randić": 6.25522208613828,
+     "second_zagreb": 840.0,
+     "sigma": 84.0,
+     "somber": 223.4244900961504,
+     "sum_connectivity": 9.53194406110283,
+     "symmetric_division_degree": 63.51190476190475,
+     "tri_zagreb": 2604.0,
+     "tri_zagreb_geometric": 478.56650608009653,
+     "tri_zagreb_harmonic": 15142.0
+    },
+    "distance": {
+     "PI": 841.0,
+     "PI_mul": 4399.0,
+     "PI_plus": 3882.0,
+     "edge_PI": 839.0,
+     "edge_PI_mul": 4396.0,
+     "edge_PI_plus": 3876.0,
+     "edge_mostar": 633.0,
+     "edge_mostar_mul": 3098.0,
+     "edge_mostar_plus": 2842.0,
+     "edge_szeged": 2196.0,
+     "edge_szeged_mul": 13774.0,
+     "edge_szeged_plus": 10986.0,
+     "edge_vertex_szeged": 2428.5,
+     "edge_wiener": 1925.0,
+     "mostar": 599.0,
+     "mostar_mul": 2939.0,
+     "mostar_plus": 2692.0,
+     "szeged": 2649.0,
+     "szeged_mul": 15741.0,
+     "szeged_plus": 12924.0,
+     "total_mostar": 1232.0,
+     "total_szeged": 9702.0,
+     "vertex_edge_wiener": 2150.5,
+     "wiener_index": 2362.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     4
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     26
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     13
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     23
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     17,
+     22
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     23,
+     25
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     26,
+     28
+    ]
+   ],
+   "kind": "drug",
+   "n": 29,
+   "name": "lisinopril",
+   "smiles": "C1C[C@H](N(C1)C(=O)[C@H](CCCCN)N[C@@H](CCC2=CC=CC=C2)C(=O)O)C(=O)O"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 20.62013493721554,
+     "augmented_zagreb": 240.625,
+     "bi_zagreb": 296.0,
+     "bi_zagreb_geometric": 126.2075276208252,
+     "bi_zagreb_harmonic": 743.0,
+     "first_zagreb": 136.0,
+     "forgotten": 346.0,
+     "geometric_arithmetic": 28.15110001967684,
+     "geometric_bi_zagreb": 6.747037655987576,
+     "geometric_harmonic": 163.08643798993552,
+     "geometric_tri_zagreb": 4.097029381754509,
+     "harmonic": 12.966666666666665,
+     "harmonic_bi_zagreb": 1.555537518037518,
+     "harmonic_geometric": 6.350898202940051,
+     "harmonic_tri_zagreb": 0.9773609593785031,
+     "hyper_zagreb": 666.0,
+     "irregularity_measure": 18.0,
+     "randić": 13.455126120231855,
+     "second_zagreb": 160.0,
+     "sigma": 26.0,
+     "somber": 98.33628887159838,
+     "sum_connectivity": 13.62853229977949,
+     "symmetric_division_degree": 66.0,
+     "tri_zagreb": 506.0,
+     "tri_zagreb_geometric": 213.16847903447183,
+     "tri_zagreb_harmonic": 1284.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 16.452504067311292,
+     "augmented_zagreb": 1263.9365824437957,
+     "bi_zagreb": 1275.0,
+     "bi_zagreb_geometric": 216.54659788308624,
+     "bi_zagreb_harmonic": 8375.0,
+     "first_zagreb": 320.0,
+     "forgotten": 2016.0,
+     "geometric_arithmetic": 28.46017940243803,
+     "geometric_bi_zagreb": 4.130791599590493,
+     "geometric_harmonic": 968.0265718568165,
+     "geometric_tri_zagreb": 1.912265405826984,
+     "harmonic": 5.936991603168074,
+     "harmonic_bi_zagreb": 0.2399074933637001,
+     "harmonic_geometric": 1.4156491062216852,
+     "harmonic_tri_zagreb": 0.11980163488062992,
+     "hyper_zagreb": 3926.0,
+     "irregularity_measure": 46.0,
+     "randić": 6.06658806603089,
+     "second_zagreb": 955.0,
+     "sigma": 106.0,
+     "somber": 229.79197590710092,
+     "sum_connectivity": 9.131732437154653,
+     "symmetric_division_degree": 62.59047619047619,
+     "tri_zagreb": 2971.0,
+     "tri_zagreb_geometric": 493.28401243824436,
+     "tri_zagreb_harmonic": 19839.0
+    },
+    "distance": {
+     "PI": 812.0,
+     "PI_mul": 4480.0,
+     "PI_plus": 3808.0,
+     "edge_PI": 800.0,
+     "edge_PI_mul": 4399.0,
+     "edge_PI_plus": 3746.0,
+     "edge_mostar": 608.0,
+     "edge_mostar_mul": 2991.0,
+     "edge_mostar_plus": 2710.0,
+     "edge_szeged": 1962.0,
+     "edge_szeged_mul": 14108.0,
+     "edge_szeged_plus": 10471.0,
+     "edge_vertex_szeged": 2293.0,
+     "edge_wiener": 1318.0,
+     "mostar": 564.0,
+     "mostar_mul": 2770.0,
+     "mostar_plus": 2512.0,
+     "szeged": 2608.0,
+     "szeged_mul": 17411.0,
+     "szeged_plus": 13400.0,
+     "total_mostar": 1172.0,
+     "total_szeged": 9156.0,
+     "vertex_edge_wiener": 1585.0,
+     "wiener_index": 1836.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     10
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     23
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     22
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     18
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     16
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     18,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     26,
+     27
+    ]
+   ],
+   "kind": "drug",
+   "n": 28,
+   "name": "amlodipine",
+   "smiles": "CCOC(=O)C1=C(NC(=C(C1C2=CC=CC=C2Cl)C(=O)OC)C)COCCN"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 19.205921374842447,
+     "augmented_zagreb": 224.625,
+     "bi_zagreb": 298.0,
+     "bi_zagreb_geometric": 121.07311948833447,
+     "bi_zagreb_harmonic": 771.0,
+     "first_zagreb": 134.0,
+     "forgotten": 354.0,
+     "geometric_arithmetic": 26.262060586270465,
+     "geometric_bi_zagreb": 6.066552175686404,
+     "geometric_harmonic": 167.09365003013045,
+     "geometric_tri_zagreb": 3.5443660600240343,
+     "harmonic": 11.166666666666668,
+     "harmonic_bi_zagreb": 1.1396284271284272,
+     "harmonic_geometric": 4.926582589123592,
+     "harmonic_tri_zagreb": 0.6714712350677262,
+     "hyper_zagreb": 682.0,
+     "irregularity_measure": 18.0,
+     "randić": 11.5585506480638,
+     "second_zagreb": 164.0,
+     "sigma": 26.0,
+     "somber": 96.78788451599863,
+     "sum_connectivity": 12.238122278710485,
+     "symmetric_division_degree": 61.0,
+     "tri_zagreb": 518.0,
+     "tri_zagreb_geometric": 209.5893891859945,
+     "tri_zagreb_harmonic": 1347.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 14.531583487430343,
+     "augmented_zagreb": 1342.4765674056791,
+     "bi_zagreb": 1350.0,
+     "bi_zagreb_geometric": 216.77756598930077,
+     "bi_zagreb_harmonic": 8863.0,
+     "first_zagreb": 328.0,
+     "forgotten": 2132.0,
+     "geometric_arithmetic": 26.630054657454465,
+     "geometric_bi_zagreb": 3.4662485317935,
+     "geometric_harmonic": 1032.817355186059,
+     "geometric_tri_zagreb": 1.5264057598385656,
+     "harmonic": 4.6943223443223445,
+     "harmonic_bi_zagreb": 0.12331548444551903,
+     "harmonic_geometric": 0.8805299058570963,
+     "harmonic_tri_zagreb": 0.05573380323202133,
+     "hyper_zagreb": 4176.0,
+     "irregularity_measure": 40.0,
+     "randić": 4.768983366692975,
+     "second_zagreb": 1022.0,
+     "sigma": 88.0,
+     "somber": 234.6534694371436,
+     "sum_connectivity": 7.903757875956641,
+     "symmetric_division_degree": 57.14880952380952,
+     "tri_zagreb": 3154.0,
+     "tri_zagreb_geometric": 502.2721777011892,
+     "tri_zagreb_harmonic": 20839.0
+    },
+    "distance": {
+     "PI": 624.0,
+     "PI_mul": 3836.0,
+     "PI_plus": 3118.0,
+     "edge_PI": 658.0,
+     "edge_PI_mul": 4035.0,
+     "edge_PI_plus": 3285.0,
+     "edge_mostar": 412.0,
+     "edge_mostar_mul": 2277.0,
+     "edge_mostar_plus": 1967.0,
+     "edge_szeged": 2085.0,
+     "edge_szeged_mul": 14867.0,
+     "edge_szeged_plus": 11149.0,
+     "edge_vertex_szeged": 2178.0,
+     "edge_wiener": 1092.0,
+     "mostar": 346.0,
+     "mostar_mul": 1902.0,
+     "mostar_plus": 1648.0,
+     "szeged": 2237.0,
+     "szeged_mul": 15349.0,
+     "szeged_plus": 11743.0,
+     "total_mostar": 758.0,
+     "total_szeged": 8678.0,
+     "vertex_edge_wiener": 1176.5,
+     "wiener_index": 1234.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     13
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     21
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     13
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     20
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     14
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     19
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     21,
+     23
+    ]
+   ],
+   "kind": "drug",
+   "n": 24,
+   "name": "ciprofloxacin",
+   "smiles": "C1CC1N2C=C(C(=O)C3=CC(=C(C=C32)N4CCNCC4)F)C(=O)O"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 17.578369571312006,
+     "augmented_zagreb": 223.94074999999998,
+     "bi_zagreb": 305.0,
+     "bi_zagreb_geometric": 115.94516654911476,
+     "bi_zagreb_harmonic": 849.0,
+     "first_zagreb": 132.0,
+     "forgotten": 374.0,
+     "geometric_arithmetic": 24.32827828278718,
+     "geometric_bi_zagreb": 5.445429382153075,
+     "geometric_harmonic": 176.36417239121977,
+     "geometric_tri_zagreb": 3.1085436725704287,
+     "harmonic": 9.79047619047619,
+     "harmonic_bi_zagreb": 0.9313140806561859,
+     "harmonic_geometric": 4.117672875971467,
+     "harmonic_tri_zagreb": 0.5390031587400007,
+     "hyper_zagreb": 720.0,
+     "irregularity_measure": 20.0,
+     "randić": 10.125864216121357,
+     "second_zagreb": 173.0,
+     "sigma": 28.0,
+     "somber": 95.3500559116349,
+     "sum_connectivity": 11.016553811774344,
+     "symmetric_division_degree": 56.25,
+     "tri_zagreb": 547.0,
+     "tri_zagreb_geometric": 206.26955304435188,
+     "tri_zagreb_harmonic": 1536.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 12.848781092585686,
+     "augmented_zagreb": 1760.016638139353,
+     "bi_zagreb": 1588.0,
+     "bi_zagreb_geometric": 221.3063488260724,
+     "bi_zagreb_harmonic": 12279.0,
+     "first_zagreb": 346.0,
+     "forgotten": 2618.0,
+     "geometric_arithmetic": 24.592786118991665,
+     "geometric_bi_zagreb": 2.936808941889489,
+     "geometric_harmonic": 1258.4862456109609,
+     "geometric_tri_zagreb": 1.247239402979813,
+     "harmonic": 3.85469497822439,
+     "harmonic_bi_zagreb": 0.08333726644095568,
+     "harmonic_geometric": 0.6459017400940283,
+     "harmonic_tri_zagreb": 0.036028795209767484,
+     "hyper_zagreb": 5102.0,
+     "irregularity_measure": 50.0,
+     "randić": 3.9279474230620055,
+     "second_zagreb": 1242.0,
+     "sigma": 134.0,
+     "somber": 248.13432595291778,
+     "sum_connectivity": 6.885970753349067,
+     "symmetric_division_degree": 53.45479797979797,
+     "tri_zagreb": 3860.0,
+     "tri_zagreb_geometric": 532.0650367772819,
+     "tri_zagreb_harmonic": 30141.0
+    },
+    "distance": {
+     "PI": 495.0,
+     "PI_mul": 3427.0,
+     "PI_plus": 2616.0,
+     "edge_PI": 541.0,
+     "edge_PI_mul": 3729.0,
+     "edge_PI_plus": 2853.0,
+     "edge_mostar": 303.0,
+     "edge_mostar_mul": 1943.0,
+     "edge_mostar_plus": 1551.0,
+     "edge_szeged": 1789.0,
+     "edge_szeged_mul": 13485.0,
+     "edge_szeged_plus": 9808.0,
+     "edge_vertex_szeged": 1804.0,
+     "edge_wiener": 625.0,
+     "mostar": 231.0,
+     "mostar_mul": 1473.0,
+     "mostar_plus": 1180.0,
+     "szeged": 1790.0,
+     "szeged_mul": 13218.0,
+     "szeged_plus": 9732.0,
+     "total_mostar": 534.0,
+     "total_szeged": 7187.0,
+     "vertex_edge_wiener": 683.0,
+     "wiener_index": 712.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     9
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     19
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     13
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     15
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     14
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     17,
+     20
+    ],
+    [
+     18,
+     19
+    ]
+   ],
+   "kind": "drug",
+   "n": 21,
+   "name": "morphine",
+   "smiles": "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 9.220897726126537,
+     "augmented_zagreb": 106.15625,
+     "bi_zagreb": 129.0,
+     "bi_zagreb_geometric": 56.00437666473736,
+     "bi_zagreb_harmonic": 310.0,
+     "first_zagreb": 60.0,
+     "forgotten": 146.0,
+     "geometric_arithmetic": 12.785208992237523,
+     "geometric_bi_zagreb": 3.038159372482943,
+     "geometric_harmonic": 69.95899904296954,
+     "geometric_tri_zagreb": 1.8711389508397687,
+     "harmonic": 5.766666666666667,
+     "harmonic_bi_zagreb": 0.6363275613275614,
+     "harmonic_geometric": 2.664094621559216,
+     "harmonic_tri_zagreb": 0.39736342280201936,
+     "hyper_zagreb": 284.0,
+     "irregularity_measure": 6.0,
+     "randić": 5.877010097711745,
+     "second_zagreb": 69.0,
+     "sigma": 8.0,
+     "somber": 43.040326884740054,
+     "sum_connectivity": 6.105350962927558,
+     "symmetric_division_degree": 28.0,
+     "tri_zagreb": 215.0,
+     "tri_zagreb_geometric": 92.53242357471872,
+     "tri_zagreb_harmonic": 522.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 7.337770354163415,
+     "augmented_zagreb": 463.0289423904262,
+     "bi_zagreb": 512.0,
+     "bi_zagreb_geometric": 94.49353023758634,
+     "bi_zagreb_harmonic": 2936.0,
+     "first_zagreb": 138.0,
+     "forgotten": 784.0,
+     "geometric_arithmetic": 12.846453923983711,
+     "geometric_bi_zagreb": 1.829128701256568,
+     "geometric_harmonic": 378.43992133773537,
+     "geometric_tri_zagreb": 0.8361259147026753,
+     "harmonic": 2.556299256299256,
+     "harmonic_bi_zagreb": 0.07832675474387979,
+     "harmonic_geometric": 0.5284410829543185,
+     "harmonic_tri_zagreb": 0.03651886994318062,
+     "hyper_zagreb": 1532.0,
+     "irregularity_measure": 18.0,
+     "randić": 2.5868474103839314,
+     "second_zagreb": 374.0,
+     "sigma": 36.0,
+     "somber": 98.7134365359987,
+     "sum_connectivity": 4.055445291392805,
+     "symmetric_division_degree": 27.288095238095238,
+     "tri_zagreb": 1158.0,
+     "tri_zagreb_geometric": 211.21450328276777,
+     "tri_zagreb_harmonic": 6716.0
+    },
+    "distance": {
+     "PI": 144.0,
+     "PI_mul": 771.0,
+     "PI_plus": 668.0,
+     "edge_PI": 142.0,
+     "edge_PI_mul": 768.0,
+     "edge_PI_plus": 662.0,
+     "edge_mostar": 84.0,
+     "edge_mostar_mul": 414.0,
+     "edge_mostar_plus": 378.0,
+     "edge_szeged": 235.0,
+     "edge_szeged_mul": 1407.0,
+     "edge_szeged_plus": 1142.0,
+     "edge_vertex_szeged": 263.5,
+     "edge_wiener": 134.0,
+     "mostar": 72.0,
+     "mostar_mul": 355.0,
+     "mostar_plus": 324.0,
+     "szeged": 291.0,
+     "szeged_mul": 1633.0,
+     "szeged_plus": 1374.0,
+     "total_mostar": 156.0,
+     "total_szeged": 1053.0,
+     "vertex_edge_wiener": 164.0,
+     "wiener_index": 191.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     11
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ]
+   ],
+   "kind": "drug",
+   "n": 12,
+   "name": "nicotine",
+   "smiles": "CN1CCC[C@H]1C2=CN=CC=C2"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 25.735990966378452,
+     "augmented_zagreb": 294.85749074074073,
+     "bi_zagreb": 393.0,
+     "bi_zagreb_geometric": 161.01677770109038,
+     "bi_zagreb_harmonic": 1025.0,
+     "first_zagreb": 178.0,
+     "forgotten": 480.0,
+     "geometric_arithmetic": 34.73991528555136,
+     "geometric_bi_zagreb": 8.129973804950417,
+     "geometric_harmonic": 220.86324654982397,
+     "geometric_tri_zagreb": 4.744218181215353,
+     "harmonic": 15.104761904761906,
+     "harmonic_bi_zagreb": 1.6275679729627097,
+     "harmonic_geometric": 6.903247390770357,
+     "harmonic_tri_zagreb": 0.9786495720706245,
+     "hyper_zagreb": 910.0,
+     "irregularity_measure": 32.0,
+     "randić": 15.755587286553409,
+     "second_zagreb": 215.0,
+     "sigma": 50.0,
+     "somber": 129.49198034061055,
+     "sum_connectivity": 16.409963946180127,
+     "symmetric_division_degree": 84.33333333333333,
+     "tri_zagreb": 695.0,
+     "tri_zagreb_geometric": 282.88559569603757,
+     "tri_zagreb_harmonic": 1829.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 19.590025366867145,
+     "augmented_zagreb": 1724.99138059715,
+     "bi_zagreb": 1755.0,
+     "bi_zagreb_geometric": 285.0932488855779,
+     "bi_zagreb_harmonic": 11476.0,
+     "first_zagreb": 430.0,
+     "forgotten": 2790.0,
+     "geometric_arithmetic": 35.42415804224344,
+     "geometric_bi_zagreb": 4.735100791314464,
+     "geometric_harmonic": 1342.2007548545841,
+     "geometric_tri_zagreb": 2.1197675687008424,
+     "harmonic": 6.547073188249659,
+     "harmonic_bi_zagreb": 0.21348454002220119,
+     "harmonic_geometric": 1.3649082566204203,
+     "harmonic_tri_zagreb": 0.10432744417016337,
+     "hyper_zagreb": 5440.0,
+     "irregularity_measure": 56.0,
+     "randić": 6.667649968570014,
+     "second_zagreb": 1325.0,
+     "sigma": 140.0,
+     "somber": 308.29512096519153,
+     "sum_connectivity": 10.723033189879382,
+     "symmetric_division_degree": 76.8734126984127,
+     "tri_zagreb": 4115.0,
+     "tri_zagreb_geometric": 660.9684787764431,
+     "tri_zagreb_harmonic": 27111.0
+    },
+    "distance": {
+     "PI": 1154.0,
+     "PI_mul": 6870.0,
+     "PI_plus": 5697.0,
+     "edge_PI": 1212.0,
+     "edge_PI_mul": 7222.0,
+     "edge_PI_plus": 5986.0,
+     "edge_mostar": 836.0,
+     "edge_mostar_mul": 4582.0,
+     "edge_mostar_plus": 3992.0,
+     "edge_szeged": 4562.0,
+     "edge_szeged_mul": 32249.0,
+     "edge_szeged_plus": 24260.0,
+     "edge_vertex_szeged": 4724.0,
+     "edge_wiener": 2751.0,
+     "mostar": 742.0,
+     "mostar_mul": 4072.0,
+     "mostar_plus": 3545.0,
+     "szeged": 4838.0,
+     "szeged_mul": 32662.0,
+     "szeged_plus": 25196.0,
+     "total_mostar": 1578.0,
+     "total_szeged": 18848.0,
+     "vertex_edge_wiener": 2941.5,
+     "wiener_index": 3086.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     32
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     11
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     13
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     13,
+     18
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     29
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     17,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     19,
+     21
+    ],
+    [
+     19,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     22,
+     27
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     25,
+     28
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     29,
+     30
+    ],
+    [
+     30,
+     31
+    ]
+   ],
+   "kind": "drug",
+   "n": 33,
+   "name": "sildenafil",
+   "smiles": "CCCC1=NN(C2=C1N=C(NC2=O)C3=C(C=CC(=C3)S(=O)(=O)N4CCN(CC4)C)OCC)C"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 79.46205592090772,
+     "augmented_zagreb": 859.7366157407407,
+     "bi_zagreb": 1212.0,
+     "bi_zagreb_geometric": 495.4863271272297,
+     "bi_zagreb_harmonic": 3156.0,
+     "first_zagreb": 550.0,
+     "forgotten": 1492.0,
+     "geometric_arithmetic": 105.30634548317592,
+     "geometric_bi_zagreb": 24.592230769040622,
+     "geometric_harmonic": 681.8365570673636,
+     "geometric_tri_zagreb": 13.928520565032011,
+     "harmonic": 45.152380952380945,
+     "harmonic_bi_zagreb": 4.679305270752639,
+     "harmonic_geometric": 20.26093200280755,
+     "harmonic_tri_zagreb": 2.664831126673232,
+     "hyper_zagreb": 2816.0,
+     "irregularity_measure": 108.0,
+     "randić": 47.65616109257957,
+     "second_zagreb": 662.0,
+     "sigma": 168.0,
+     "somber": 401.8425643202299,
+     "sum_connectivity": 49.66593770587442,
+     "symmetric_division_degree": 265.24999999999994,
+     "tri_zagreb": 2154.0,
+     "tri_zagreb_geometric": 880.7002938004129,
+     "tri_zagreb_harmonic": 5619.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 59.55954101626504,
+     "augmented_zagreb": 5228.777033865357,
+     "bi_zagreb": 5366.0,
+     "bi_zagreb_geometric": 876.4802144557183,
+     "bi_zagreb_harmonic": 34428.0,
+     "first_zagreb": 1324.0,
+     "forgotten": 8474.0,
+     "geometric_arithmetic": 108.1128972141882,
+     "geometric_bi_zagreb": 14.177009686281266,
+     "geometric_harmonic": 4089.613787043478,
+     "geometric_tri_zagreb": 6.1854072122742645,
+     "harmonic": 19.181078888431827,
+     "harmonic_bi_zagreb": 0.5155521989895956,
+     "harmonic_geometric": 3.6397584209741694,
+     "harmonic_tri_zagreb": 0.23084309515797113,
+     "hyper_zagreb": 16558.0,
+     "irregularity_measure": 166.0,
+     "randić": 19.594776026460487,
+     "second_zagreb": 4042.0,
+     "sigma": 390.0,
+     "somber": 949.0309560783753,
+     "sum_connectivity": 32.2626364926795,
+     "symmetric_division_degree": 236.3670634920635,
+     "tri_zagreb": 12516.0,
+     "tri_zagreb_geometric": 2035.488904634679,
+     "tri_zagreb_harmonic": 80584.0
+    },
+    "distance": {
+     "PI": 11110.0,
+     "PI_mul": 66862.0,
+     "PI_plus": 55550.0,
+     "edge_PI": 11864.0,
+     "edge_PI_mul": 71265.0,
+     "edge_PI_plus": 59276.0,
+     "edge_mostar": 8240.0,
+     "edge_mostar_mul": 45443.0,
+     "edge_mostar_plus": 39844.0,
+     "edge_szeged": 134924.0,
+     "edge_szeged_mul": 950020.0,
+     "edge_szeged_plus": 719616.0,
+     "edge_vertex_szeged": 131808.5,
+     "edge_wiener": 53111.0,
+     "mostar": 7482.0,
+     "mostar_mul": 41296.0,
+     "mostar_plus": 36190.0,
+     "szeged": 128372.0,
+     "szeged_mul": 892298.0,
+     "szeged_plus": 680894.0,
+     "total_mostar": 15722.0,
+     "total_szeged": 526913.0,
+     "vertex_edge_wiener": 53131.0,
+     "wiener_index": 52810.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     100
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     98
+    ],
+    [
+     3,
+     99
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     8,
+     13
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     97
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     96
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     94
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     15,
+     20
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     16,
+     67
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     18,
+     37
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     22,
+     27
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     23,
+     93
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     25,
+     28
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     28,
+     29
+    ],
+    [
+     28,
+     92
+    ],
+    [
+     29,
+     30
+    ],
+    [
+     29,
+     82
+    ],
+    [
+     30,
+     31
+    ],
+    [
+     30,
+     32
+    ],
+    [
+     32,
+     33
+    ],
+    [
+     33,
+     34
+    ],
+    [
+     33,
+     78
+    ],
+    [
+     34,
+     35
+    ],
+    [
+     34,
+     36
+    ],
+    [
+     36,
+     37
+    ],
+    [
+     37,
+     38
+    ],
+    [
+     38,
+     39
+    ],
+    [
+     38,
+     40
+    ],
+    [
+     40,
+     41
+    ],
+    [
+     41,
+     42
+    ],
+    [
+     41,
+     73
+    ],
+    [
+     42,
+     43
+    ],
+    [
+     42,
+     47
+    ],
+    [
+     43,
+     44
+    ],
+    [
+     44,
+     45
+    ],
+    [
+     44,
+     49
+    ],
+    [
+     45,
+     46
+    ],
+    [
+     45,
+     48
+    ],
+    [
+     46,
+     47
+    ],
+    [
+     49,
+     50
+    ],
+    [
+     49,
+     54
+    ],
+    [
+     50,
+     51
+    ],
+    [
+     50,
+     57
+    ],
+    [
+     51,
+     52
+    ],
+    [
+     52,
+     53
+    ],
+    [
+     52,
+     56
+    ],
+    [
+     53,
+     54
+    ],
+    [
+     54,
+     55
+    ],
+    [
+     57,
+     58
+    ],
+    [
+     57,
+     75
+    ],
+    [
+     58,
+     59
+    ],
+    [
+     59,
+     60
+    ],
+    [
+     59,
+     61
+    ],
+    [
+     61,
+     62
+    ],
+    [
+     61,
+     72
+    ],
+    [
+     62,
+     63
+    ],
+    [
+     62,
+     71
+    ],
+    [
+     63,
+     64
+    ],
+    [
+     63,
+     69
+    ],
+    [
+     64,
+     65
+    ],
+    [
+     65,
+     66
+    ],
+    [
+     65,
+     70
+    ],
+    [
+     66,
+     67
+    ],
+    [
+     66,
+     68
+    ],
+    [
+     68,
+     69
+    ],
+    [
+     72,
+     73
+    ],
+    [
+     73,
+     74
+    ],
+    [
+     75,
+     76
+    ],
+    [
+     75,
+     77
+    ],
+    [
+     78,
+     79
+    ],
+    [
+     79,
+     80
+    ],
+    [
+     79,
+     81
+    ],
+    [
+     82,
+     83
+    ],
+    [
+     83,
+     84
+    ],
+    [
+     83,
+     85
+    ],
+    [
+     85,
+     86
+    ],
+    [
+     85,
+     90
+    ],
+    [
+     86,
+     87
+    ],
+    [
+     87,
+     88
+    ],
+    [
+     87,
+     89
+    ],
+    [
+     90,
+     91
+    ],
+    [
+     94,
+     95
+    ]
+   ],
+   "kind": "drug",
+   "n": 101,
+   "name": "vancomycin",
+   "smiles": "C[C@H]1[C@H]([C@@](C[C@@H](O1)O[C@@H]2[C@H]([C@@H]([C@H](O[C@H]2OC3=C4C=C5C=C3OC6=C(C=C(C=C6)[C@H]([C@H](C(=O)N[C@H](C(=O)N[C@H]5C(=O)N[C@@H]7C8=CC(=C(C=C8)O)C9=C(C=C(C=C9O)O)[C@H](NC(=O)[C@H]([C@@H](C1=CC(=C(O4)C=C1)Cl)O)NC7=O)C(=O)O)CC(=O)N)NC(=O)[C@@H](CC(C)C)NC)O)Cl)CO)O)O)(C)N)O"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 62.731446500019835,
+     "augmented_zagreb": 614.296875,
+     "bi_zagreb": 889.0,
+     "bi_zagreb_geometric": 377.2950557810463,
+     "bi_zagreb_harmonic": 2288.0,
+     "first_zagreb": 412.0,
+     "forgotten": 1112.0,
+     "geometric_arithmetic": 79.92639975410044,
+     "geometric_bi_zagreb": 19.332121347292162,
+     "geometric_harmonic": 495.49658274096186,
+     "geometric_tri_zagreb": 10.845783641895595,
+     "harmonic": 36.33333333333333,
+     "harmonic_bi_zagreb": 4.147510822510822,
+     "harmonic_geometric": 17.5237499415166,
+     "harmonic_tri_zagreb": 2.335887796414112,
+     "hyper_zagreb": 2066.0,
+     "irregularity_measure": 90.0,
+     "randić": 39.209088524097616,
+     "second_zagreb": 477.0,
+     "sigma": 158.0,
+     "somber": 304.3087547117174,
+     "sum_connectivity": 39.12167629090271,
+     "symmetric_division_degree": 219.6666666666667,
+     "tri_zagreb": 1589.0,
+     "tri_zagreb_geometric": 675.2226642946941,
+     "tri_zagreb_harmonic": 4090.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 47.96668539379099,
+     "augmented_zagreb": 3440.8144744861847,
+     "bi_zagreb": 3692.0,
+     "bi_zagreb_geometric": 640.7445623834245,
+     "bi_zagreb_harmonic": 22989.0,
+     "first_zagreb": 954.0,
+     "forgotten": 5912.0,
+     "geometric_arithmetic": 82.75176022018827,
+     "geometric_bi_zagreb": 11.717183779158045,
+     "geometric_harmonic": 2790.875253518661,
+     "geometric_tri_zagreb": 5.1765807030299325,
+     "harmonic": 16.280364080364084,
+     "harmonic_bi_zagreb": 0.5389252247262464,
+     "harmonic_geometric": 3.4879361792697616,
+     "harmonic_tri_zagreb": 0.2492086370287556,
+     "hyper_zagreb": 11388.0,
+     "irregularity_measure": 156.0,
+     "randić": 16.784143569447988,
+     "second_zagreb": 2738.0,
+     "sigma": 436.0,
+     "somber": 689.326949510745,
+     "sum_connectivity": 26.053009054975306,
+     "symmetric_division_degree": 189.78809523809528,
+     "tri_zagreb": 8650.0,
+     "tri_zagreb_geometric": 1489.0691469980436,
+     "tri_zagreb_harmonic": 54186.0
+    },
+    "distance": {
+     "PI": 7140.0,
+     "PI_mul": 39873.0,
+     "PI_plus": 34541.0,
+     "edge_PI": 7088.0,
+     "edge_PI_mul": 39663.0,
+     "edge_PI_plus": 34317.0,
+     "edge_mostar": 4494.0,
+     "edge_mostar_mul": 18735.0,
+     "edge_mostar_plus": 19561.0,
+     "edge_szeged": 59102.0,
+     "edge_szeged_mul": 474955.0,
+     "edge_szeged_plus": 335542.0,
+     "edge_vertex_szeged": 61264.5,
+     "edge_wiener": 31652.0,
+     "mostar": 4442.0,
+     "mostar_mul": 18525.0,
+     "mostar_plus": 19337.0,
+     "szeged": 63427.0,
+     "szeged_mul": 492295.0,
+     "szeged_plus": 354130.0,
+     "total_mostar": 8936.0,
+     "total_szeged": 245058.0,
+     "vertex_edge_wiener": 34494.5,
+     "wiener_index": 37337.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     45
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     84
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     83
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     79
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     76
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     15,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     17,
+     75
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     18,
+     71
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     19,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     22,
+     70
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     23,
+     25
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     26,
+     69
+    ],
+    [
+     27,
+     28
+    ],
+    [
+     27,
+     29
+    ],
+    [
+     29,
+     30
+    ],
+    [
+     29,
+     68
+    ],
+    [
+     30,
+     31
+    ],
+    [
+     30,
+     64
+    ],
+    [
+     31,
+     32
+    ],
+    [
+     31,
+     33
+    ],
+    [
+     33,
+     34
+    ],
+    [
+     33,
+     63
+    ],
+    [
+     34,
+     35
+    ],
+    [
+     34,
+     59
+    ],
+    [
+     35,
+     36
+    ],
+    [
+     35,
+     37
+    ],
+    [
+     37,
+     38
+    ],
+    [
+     37,
+     58
+    ],
+    [
+     38,
+     39
+    ],
+    [
+     38,
+     55
+    ],
+    [
+     39,
+     40
+    ],
+    [
+     39,
+     41
+    ],
+    [
+     41,
+     42
+    ],
+    [
+     41,
+     54
+    ],
+    [
+     42,
+     43
+    ],
+    [
+     42,
+     46
+    ],
+    [
+     43,
+     44
+    ],
+    [
+     43,
+     45
+    ],
+    [
+     46,
+     47
+    ],
+    [
+     46,
+     53
+    ],
+    [
+     47,
+     48
+    ],
+    [
+     47,
+     49
+    ],
+    [
+     49,
+     50
+    ],
+    [
+     50,
+     51
+    ],
+    [
+     51,
+     52
+    ],
+    [
+     55,
+     56
+    ],
+    [
+     55,
+     57
+    ],
+    [
+     59,
+     60
+    ],
+    [
+     60,
+     61
+    ],
+    [
+     60,
+     62
+    ],
+    [
+     64,
+     65
+    ],
+    [
+     65,
+     66
+    ],
+    [
+     65,
+     67
+    ],
+    [
+     71,
+     72
+    ],
+    [
+     72,
+     73
+    ],
+    [
+     72,
+     74
+    ],
+    [
+     76,
+     77
+    ],
+    [
+     76,
+     78
+    ],
+    [
+     79,
+     80
+    ],
+    [
+     80,
+     81
+    ],
+    [
+     80,
+     82
+    ]
+   ],
+   "kind": "drug",
+   "n": 85,
+   "name": "cyclosporine",
+   "smiles": "CC[C@H]1C(=O)N(CC(=O)N([C@H](C(=O)N[C@H](C(=O)N([C@H](C(=O)N[C@H](C(=O)N[C@@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N1)[C@@H]([C@H](C)C/C=C/C)O)C)C(C)C)C)CC(C)C)C)CC(C)C)C)C)C)CC(C)C)C)C(C)C)CC(C)C)C)C"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 45.58647078599297,
+     "augmented_zagreb": 498.0068703703704,
+     "bi_zagreb": 694.0,
+     "bi_zagreb_geometric": 283.44405447562144,
+     "bi_zagreb_harmonic": 1829.0,
+     "first_zagreb": 314.0,
+     "forgotten": 858.0,
+     "geometric_arithmetic": 60.17151536060705,
+     "geometric_bi_zagreb": 14.140633650213125,
+     "geometric_harmonic": 391.4977299415921,
+     "geometric_tri_zagreb": 8.047374901680266,
+     "harmonic": 26.185714285714276,
+     "harmonic_bi_zagreb": 2.81069055213792,
+     "harmonic_geometric": 12.030099509593187,
+     "harmonic_tri_zagreb": 1.6155715817996523,
+     "hyper_zagreb": 1618.0,
+     "irregularity_measure": 56.0,
+     "randić": 27.730884027626534,
+     "second_zagreb": 380.0,
+     "sigma": 98.0,
+     "somber": 229.63496082337952,
+     "sum_connectivity": 28.592194660403162,
+     "symmetric_division_degree": 153.66666666666663,
+     "tri_zagreb": 1238.0,
+     "tri_zagreb_geometric": 504.3693360951803,
+     "tri_zagreb_harmonic": 3277.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 34.41442277062831,
+     "augmented_zagreb": 3085.6741712102994,
+     "bi_zagreb": 3110.0,
+     "bi_zagreb_geometric": 501.7964905083217,
+     "bi_zagreb_harmonic": 20697.0,
+     "first_zagreb": 760.0,
+     "forgotten": 4994.0,
+     "geometric_arithmetic": 61.56626353804725,
+     "geometric_bi_zagreb": 8.189691504747948,
+     "geometric_harmonic": 2385.5346662917073,
+     "geometric_tri_zagreb": 3.5453778589118152,
+     "harmonic": 11.09388830124124,
+     "harmonic_bi_zagreb": 0.3069990424189253,
+     "harmonic_geometric": 2.1462490096103415,
+     "harmonic_tri_zagreb": 0.1361915199391397,
+     "hyper_zagreb": 9694.0,
+     "irregularity_measure": 102.0,
+     "randić": 11.405376168510726,
+     "second_zagreb": 2350.0,
+     "sigma": 294.0,
+     "somber": 547.0649782650629,
+     "sum_connectivity": 18.549312964387045,
+     "symmetric_division_degree": 138.75992063492066,
+     "tri_zagreb": 7344.0,
+     "tri_zagreb_geometric": 1178.4894136150901,
+     "tri_zagreb_harmonic": 49129.0
+    },
+    "distance": {
+     "PI": 3629.0,
+     "PI_mul": 21654.0,
+     "PI_plus": 17998.0,
+     "edge_PI": 3779.0,
+     "edge_PI_mul": 22493.0,
+     "edge_PI_plus": 18724.0,
+     "edge_mostar": 2169.0,
+     "edge_mostar_mul": 10023.0,
+     "edge_mostar_plus": 9788.0,
+     "edge_szeged": 29362.0,
+     "edge_szeged_mul": 222671.0,
+     "edge_szeged_plus": 161241.0,
+     "edge_vertex_szeged": 29462.0,
+     "edge_wiener": 12963.0,
+     "mostar": 1947.0,
+     "mostar_mul": 8872.0,
+     "mostar_plus": 8746.0,
+     "szeged": 29430.0,
+     "szeged_mul": 217379.0,
+     "szeged_plus": 159681.0,
+     "total_mostar": 4116.0,
+     "total_szeged": 117716.0,
+     "vertex_edge_wiener": 13487.5,
+     "wiener_index": 13890.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 0.0,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     33
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     5,
+     58
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     14
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     49
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     11,
+     48
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     12,
+     19
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     13,
+     16
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     16,
+     47
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     17,
+     46
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     18,
+     23
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     20,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     22,
+     24
+    ],
+    [
+     22,
+     45
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     27,
+     28
+    ],
+    [
+     27,
+     43
+    ],
+    [
+     28,
+     29
+    ],
+    [
+     28,
+     42
+    ],
+    [
+     29,
+     30
+    ],
+    [
+     29,
+     38
+    ],
+    [
+     30,
+     31
+    ],
+    [
+     30,
+     37
+    ],
+    [
+     31,
+     32
+    ],
+    [
+     31,
+     36
+    ],
+    [
+     32,
+     33
+    ],
+    [
+     32,
+     35
+    ],
+    [
+     33,
+     34
+    ],
+    [
+     38,
+     39
+    ],
+    [
+     39,
+     40
+    ],
+    [
+     39,
+     41
+    ],
+    [
+     43,
+     44
+    ],
+    [
+     49,
+     50
+    ],
+    [
+     50,
+     51
+    ],
+    [
+     51,
+     52
+    ],
+    [
+     51,
+     56
+    ],
+    [
+     52,
+     53
+    ],
+    [
+     53,
+     54
+    ],
+    [
+     54,
+     55
+    ],
+    [
+     54,
+     57
+    ],
+    [
+     55,
+     56
+    ]
+   ],
+   "kind": "drug",
+   "n": 59,
+   "name": "rifampicin",
+   "smiles": "C[C@H]1/C=C/C=C(\\C(=O)NC2=C(C(=C3C(=C2O)C(=C(C4=C3C(=O)[C@](O4)(O/C=C/[C@@H]([C@H]([C@H]([C@@H]([C@@H]([C@@H]([C@H]1O)C)O)C)OC(=O)C)C)OC)C)C)O)O)/C=N/N5CCN(CC5)C)/C"
+  },
+  {
+   "chemgraphx": {
+    "degree": {
+     "atom_bond_connectivity": 48.99182101980969,
+     "augmented_zagreb": 556.2436944444444,
+     "bi_zagreb": 775.0,
+     "bi_zagreb_geometric": 309.02289874057624,
+     "bi_zagreb_harmonic": 2112.0,
+     "first_zagreb": 346.0,
+     "forgotten": 976.0,
+     "geometric_arithmetic": 65.09903184180267,
+     "geometric_bi_zagreb": 15.140626000382017,
+     "geometric_harmonic": 442.78221424230685,
+     "geometric_tri_zagreb": 8.615551026607484,
+     "harmonic": 27.78333333333333,
+     "harmonic_bi_zagreb": 2.8762317726133526,
+     "harmonic_geometric": 12.432628258962312,
+     "harmonic_tri_zagreb": 1.659367529159196,
+     "hyper_zagreb": 1834.0,
+     "irregularity_measure": 66.0,
+     "randić": 29.27228992717613,
+     "second_zagreb": 429.0,
+     "sigma": 118.0,
+     "somber": 253.05217260552303,
+     "sum_connectivity": 30.592445174187112,
+     "symmetric_division_degree": 164.91666666666669,
+     "tri_zagreb": 1405.0,
+     "tri_zagreb_geometric": 556.4040660214624,
+     "tri_zagreb_harmonic": 3871.0
+    },
+    "degree_sum": {
+     "atom_bond_connectivity": 36.55473488486189,
+     "augmented_zagreb": 3910.302350999488,
+     "bi_zagreb": 3706.0,
+     "bi_zagreb_geometric": 559.9604998834579,
+     "bi_zagreb_harmonic": 27004.0,
+     "first_zagreb": 858.0,
+     "forgotten": 6076.0,
+     "geometric_arithmetic": 66.67573736629456,
+     "geometric_bi_zagreb": 8.680629518815756,
+     "geometric_harmonic": 2894.089331290349,
+     "geometric_tri_zagreb": 3.8029199658634254,
+     "harmonic": 11.779268151868774,
+     "harmonic_bi_zagreb": 0.327344797961314,
+     "harmonic_geometric": 2.271687632851219,
+     "harmonic_tri_zagreb": 0.14990409456608675,
+     "hyper_zagreb": 11772.0,
+     "irregularity_measure": 124.0,
+     "randić": 12.02837947105152,
+     "second_zagreb": 2848.0,
+     "sigma": 380.0,
+     "somber": 617.2014852734167,
+     "sum_connectivity": 19.790464753445413,
+     "symmetric_division_degree": 147.6760461760462,
+     "tri_zagreb": 8924.0,
+     "tri_zagreb_geometric": 1328.3601845197336,
+     "tri_zagreb_harmonic": 65831.0
+    },
+    "distance": {
+     "PI": 4216.0,
+     "PI_mul": 26598.0,
+     "PI_plus": 21452.0,
+     "edge_PI": 4504.0,
+     "edge_PI_mul": 28330.0,
+     "edge_PI_plus": 22893.0,
+     "edge_mostar": 3494.0,
+     "edge_mostar_mul": 19640.0,
+     "edge_mostar_plus": 16973.0,
+     "edge_szeged": 23707.0,
+     "edge_szeged_mul": 199515.0,
+     "edge_szeged_plus": 137253.0,
+     "edge_vertex_szeged": 24020.5,
+     "edge_wiener": 14382.0,
+     "mostar": 3148.0,
+     "mostar_mul": 17730.0,
+     "mostar_plus": 15302.0,
+     "szeged": 24136.0,
+     "szeged_mul": 194502.0,
+     "szeged_plus": 136815.0,
+     "total_mostar": 6642.0,
+     "total_szeged": 95884.0,
+     "vertex_edge_wiener": 14646.0,
+     "wiener_index": 14767.0
+    }
+   },
+   "chemgraphx_route_max_rel_diff": 2.043242396385197e-16,
+   "chemgraphx_routes": [
+    "adjacency",
+    "mol_v2000",
+    "mol_v3000"
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     18
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     2,
+     14
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     3,
+     58
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     6,
+     11
+    ],
+    [
+     6,
+     57
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     7,
+     56
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     9,
+     51
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     50
+    ],
+    [
+     10,
+     52
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     12,
+     41
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     13,
+     17
+    ],
+    [
+     13,
+     40
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     14,
+     16
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     20,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     22,
+     39
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     23,
+     30
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     24,
+     29
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     27,
+     28
+    ],
+    [
+     28,
+     29
+    ],
+    [
+     30,
+     31
+    ],
+    [
+     31,
+     32
+    ],
+    [
+     31,
+     33
+    ],
+    [
+     33,
+     34
+    ],
+    [
+     33,
+     38
+    ],
+    [
+     34,
+     35
+    ],
+    [
+     35,
+     36
+    ],
+    [
+     36,
+     37
+    ],
+    [
+     37,
+     38
+    ],
+    [
+     41,
+     42
+    ],
+    [
+     42,
+     43
+    ],
+    [
+     42,
+     44
+    ],
+    [
+     44,
+     45
+    ],
+    [
+     44,
+     49
+    ],
+    [
+     45,
+     46
+    ],
+    [
+     46,
+     47
+    ],
+    [
+     47,
+     48
+    ],
+    [
+     48,
+     49
+    ],
+    [
+     50,
+     51
+    ],
+    [
+     52,
+     53
+    ],
+    [
+     53,
+     54
+    ],
+    [
+     53,
+     55
+    ],
+    [
+     58,
+     59
+    ],
+    [
+     59,
+     60
+    ],
+    [
+     59,
+     61
+    ]
+   ],
+   "kind": "drug",
+   "n": 62,
+   "name": "paclitaxel",
+   "smiles": "CC1=C2[C@H](C(=O)[C@@]3([C@H](C[C@@H]4[C@]([C@H]3[C@@H]([C@@](C2(C)C)(C[C@@H]1OC(=O)[C@@H]([C@H](C5=CC=CC=C5)NC(=O)C6=CC=CC=C6)O)O)OC(=O)C7=CC=CC=C7)(CO4)OC(=O)C)O)C)OC(=O)C"
+  }
+ ],
+ "probes": {
+  "2K2": {
+   "distance.PI": 4.0,
+   "distance.edge_PI": 0.0,
+   "distance.edge_wiener": {
+    "nonfinite": "inf"
+   },
+   "distance.mostar": 0.0,
+   "distance.szeged": 2.0,
+   "distance.vertex_edge_wiener": {
+    "nonfinite": "inf"
+   },
+   "distance.wiener_index": {
+    "nonfinite": "inf"
+   }
+  },
+  "K2": {
+   "degree.augmented_zagreb": {
+    "nonfinite": "inf"
+   },
+   "distance.wiener_index": 1.0
+  },
+  "P1000": {
+   "distance.edge_wiener": 165668560.0,
+   "distance.szeged": 166666496.0,
+   "distance.wiener_index": 166666352.0
+  },
+  "P3": {
+   "distance.PI": 6.0,
+   "distance.edge_PI": 2.0,
+   "distance.edge_wiener": 0.0,
+   "distance.mostar": 2.0,
+   "distance.szeged": 4.0,
+   "distance.vertex_edge_wiener": 1.0,
+   "distance.wiener_index": 4.0
+  },
+  "P3+K2": {
+   "distance.PI": 8.0,
+   "distance.edge_PI": 2.0,
+   "distance.edge_wiener": {
+    "nonfinite": "inf"
+   },
+   "distance.mostar": 2.0,
+   "distance.szeged": 5.0,
+   "distance.vertex_edge_wiener": {
+    "nonfinite": "inf"
+   },
+   "distance.wiener_index": {
+    "nonfinite": "inf"
+   }
+  },
+  "P300": {
+   "distance.edge_wiener": 4410549.0,
+   "distance.szeged": 4499950.0,
+   "distance.wiener_index": 4499950.0
+  },
+  "P4": {
+   "distance.PI": 12.0,
+   "distance.edge_PI": 6.0,
+   "distance.edge_wiener": 1.0,
+   "distance.mostar": 4.0,
+   "distance.szeged": 10.0,
+   "distance.vertex_edge_wiener": 4.0,
+   "distance.wiener_index": 10.0
+  },
+  "P600": {
+   "distance.edge_wiener": 35641100.0,
+   "distance.szeged": 35999900.0,
+   "distance.wiener_index": 35999908.0
+  },
+  "acetic_acid.mol": {
+   "degree.first_zagreb": 12.0,
+   "distance.PI": 12.0,
+   "distance.edge_PI": 6.0,
+   "distance.edge_wiener": 0.0,
+   "distance.mostar": 6.0,
+   "distance.szeged": 9.0,
+   "distance.vertex_edge_wiener": 3.0,
+   "distance.wiener_index": 9.0,
+   "n_edges": 3,
+   "n_vertices": 4
+  },
+  "alanine.mol": {
+   "degree.first_zagreb": 22.0,
+   "distance.wiener_index": 29.0,
+   "n_edges": 5,
+   "n_vertices": 6
+  },
+  "alanine_one_stereo_H.mol": {
+   "degree.first_zagreb": 30.0,
+   "distance.wiener_index": 42.0,
+   "n_edges": 6,
+   "n_vertices": 7
+  },
+  "sodium_acetate_Na_first.mol": {
+   "degree.first_zagreb": 12.0,
+   "distance.PI": 12.0,
+   "distance.edge_PI": 6.0,
+   "distance.edge_wiener": 0.0,
+   "distance.mostar": 6.0,
+   "distance.szeged": 9.0,
+   "distance.vertex_edge_wiener": {
+    "nonfinite": "inf"
+   },
+   "distance.wiener_index": {
+    "nonfinite": "inf"
+   },
+   "n_edges": 3,
+   "n_vertices": 5
+  },
+  "sodium_acetate_Na_last.mol": {
+   "degree.first_zagreb": 12.0,
+   "distance.PI": 12.0,
+   "distance.edge_PI": 6.0,
+   "distance.edge_wiener": 0.0,
+   "distance.mostar": 6.0,
+   "distance.szeged": 9.0,
+   "distance.vertex_edge_wiener": 3.0,
+   "distance.wiener_index": 9.0,
+   "n_edges": 3,
+   "n_vertices": 5
+  },
+  "toluene.mol": {
+   "degree.first_zagreb": 30.0,
+   "distance.PI": 49.0,
+   "distance.edge_PI": 36.0,
+   "distance.edge_wiener": 18.0,
+   "distance.mostar": 11.0,
+   "distance.szeged": 78.0,
+   "distance.vertex_edge_wiener": 28.5,
+   "distance.wiener_index": 42.0,
+   "n_edges": 7,
+   "n_vertices": 7
+  },
+  "toluene_explicit_H.mol": {
+   "degree.first_zagreb": 78.0,
+   "distance.PI": 225.0,
+   "distance.edge_PI": 204.0,
+   "distance.edge_wiener": 153.0,
+   "distance.mostar": 129.0,
+   "distance.szeged": 480.0,
+   "distance.vertex_edge_wiener": 234.0,
+   "distance.wiener_index": 318.0,
+   "n_edges": 15,
+   "n_vertices": 15
+  }
+ },
+ "rel_tol": 1e-10
+}
