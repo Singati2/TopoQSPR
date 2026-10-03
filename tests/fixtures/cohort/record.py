@@ -28,12 +28,14 @@ def record(fresh: bool = False) -> None:
     mesh = MeshClient(HERE / "mesh")
     client.mesh_headings()
     suggest_headings("gout", client, mesh_client=mesh)
-    suggest_headings("breast cancer", client, mesh_client=mesh)
+    for text in ("breast cancer", "high blood pressure", "diabetes", "T2D", "adult-onset diabetes"):
+        suggest_headings(text, client, mesh_client=mesh)
     gout = build_cohort([GOUT], client)
     build_cohort([GOUT], client, include_descendants=True, mesh_client=mesh)
     build_cohort([T2D], client)
     naive_cohort("gout", client)
     build_atc_cohort("M04", client)
+    client.verify_release()  # promote staged cache entries (each build also does this)
     (HERE / "expected_gout.csv").write_bytes(gout.to_csv_bytes())
 
 

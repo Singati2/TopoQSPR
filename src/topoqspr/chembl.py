@@ -11,6 +11,12 @@ Design rules
   live under ``<cache_dir>/<chembl_db_version>/`` so two releases can never mix.  The
   release is read from ``/status`` once per client (or, offline, from the cached
   ``status.json``).
+* An online client writes new entries to a private staging directory
+  ``<cache_dir>/.staging-*/`` (visible only to that client) and promotes them into
+  ``<cache_dir>/<release>/`` only when :meth:`ChemblClient.verify_release` confirms that
+  the live release is still the one read at start.  If the release changed mid-run the
+  staged entries are deleted, so data served by release N+1 is never filed under N.
+  Entries of a client that never calls ``verify_release`` are never promoted.
 * Cache files are gzip-compressed canonical JSON (sorted keys, ``mtime=0``), so the same
   response always produces the same bytes; each file stores its own key and is verified on
   load (hash-collision / tampering guard).
@@ -27,6 +33,8 @@ import gzip
 import hashlib
 import json
 import os
+import shutil
+import tempfile
 import time
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping
@@ -199,6 +207,18 @@ class ChemblClient(_HttpJson):
         self.molecule_batch = int(molecule_batch)
         self._requested_release = release
         self._status: dict | None = None
+        self._staging: Path | None = None
+        self._staged: list[Path] = []
+
+    def __enter__(self) -> "ChemblClient":
+        return self
+
+    def __exit__(self, exc_type, exc, tb) -> None:
+        """Verify-and-promote on a clean exit; discard staged entries on an exception."""
+        if exc_type is not None:
+            self.discard_staged()
+        else:
+            self.verify_release()
 
     # ------------------------------------------------------------------ status / release
     def status(self) -> dict:
@@ -245,29 +265,75 @@ class ChemblClient(_HttpJson):
         safe_ep = endpoint.replace("/", "_")
         return self.cache_dir / self.release / safe_ep / f"{digest}.json.gz", key
 
+    def _staged_path(self, path: Path) -> Path:
+        if self._staging is None:
+            self.cache_dir.mkdir(parents=True, exist_ok=True)
+            self._staging = Path(tempfile.mkdtemp(prefix=".staging-", dir=self.cache_dir))
+        return self._staging / path.relative_to(self.cache_dir)
+
+    def _load(self, path: Path, key: dict) -> tuple[bool, Any]:
+        """``(True, data)`` from the promoted cache or this client's staging area."""
+        candidates = [path]
+        if self._staging is not None:
+            candidates.append(self._staging / path.relative_to(self.cache_dir))
+        for cand in candidates:
+            if cand.exists():
+                blob = _read_gz_json(cand)
+                if blob.get("key") != key:
+                    raise RuntimeError(f"cache key mismatch in {cand}")
+                return True, blob["data"]
+        return False, None
+
+    def _store(self, path: Path, key: dict, data: Any) -> None:
+        """Write to staging; promoted by :meth:`verify_release`."""
+        staged = self._staged_path(path)
+        _write_gz_json(staged, {"key": key, "data": data})
+        self._staged.append(path)
+
     def _cached(self, endpoint: str, params: Mapping[str, Any], producer: Callable[[], Any]) -> Any:
         params = {k: (str(v) if not isinstance(v, str) else v) for k, v in params.items()}
         path, key = self._cache_path(endpoint, params)
-        if path.exists():
-            blob = _read_gz_json(path)
-            if blob.get("key") != key:
-                raise RuntimeError(f"cache key mismatch in {path}")
-            return blob["data"]
+        hit, data = self._load(path, key)
+        if hit:
+            return data
         if self.offline:
             raise CacheMiss(f"{endpoint} {params} not cached for {self.release} under {self.cache_dir}")
         data = producer()
-        _write_gz_json(path, {"key": key, "data": data})
+        self._store(path, key, data)
         return data
 
+    def discard_staged(self) -> int:
+        """Delete this client's unpromoted cache entries; returns how many were dropped."""
+        n = len(self._staged)
+        if self._staging is not None:
+            shutil.rmtree(self._staging, ignore_errors=True)
+        self._staging, self._staged = None, []
+        return n
+
+    def _promote(self) -> None:
+        for path in sorted(set(self._staged)):
+            staged = self._staging / path.relative_to(self.cache_dir)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            os.replace(staged, path)
+        self.discard_staged()
+
     def verify_release(self) -> None:
-        """Re-read ``/status`` and raise if the live release changed since this client
-        started (entries fetched after a switch would otherwise be filed under the old
-        release).  No-op offline."""
+        """Re-read ``/status``; raise if the live release changed since this client started.
+
+        On success the entries staged by this client are promoted into
+        ``<cache_dir>/<release>/``; on a change they are deleted first, so nothing fetched
+        after a switch is ever filed under the old release.  No-op offline.
+        """
         if self.offline:
             return
         live = self._get_json("status.json").get("chembl_db_version")
         if live != self.release:
-            raise RuntimeError(f"ChEMBL release changed during the run: {self.release} -> {live}")
+            n = self.discard_staged()
+            raise RuntimeError(
+                f"ChEMBL release changed during the run: {self.release} -> {live} "
+                f"({n} unverified cache entries discarded)"
+            )
+        self._promote()
 
     # ------------------------------------------------------------------ pagination
     def _paginate(self, endpoint: str, params: Mapping[str, Any]) -> list[dict]:
@@ -362,11 +428,9 @@ class ChemblClient(_HttpJson):
         missing: list[str] = []
         for cid in ids:
             path, key = self._cache_path("molecule", {"molecule_chembl_id": cid})
-            if path.exists():
-                blob = _read_gz_json(path)
-                if blob.get("key") != key:
-                    raise RuntimeError(f"cache key mismatch in {path}")
-                out[cid] = blob["data"]
+            hit, data = self._load(path, key)
+            if hit:
+                out[cid] = data
             else:
                 missing.append(cid)
         if missing and self.offline:
@@ -385,7 +449,7 @@ class ChemblClient(_HttpJson):
             for cid in batch:
                 rec = got.get(cid)  # None is cached too: "the release has no such record"
                 path, key = self._cache_path("molecule", {"molecule_chembl_id": cid})
-                _write_gz_json(path, {"key": key, "data": rec})
+                self._store(path, key, rec)
                 out[cid] = rec
         return {cid: out[cid] for cid in ids}
 
@@ -473,13 +537,19 @@ class MeshClient(_HttpJson):
 
         return self._cached("lookup/details", {"descriptor": descriptor_id}, produce)
 
-    def descriptors_for_text(self, text: str, limit: int = 50) -> dict[str, list[str]]:
-        """Descriptors having a term that contains ``text`` -> sorted matched term labels."""
+    def descriptors_for_text(self, text: str, limit: int = 50, match: str = "contains") -> dict[str, list[str]]:
+        """Descriptors having a term that matches ``text`` -> sorted matched term labels.
+
+        ``match`` is the NLM lookup mode: ``contains`` (default) or ``exact``
+        (case-insensitive whole-label match).
+        """
+        if match not in ("contains", "exact"):
+            raise ValueError(f"match must be 'contains' or 'exact', not {match!r}")
         text = " ".join(text.split())
 
         def produce() -> dict[str, list[str]]:
             terms = self._get_json(
-                "lookup/term", {"label": text, "match": "contains", "limit": limit}
+                "lookup/term", {"label": text, "match": match, "limit": limit}
             )
             if not terms:
                 return {}
@@ -496,7 +566,7 @@ class MeshClient(_HttpJson):
                 out.setdefault(self._did(r["d"]), set()).add(label[r["t"]])
             return {k: sorted(v) for k, v in sorted(out.items())}
 
-        return self._cached("lookup/term", {"label": text, "match": "contains", "limit": limit}, produce)
+        return self._cached("lookup/term", {"label": text, "match": match, "limit": limit}, produce)
 
     def descendants(self, descriptor_id: str) -> list[dict]:
         """All descriptors below ``descriptor_id`` in any of its tree positions.
