@@ -92,9 +92,10 @@ Bioactivity values are excluded from v1.0 modelling.
 | M_TI-family | one model per index family (Experiment B, family contributions) |
 | M_std | RDKit 2D descriptors, **excluding every descriptor in the target's derivation family** (e.g. for Crippen logP: MolLogP, MolMR, SlogP_VSA*, SMR_VSA*) |
 
-The baselines (M0, M_size, M_comp) are part of every run. At `v1.0-dev` they are configurable
-defaults; config validation will enforce them (code change in preparation on branch `fx-code`), and
-until then the frozen configs list them explicitly (PIPELINE.md §2).
+The baselines (M0, M_size, M_comp) are part of every run: config validation rejects a feature-set
+list without `null`, `size` and `composition`, or a reference other than `size`, unless
+`evaluation.allow_custom_baselines` is set (recorded in the run record; not used for the frozen
+analyses). See PIPELINE.md §2.
 
 ## 6. Models and cross-validation
 

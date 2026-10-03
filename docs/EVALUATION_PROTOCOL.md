@@ -506,10 +506,9 @@ AD (the zero-column `null` set) makes the summary shares NaN with the reason.
 Sensitivity analysis for the CI of the primary ΔR²(TI − size) and ΔMAE (CV intervals can
 undercover; Bates, Hastie & Tibshirani 2023), with B resamples (default B = 200).
 The plan restricts it to the **pooled** set (EXPERIMENT_PLAN §7): at per-disease n the
-resampled test folds are too small for R² to be defined (PIPELINE.md §10). At `v1.0-dev`
-(e35dc4a) `protocol.bootstrap.enabled` defaults to true for every cohort, so the frozen
-per-disease configs must set it to false; a code change in preparation (branch `fx-code`)
-makes it default to on only for `cohort.source = "pooled"`. For b = 0..B−1:
+resampled test folds are too small for R² to be defined (PIPELINE.md §10). `protocol.bootstrap.enabled`
+defaults to `null`, meaning on for `cohort.source = "pooled"` and off for every other cohort
+unless set to true explicitly (the rule is recorded in the run record). For b = 0..B−1:
 
 1. **Resample units, not rows.** The units are the connectivity groups (stereoisomers,
    racemate/enantiomer, isotopologues; PIPELINE.md §1) and every other molecule on its
