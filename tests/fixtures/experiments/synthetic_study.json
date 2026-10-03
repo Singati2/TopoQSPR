@@ -1,0 +1,222 @@
+{
+ "name": "synthetic exact-polynomial study (test fixture)",
+ "reference": "synthetic; not a published study",
+ "notes": "BP is an exact quadratic of the first Zagreb index M1; MV is an exact linear function of the Randic index R. Values are computed, not measured.",
+ "compounds": [
+  {
+   "name": "propane",
+   "smiles": "CCC",
+   "properties": {
+    "BP": 31.160000000000004,
+    "MV": 75.35533905932738
+   }
+  },
+  {
+   "name": "butane",
+   "smiles": "CCCC",
+   "properties": {
+    "BP": 43.0,
+    "MV": 87.85533905932738
+   }
+  },
+  {
+   "name": "isobutane",
+   "smiles": "CC(C)C",
+   "properties": {
+    "BP": 48.74000000000001,
+    "MV": 83.30127018922194
+   }
+  },
+  {
+   "name": "pentane",
+   "smiles": "CCCCC",
+   "properties": {
+    "BP": 54.36000000000001,
+    "MV": 100.35533905932738
+   }
+  },
+  {
+   "name": "neopentane",
+   "smiles": "CC(C)(C)C",
+   "properties": {
+    "BP": 70.5,
+    "MV": 90.0
+   }
+  },
+  {
+   "name": "hexane",
+   "smiles": "CCCCCC",
+   "properties": {
+    "BP": 65.24,
+    "MV": 112.85533905932738
+   }
+  },
+  {
+   "name": "2-methylpentane",
+   "smiles": "CCCC(C)C",
+   "properties": {
+    "BP": 70.5,
+    "MV": 109.25139025074155
+   }
+  },
+  {
+   "name": "2,3-dimethylbutane",
+   "smiles": "CC(C)C(C)C",
+   "properties": {
+    "BP": 75.64,
+    "MV": 106.0683602522959
+   }
+  },
+  {
+   "name": "heptane",
+   "smiles": "CCCCCCC",
+   "properties": {
+    "BP": 75.64,
+    "MV": 125.35533905932738
+   }
+  },
+  {
+   "name": "octane",
+   "smiles": "CCCCCCCC",
+   "properties": {
+    "BP": 85.56,
+    "MV": 137.85533905932738
+   }
+  },
+  {
+   "name": "cyclohexane",
+   "smiles": "C1CCCCC1",
+   "properties": {
+    "BP": 80.66000000000001,
+    "MV": 115.0
+   }
+  },
+  {
+   "name": "toluene",
+   "smiles": "Cc1ccccc1",
+   "properties": {
+    "BP": 95.0,
+    "MV": 124.8461712529338
+   }
+  },
+  {
+   "name": "ethylbenzene",
+   "smiles": "CCc1ccccc1",
+   "properties": {
+    "BP": 103.96000000000001,
+    "MV": 138.2962913144534
+   }
+  },
+  {
+   "name": "naphthalene",
+   "smiles": "c1ccc2ccccc2c1",
+   "properties": {
+    "BP": 135.0,
+    "MV": 164.15816237971967
+   }
+  },
+  {
+   "name": "phenol",
+   "smiles": "Oc1ccccc1",
+   "properties": {
+    "BP": 95.0,
+    "MV": 124.8461712529338
+   }
+  },
+  {
+   "name": "isopropanol",
+   "smiles": "CC(C)O",
+   "properties": {
+    "BP": 48.74000000000001,
+    "MV": 83.30127018922194
+   }
+  },
+  {
+   "name": "1-butanol",
+   "smiles": "CCCCO",
+   "properties": {
+    "BP": 54.36000000000001,
+    "MV": 100.35533905932738
+   }
+  },
+  {
+   "name": "acetic acid",
+   "smiles": "CC(=O)O",
+   "properties": {
+    "BP": 48.74000000000001,
+    "MV": 83.30127018922194
+   }
+  },
+  {
+   "name": "2,2,4-trimethylpentane",
+   "smiles": "CC(C)CC(C)(C)C",
+   "properties": {
+    "BP": 103.96000000000001,
+    "MV": 125.4125554859097
+   }
+  },
+  {
+   "name": "decane",
+   "smiles": "CCCCCCCCCC",
+   "properties": {
+    "BP": 103.96000000000001,
+    "MV": 162.85533905932738
+   }
+  },
+  {
+   "name": "unresolved drug",
+   "properties": {
+    "BP": 100.0,
+    "MV": 50.0
+   }
+  }
+ ],
+ "properties": [
+  "BP",
+  "MV"
+ ],
+ "indices": [
+  "first Zagreb",
+  "Randic",
+  "M2",
+  {
+   "label": "ABC_4"
+  },
+  "XYZ index"
+ ],
+ "model_forms": [
+  "linear",
+  "quadratic"
+ ],
+ "reported_fits": [
+  {
+   "property": "BP",
+   "index": "first Zagreb",
+   "form": "quadratic",
+   "r2": 1.0,
+   "coefficients": [
+    12.5,
+    3.2,
+    -0.015
+   ]
+  },
+  {
+   "property": "MV",
+   "index": "Randic",
+   "form": "linear",
+   "r": 1.0
+  }
+ ],
+ "reported_index_values": {
+  "hexane": {
+   "first Zagreb": 18,
+   "Randic": 2.9142
+  },
+  "toluene": {
+   "first Zagreb": 30
+  },
+  "octane": {
+   "first Zagreb": 25
+  }
+ }
+}
