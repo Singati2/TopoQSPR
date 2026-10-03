@@ -117,26 +117,41 @@ def corrected_ttest(diffs: Sequence[float], n_train, n_test, alpha: float = 0.05
     return out
 
 
-def benjamini_hochberg(pvals: Sequence[float], q: float = 0.05):
+def _family_size(p: np.ndarray, m: int | None) -> int:
+    k = int(np.sum(~np.isnan(p)))
+    if m is None:
+        return k
+    m = int(m)
+    if m < k:
+        raise ValueError(f"family size m={m} is smaller than the {k} finite p-values")
+    return m
+
+
+def benjamini_hochberg(pvals: Sequence[float], q: float = 0.05, m: int | None = None):
     """Benjamini-Hochberg step-up procedure.
 
-    For the m non-NaN p-values sorted p_(1) <= ... <= p_(m), the adjusted
-    value is q_(i) = min_{j >= i} min(1, m * p_(j) / j); hypothesis i is
-    rejected iff q_(i) <= q (equivalently: reject H_(1..k) with
-    k = max{i : p_(i) <= i q / m}). NaN p-values stay NaN, are not rejected
-    and do not count towards m.
+    For the k non-NaN p-values sorted p_(1) <= ... <= p_(k) and a family of
+    m >= k hypotheses, the adjusted value is
+    q_(i) = min_{j >= i} min(1, m * p_(j) / j); hypothesis i is rejected iff
+    q_(i) <= q (equivalently: reject H_(1..r) with r = max{i : p_(i) <= i q / m}).
+    NaN p-values stay NaN and are never rejected. By default (``m=None``)
+    m = k, i.e. a NaN does not count towards m. Passing the pre-specified
+    family size ``m`` keeps the untestable members in m (equivalent to
+    giving them p = 1), so a member that fails to evaluate cannot loosen
+    the correction for the others.
 
     Returns (adjusted, reject) as numpy arrays in the input order.
     """
     p = np.asarray(pvals, dtype=float).ravel()
     if np.any((p[~np.isnan(p)] < 0) | (p[~np.isnan(p)] > 1)):
         raise ValueError("p-values must lie in [0, 1]")
+    m = _family_size(p, m)
     adj = np.full(p.shape, np.nan)
     ok = np.flatnonzero(~np.isnan(p))
-    m = ok.size
-    if m:
+    k = ok.size
+    if k:
         order = ok[np.argsort(p[ok], kind="mergesort")]
-        ranked = p[order] * m / np.arange(1, m + 1)
+        ranked = p[order] * m / np.arange(1, k + 1)
         ranked = np.minimum.accumulate(ranked[::-1])[::-1]
         adj[order] = np.minimum(ranked, 1.0)
     reject = np.zeros(p.shape, dtype=bool)
@@ -144,23 +159,24 @@ def benjamini_hochberg(pvals: Sequence[float], q: float = 0.05):
     return adj, reject
 
 
-def benjamini_yekutieli(pvals: Sequence[float], q: float = 0.05):
+def benjamini_yekutieli(pvals: Sequence[float], q: float = 0.05, m: int | None = None):
     """Benjamini-Yekutieli step-up procedure (valid under arbitrary dependence).
 
     Same as :func:`benjamini_hochberg` with every p-value multiplied by
     c(m) = sum_{i=1..m} 1/i (Benjamini & Yekutieli 2001, Thm 1.3):
     q_(i) = min_{j >= i} min(1, c(m) * m * p_(j) / j). Used as the sensitivity
     analysis for BH because the confirmatory endpoints share drugs and folds.
+    ``m`` as in :func:`benjamini_hochberg` (default: the number of finite p).
 
     Returns (adjusted, reject) in the input order; NaN p-values stay NaN.
     """
     p = np.asarray(pvals, dtype=float).ravel()
-    m = int(np.sum(~np.isnan(p)))
-    if m == 0:
+    m = _family_size(p, m)
+    if m == 0 or np.all(np.isnan(p)):
         return np.full(p.shape, np.nan), np.zeros(p.shape, dtype=bool)
     c = float(np.sum(1.0 / np.arange(1, m + 1)))
     scaled = np.where(np.isnan(p), np.nan, np.minimum(1.0, p * c))
-    adj, _ = benjamini_hochberg(scaled, q)
+    adj, _ = benjamini_hochberg(scaled, q, m=m)
     # BH on c*p caps at 1 before the step-up; recompute the reject set on the adjusted values
     adj = np.minimum(1.0, adj)
     return adj, np.where(np.isnan(adj), False, adj <= q)

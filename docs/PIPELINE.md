@@ -248,7 +248,7 @@ is corrected by the analysis that collects `d_r2_p` across runs.
 | `counts` | candidates, standardised, rejections by code, non-missing values per target, feature-set sizes, number of failure records, `connectivity_groups` (groups and molecules), `skipped_targets` (target → reason) |
 | `targets` | every target spec: name, class (EXPERIMENT_PLAN §4) and label, rdkit2d exclusion, units, source, description |
 | `target_providers` | each provider's `provenance()` (for `expdata`: sources, licences, hashes, match counts; §3) |
-| `protocol` | `null` without `config.protocol`; otherwise the expanded confirmatory **family** (target, set, reference), the family rule, the confirmatory learner and its families, the **practical threshold**, q, alpha, the multiplicity, informative and practical rules, and for `permutation` and `bootstrap` K/B, seed, RNG rule, learner or families (a fast bootstrap subset is labelled as such), statistic and interval rules |
+| `protocol` | `null` without `config.protocol`; otherwise the expanded confirmatory **family** (target, set, reference), the family rule, the confirmatory learner and its families, the **practical threshold**, q, alpha, the multiplicity, **family-membership** (`family_membership`, `min_n`, `min_n_test`), informative and practical rules, and for `permutation` and `bootstrap` `enabled` (with the reason when off), K/B, seed, RNG rule, permutation scheme (row-wise or block, per target), learner or families (a fast bootstrap subset is labelled as such), statistic and interval rules |
 | `outputs` | SHA-256 and size of every file written before the record |
 | `result_csvs` | the files a re-run must reproduce byte for byte |
 | `timings_s` | wall time per stage, per target × learner for `evaluate`, and per target (permutation) or family row (bootstrap) for `protocol` |
@@ -478,8 +478,11 @@ cohort as §8).
 mp_bradley 15, logs_aqsoldb 12, logp_opera 10, logd74_az 8 (the coverage counts of
 EXPERIMENTAL_DATA.md). Missing values carry their reasons: `no_measurement` 17–22 per
 target, `no_measurement_stereo_mismatch` (only another stereoisomer has a value) 3 for
-logd74_az and 1 for logp_opera, `replicates_disagree` 1, 2, 0, 1. Every confirmatory row
-is labelled underpowered. One target (logd74_az, n = 8) has outer test folds with a single
+logd74_az and 1 for logp_opera, `replicates_disagree` mp_bradley 1, logp_opera 2,
+logd74_az 0, logs_aqsoldb 1. Every confirmatory row is labelled underpowered (n < 50).
+(This run predates the family-membership rule of EVALUATION_PROTOCOL §11.2: it still gave
+these rows BH/BY q values; under the current code every one of them is left out of the
+multiplicity family, `family_m` = 0, with NaN q and no informative flag.) One target (logd74_az, n = 8) has outer test folds with a single
 row, so 10 of 25 fold R² are undefined and its corrected-t p is NaN with the reason, as
 specified. The bootstrap intervals are NaN with "k of 19 resamples undefined" for all four
 rows: at n = 8–15 a resampled test fold often holds copies of one or two molecules

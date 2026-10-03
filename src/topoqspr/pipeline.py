@@ -92,6 +92,7 @@ __all__ = [
     "paired_bootstrap",
     "ad_report",
     "confirmatory_table",
+    "permutation_indices",
     "PROTOCOL_CSVS",
     "AD_CSVS",
 ]
@@ -860,10 +861,12 @@ def _evaluate_stage(cfg, wide, sets, specs, values, groups_all, timer):
     n_jobs = cfg["runtime"]["n_jobs"]
     context: dict[str, dict] = {}
     skipped: dict[str, str] = {}
+    n_values: dict[str, int] = {}
     for spec in specs:
         y = values[spec.name]
         keep = np.isfinite(y.to_numpy(dtype=float))
         rows = np.flatnonzero(keep)
+        n_values[spec.name] = int(rows.size)
         y_t = y.iloc[rows]
         groups = None if groups_all is None else groups_all[rows]
         why = _too_few_rows(len(rows), groups, e["outer_splits"], e["inner_splits"])
@@ -922,7 +925,8 @@ def _evaluate_stage(cfg, wide, sets, specs, values, groups_all, timer):
     else:
         summary = pd.DataFrame(columns=lead)
     return dict(folds=cat(folds), predictions=cat(preds), paired=cat(paired),
-                inner=cat(inner), summary=summary, context=context, skipped=skipped)
+                inner=cat(inner), summary=summary, context=context, skipped=skipped,
+                n_values=n_values)
 
 
 def _prefix(df: pd.DataFrame, key: Mapping) -> pd.DataFrame:
@@ -945,8 +949,56 @@ def _nested_stat(res: ev.NestedCVResult) -> dict:
                 n_failed_folds=int(s["n_failed_folds"]), reason=s["reason"])
 
 
+#: How permutation_control permutes y (written to run_record.protocol.permutation).
+PERMUTATION_SCHEME = (
+    "row-wise (default_rng([seed, b]).permutation(n)) when the CV is ungrouped; restricted "
+    "(block) permutation when CV groups are given: with the same generator, the rows of "
+    "singleton groups and of groups whose size no other group shares are permuted row-wise "
+    "among themselves (first draw), then, for each group size s >= 2 shared by >= 2 groups "
+    "(ascending s; groups in sorted label order), whole groups' y blocks are exchanged by a "
+    "random permutation of those groups (row order inside a block kept). y values never "
+    "leave their CV group's block, so the within-group dependence of y is kept under the null.")
+
+
+def permutation_indices(n: int, groups, rng: np.random.Generator) -> np.ndarray:
+    """Index vector ``perm`` such that ``y[perm]`` is one Y-randomised target.
+
+    ``groups=None``: ``rng.permutation(n)`` (exchangeable rows). With CV group
+    labels the permutation is **restricted** (:data:`PERMUTATION_SCHEME`):
+    blocks of equal-size groups swap their y values whole, so a target that
+    is shared within a group (stereoisomers, scaffold series) keeps that
+    structure under the null and the grouped CV sees a null of the same kind
+    as the real data. Row-wise permutation with grouped folds breaks the
+    within-group correlation and makes the test conservative.
+    """
+    if groups is None:
+        return rng.permutation(n)
+    g = np.asarray(groups, dtype=object).astype(str)
+    if g.size != n:
+        raise ValueError(f"groups has {g.size} labels for {n} rows")
+    uniq, inv = np.unique(g, return_inverse=True)
+    members = [np.flatnonzero(inv == i) for i in range(uniq.size)]
+    sizes = np.array([m.size for m in members])
+    by_size: dict[int, list[int]] = {}
+    for i, sz in enumerate(sizes):
+        by_size.setdefault(int(sz), []).append(i)
+    perm = np.arange(n)
+    rest = [i for sz, gi in by_size.items() if sz == 1 or len(gi) == 1 for i in gi]
+    if rest:
+        rows = np.sort(np.concatenate([members[i] for i in rest]))
+        perm[rows] = rows[rng.permutation(rows.size)]
+    for sz in sorted(by_size):
+        gi = by_size[sz]
+        if sz == 1 or len(gi) == 1:
+            continue
+        pi = rng.permutation(len(gi))
+        for k, j in enumerate(pi):
+            perm[members[gi[k]]] = members[gi[j]]
+    return perm
+
+
 def _one_permutation(feature_sets, y, b, seed, groups, families, nested_kwargs):
-    perm = np.random.default_rng([seed, b]).permutation(y.size)
+    perm = permutation_indices(y.size, groups, np.random.default_rng([seed, b]))
     yp = y[perm]
     out = []
     for name, X in feature_sets.items():
@@ -962,8 +1014,10 @@ def permutation_control(feature_sets: Mapping[str, pd.DataFrame], y, *,
     """Y-randomised control (EXPERIMENT_PLAN §7; Ruecker et al. 2007).
 
     For b = 0..K-1 the target is permuted with
-    ``numpy.random.default_rng([seed, b]).permutation(n)`` (the same permutation
-    for every feature set, so sets are compared on identical nulls) and the
+    :func:`permutation_indices` and ``numpy.random.default_rng([seed, b])``:
+    ``rng.permutation(n)`` without groups, a restricted block permutation of
+    equal-size groups' y values with ``groups`` (the same permutation for
+    every feature set, so sets are compared on identical nulls) and the
     **whole** nested procedure of :func:`topoqspr.evaluate.nested_cv` is rerun
     with the same ``families``, outer seeds, inner rule and ``groups``. The
     rows of X and their group labels are not moved, so the outer and inner
@@ -1179,6 +1233,7 @@ def _expand_family(protocol: Mapping, specs: Sequence[TargetSpec], reference: st
 
 CONFIRMATORY_COLUMNS = [
     "target", "target_class", "comparison", "set", "reference", "learner", "n", "underpowered",
+    "in_family", "family_m",
     "d_r2_mean", "d_r2_ci_low", "d_r2_ci_high", "d_r2_p", "d_r2_q_bh", "d_r2_q_by",
     "informative_bh", "informative_by",
     "d_mae_mean", "d_mae_ci_low", "d_mae_ci_high", "d_mae_p",
@@ -1191,29 +1246,55 @@ CONFIRMATORY_COLUMNS = [
     "reason",
 ]
 
+#: Membership rule of the multiplicity family (written to run_record.protocol).
+FAMILY_RULE = (
+    "m = number of pre-specified family members that are not underpowered "
+    "(EXPERIMENT_PLAN 7: >= min_n measured values; EVALUATION_PROTOCOL: an underpowered "
+    "result carries no ML claim). Underpowered members (n < evaluation.min_n or smallest "
+    "outer test fold < evaluation.min_n_test) and members whose target was not evaluated "
+    "with fewer than min_n values are left out of the family: q NaN, informative_* and "
+    "practically_significant None. Every other member counts in m even when its p is "
+    "undefined or it has no result; such a member is never rejected (as p = 1) and keeps "
+    "NaN q with the reason, so an evaluation failure cannot loosen the correction.")
+
 
 def confirmatory_table(family: Sequence[Mapping], summary: pd.DataFrame, ad_summary: pd.DataFrame,
                        *, learner: str, practical_threshold: float = 0.05, q: float = 0.05,
                        perm_summary: pd.DataFrame | None = None,
                        boot: Mapping | None = None, target_classes: Mapping | None = None,
-                       skipped: Mapping | None = None) -> pd.DataFrame:
+                       skipped: Mapping | None = None, n_values: Mapping | None = None,
+                       min_n: int | None = None, permutation_note: str = "permutation not run",
+                       bootstrap_note: str = "bootstrap not run",
+                       ad_note: str = "AD not fitted") -> pd.DataFrame:
     """One row per (target x comparison) of the confirmatory family.
 
     From the main analysis (``summary`` of ``learner``): n, mean d_R2 with the
-    corrected repeated-CV t CI and p, d_MAE with CI and p. Across the family:
-    BH and BY adjusted q of d_r2_p (:func:`topoqspr.stats.benjamini_hochberg`,
-    :func:`~topoqspr.stats.benjamini_yekutieli`; NaN p stays NaN and does not
-    count towards m). ``informative_bh`` = q_bh <= q and d_r2_mean > 0 (the
-    CI's lower bound above 0 after BH control, EXPERIMENT_PLAN §7);
+    corrected repeated-CV t CI and p, d_MAE with CI and p.
+
+    **Multiplicity family** (:data:`FAMILY_RULE`): a member is in the family
+    (``in_family``) unless its result is underpowered, or its target was not
+    evaluated (``skipped``) and has fewer than ``min_n`` measured values
+    (``n_values``; unknown n counts as in the family). Excluded members get
+    NaN q, None informative_* / practically_significant and the reason
+    "underpowered: not in confirmatory family". Across the family, BH and BY
+    adjusted q of d_r2_p (:func:`topoqspr.stats.benjamini_hochberg`,
+    :func:`~topoqspr.stats.benjamini_yekutieli`) with m = ``family_m`` = the
+    number of members in the family, **including** members whose p is NaN or
+    that have no result (never rejected; NaN q with the reason).
+    ``informative_bh`` = q_bh <= q and d_r2_mean > 0 (EXPERIMENT_PLAN §7);
     ``informative_by`` likewise with BY. ``practically_significant`` =
-    d_r2_mean >= ``practical_threshold``. AD: mean share of outer-test
-    molecules outside the domain for the set and the reference. Permutation:
-    K and the empirical p (+1 corrected) and 95th-percentile flag for the set
-    and for the reference. Bootstrap: B, families, original-data estimate and
-    percentile CIs. Anything unavailable is NaN, with ``reason``.
+    d_r2_mean >= ``practical_threshold``.
+
+    AD: mean share of outer-test molecules outside the domain for the set and
+    the reference. Permutation: K and the empirical p (+1 corrected) and
+    95th-percentile flag for the set and for the reference. Bootstrap: B,
+    families, original-data estimate and percentile CIs. Anything unavailable
+    is NaN, with ``reason`` (``permutation_note`` / ``bootstrap_note`` /
+    ``ad_note`` say why a component was not run at all).
     """
     skipped = dict(skipped or {})
     target_classes = dict(target_classes or {})
+    n_values = dict(n_values or {})
     s = summary[summary["learner"] == learner].set_index(["target", "set"]) if len(summary) \
         else pd.DataFrame()
     ads = ad_summary[ad_summary["learner"] == learner].set_index(["target", "set"]) \
@@ -1226,13 +1307,21 @@ def confirmatory_table(family: Sequence[Mapping], summary: pd.DataFrame, ad_summ
         row = {c: math.nan for c in CONFIRMATORY_COLUMNS}
         row.update(target=t, target_class=target_classes.get(t, math.nan),
                    comparison=f"{st}-{ref}", set=st, reference=ref, learner=learner,
-                   practical_threshold=practical_threshold, reason="")
+                   practical_threshold=practical_threshold, reason="", in_family=True)
         why = []
+        evaluated = False
         if t in skipped:
             why.append(f"target not evaluated: {skipped[t]}")
+            nv = n_values.get(t)
+            if nv is not None:
+                row["n"] = int(nv)
+                if min_n is not None and int(nv) < int(min_n):
+                    row["underpowered"] = True
+                    row["in_family"] = False
         elif (t, st) not in s.index:
             why.append(f"no result for set {st!r} (feature set not produced for this run)")
         else:
+            evaluated = True
             r = s.loc[(t, st)]
             row.update(n=int(r["n"]), underpowered=bool(r["underpowered"]),
                        **{c: float(r[c]) for c in ("d_r2_mean", "d_r2_ci_low", "d_r2_ci_high",
@@ -1242,15 +1331,32 @@ def confirmatory_table(family: Sequence[Mapping], summary: pd.DataFrame, ad_summ
                 why.append(r["reason"])
             if bool(r["underpowered"]):
                 why.append(f"underpowered: {r['underpowered_reason']}")
-        for nm, col in ((st, "ad_share_outside_set"), (ref, "ad_share_outside_reference")):
-            if (t, nm) in ads.index:
-                row[col] = float(ads.loc[(t, nm), "share_outside_fold_mean"])
+                row["in_family"] = False
+            if not math.isfinite(row["d_r2_p"]):
+                why.append("d_r2_p undefined (never rejected"
+                           + ("; counted in m)" if row["in_family"] else ")"))
+        if not row["in_family"]:
+            why.append("underpowered: not in confirmatory family")
+        if evaluated:
+            for nm, col, sfx in ((st, "ad_share_outside_set", "set"),
+                                 (ref, "ad_share_outside_reference", "reference")):
+                if (t, nm) in ads.index:
+                    row[col] = float(ads.loc[(t, nm), "share_outside_fold_mean"])
+                    ar = ads.loc[(t, nm), "reason"]
+                    if not math.isfinite(row[col]):
+                        why.append(f"AD {sfx}: {ar or 'share undefined'}")
+                else:
+                    why.append(f"AD {sfx}: {ad_note}")
         for nm, sfx in ((st, "set"), (ref, "reference")):
             if (t, nm) in ps.index:
                 pr = ps.loc[(t, nm)]
                 row["perm_k"] = int(pr["n_permutations"])
                 row[f"perm_p_{sfx}"] = float(pr["p"])
                 row[f"perm_uninformative_{sfx}"] = pr["uninformative"]
+                if isinstance(pr["reason"], str) and pr["reason"]:
+                    why.append(f"permutation {sfx}: {pr['reason']}")
+            elif evaluated:
+                why.append(f"permutation {sfx} ({nm}): {permutation_note}")
         b = (boot or {}).get((t, st, ref))
         if b is not None:
             row.update(boot_b=b["n_boot"], boot_families=json.dumps(b["families"]),
@@ -1264,20 +1370,29 @@ def confirmatory_table(family: Sequence[Mapping], summary: pd.DataFrame, ad_summ
                 extra = [x for x in dict.fromkeys(b["reason"].split("; ")) if x and x not in seen]
                 if extra:
                     why.append("bootstrap: " + "; ".join(extra))
+        elif evaluated:
+            why.append(bootstrap_note)
         row["reason"] = "; ".join(dict.fromkeys(why))
         rows.append(row)
     df = pd.DataFrame(rows, columns=CONFIRMATORY_COLUMNS)
     if len(df):
+        member = df["in_family"].to_numpy(dtype=bool)
+        m = int(member.sum())
         p = df["d_r2_p"].to_numpy(dtype=float)
-        df["d_r2_q_bh"], rej_bh = stats.benjamini_hochberg(p, q)
-        df["d_r2_q_by"], rej_by = stats.benjamini_yekutieli(p, q)
+        p_fam = np.where(member, p, np.nan)
+        q_bh, rej_bh = stats.benjamini_hochberg(p_fam, q, m=m)
+        q_by, rej_by = stats.benjamini_yekutieli(p_fam, q, m=m)
+        df["d_r2_q_bh"], df["d_r2_q_by"] = q_bh, q_by
+        df["family_m"] = m
         pos = df["d_r2_mean"].to_numpy(dtype=float) > 0
-        defined = np.isfinite(p)
+        defined = np.isfinite(p_fam)
         df["informative_bh"] = np.where(defined, rej_bh & pos, None)
         df["informative_by"] = np.where(defined, rej_by & pos, None)
         d = df["d_r2_mean"].to_numpy(dtype=float)
-        df["practically_significant"] = np.where(np.isfinite(d), d >= practical_threshold, None)
+        df["practically_significant"] = np.where(np.isfinite(d) & member,
+                                                 d >= practical_threshold, None)
         df["underpowered"] = df["underpowered"].astype(object)
+        df["in_family"] = df["in_family"].astype(bool)
     return df
 
 
@@ -1306,6 +1421,7 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
                   learner=learner, learner_families=list(_learner_families(learner, e["families"])),
                   practical_threshold=p["practical_threshold"], q=p["q"], alpha=e["alpha"],
                   multiplicity="Benjamini-Hochberg over the family's d_r2_p (BY as sensitivity)",
+                  family_membership=FAMILY_RULE, min_n=e["min_n"], min_n_test=e["min_n_test"],
                   informative_rule="q <= q-level and d_r2_mean > 0",
                   practical_rule="d_r2_mean >= practical_threshold")
 
@@ -1354,7 +1470,14 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
             statistic="mean over repeats of pooled out-of-fold R2 (NaN if any outer fold failed)",
             p_rule="(1 + #{null >= observed}) / (1 + K_valid)",
             uninformative_rule="observed <= quantile of the permutation distribution",
-            folds="identical to the main analysis (rows, groups and seeds unchanged)")
+            folds="identical to the main analysis (rows, groups and seeds unchanged)",
+            scheme=PERMUTATION_SCHEME,
+            scheme_by_target={t: ("block" if ctx[t]["groups"] is not None else "row-wise")
+                              for t in targets if t in ctx},
+            enabled=True)
+    else:
+        record["permutation"] = dict(enabled=False, reason=(
+            "protocol.permutation.enabled = false" if not perm["enabled"] else "empty family"))
     timer.t["protocol:permutation"] = time.perf_counter() - t0
     out["permutation"] = pd.concat(perm_rows, ignore_index=True) if perm_rows else \
         pd.DataFrame(columns=["target", "learner", "set", "permutation", "rng", "r2_pooled_mean",
@@ -1400,7 +1523,11 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
                  "molecules singly",
             cv_groups="every copy keeps its original group label (main-analysis CV group, or "
                       "the unit), so copies never straddle a fold",
-            interval="percentile, alpha = evaluation.alpha; NaN if any resample failed")
+            interval="percentile, alpha = evaluation.alpha; NaN if any resample failed",
+            enabled=True)
+    else:
+        record["bootstrap"] = dict(enabled=False, reason=(
+            "protocol.bootstrap.enabled = false" if not boot["enabled"] else "empty family"))
     timer.t["protocol:bootstrap"] = time.perf_counter() - t0
     out["bootstrap"] = pd.concat(boot_rows, ignore_index=True) if boot_rows else pd.DataFrame(
         columns=["target", "set", "reference", "resample", "rng", "n_rows", "n_units", "d_r2",
@@ -1411,7 +1538,14 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
         family, res["summary"], out["ad_summary"], learner=learner,
         practical_threshold=p["practical_threshold"], q=p["q"], perm_summary=perm_df,
         boot=boot_summ, target_classes={s.name: s.target_class for s in specs},
-        skipped=res["skipped"])
+        skipped=res["skipped"], n_values=res.get("n_values"), min_n=e["min_n"],
+        permutation_note=(
+            "permutation disabled (protocol.permutation.enabled = false)" if not perm["enabled"]
+            else "set not in protocol.permutation.feature_sets" if perm["feature_sets"]
+            else "permutation not available"),
+        bootstrap_note=("bootstrap disabled (protocol.bootstrap.enabled = false)"
+                        if not boot["enabled"] else "bootstrap not available"),
+        ad_note="AD not fitted (evaluation.ad = null)" if e["ad"] is None else "AD not available")
     return out, record
 
 
