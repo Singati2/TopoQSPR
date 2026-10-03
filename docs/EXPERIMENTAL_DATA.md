@@ -86,6 +86,11 @@ document record (title, authors, DOI, ChEMBL 20) was read from the ChEMBL `docum
 Applied to every record. The first failure wins, and nothing is imputed: a record that fails a
 rule keeps `value = NaN` plus a `status` code and a `detail` text.
 
+**Dependency.** The Bradley source is an Excel file read with `pandas.read_excel(...,
+engine="openpyxl")`, so building `mp_bradley` from the raw file needs
+`openpyxl` (the `expdata` extra in `pyproject.toml`). Without it pandas raises `ImportError`
+(CLI exit 2). Make sure the installed lock or image contains it (PIPELINE.md §7).
+
 1. **Value.** Missing or non-numeric → `missing_value`. A qualified value (ChEMBL
    `standard_relation` other than `=`) → `censored_value`, and so does a value at or beyond a
    target's assay range (`TargetSpec.assay_range`, tolerance 1e-6; set for `logd74_az`
