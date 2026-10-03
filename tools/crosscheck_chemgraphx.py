@@ -25,9 +25,14 @@ the edges in a different order):
 * the adjacency-list JSON of the text-area route (``create_graph``), with
   vertices numbered 1..n.
 
-The ChemGraphX classes are called as ``main.py`` calls them
-(``ColumnF(file, textarea)`` for degree and distance indices,
-``ColumnCD(file, textarea)`` for the degree-sum ones). Values are read from
+The ChemGraphX classes are constructed with the ``(file, textarea)`` arguments
+``main.py`` passes. Degree values are read from ``ColumnF``. ``main.py``'s
+``/degree_based`` route uses ``ColumnAB`` instead, but ``ColumnF`` subclasses
+it (``ColumnF -> ColumnE -> ColumnAB``, each ``__init__`` calling
+``super().__init__`` first, with no override of ``degree_indices`` or the
+methods computing it), so the ``degree_indices`` dict is identical.
+Distance values come from ``ColumnF`` (as in ``/distance_based``) and the
+degree-sum ones from ``ColumnCD`` (as in ``/degree_based``). Values are read from
 the instances' ``degree_indices`` / ``distance_indices`` dicts, which the
 Flask endpoints only re-label (``capitalize_dictionary``).
 
@@ -254,9 +259,12 @@ def load_chemgraphx(clone: Path) -> types.SimpleNamespace:
         sys.modules.setdefault("matplotlib.pyplot", plt)
     if str(server) not in sys.path:
         sys.path.insert(0, str(server))
+    column_ab = importlib.import_module("column_ab")
     column_f = importlib.import_module("column_f")
     column_cd = importlib.import_module("column_cd")
-    return types.SimpleNamespace(ColumnF=column_f.ColumnF, ColumnCD=column_cd.ColumnCD)
+    return types.SimpleNamespace(
+        ColumnAB=column_ab.ColumnAB, ColumnF=column_f.ColumnF, ColumnCD=column_cd.ColumnCD
+    )
 
 
 def adjacency_json(n: int, edges) -> str:
@@ -330,10 +338,17 @@ def chemgraphx_values(cgx, entry: dict) -> dict:
         results[route] = vals
     ref = results["mol_v2000"]
     # The routes give ChemGraphX the edges in different orders, so floating
-    # sums may differ in the last bit; report the largest relative gap.
-    gap = max(
-        rel_diff(results[r][b][k], ref[b][k]) for r in results for b in ref for k in ref[b]
-    )
+    # sums may differ in the last bit; report the largest relative gap. A
+    # missing key or a non-finite mismatch counts as an infinite gap, so a
+    # broken route cannot hide behind max() skipping NaN.
+    gaps = []
+    for r in results:
+        for b in ref:
+            if set(results[r][b]) != set(ref[b]):
+                gaps.append(math.inf)
+                continue
+            gaps.extend(route_gap(results[r][b][k], ref[b][k]) for k in ref[b])
+    gap = max(gaps, default=0.0)
     return {"values": ref, "route_max_rel_diff": gap, "routes": sorted(routes)}
 
 
@@ -392,6 +407,19 @@ def rel_diff(a: float, b: float) -> float:
     if not (math.isfinite(a) and math.isfinite(b)):
         return float("nan")
     return abs(a - b) / abs(b) if b != 0 else abs(a - b)
+
+
+def route_gap(a: float, b: float) -> float:
+    """Gap between one ChemGraphX value on two input routes.
+
+    ``rel_diff`` when both are finite; 0.0 when both are the same non-finite
+    value (both NaN, or the same signed infinity); ``inf`` otherwise, so a
+    non-finite disagreement always fails the route-agreement check."""
+    if math.isfinite(a) and math.isfinite(b):
+        return rel_diff(a, b)
+    if (math.isnan(a) and math.isnan(b)) or a == b:
+        return 0.0
+    return math.inf
 
 
 def compare(fixture: dict) -> dict:
