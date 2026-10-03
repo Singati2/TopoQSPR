@@ -268,7 +268,25 @@ gives R² = 1 on both sets.
 
 ## Pilot smoke run (Migraine Disorders, D008881; runtime only)
 
-PILOT_RUNTIME_PLACEHOLDER
+Wall times only (no performance number of these runs is reported or was inspected; only the
+cohort counts below were read), measured 2026-10-03
+on the shared lab machine under heavy load (1-min load average 18–34 on the runs below),
+`OMP_NUM_THREADS=OPENBLAS_NUM_THREADS=MKL_NUM_THREADS=1`, commit e897101. Pilot cohort:
+33 controlled parents; naive `migraine` query 137 included molecules (headings D008881,
+D020325, D020326). Expect large variation with machine load.
+
+| run | settings | wall time |
+|---|---|---|
+| `exp-a --mesh D008881 --naive-text migraine --counts-only` | online, cache seeded from the fixture cache (fetches the naive query) | 32 s |
+| `exp-a --mesh D008881 --naive-text migraine --model --offline` | default targets and all 102 indices, `ridge pls knn`, seeds 0–4, 5 × 3 folds, `--n-jobs 4` | 372 s |
+| `exp-c --mesh D008881 --target MolLogP --feature-set TI --offline` | `ridge pls knn`, all ten v0.x families, seeds 0–4, 5 × 3 folds, `--n-jobs 4` | 203 s (65.6 s in an earlier, less loaded run) |
+| `size-dependence --mesh D008881 --offline` (reduced smoke) | `--families linear knn --seeds 0 --outer-splits 3 --inner-splits 2 --n-jobs 4` | 280 s |
+| `size-dependence --mesh D008881 --offline` (defaults) | `linear poly2_ridge knn`, seeds 0–4, 5 × 3 folds, `--n-jobs 4` | 2525 s (≈ 42 min; run on the pre-fix commit 7dab41d, whose size-dependence code is the same) |
+
+The default size-dependence run fits 102 indices × 2 predictor sets × 25 outer folds, each
+with an inner grid search, on 33 molecules; most of the time is per-fit and per-fold
+overhead, not data size. Use the reduced command above as the smoke test; the default
+settings are for the real panel runs.
 
 ## API notes
 
