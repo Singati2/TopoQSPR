@@ -112,7 +112,12 @@ def test_known_resolution_cases():
     valp = by["ali2026_stiff_person"]["09"]
     assert valp["rule"] == "parent_form" and valp["molecular_formula"] == "C8H16O2"
     assert by["tang2026_arthritis"]["34"]["status"] == "unresolved"       # chondroitin sulfate
-    assert by["supriya2026_tuberculosis"]["06"]["status"] == "unresolved"  # imipenem-cilastatin
+    mecl = by["tang2026_arthritis"]["28"]                                  # anion name
+    assert (mecl["rule"], mecl["query_name"], mecl["pubchem_cid"]) == \
+        ("parent_form", "meclofenamic acid", by["tang2026_arthritis"]["39"]["pubchem_cid"])
+    imi = by["supriya2026_tuberculosis"]["06"]                             # imipenem-cilastatin
+    assert (imi["rule"], imi["status"], imi["pubchem_cid"], imi["pubchem_title"]) == \
+        ("component_by_printed_index", "resolved", "104838", "Imipenem")
     acs = er.load_study(er.DATA_DIR / "ahmed2026_antiepileptic")["automated_checks"]
     assert acs["duplicate_structures"] == [["10", "18"]]                   # lacosamide twice
 
@@ -141,6 +146,196 @@ def test_matches_printed():
     assert er.matches_printed("437", "436.9")
     assert not er.matches_printed("159.12", "159.23")
     assert not er.matches_printed("296", "308")
+
+
+def test_matches_printed_rejects_last_digit_and_off_by_one():
+    # regression: the old tolerance (half a unit of *both* numbers) accepted these
+    assert not er.matches_printed("57", "56", "TPSA")       # TPSA 56 is 56.0
+    assert not er.matches_printed("57", "56")
+    assert not er.matches_printed("30", "29", "HeavyAtomCount")
+    assert not er.matches_printed("454.5", "454.4", "MolecularWeight")
+    assert not er.matches_printed("2.82", "3", "XLogP")    # XLogP 3 is 3.0
+    assert not er.matches_printed("263.381", "263.37", "MolecularWeight")
+    # genuine agreements at the coarser precision
+    assert er.matches_printed("57", "56.7", "TPSA")
+    assert er.matches_printed("64", "63.7", "TPSA")
+    assert er.matches_printed("0.00", "0", "XLogP")
+    assert er.matches_printed("−1.10", "-1.1", "XLogP")
+    assert er.matches_printed("2.43", "2.4", "XLogP")
+    assert er.matches_printed("470", "470.0", "MolecularWeight")
+    assert er.matches_printed("30", "30", "HeavyAtomCount")
+    # PUG-REST truncates PubChem's 1-decimal complexity (PUG-View 93.4 -> 93, 2.8 -> 2)
+    assert er.matches_printed("93.4", "93", "Complexity")
+    assert er.matches_printed("2.8", "2", "Complexity")
+    assert not er.matches_printed("94.0", "93", "Complexity")
+    assert not er.matches_printed("94", "93", "Complexity")
+    assert not er.matches_printed("92.9", "93", "Complexity")
+
+
+def test_pubchem_agreement_counts():
+    """Counts quoted in docs/REPLICATION_DATA.md and the consistency notes."""
+    def per(key, code):
+        return er.load_study(er.DATA_DIR / key)["automated_checks"]["properties"][code]
+    assert per("ali2026_stiff_person", "logP")["pubchem_match"] == 4
+    assert "01" in per("ali2026_stiff_person", "logP")["pubchem_mismatch"]   # diazepam 2.82
+    mw = per("pavithra2026_skin_cancer", "MW")
+    assert (mw["pubchem_match"], mw["pubchem_mismatch"]) == (7, ["03", "05", "06"])
+    psa = per("pavithra2026_skin_cancer", "PSA")
+    assert (psa["pubchem_match"], psa["pubchem_mismatch"]) == (9, ["05"])
+    for code in ("MW", "COM", "HAC"):
+        assert per("colakoglu2026_bipolar", code)["pubchem_match"] == 18
+    assert per("kabeer2026_antidepressants", "CO")["pubchem_match"] == 16
+
+
+def test_computed_pubchem_label_requires_agreement(tmp_path):
+    d = tmp_path / "ali2026_stiff_person"
+    shutil.copytree(er.DATA_DIR / d.name, d)
+    cache = er.PubChemCache(offline=True)
+    s = er.load_study(d)
+    labels = {p["code"]: p["source_label"] for p in s["properties"]}
+    assert labels["MW"] == "mixed"
+    for p in s["properties"]:
+        if p["code"] == "MW":
+            p["source_label"] = "computed_pubchem"        # 3/10 match: must be refused
+    er.dump_study(d, s)
+    assert any("computed_pubchem but only 3/10" in e for e in er.validate_study(d, cache))
+    # every computed_pubchem column in the data meets the threshold
+    for sd in STUDY_DIRS:
+        st = er.load_study(sd)
+        per = st["automated_checks"].get("properties")
+        for p in st["properties"]:
+            if p["source_label"] == "computed_pubchem":
+                c = per[p["code"]]
+                assert c["pubchem_match"] / c["pubchem_compared"] >= er.COMPUTED_PUBCHEM_MIN_MATCH
+
+
+def _eds(smiles: str) -> int:
+    """Eccentric distance sum on the hydrogen-suppressed graph: sum_v ecc(v) * D(v)."""
+    from rdkit import Chem
+    dm = Chem.GetDistanceMatrix(Chem.MolFromSmiles(smiles))
+    return int(round(float((dm.max(axis=1) * dm.sum(axis=1)).sum())))
+
+
+def test_imipenem_identified_by_printed_eds():
+    """Supriya & Iyer Table 7 prints EDS 15088 for IMIPENEM-CILASTATIN; imipenem gives it
+    exactly (cilastatin gives 43610), and the same code reproduces the printed EDS of
+    ethambutol (5892), isoniazid (1177), pyrazinamide (727) and ethionamide (1554)."""
+    pytest.importorskip("rdkit")
+    by = {r["drug_id"]: r for r in er.read_csv(er.DATA_DIR / "supriya2026_tuberculosis"
+                                               / "drugs.csv")}
+    printed = {"04": 5892, "05": 1554, "06": 15088, "07": 1177, "12": 727}
+    assert {k: _eds(by[k]["isomeric_smiles"]) for k in printed} == printed
+    assert "15088" in by["06"]["note"] and "43610" in by["06"]["note"]
+
+
+def test_ion_name_resolved_as_printed_is_flagged(tmp_path):
+    d = tmp_path / "tang2026_arthritis"
+    shutil.copytree(er.DATA_DIR / d.name, d)
+    cache = er.PubChemCache(offline=True)
+    assert er.validate_study(d, cache) == []
+    drugs = er.read_csv(d / "drugs.csv")
+    r = next(x for x in drugs if x["drug_id"] == "28")
+    r.update(rule="as_printed", query_name="meclofenamate", note="")
+    er.write_csv(d / "drugs.csv", drugs, er.DRUG_COLUMNS)
+    errs = er.validate_study(d, er.PubChemCache(offline=True))
+    assert any("use rule parent_form" in e for e in errs)
+    assert er._ion_name_for_acid("Valproate", "Valproic Acid")
+    assert not er._ion_name_for_acid("Methotrexate", "Methotrexate")
+
+
+def test_validate_detects_value_edit_offline(tmp_path):
+    """Changing value_verbatim and value together is caught by source.properties_sha256."""
+    d = tmp_path / "colakoglu2026_bipolar"
+    shutil.copytree(er.DATA_DIR / d.name, d)
+    cache = er.PubChemCache(offline=True)
+    assert er.validate_study(d, cache) == []
+    text = (d / "properties.csv").read_text()
+    assert text.count("01,BD1,BP,646.2,646.2,") == 1
+    (d / "properties.csv").write_text(text.replace("01,BD1,BP,646.2,646.2,",
+                                                   "01,BD1,BP,646.3,646.3,"))
+    errs = er.validate_study(d, cache)
+    assert any("properties_sha256" in e for e in errs)
+
+
+def test_validate_detects_swapped_values_and_wrong_labels(tmp_path):
+    d = tmp_path / "vimala2026_anticancer"
+    shutil.copytree(er.DATA_DIR / d.name, d)
+    cache = er.PubChemCache(offline=True)
+    assert er.validate_study(d, cache) == []
+    rows = er.read_csv(d / "properties.csv")
+    a = next(r for r in rows if r["drug_id"] == "01" and r["property"] == "BP")
+    b = next(r for r in rows if r["drug_id"] == "02" and r["property"] == "BP")
+    for k in ("value_verbatim", "value"):
+        a[k], b[k] = b[k], a[k]
+    er.write_csv(d / "properties.csv", rows, er.PROPERTY_COLUMNS)
+    assert any("properties_sha256" in e for e in er.validate_study(d, cache))
+    rows = er.read_csv(er.DATA_DIR / d.name / "properties.csv")
+    rows[3]["row_label_verbatim"] = "Totally Different Drug"
+    er.write_csv(d / "properties.csv", rows, er.PROPERTY_COLUMNS)
+    errs = er.validate_study(d, cache)
+    assert any("not in drugs.csv order/labels" in e for e in errs)
+    rows = er.read_csv(er.DATA_DIR / d.name / "properties.csv")
+    rows[0], rows[1] = rows[1], rows[0]                    # reordered rows
+    er.write_csv(d / "properties.csv", rows, er.PROPERTY_COLUMNS)
+    assert any("not in drugs.csv order/labels" in e for e in er.validate_study(d, cache))
+
+
+def test_unknown_study_key_fails(capsys):
+    with pytest.raises(KeyError):
+        er.study_dirs(["nonexistent_study"])
+    assert er.main(["validate", "nonexistent_study"]) == 2
+    assert er.main(["resolve", "--offline", "nonexistent_study"]) == 2
+    assert er.main(["extract", "nonexistent_study"]) == 2
+    assert "unknown study key" in capsys.readouterr().err
+
+
+def test_equation_verbatim_is_verbatim():
+    for d in STUDY_DIRS:
+        for m in er.load_study(d)["models"]:
+            eq = m.get("equation_verbatim")
+            assert eq is None or not er._ANNOTATION.search(eq), (d.name, m["id"])
+            if "equation_interpreted" in m:
+                assert m["interpretation_source"]
+    k = er.load_study(er.DATA_DIR / "kabeer2026_antidepressants")
+    for m in k["models"]:
+        assert "[IMG " in m["equation_verbatim"] and m["equation_interpreted"]
+    s = er.load_study(er.DATA_DIR / "supriya2026_tuberculosis")
+    assert any("Table 20 caption" in m["source"] for m in s["models"])
+
+
+def test_validator_rejects_annotated_equation(tmp_path):
+    d = tmp_path / "ali2026_stiff_person"
+    shutil.copytree(er.DATA_DIR / d.name, d)
+    cache = er.PubChemCache(offline=True)
+    s = er.load_study(d)
+    s["models"][0]["equation_verbatim"] += " (Table 5 caption)"
+    s["models"][1]["equation_interpreted"] = "y = x"
+    er.dump_study(d, s)
+    errs = er.validate_study(d, cache)
+    assert any("non-verbatim annotation" in e for e in errs)
+    assert any("needs interpretation_source" in e for e in errs)
+
+
+def test_equation_problems_synthetic():
+    study = {"models": [{"id": "ok", "equation_verbatim": "[IMG img.gif]"},
+                        {"id": "cap", "equation_verbatim": "Props"},
+                        {"id": "bad", "equation_verbatim": "BP = 2x (Table 2 caption)"},
+                        {"id": "none", "equation_verbatim": None}]}
+    assert er.equation_problems(JATS, study) == ["bad"]
+
+
+@pytest.mark.parametrize("d", STUDY_DIRS, ids=[d.name for d in STUDY_DIRS])
+def test_cached_xml_reextraction(d):
+    """Offline when the Europe PMC XML is in the local cache (skipped otherwise): properties
+    hash and every equation_verbatim agree with the XML."""
+    s = er.load_study(d)
+    p = er._xml_path(s)
+    if not p.exists() or er.hashlib.sha256(p.read_bytes()).hexdigest() != s["source"]["xml_sha256"]:
+        pytest.skip("archived XML not in the local cache")
+    xml = p.read_bytes()
+    rows = er.extract_properties(xml, s["property_table"], er.read_csv(d / "drugs.csv"))
+    assert er.properties_sha256(rows) == s["source"]["properties_sha256"]
+    assert er.equation_problems(xml, s) == []
 
 
 JATS = b"""<article xmlns:mml="http://www.w3.org/1998/Math/MathML"

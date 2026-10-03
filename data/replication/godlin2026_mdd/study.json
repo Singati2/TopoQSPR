@@ -28,7 +28,8 @@
     "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13226495/fullTextXML",
     "retrieved": "2026-10-03",
     "xml_sha256": "c784664638efbfdf7b819bb2fbc9114b7ca87bf3e78ca50a5f1673560894e249",
-    "other_sources": []
+    "other_sources": [],
+    "properties_sha256": "4f63f0be8ca277a8161e36691d8e14bb7d3c736559d92998f7e69a939b53df62"
   },
   "n_reported": 21,
   "n_reported_source": "Table 6 lists G1-G21; text lists 21 drugs",

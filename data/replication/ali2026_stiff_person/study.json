@@ -30,7 +30,8 @@
     "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13243891/fullTextXML",
     "retrieved": "2026-10-03",
     "xml_sha256": "17d95a76fb45c3cf0ffc2b4a6b88b9c9bc93d3969e86dea7b34762732554da04",
-    "other_sources": []
+    "other_sources": [],
+    "properties_sha256": "c319a771c1b55f9e8a06be0a7fc0e90add09fd1b6f2732da2dab6c6908bfb4f1"
   },
   "n_reported": 10,
   "n_reported_source": "Tables 3-4 list 10 drugs",
@@ -81,8 +82,8 @@
       "name_verbatim": "M.W",
       "unit_verbatim": null,
       "source_stated_verbatim": "'Structural and physicochemical data for these drugs were obtained from PubChem [31], and ChemSpider [35]'",
-      "source_label": "computed_pubchem",
-      "source_evidence": "compared with PubChem MolecularWeight (automated_checks): the printed values are mostly NOT the PubChem MW",
+      "source_label": "mixed",
+      "source_evidence": "compared with PubChem MolecularWeight (automated_checks): only 3/10 printed values are the PubChem average MW, 3 are the monoisotopic mass and diazepam 278.07 is neither, so the column mixes sources",
       "pubchem_field": "MolecularWeight"
     },
     {
@@ -239,7 +240,7 @@
       "predictors": [
         "mM2"
       ],
-      "equation_verbatim": "[IMG OPEN-15-e70239-e025.jpg] (equation printed only as an image)",
+      "equation_verbatim": "[IMG OPEN-15-e70239-e025.jpg]",
       "statistics": {
         "R2": "0.9515",
         "RMSE": "13.69",
@@ -249,7 +250,8 @@
         "p": "0.001"
       },
       "fit": "in_sample",
-      "source": "Table 5"
+      "source": "Table 5",
+      "note": "the equation is printed only as an image"
     },
     {
       "id": "T5-04-ReZG2-linear",
@@ -334,7 +336,7 @@
       "predictors": [
         "mM2"
       ],
-      "equation_verbatim": "[IMG OPEN-15-e70239-e021.jpg] (equation printed only as an image)",
+      "equation_verbatim": "[IMG OPEN-15-e70239-e021.jpg]",
       "statistics": {
         "R2": "0.9526",
         "RMSE": "13.54",
@@ -344,7 +346,8 @@
         "p": "0.001"
       },
       "fit": "in_sample",
-      "source": "Table 5"
+      "source": "Table 5",
+      "note": "the equation is printed only as an image"
     },
     {
       "id": "T5-09-ReZG2-quadratic",
@@ -524,7 +527,7 @@
       "predictors": [
         "mM2"
       ],
-      "equation_verbatim": "[IMG OPEN-15-e70239-e054.jpg] (equation printed only as an image)",
+      "equation_verbatim": "[IMG OPEN-15-e70239-e054.jpg]",
       "statistics": {
         "R2": "0.9502",
         "RMSE": "13.87",
@@ -535,7 +538,7 @@
       },
       "fit": "in_sample",
       "source": "Table 6",
-      "note": "predictor inferred from the row order (M1, M2, mM2, ReZG1, F); the equation is an image"
+      "note": "predictor inferred from the row order (M1, M2, mM2, ReZG1, F); the equation is an image; the equation is printed only as an image"
     },
     {
       "id": "T6-09-ReZG1-power",
@@ -873,7 +876,7 @@
     {
       "check": "logP",
       "result": "info",
-      "detail": "logP matches PubChem XLogP3 for 5/10 drugs; the source is mixed."
+      "detail": "logP matches PubChem XLogP3 for 4/10 drugs (diazepam 2.82 vs XLogP3 3.0 does not); the source is mixed."
     },
     {
       "check": "density",
@@ -962,8 +965,9 @@
         "missing": [],
         "pubchem_field": "XLogP",
         "pubchem_compared": 10,
-        "pubchem_match": 5,
+        "pubchem_match": 4,
         "pubchem_mismatch": [
+          "01",
           "03",
           "04",
           "06",

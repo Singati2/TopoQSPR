@@ -28,7 +28,8 @@
     "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13260617/fullTextXML",
     "retrieved": "2026-10-03",
     "xml_sha256": "d12d7843aa5edcef4841140927ea41d7b57eab5f218805a730b5332178030209",
-    "other_sources": []
+    "other_sources": [],
+    "properties_sha256": "c9da47719a7689ca501caceed451530e5429a684654d41117d638385dcab1a96"
   },
   "n_reported": 10,
   "n_reported_source": "Text: 'Ten skin cancer drugs were selected'; N = 10 in Tables 5-8",
@@ -93,8 +94,8 @@
       "name_verbatim": "Molecular weight (MW)",
       "unit_verbatim": null,
       "source_stated_verbatim": "'the PubChem ... and ChemSpider databases ... were used to gather information on their physicochemical properties'",
-      "source_label": "computed_pubchem",
-      "source_evidence": "compared with PubChem MolecularWeight",
+      "source_label": "mixed",
+      "source_evidence": "compared with PubChem MolecularWeight (automated_checks): 7/10 equal PubChem; diclofenac is the sodium salt and nicotinamide (122.2) and methotrexate (454.5) are not PubChem's rounding, so the column is mostly but not only PubChem",
       "pubchem_field": "MolecularWeight"
     },
     {
@@ -1431,12 +1432,12 @@
     {
       "check": "PubChem MW/complexity",
       "result": "issue",
-      "detail": "Diclofenac MW 318.1 and complexity 310 are those of diclofenac sodium (free acid: 296.1, 304); nicotinamide MW is printed 122.2 (PubChem 122.12). The other 8 MW values match."
+      "detail": "Diclofenac MW 318.1 and complexity 310 are those of diclofenac sodium (free acid: 296.1, 304); nicotinamide MW is printed 122.2 (PubChem 122.12) and methotrexate 454.5 (PubChem 454.4). The other 7 MW values match."
     },
     {
       "check": "PSA",
       "result": "ok",
-      "detail": "PSA matches PubChem TPSA for 10/10 drugs (printed as integers)."
+      "detail": "PSA matches PubChem TPSA for 9/10 drugs (printed as integers); nicotinamide is printed 57 (PubChem TPSA 56.0)."
     },
     {
       "check": "logP",
@@ -1495,8 +1496,9 @@
         "missing": [],
         "pubchem_field": "MolecularWeight",
         "pubchem_compared": 10,
-        "pubchem_match": 8,
+        "pubchem_match": 7,
         "pubchem_mismatch": [
+          "03",
           "05",
           "06"
         ],
@@ -1529,8 +1531,10 @@
         "missing": [],
         "pubchem_field": "TPSA",
         "pubchem_compared": 10,
-        "pubchem_match": 10,
-        "pubchem_mismatch": []
+        "pubchem_match": 9,
+        "pubchem_mismatch": [
+          "05"
+        ]
       },
       "MV": {
         "n_values": 10,

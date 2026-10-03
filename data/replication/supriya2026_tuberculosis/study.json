@@ -28,7 +28,8 @@
     "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13319808/fullTextXML",
     "retrieved": "2026-10-03",
     "xml_sha256": "d6b32917fa1b9b62efa3ab0429afa4a9f94d5bd0bbe74393304cae43722e3e5d",
-    "other_sources": []
+    "other_sources": [],
+    "properties_sha256": "a8d3930dd42a815ac38ae781bee5d015901fc86c38f380e1c2844f68b19c8b6b"
   },
   "n_reported": 13,
   "n_reported_source": "Text: 'we performed DESI and EDS QSPR study on 13 medications' (tuberculosis subset; the SARS-CoV-2 subset, n = 8, fails criterion iv)",
@@ -171,14 +172,14 @@
         "DESI",
         "EDS"
       ],
-      "equation_verbatim": "$E = -7.444\\times 10^{-5}. DESI +9.14\\times 10^{-4}. EDS$ (Table 20 caption)",
+      "equation_verbatim": "$E = -7.444\\times 10^{-5}. DESI +9.14\\times 10^{-4}. EDS$",
       "statistics": {
         "R2": "0.82",
         "RMSE": "14.66",
         "adj_R2": "0.78"
       },
       "fit": "in_sample",
-      "source": "Table 13 (tuberculosis columns)",
+      "source": "Table 13 (tuberculosis columns); equation from the Table 20 caption",
       "note": "n = 11 for BP, E, FP (isoniazid and terizidone have no value)"
     },
     {
@@ -205,14 +206,14 @@
       "predictors": [
         "DESI"
       ],
-      "equation_verbatim": "MR=46.9421+3.4978 $\\times 10^{-4}$ DESI (Table 17 caption)",
+      "equation_verbatim": "MR=46.9421+3.4978$\\times 10^{-4}$DESI",
       "statistics": {
         "R2": "0.94",
         "RMSE": "10.29",
         "adj_R2": "0.94"
       },
       "fit": "in_sample",
-      "source": "Table 13 (tuberculosis columns)"
+      "source": "Table 13 (tuberculosis columns); equation from the Table 17 caption"
     },
     {
       "id": "Tab13-TB-P",
@@ -221,14 +222,14 @@
       "predictors": [
         "DESI"
       ],
-      "equation_verbatim": "$P = 18.59 +1.38 \\times 10^{-4}.DESI$ (Table 19 caption)",
+      "equation_verbatim": "$P = 18.59 +1.38 \\times 10^{-4}.DESI$",
       "statistics": {
         "R2": "0.94",
         "RMSE": "4.08",
         "adj_R2": "0.90"
       },
       "fit": "in_sample",
-      "source": "Table 13 (tuberculosis columns)"
+      "source": "Table 13 (tuberculosis columns); equation from the Table 19 caption"
     },
     {
       "id": "Tab13-TB-MV",
@@ -237,14 +238,14 @@
       "predictors": [
         "EDS"
       ],
-      "equation_verbatim": "$MV=108.9790+0.0059.EDS-3.014\\times 10^{-8}.EDS^{2}.$ (Table 18 caption)",
+      "equation_verbatim": "$MV=108.9790+0.0059.EDS-3.014\\times 10^{-8}.EDS^{2}.$",
       "statistics": {
         "R2": "0.92",
         "RMSE": "33.96",
         "adj_R2": "0.90"
       },
       "fit": "in_sample",
-      "source": "Table 13 (tuberculosis columns)"
+      "source": "Table 13 (tuberculosis columns); equation from the Table 18 caption"
     },
     {
       "id": "Tab16-TB-BP",
@@ -384,14 +385,14 @@
     }
   ],
   "resolution_issues": [
-    "Imipenem-cilastatin is a two-component combination product: unresolved (rule unresolvable).",
+    "Imipenem-cilastatin is a two-component combination product. The printed Table 7 EDS equals imipenem's eccentric distance sum (cilastatin's is 43610), so the row is resolved to imipenem, CID 104838 (rule component_by_printed_index; see the drugs.csv note).",
     "'p-AMINOSALICYLIC ACID' resolves to 4-aminosalicylic acid (CID 4649); TERIZIDONE to CID 65720."
   ],
   "reproducibility": {
     "verdict": "approximate",
     "reasons": [
       "names, property values and both index values are printed; EDS is uniquely defined, DESI needs longest-path (detour) distances, which are computable for these sizes",
-      "imipenem-cilastatin is a combination product with one row of values; it cannot be mapped to one structure",
+      "imipenem-cilastatin is a combination product with one row of values; its printed EDS identifies imipenem as the structure behind the indices, but which component the ChemSpider property values describe is not stated",
       "BP, E and FP are missing for isoniazid and terizidone (n = 11 for those properties)",
       "how the logarithmic and exponential models were fitted (linearised vs nonlinear least squares) is not stated; several coefficient tables disagree with their captions (e.g. Table 23 intercept 1.73 vs 731.2012 in the model)"
     ]
@@ -400,8 +401,7 @@
     "n_drugs_listed": 13,
     "n_matches_reported": true,
     "resolution_status_counts": {
-      "resolved": 12,
-      "unresolved": 1
+      "resolved": 13
     },
     "duplicate_structures": [],
     "shared_connectivity_groups": [],

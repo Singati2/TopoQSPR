@@ -28,7 +28,8 @@
     "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13563987/fullTextXML",
     "retrieved": "2026-10-03",
     "xml_sha256": "f40a5ae5325f9a049a95326eb7a3e5cf92e79f6de08e2d2fc14755e509e2b55e",
-    "other_sources": []
+    "other_sources": [],
+    "properties_sha256": "a2d33d2cd03fba4bab9fc180f280f910c29fbaed1ff760d06683ce5723c3bd3b"
   },
   "n_reported": 18,
   "n_reported_source": "Abstract: 'computed for 18 drugs used to treat bipolar disorder'; Discussion: 'n = 18'",
@@ -1284,7 +1285,7 @@
     {
       "check": "PubChem computed properties",
       "result": "ok",
-      "detail": "MW, COM and HAC equal current PubChem values for 18/18 drugs (automated_checks), so they are computed_pubchem."
+      "detail": "MW, COM and HAC equal current PubChem values for 18/18 drugs (automated_checks), so they are computed_pubchem. Valproic acid COM 93.4 is PubChem's 1-decimal complexity (PUG-View); PUG-REST truncates it to 93."
     },
     {
       "check": "ACD/ChemSpider properties",

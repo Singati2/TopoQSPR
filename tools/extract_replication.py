@@ -26,6 +26,9 @@ reproduces ``drugs.csv`` byte for byte.  Resolution rules (docs/REPLICATION_DATA
 * ``code_mapped``       the table prints a code (BD1, A1, G1); the name comes from the text.
 * ``parent_form``       the printed name denotes an ion or salt while the paper's own formula or
                         values describe the neutral parent; ``query_name`` is the parent.
+* ``component_by_printed_index``  a combination product whose printed index values identify
+                        one component; ``query_name`` is that component and ``note`` the evidence
+                        (a printed index value recomputed exactly for it and not for the other).
 * ``unresolvable``      combination product, polymer or mixture: no single structure, status
                         ``unresolved`` (never guessed).
 If PubChem returns several CIDs for a name the first (PubChem's ranking) is taken and the row is
@@ -36,7 +39,7 @@ Usage::
     python tools/extract_replication.py validate            # offline schema + consistency
     python tools/extract_replication.py resolve [--offline] [study ...]
     python tools/extract_replication.py fetch-xml [study ...]          # network, cached
-    python tools/extract_replication.py extract [study ...]             # needs cached XML
+    python tools/extract_replication.py extract [--record] [study ...]  # needs cached XML
 """
 
 from __future__ import annotations
@@ -48,6 +51,7 @@ import io
 import json
 import math
 import re
+from decimal import ROUND_DOWN, Decimal
 import sys
 import time
 import urllib.parse
@@ -78,10 +82,13 @@ PROPERTY_COLUMNS = ["drug_id", "row_label_verbatim", "property", "value_verbatim
                     "missing_reason"]
 
 RULES = {"as_printed", "typo_corrected", "spelling_variant", "code_mapped", "parent_form",
-         "unresolvable"}
+         "component_by_printed_index", "unresolvable"}
 STATUSES = {"resolved", "ambiguous_first_cid", "resolved_multicomponent", "unresolved"}
 SOURCE_LABELS = {"predicted_acd_chemspider", "computed_pubchem", "predicted_chemdraw",
-                 "measured", "measured_or_predicted_unclear", "unknown"}
+                 "measured", "measured_or_predicted_unclear", "mixed", "unknown"}
+# 'computed_pubchem' must be confirmed by automated_checks: at least this fraction of the
+# compared values agree with PubChem (otherwise the column is labelled 'mixed' or 'unknown').
+COMPUTED_PUBCHEM_MIN_MATCH = 0.8
 MODEL_FORMS = {"linear", "quadratic", "cubic", "logarithmic", "exponential", "power",
                "multiple_linear", "ridge", "elastic_net", "random_forest", "xgboost", "ann",
                "fuzzy_ann"}
@@ -99,6 +106,15 @@ REQUIRED_STUDY_KEYS = {
 # PubChem computed field used to label a property column as 'computed_pubchem'.
 PUBCHEM_COMPARABLE = {"MolecularWeight": "molecular_weight", "HeavyAtomCount": "heavy_atom_count",
                       "Complexity": "complexity", "TPSA": "tpsa", "XLogP": "xlogp"}
+# Native decimals of PubChem's computed values.  PUG-REST JSON drops trailing zeros (an XLogP
+# of 3.0 arrives as 3, a TPSA of 56.0 as 56), so the reference is read at this precision.
+# MolecularWeight is a string carrying its own precision; HeavyAtomCount is an integer.
+# Complexity is special: PubChem computes it to 1 dp (PUG-View: valproic acid 93.4,
+# phenelzine 77.3, ethanol 2.8) but PUG-REST returns it truncated to an integer (93, 77, 2).
+PUBCHEM_NATIVE_DECIMALS = {"XLogP": 1, "TPSA": 1, "HeavyAtomCount": 0}
+# An equation_verbatim must be a substring of the rendered XML; location or interpretation
+# remarks belong in 'source' or 'note', never in the verbatim field.
+_ANNOTATION = re.compile(r"\((?:Table|Figure|Fig\.|Eq\.|equation)[^)]*\)\s*$", re.I)
 
 
 # --------------------------------------------------------------------------- JATS rendering
@@ -327,18 +343,43 @@ def read_csv(path: Path) -> list[dict]:
         return list(csv.DictReader(fh))
 
 
-def write_csv(path: Path, rows: list[dict], columns: list[str]) -> None:
+def csv_text(rows: list[dict], columns: list[str]) -> str:
     buf = io.StringIO()
     w = csv.DictWriter(buf, fieldnames=columns, lineterminator="\n")
     w.writeheader()
     for r in rows:
         w.writerow({c: r.get(c, "") for c in columns})
-    path.write_text(buf.getvalue(), encoding="utf-8")
+    return buf.getvalue()
+
+
+def write_csv(path: Path, rows: list[dict], columns: list[str]) -> None:
+    path.write_text(csv_text(rows, columns), encoding="utf-8")
+
+
+def properties_sha256(rows: list[dict]) -> str:
+    """SHA-256 of the canonical properties.csv text (as ``write_csv`` writes it).  ``extract
+    --record`` stores it as ``source.properties_sha256``; ``validate`` then detects any later
+    edit of a committed value offline, and ``extract`` detects drift for withheld studies."""
+    return hashlib.sha256(csv_text(rows, PROPERTY_COLUMNS).encode("utf-8")).hexdigest()
+
+
+def equation_problems(xml: bytes, study: dict) -> list[str]:
+    """Model ids whose ``equation_verbatim`` is not a substring of any rendered paragraph,
+    caption, title, formula or table cell of the JATS XML."""
+    root = ET.fromstring(xml)
+    texts = [render(e) for e in root.iter()
+             if e.tag in ("p", "td", "th", "caption", "title", "label", "disp-formula")]
+    return [m["id"] for m in study["models"] if m.get("equation_verbatim")
+            and not any(m["equation_verbatim"] in t for t in texts)]
 
 
 def study_dirs(keys: list[str] | None = None) -> list[Path]:
+    """All study folders, or the requested ones; an unknown key raises ``KeyError``."""
     ds = sorted(p for p in DATA_DIR.iterdir() if p.is_dir() and (p / "study.json").exists())
     if keys:
+        unknown = sorted(set(keys) - {d.name for d in ds})
+        if unknown:
+            raise KeyError(f"unknown study key(s): {', '.join(unknown)}")
         ds = [d for d in ds if d.name in keys]
     return ds
 
@@ -368,15 +409,30 @@ def _decimals(s: str) -> int:
     return len(t.split(".")[1]) if "." in t else 0
 
 
-def matches_printed(printed: str, ref: str) -> bool:
-    """True if two printed numbers agree up to the rounding of both (PubChem itself prints,
-    e.g., sertraline MW as '306.2')."""
-    v, why = parse_value(printed)
-    w, why2 = parse_value(ref)
+def matches_printed(printed: str, ref: str, field: str | None = None) -> bool:
+    """True if the printed number and the reference agree at the coarser of their precisions:
+    the more precise one, rounded to the coarser number of decimals, gives the other (a tie at
+    exactly half a unit is accepted under either rounding convention).  Numbers given at the
+    same precision must be equal, so integers are compared exactly.
+
+    ``field`` names the PubChem field of ``ref``; its native precision is used where PUG-REST
+    dropped trailing zeros (``PUBCHEM_NATIVE_DECIMALS``).  For ``Complexity`` the reference is
+    PUG-REST's truncated integer: a printed integer must equal it and a printed decimal must
+    truncate to it.  (PubChem itself prints, e.g., sertraline MW as '306.2'.)"""
+    _, why = parse_value(printed)
+    _, why2 = parse_value(ref)
     if why or why2:
         return False
-    tol = 0.5 * 10.0 ** (-_decimals(printed)) + 0.5 * 10.0 ** (-_decimals(ref)) + 1e-9
-    return abs(v - w) <= tol
+    p = Decimal(printed.strip().translate(_MINUS))
+    r = Decimal(ref.strip().translate(_MINUS))
+    dp = _decimals(printed)
+    dr = max(_decimals(ref), PUBCHEM_NATIVE_DECIMALS.get(field or "", 0))
+    if field == "Complexity" and dp > 0 and _decimals(ref) == 0:
+        return p.to_integral_value(rounding=ROUND_DOWN) == r
+    if dp == dr:
+        return p == r
+    fine, coarse = (p, r) if dp > dr else (r, p)
+    return abs(fine - coarse) <= Decimal(5).scaleb(-(min(dp, dr) + 1))
 
 
 def _hill_norm(f: str) -> str:
@@ -429,7 +485,7 @@ def automated_checks(study: dict, drugs: list[dict], props: list[dict] | None) -
             cmp_ = [(r, by_drug[r["drug_id"]][col]) for r in vals
                     if by_drug[r["drug_id"]][col] not in ("", None)]
             ok = [r["drug_id"] for r, ref in cmp_
-                  if matches_printed(r["value_verbatim"], ref)]
+                  if matches_printed(r["value_verbatim"], ref, fld)]
             bad = sorted(r["drug_id"] for r, _ in cmp_ if r["drug_id"] not in ok)
             d["pubchem_field"] = fld
             d["pubchem_compared"] = len(cmp_)
@@ -484,7 +540,7 @@ def validate_study(d: Path, cache: PubChemCache | None = None) -> list[str]:
         errs.append("licence statement/spdx missing")
     if lic.get("data_redistribution") == "stored" and not lic["spdx"].startswith("CC-BY-4.0"):
         errs.append("values stored for a non CC-BY article")
-    for k in ("fulltext_url", "retrieved", "xml_sha256"):
+    for k in ("fulltext_url", "retrieved", "xml_sha256", "properties_sha256"):
         if not s["source"].get(k):
             errs.append(f"source.{k} missing")
     pt = s["property_table"]
@@ -527,6 +583,12 @@ def validate_study(d: Path, cache: PubChemCache | None = None) -> list[str]:
             errs.append(f"model {m.get('id')}: statistics must map to verbatim strings")
         if m.get("property") not in codes:
             errs.append(f"model {m.get('id')}: property {m.get('property')!r} not in properties")
+        eq = m.get("equation_verbatim")
+        if eq is not None and (not isinstance(eq, str) or _ANNOTATION.search(eq)):
+            errs.append(f"model {m.get('id')}: equation_verbatim carries a non-verbatim "
+                        "annotation (move it to source or note)")
+        if "equation_interpreted" in m and not m.get("interpretation_source"):
+            errs.append(f"model {m.get('id')}: equation_interpreted needs interpretation_source")
         symbols = {i.get("symbol_verbatim") for i in s["indices"]}
         unknown = [p for p in m.get("predictors", []) if p not in symbols]
         if unknown:
@@ -558,6 +620,10 @@ def validate_study(d: Path, cache: PubChemCache | None = None) -> list[str]:
             errs.append(f"drug {r['drug_id']}: rule {r['rule']} needs a note")
         if r["rule"] == "as_printed" and r["query_name"] != r["name_verbatim"]:
             errs.append(f"drug {r['drug_id']}: as_printed but query_name differs")
+        if r["rule"] == "as_printed" and _ion_name_for_acid(r["name_verbatim"],
+                                                            r["pubchem_title"]):
+            errs.append(f"drug {r['drug_id']}: ion/salt name {r['name_verbatim']!r} resolved to "
+                        f"{r['pubchem_title']!r}; use rule parent_form with a note")
         if r["status"] != "unresolved" and not (r["pubchem_cid"] and r["inchikey"]
                                                  and r["isomeric_smiles"]):
             errs.append(f"drug {r['drug_id']}: resolved without CID/SMILES/InChIKey")
@@ -588,6 +654,16 @@ def validate_study(d: Path, cache: PubChemCache | None = None) -> list[str]:
         if len(props) != len(drugs) * len(codes):
             errs.append(f"properties.csv has {len(props)} rows, expected "
                         f"{len(drugs)} x {len(codes)}")
+        # rows must belong to their drugs and come in drug order, then property-column order
+        order = [(dr["drug_id"], dr["row_label_verbatim"], c["property"])
+                 for dr in drugs for c in pt.get("columns", [])]
+        got = [(r["drug_id"], r["row_label_verbatim"], r["property"]) for r in props]
+        if got != order:
+            bad = next((g for g, o in zip(got, order) if g != o), None)
+            errs.append(f"properties.csv rows not in drugs.csv order/labels (first: {bad})")
+        if properties_sha256(props) != s["source"].get("properties_sha256"):
+            errs.append("properties.csv differs from source.properties_sha256 "
+                        "(edited after extraction?)")
         seen = set()
         ids_ok = {r["drug_id"] for r in drugs}
         for r in props:
@@ -605,7 +681,23 @@ def validate_study(d: Path, cache: PubChemCache | None = None) -> list[str]:
     if cache is not None and not any("cache miss" in e for e in errs):
         if automated_checks(s, drugs, props) != s["automated_checks"]:
             errs.append("automated_checks out of date (run resolve)")
+    # 'computed_pubchem' must be confirmed by the automated comparison
+    per = s["automated_checks"].get("properties")
+    for p in s["properties"]:
+        if p.get("source_label") != "computed_pubchem" or not isinstance(per, dict):
+            continue
+        c = per.get(p.get("code"), {})
+        n, k = c.get("pubchem_compared", 0), c.get("pubchem_match", 0)
+        if not n or k / n < COMPUTED_PUBCHEM_MIN_MATCH:
+            errs.append(f"property {p.get('code')}: source_label computed_pubchem but only "
+                        f"{k}/{n} values match PubChem (< {COMPUTED_PUBCHEM_MIN_MATCH:.0%})")
     return [f"{d.name}: {e}" for e in errs]
+
+
+def _ion_name_for_acid(name: str, title: str) -> bool:
+    """A printed anion name ('valproate', 'meclofenamate') whose PubChem record is the acid."""
+    n, t = name.strip().lower(), title.strip().lower()
+    return n.endswith("ate") and t.endswith(" acid") and n != t
 
 
 # --------------------------------------------------------------------------- commands
@@ -647,9 +739,11 @@ def cmd_fetch_xml(keys: list[str] | None) -> int:  # pragma: no cover - network
     return 0
 
 
-def cmd_extract(keys: list[str] | None) -> int:
+def cmd_extract(keys: list[str] | None, record: bool = False) -> int:
     """Re-extract properties from the cached JATS XML and compare with properties.csv
-    (or write it to the local cache for licence-withheld studies)."""
+    (or write it to the local cache for licence-withheld studies), compare its SHA-256 with
+    ``source.properties_sha256`` (``--record`` writes it) and check that every
+    ``equation_verbatim`` occurs verbatim in the XML."""
     bad = 0
     for d in study_dirs(keys):
         s = load_study(d)
@@ -658,15 +752,27 @@ def cmd_extract(keys: list[str] | None) -> int:
             print(f"{d.name}: no cached XML ({p}); run fetch-xml")
             bad += 1
             continue
+        xml = p.read_bytes()
         drugs = read_csv(d / "drugs.csv")
-        rows = extract_properties(p.read_bytes(), s["property_table"], drugs)
+        rows = [{c: r[c] for c in PROPERTY_COLUMNS}
+                for r in extract_properties(xml, s["property_table"], drugs)]
+        h = properties_sha256(rows)
+        if record and s["source"].get("properties_sha256") != h:
+            s["source"]["properties_sha256"] = h
+            dump_study(d, s)
+        if s["source"].get("properties_sha256") != h:
+            print(f"{d.name}: extracted properties DIFFER FROM source.properties_sha256")
+            bad += 1
+        eq_bad = equation_problems(xml, s)
+        if eq_bad:
+            print(f"{d.name}: equation_verbatim not found in the XML for {eq_bad}")
+            bad += 1
         if s["licence"]["data_redistribution"] == "withheld":
             q = XML_CACHE / s["study_key"] / "properties.csv"
             write_csv(q, rows, PROPERTY_COLUMNS)
             print(f"{d.name}: {len(rows)} rows written to {q} (not committed: licence)")
             continue
-        committed = read_csv(d / "properties.csv")
-        same = committed == [{c: r[c] for c in PROPERTY_COLUMNS} for r in rows]
+        same = read_csv(d / "properties.csv") == rows
         print(f"{d.name}: properties.csv {'matches' if same else 'DIFFERS FROM'} the XML")
         bad += not same
     return 1 if bad else 0
@@ -675,7 +781,11 @@ def cmd_extract(keys: list[str] | None) -> int:
 def cmd_validate(keys: list[str] | None) -> int:
     cache = PubChemCache(offline=True)
     n = 0
-    for d in study_dirs(keys):
+    dirs = study_dirs(keys)
+    if not dirs:
+        print("no study folders found")
+        return 1
+    for d in dirs:
         errs = validate_study(d, cache)
         for e in errs:
             print(e)
@@ -693,15 +803,23 @@ def main(argv: list[str] | None = None) -> int:
         if name == "resolve":
             sp.add_argument("--offline", action="store_true",
                             help="use only the committed PubChem cache")
+        if name == "extract":
+            sp.add_argument("--record", action="store_true",
+                            help="write source.properties_sha256 from the extracted rows")
     a = ap.parse_args(argv)
     keys = a.studies or None
+    try:
+        study_dirs(keys)
+    except KeyError as exc:
+        print(f"error: {exc.args[0]}", file=sys.stderr)
+        return 2
     if a.cmd == "validate":
         return cmd_validate(keys)
     if a.cmd == "resolve":
         return cmd_resolve(keys, a.offline)
     if a.cmd == "fetch-xml":
         return cmd_fetch_xml(keys)
-    return cmd_extract(keys)
+    return cmd_extract(keys, a.record)
 
 
 if __name__ == "__main__":
