@@ -10,13 +10,14 @@ Roadmap item M6.
 
 | # | Stage | What happens | Module |
 |---|---|---|---|
-| 1 | cohort | Controlled cohort from confirmed MeSH IDs (ChEMBL, cached per release), or a cohort manifest written earlier, or a SMILES CSV. Writes `manifest.csv` (+ `manifest.json`). | `cohort.build_cohort` |
+| 1 | cohort | Controlled cohort from confirmed MeSH IDs (ChEMBL, cached per release), or the pooled approved-drug set (`expdata.approved_drug_pool`), or a cohort manifest written earlier, or a SMILES CSV. Writes `manifest.csv` (+ `manifest.json`). | `cohort.build_cohort`, `expdata.approved_drug_pool` |
 | 2 | standardize | `graph.standardize` on every included structure. Rejections stay in `molecules.csv` with their code. A structure whose standardised parent has the same full InChIKey as an earlier one is excluded as `duplicate_inchikey:<kept id>` (it would otherwise sit in a training and a test fold at once). Parents that share only the InChIKey **first block** (stereoisomers, racemate and enantiomer, isotopologues) are all kept but get a common `connectivity_group` (see *Connectivity groups* below). | `graph` |
 | 3 | indices | All `indices.REGISTRY` entries (or `indices.names`). An undefined index is NaN with the registry's reason in `failures.csv`; an unexpected exception makes that molecule's indices NaN with the exception text. Never 0. | `indices` |
 | 4 | features | `size`, `size_rings`, `composition`, `rdkit2d` (all of `descList`, subset per target below), `TI` and one `TI_<family>` set per index family. | `features` |
 | 5 | targets | Each configured provider returns values (NaN + reason when missing). Rows with a missing value are dropped **for that target only**; the count is `n_target_missing` in `summary.csv`. | `target_providers` |
 | 6 | evaluate | For every target and every learner: `evaluate.compare_feature_sets` on all feature sets with identical outer folds (EVALUATION_PROTOCOL.md §3–5). | `evaluate` |
-| 7 | write | Result CSVs, `study.json`, then `run_record.json` last. Everything is written to a staging directory `.<out>.partial` next to `--out` and moved into `--out` only when the run has succeeded: a failed run leaves no partial results directory, and with `--overwrite` the old results are replaced only by a finished run. | `provenance` |
+| 7 | protocol | AD coverage and in-domain metrics for every result (`ad.csv`, `ad_summary.csv`). With `config.protocol`: the Y-randomised control, the whole-procedure paired bootstrap and the confirmatory family table (§9; EVALUATION_PROTOCOL.md §11). | `pipeline` |
+| 8 | write | Result CSVs, `study.json`, then `run_record.json` last. Everything is written to a staging directory `.<out>.partial` next to `--out` and moved into `--out` only when the run has succeeded: a failed run leaves no partial results directory, and with `--overwrite` the old results are replaced only by a finished run. | `provenance` |
 
 **Learners.** `selected` is the protocol's default: family and hyperparameters are
 chosen in the inner loop among all configured families. Every family name listed in
@@ -66,7 +67,7 @@ what is stored and hashed.
 {
   "schema": 1,
   "name": "study",
-  "cohort": {                       // one of three sources
+  "cohort": {                       // one of four sources
     "source": "chembl",             // controlled cohort (COHORT_DEFINITION.md)
     "mesh_ids": ["D008881"],        // confirmed descriptor IDs (required)
     "min_phase": 4.0,               // null = no phase rule
@@ -77,6 +78,8 @@ what is stored and hashed.
     "disease_label": null,
     "chembl_release": null          // e.g. "ChEMBL_37": fail if another release is served
   },
+  // or {"source": "pooled", "chembl_release": null}   pooled approved drugs, any indication
+  //    (expdata.approved_drug_pool: the union of the phase-4 cohorts of every MeSH heading)
   // or {"source": "manifest", "path": "cohort/manifest.csv"}          (decision == include rows)
   // or {"source": "smiles_csv", "path": "x.csv", "id_column": "id", "smiles_column": "smiles"}
   //    relative paths are relative to the config file's directory (CLI) / base_dir (API)
@@ -91,10 +94,16 @@ what is stored and hashed.
     "random_state": 0, "ad": "knn", "split": "random",
     "reference": "size", "alpha": 0.05, "min_n": 50, "min_n_test": 10
   },
+  "protocol": null,                 // null = no protocol stage; see §9 for the section
   "output": {"features_format": "csv"},   // "parquet" additionally writes features.parquet
-  "runtime": {"n_jobs": 1, "chembl_cache_dir": null, "offline": false}
+  "runtime": {"n_jobs": 1, "chembl_cache_dir": null, "offline": false,
+              "expdata_cache_dir": null}   // null = <TOPOQSPR_CACHE or ~/.cache/topoqspr>/expdata
 }
 ```
+
+`protocol: null` (the default) leaves the key out of the resolved config, so configs
+written before the protocol stage existed keep their `config_sha256` (the golden hash of
+`examples/pilot_migraine.json` is unchanged) and old run records still re-run.
 
 **Validation happens before any work.** Besides unknown keys, `resolve_config` rejects an
 empty or duplicated `evaluation.seeds` (identical repeats would be counted as independent
@@ -136,6 +145,39 @@ The shipped provider `rdkit` computes, on `Chem.RemoveHs` of the standardised pa
 | `TPSA` (Ertl) | 2 | `TPSA` | Å² |
 | `MolMR` (Wildman–Crippen) | 2 | `MolMR` | cm³/mol |
 
+The shipped provider `expdata` (`target_providers.ExpdataTargetProvider`) serves the
+measured targets of `expdata.get_target` (EXPERIMENTAL_DATA.md): `mp_bradley`,
+`mp_opera`, `logp_opera`, `logd74_az`, `logs_aqsoldb`, `logs_opera`, `logs74_az`,
+`logs68_biogen` (`names: null` = all eight). Every target is class 3, has
+`rdkit2d_exclusion: null` (a measured value is computed from no RDKit descriptor; by the
+leakage rule of EVALUATION_PROTOCOL.md §1 alternative estimators such as Crippen `MolLogP`
+for measured logP are kept, even though Crippen's atom contributions were themselves fitted
+to measured logP data) and carries the source in `source` (`expdata:<source key>`).
+
+* **Join:** the full standard InChIKey of the standardised parent (the same
+  `graph.standardize` that `expdata` applies to the source records). There is no
+  first-block fallback, so a stereoisomer never inherits its partner's measurement.
+* **Missing values** are NaN with one of the reasons `no_inchikey`, `no_measurement`,
+  `no_measurement_stereo_mismatch` (only another stereoisomer or isotopologue has a value;
+  not used) or `replicates_disagree` (replicate SD above the target's `disagreement_sd`;
+  the provider loads with `drop_disagreeing=False` and applies the rule itself so that the
+  reason is recorded).
+* **Options** (hashed): `drop_disagreeing` (default true), `keep_salt_forms` (default
+  false; sensitivity analysis), `chembl_release` (for the AstraZeneca targets; default:
+  the release of the cohort's ChEMBL client, else ChEMBL_37).
+* **Runtime** (not hashed): the pipeline calls `set_runtime(cache_dir=runtime.expdata_cache_dir,
+  chembl_cache_dir=..., offline=..., client=<cohort client>)` on any provider that defines
+  it, so the AstraZeneca (ChEMBL-hosted) targets come from the cohort's release and cache.
+* **Provenance** (`study.json` and `run_record.json` → `target_providers`): matching rule,
+  options, `expdata.PROCESSING_VERSION`, and per target the source key, title, citation,
+  DOI, version, **licence**, redistribution flag, URL or ChEMBL assay, the raw-data
+  SHA-256 and processing fingerprint, the number of source parents, full-key matches,
+  parents dropped for disagreeing replicates, and values used.
+
+A target with fewer molecules (or connectivity groups) than the CV needs is not evaluated;
+it is listed with the reason in `run_record.json` → `counts.skipped_targets` (a pilot-size
+cohort covers only a handful of drugs for some measured endpoints).
+
 Experimental (class 3) providers are added by `register_target_provider(name, factory)`
 or named in the config as `"package.module:factory"`; the factory is called as
 `factory(names=<list or None>, **options)`. The pipeline checks that the returned columns
@@ -173,11 +215,19 @@ redistributed results must keep the attribution and the licence (README, *Data*)
 | `paired.csv` | per-fold differences d_R², d_MAE, d_RMSE against the reference set |
 | `inner.csv` | the inner-loop selection table of every outer fold |
 | `summary.csv` | the baseline ladder per target × learner: `target, target_class, learner, set, reference, n, n_target_missing, p`, fold-mean and pooled R², MAE, failed/valid fold counts, `underpowered` (+ reason), `d_r2_mean/ci_low/ci_high/p`, `d_mae_*`, `d_r2_q` (BH across the sets of that target × learner), `family_counts`, `min_n_test` |
+| `ad.csv` | per (target, learner, set, repeat, fold): n_test, n_in_domain, n_outside, share_outside, R²/MAE of the in-domain and of the outside test rows, ad_reason (written whenever `evaluation.ad` is set) |
+| `ad_summary.csv` | per (target, learner, set): mean and max share outside over folds, pooled share, and mean over repeats of the pooled R²/MAE on all, in-domain and outside rows; `reason` when the AD was not fitted (e.g. the zero-column `null` set) |
+| `permutation.csv` | protocol: one row per (target, set, permutation): the permuted-target nested-CV statistics and the RNG used |
+| `permutation_summary.csv` | protocol: per (target, set): observed mean pooled R², K, empirical p (+1), null mean/SD/95th percentile/max, valid and failed permutations, `uninformative` |
+| `bootstrap.csv` | protocol: per (target, set, reference, resample): the RNG, rows and units drawn, d_R², d_MAE and both sets' fold-mean R²/MAE; `resample = -1` is the original data |
+| `confirmatory.csv` | protocol: the confirmatory family table (EVALUATION_PROTOCOL.md §11) |
 | `study.json` | feature-set column lists (rdkit2d per target), target specs, provider provenance |
 | `run_record.json` | §5 |
 
-The study-level BH correction over disease × target pairs (EXPERIMENT_PLAN §7) is applied
-by the analysis that collects `d_r2_p` across runs, not by a single run.
+`d_r2_q` in `summary.csv` corrects across the sets of one target × learner only. The
+confirmatory BH/BY correction is in `confirmatory.csv`, over the family that the run's
+`protocol.family` defines; a family that spans several runs (e.g. diseases run separately)
+is corrected by the analysis that collects `d_r2_p` across runs.
 
 ## 5. Run record
 
@@ -195,10 +245,13 @@ by the analysis that collects `d_r2_p` across runs, not by a single run.
 | `seeds` | outer seeds, the inner-seed rule (`1000 * outer_seed + fold`), the estimator `random_state`, the outer splitter actually used (§1 *Connectivity groups*) |
 | `inputs` | SHA-256 of every input file (SMILES CSV / manifest + sidecar) |
 | `manifest_sha256` | SHA-256 of the written `manifest.csv` |
-| `counts` | candidates, standardised, rejections by code, non-missing values per target, feature-set sizes, number of failure records, `connectivity_groups` (groups and molecules) |
+| `counts` | candidates, standardised, rejections by code, non-missing values per target, feature-set sizes, number of failure records, `connectivity_groups` (groups and molecules), `skipped_targets` (target → reason) |
+| `targets` | every target spec: name, class (EXPERIMENT_PLAN §4) and label, rdkit2d exclusion, units, source, description |
+| `target_providers` | each provider's `provenance()` (for `expdata`: sources, licences, hashes, match counts; §3) |
+| `protocol` | `null` without `config.protocol`; otherwise the expanded confirmatory **family** (target, set, reference), the family rule, the confirmatory learner and its families, the **practical threshold**, q, alpha, the multiplicity, **family-membership** (`family_membership`, `min_n`, `min_n_test`), informative and practical rules, and for `permutation` and `bootstrap` `enabled` (with the reason when off), K/B, seed, RNG rule, permutation scheme (row-wise or block, per target), learner or families (a fast bootstrap subset is labelled as such), statistic and interval rules |
 | `outputs` | SHA-256 and size of every file written before the record |
 | `result_csvs` | the files a re-run must reproduce byte for byte |
-| `timings_s` | wall time per stage, and per target × learner for `evaluate` |
+| `timings_s` | wall time per stage, per target × learner for `evaluate`, and per target (permutation) or family row (bootstrap) for `protocol` |
 
 **Re-run.** `topoqspr rerun RUN_RECORD --out DIR` (`pipeline.rerun`) checks the record's
 config hash, checks every input file against its recorded SHA-256, builds an **offline**
@@ -355,3 +408,109 @@ learners took 6.4 h for n = 33. Tree-ensemble cost grows with n_train, and the p
 own measurement (§9) is about 340 s per outer fold at n_train = 123 for the ten families,
 so main-panel cohorts (n ≥ 50) with all eleven learners will need a dedicated machine or
 a reduced learner list, decided before the plan is frozen.
+
+## 9. Protocol stage (confirmatory analysis)
+
+Enabled by a `protocol` section in the study config (EXPERIMENT_PLAN §7; statistics in
+EVALUATION_PROTOCOL.md §11). Defaults:
+
+```jsonc
+"protocol": {
+  "family": null,                 // "auto" = every class-3 target x (TI vs evaluation.reference);
+                                  // or [{"target": "mp_bradley", "set": "TI", "reference": "size"}, ...]
+                                  // or the shorthand ["mp_bradley:TI-size", "logp_opera:TI_degree"]
+  "learner": "selected",          // whose results form the table; must be in evaluation.learners
+  "practical_threshold": 0.05,    // minimal meaningful Delta R2 (plan: to be confirmed)
+  "q": 0.05,                      // FDR level for BH and BY
+  "permutation": {"enabled": true, "n_permutations": 200, "seed": 0,
+                  "learner": null,          // null = protocol.learner (must be in evaluation.learners)
+                  "feature_sets": null,     // null = the sets and references of the family
+                  "quantile": 0.95},
+  "bootstrap": {"enabled": true, "n_boot": 200, "seed": 0,
+                "families": null}           // null = protocol.learner's families; or a fast subset
+}
+```
+
+Validation (before any work): the family's sets must be evaluated feature sets (a
+`TI_<family>` set needs `TI_family`), the reference must be `evaluation.reference`,
+entries must be unique, the learners must be in `evaluation.learners`, K ≥ 1, B ≥ 2,
+bootstrap families must exist, and every family target must be supplied by a provider
+(checked before the cohort stage).
+
+Outputs: `confirmatory.csv`, `permutation.csv`, `permutation_summary.csv`,
+`bootstrap.csv` (§4), and the run record's `protocol` entry (§5), which holds the expanded
+family, the threshold and every seed and rule. All are in `result_csvs`, so `rerun`
+checks them byte for byte.
+
+**Cost.** Each permutation reruns one nested CV per set; each bootstrap resample reruns
+two. With the plan's K = B = 200 and a family of four targets × (TI vs size), that is
+4 × 2 × 200 + 4 × 2 × 201 = 3,208 nested CVs on top of the main analysis, so the main run
+needs a fast learner list (CHECKPOINT decision 4) and, for the bootstrap, possibly a
+fast family subset (`protocol.bootstrap.families`; labelled in the run record).
+Permutations and resamples run in parallel with `runtime.n_jobs` (identical results).
+
+## 10. Protocol smoke run (Migraine Disorders only)
+
+Purpose: run the protocol stage end to end on real data, with measured targets, and
+measure its cost. Only the quarantined pilot was used (EXPERIMENT_PLAN §2); **no
+performance number, CI, p or q value was read or is reported here**. Only counts, status
+fields and timings were inspected (with a script that prints nothing else).
+
+Command (2026-10-03, mpcrlab12, load average 25–30 from other jobs):
+
+```bash
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  topoqspr -v run --config pilot_protocol_smoke.json --out <scratch>/pilot_smoke --n-jobs 4 --offline
+```
+
+Config (kept in scratch space, not committed): the D008881 cohort pinned to ChEMBL_37;
+feature sets `null, size, composition, TI, rdkit2d`; targets `rdkit` (MolLogP, TPSA) and
+`expdata` (mp_bradley, logp_opera, logd74_az, logs_aqsoldb); learner `selected` over the
+fast subset ridge, PLS, kNN; 5 × 5 outer, 3 inner; `protocol.family = "auto"` (the four
+measured targets × TI vs size), K = 19 permutations, B = 19 bootstrap resamples with the
+bootstrap family subset `["ridge"]`.
+
+Run record: commit `7a39c1c` (clean tree), Python 3.10.12, ChEMBL_37 (2026-05-01, offline
+cache), `config_sha256` `9d84370a…128d24`, `manifest_sha256` `7d3e104d…ccb62a` (the same
+cohort as §8).
+
+**Counts.** 33 parents, all standardised. Measured values matched on the full InChIKey:
+mp_bradley 15, logs_aqsoldb 12, logp_opera 10, logd74_az 8 (the coverage counts of
+EXPERIMENTAL_DATA.md). Missing values carry their reasons: `no_measurement` 17–22 per
+target, `no_measurement_stereo_mismatch` (only another stereoisomer has a value) 3 for
+logd74_az and 1 for logp_opera, `replicates_disagree` mp_bradley 1, logp_opera 2,
+logd74_az 0, logs_aqsoldb 1. Every confirmatory row is labelled underpowered (n < 50).
+(This run predates the family-membership rule of EVALUATION_PROTOCOL §11.2: it still gave
+these rows BH/BY q values; under the current code every one of them is left out of the
+multiplicity family, `family_m` = 0, with NaN q and no informative flag.) One target (logd74_az, n = 8) has outer test folds with a single
+row, so 10 of 25 fold R² are undefined and its corrected-t p is NaN with the reason, as
+specified. The bootstrap intervals are NaN with "k of 19 resamples undefined" for all four
+rows: at n = 8–15 a resampled test fold often holds copies of one or two molecules
+(R² undefined), and the protocol refuses to compute an interval from the surviving
+resamples. All 152 permutation runs had a defined statistic. `null` is the only set
+without an AD (no columns).
+
+**Wall time per stage** (seconds; n_jobs = 4 over outer folds in the main analysis and
+over permutations / resamples in the protocol stage)
+
+| stage | s |
+|---|---|
+| cohort (offline cache) | 0.4 |
+| standardize | 1.7 |
+| features | 3.5 |
+| targets (`expdata.get_target` for 4 targets from the processed cache, plus the full-key join) | 170.2 |
+| evaluate (6 targets × 5 sets × 25 folds, `selected` over 3 families) | 529.8 |
+| protocol: AD report | 3.2 |
+| protocol: permutations (4 targets × 2 sets × 19 = 152 nested CVs, `selected`) | 1,906.3 (415–550 per target) |
+| protocol: bootstrap (4 rows × 20 runs × 2 sets = 160 nested CVs, ridge only) | 885.9 (178–246 per row) |
+| write | 1.0 |
+
+So at pilot size and this load one nested CV costs about 12.5 s wall for `selected`
+over ridge/PLS/kNN and 5.5 s for ridge alone (4 parallel workers). **Budget implication**
+(cost only): the plan's K = B = 200 is about 10.5 times this run, i.e. about 5.6 h for the
+permutations and 2.5 h for the bootstrap per four-target family at n ≈ 10–15, before any
+growth with n; on the pooled set (hundreds of drugs per target) with tree ensembles in the
+learner list it needs a dedicated machine, a reduced learner list, or a smaller K/B
+fixed in the frozen plan (CHECKPOINT decision 4). The bootstrap also needs a cohort large
+enough that resampled outer test folds have defined R²; at pilot size it cannot produce an
+interval by design.
