@@ -33,9 +33,15 @@ topoqspr run --config examples/pilot_migraine.json --out results/pilot
 topoqspr rerun results/pilot/run_record.json --out results/pilot-rerun   # byte-identical check
 ```
 
-`docker build -t topoqspr --build-arg GIT_COMMIT="$(git rev-parse HEAD)" --build-arg GIT_DIRTY=0 .`
-gives the same CLI from the lock file (the commit is baked in so that run records from the
-image name the code; docs/PIPELINE.md §7). The pipeline, the
+```bash
+docker build -t topoqspr \
+    --build-arg GIT_COMMIT="$(git rev-parse HEAD)" \
+    --build-arg GIT_DIRTY="$(git status --porcelain --untracked-files=no | grep -q . && echo 1 || echo 0)" .
+```
+
+gives the same CLI from the lock file (the commit and the dirty flag of the working tree are
+baked in so that run records from the image name the code; do not hard-code `GIT_DIRTY=0`;
+docs/PIPELINE.md §7). The pipeline, the
 study-config schema, the outputs and the run record are described in
 [docs/PIPELINE.md](docs/PIPELINE.md).
 
