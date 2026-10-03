@@ -1034,7 +1034,7 @@ def _one_resample(feature_sets, y, set_name, reference, units, cv_groups, b, see
                mae_set=float(s.loc[set_name, "mae_fold_mean"]),
                mae_reference=float(s.loc[reference, "mae_fold_mean"]),
                n_failed_folds=int(s["n_failed_folds"].sum()),
-               reason="; ".join(r for r in s["reason"].astype(str) if r))
+               reason="; ".join(dict.fromkeys(r for r in s["reason"].astype(str) if r)))
     return row
 
 
@@ -1258,8 +1258,13 @@ def confirmatory_table(family: Sequence[Mapping], summary: pd.DataFrame, ad_summ
                        boot_d_r2_ci_high=b["d_r2_ci_high"], boot_d_mae_original=b["d_mae_original"],
                        boot_d_mae_ci_low=b["d_mae_ci_low"], boot_d_mae_ci_high=b["d_mae_ci_high"])
             if b["reason"]:
-                why.append(f"bootstrap: {b['reason']}")
-        row["reason"] = "; ".join(why)
+                # the bootstrap's original-data row repeats the main analysis's fold
+                # reasons: report only what is new, each clause once
+                seen = {x for w in why for x in w.split("; ")}
+                extra = [x for x in dict.fromkeys(b["reason"].split("; ")) if x and x not in seen]
+                if extra:
+                    why.append("bootstrap: " + "; ".join(extra))
+        row["reason"] = "; ".join(dict.fromkeys(why))
         rows.append(row)
     df = pd.DataFrame(rows, columns=CONFIRMATORY_COLUMNS)
     if len(df):
@@ -1340,6 +1345,8 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
                                       n_valid=pv_["n_valid"], n_failed=pv_["n_failed"],
                                       uninformative=pv_["uninformative"], reason=pv_["reason"]))
             timer.t[f"protocol:permutation:{t}"] = time.perf_counter() - t1
+            log.info("protocol permutations %s (K=%d, %d sets): %.1f s", t,
+                     perm["n_permutations"], len(sets_t), timer.t[f"protocol:permutation:{t}"])
         record["permutation"] = dict(
             n_permutations=perm["n_permutations"], seed=perm["seed"], learner=pl_learner,
             families=list(fams), quantile=perm["quantile"],
@@ -1382,6 +1389,8 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
             boot_rows.append(df)
             boot_summ[(t, f["set"], f["reference"])] = sm
             timer.t[f"protocol:bootstrap:{t}:{f['set']}"] = time.perf_counter() - t1
+            log.info("protocol bootstrap %s / %s (B=%d): %.1f s", t, f["set"], boot["n_boot"],
+                     timer.t[f"protocol:bootstrap:{t}:{f['set']}"])
         record["bootstrap"] = dict(
             n_boot=boot["n_boot"], seed=boot["seed"], families=list(fams),
             families_rule=("fast subset (protocol.bootstrap.families), cost-aware sensitivity"

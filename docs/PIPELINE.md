@@ -448,3 +448,66 @@ two. With the plan's K = B = 200 and a family of four targets × (TI vs size), t
 needs a fast learner list (CHECKPOINT decision 4) and, for the bootstrap, possibly a
 fast family subset (`protocol.bootstrap.families`; labelled in the run record).
 Permutations and resamples run in parallel with `runtime.n_jobs` (identical results).
+
+## 10. Protocol smoke run (Migraine Disorders only)
+
+Purpose: run the protocol stage end to end on real data, with measured targets, and
+measure its cost. Only the quarantined pilot was used (EXPERIMENT_PLAN §2); **no
+performance number, CI, p or q value was read or is reported here**. Only counts, status
+fields and timings were inspected (with a script that prints nothing else).
+
+Command (2026-10-03, mpcrlab12, load average 25–30 from other jobs):
+
+```bash
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  topoqspr -v run --config pilot_protocol_smoke.json --out <scratch>/pilot_smoke --n-jobs 4 --offline
+```
+
+Config (kept in scratch space, not committed): the D008881 cohort pinned to ChEMBL_37;
+feature sets `null, size, composition, TI, rdkit2d`; targets `rdkit` (MolLogP, TPSA) and
+`expdata` (mp_bradley, logp_opera, logd74_az, logs_aqsoldb); learner `selected` over the
+fast subset ridge, PLS, kNN; 5 × 5 outer, 3 inner; `protocol.family = "auto"` (the four
+measured targets × TI vs size), K = 19 permutations, B = 19 bootstrap resamples with the
+bootstrap family subset `["ridge"]`.
+
+Run record: commit `7a39c1c` (clean tree), Python 3.10.12, ChEMBL_37 (2026-05-01, offline
+cache), `config_sha256` `9d84370a…128d24`, `manifest_sha256` `7d3e104d…ccb62a` (the same
+cohort as §8).
+
+**Counts.** 33 parents, all standardised. Measured values matched on the full InChIKey:
+mp_bradley 15, logs_aqsoldb 12, logp_opera 10, logd74_az 8 (the coverage counts of
+EXPERIMENTAL_DATA.md). Missing values carry their reasons: `no_measurement` 17–22 per
+target, `no_measurement_stereo_mismatch` (only another stereoisomer has a value) 3 for
+logd74_az and 1 for logp_opera, `replicates_disagree` 1, 2, 0, 1. Every confirmatory row
+is labelled underpowered. One target (logd74_az, n = 8) has outer test folds with a single
+row, so 10 of 25 fold R² are undefined and its corrected-t p is NaN with the reason, as
+specified. The bootstrap intervals are NaN with "k of 19 resamples undefined" for all four
+rows: at n = 8–15 a resampled test fold often holds copies of one or two molecules
+(R² undefined), and the protocol refuses to compute an interval from the surviving
+resamples. All 152 permutation runs had a defined statistic. `null` is the only set
+without an AD (no columns).
+
+**Wall time per stage** (seconds; n_jobs = 4 over outer folds in the main analysis and
+over permutations / resamples in the protocol stage)
+
+| stage | s |
+|---|---|
+| cohort (offline cache) | 0.4 |
+| standardize | 1.7 |
+| features | 3.5 |
+| targets (`expdata.get_target` for 4 targets from the processed cache, plus the full-key join) | 170.2 |
+| evaluate (6 targets × 5 sets × 25 folds, `selected` over 3 families) | 529.8 |
+| protocol: AD report | 3.2 |
+| protocol: permutations (4 targets × 2 sets × 19 = 152 nested CVs, `selected`) | 1,906.3 (415–550 per target) |
+| protocol: bootstrap (4 rows × 20 runs × 2 sets = 160 nested CVs, ridge only) | 885.9 (178–246 per row) |
+| write | 1.0 |
+
+So at pilot size and this load one nested CV costs about 12.5 s wall for `selected`
+over ridge/PLS/kNN and 5.5 s for ridge alone (4 parallel workers). **Budget implication**
+(cost only): the plan's K = B = 200 is about 10.5 times this run, i.e. about 5.6 h for the
+permutations and 2.5 h for the bootstrap per four-target family at n ≈ 10–15, before any
+growth with n; on the pooled set (hundreds of drugs per target) with tree ensembles in the
+learner list it needs a dedicated machine, a reduced learner list, or a smaller K/B
+fixed in the frozen plan (CHECKPOINT decision 4). The bootstrap also needs a cohort large
+enough that resampled outer test folds have defined R²; at pilot size it cannot produce an
+interval by design.
