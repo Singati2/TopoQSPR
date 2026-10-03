@@ -569,6 +569,9 @@ _RK_FORMULAS = {
     "ABC": lambda a, b: ((a + b - 2) / (a * b)) ** 0.5,
     "ISI": lambda a, b: a * b / (a + b),  # "ReZ_2"
     "RR": lambda a, b: (a * b) ** 0.5,  # "G"
+    "GA": lambda a, b: 2 * (a * b) ** 0.5 / (a + b),  # IJQC 2023 Eq. (2)
+    "AG": lambda a, b: (a + b) / (2 * (a * b) ** 0.5),  # IJQC 2023 Eq. (3)
+    "ReZ1": lambda a, b: (a + b) / (a * b),  # IJQC 2023 Eq. (8)
 }
 
 
@@ -813,3 +816,49 @@ def test_modified_reverse_degree_matches_kalaam_2024_verbatim():
         for d in range(1, delta + 1):
             for k in range(1, delta + 1):
                 assert modified_reverse_degree(d, k, delta) == printed_rule(d, k, delta)
+
+
+# Arockiaraj, Greeni & Kalaam, Int. J. Quantum Chem. 123:e27136 (2023), the original R_k paper.
+# Bond partitions are reconstructed from the paper's worked expansions (dexamethasone, Delta = 4;
+# molnupiravir, Delta = 3). Values are the paper's Table 2 (k = 1) and worked examples. Three printed
+# values are inconsistent with the paper's own definitions and are excluded (see INDEX_VERIFICATION.md):
+# dexamethasone GA k=1 (32.939 > m = 31, impossible since each GA term <= 1), molnupiravir ReZ1 and ReZ3 k=1.
+_IJQC_DEXA = {(1, 2): 1, (1, 3): 4, (1, 4): 4, (2, 2): 2, (2, 3): 9, (2, 4): 2, (3, 3): 1, (3, 4): 6, (4, 4): 2}
+_IJQC_MOLN = {(1, 2): 1, (1, 3): 6, (2, 2): 2, (2, 3): 9, (3, 3): 6}
+
+
+def _rk_from_partition(part, delta, key, k):
+    from topoqspr.indices import PHI, modified_reverse_degree
+
+    f = PHI[key][0]
+    return sum(n * f(modified_reverse_degree(a, k, delta), modified_reverse_degree(b, k, delta))
+               for (a, b), n in part.items())
+
+
+@pytest.mark.parametrize("part,delta,key,k,expected", [
+    (_IJQC_DEXA, 4, "AG", 1, 33.112), (_IJQC_DEXA, 4, "ABC", 1, 21.218), (_IJQC_DEXA, 4, "M2", 1, 156),
+    (_IJQC_DEXA, 4, "RR", 1, 66.773), (_IJQC_DEXA, 4, "F", 1, 388), (_IJQC_DEXA, 4, "M1", 1, 142),
+    (_IJQC_DEXA, 4, "ReZ1", 1, 34.0833), (_IJQC_DEXA, 4, "ISI", 1, 31.5476), (_IJQC_DEXA, 4, "ReZ3", 1, 814),
+    (_IJQC_DEXA, 4, "GA", 2, 29.707), (_IJQC_DEXA, 4, "GA", 3, 28.5037),
+    (_IJQC_MOLN, 3, "GA", 1, 22.661), (_IJQC_MOLN, 3, "AG", 1, 25.4948), (_IJQC_MOLN, 3, "ABC", 1, 13.38),
+    (_IJQC_MOLN, 3, "M2", 1, 56), (_IJQC_MOLN, 3, "RR", 1, 35.567), (_IJQC_MOLN, 3, "M1", 1, 76),
+    (_IJQC_MOLN, 3, "ISI", 1, 16.7),
+    (_IJQC_MOLN, 3, "F", 1, 146), (_IJQC_MOLN, 3, "F", 2, 241), (_IJQC_MOLN, 3, "F", 3, 285),
+])
+def test_rk_matches_arockiaraj_2023_ijqc(part, delta, key, k, expected):
+    assert _rk_from_partition(part, delta, key, k) == pytest.approx(expected, abs=5e-3)
+
+
+def test_dexamethasone_graph_has_ijqc_2023_partition_and_values():
+    from collections import Counter
+    from topoqspr.graph import standardize
+    from topoqspr.indices import compute_indices
+
+    g = standardize("C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@@]4([C@]3([C@H](C[C@@]2([C@]1(C(=O)CO)O)C)O)F)C").graph
+    part = Counter(tuple(sorted((g.degrees[u], g.degrees[v]))) for u, v in g.edges)
+    assert dict(part) == _IJQC_DEXA
+    vals, _ = compute_indices(g)
+    assert vals["R2_GA"] == pytest.approx(29.707, abs=5e-3)
+    assert vals["R3_GA"] == pytest.approx(28.5037, abs=5e-4)
+    # The paper prints 32.939 for k = 1, which exceeds m = 31 and is impossible; the correct value:
+    assert vals["R1_GA"] == pytest.approx(29.168, abs=5e-4) and vals["R1_GA"] < 31

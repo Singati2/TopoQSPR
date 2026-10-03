@@ -1,7 +1,7 @@
 # Topological index verification (TopoQSPR v1)
 
 This file is the provenance record for every index in
-`src/topoqspr/indices.py` (`REGISTRY`, 86 indices) and for every one of the
+`src/topoqspr/indices.py` (`REGISTRY`, 95 indices) and for every one of the
 135 index names of v0.x (`config.py:TOPO_INDICES`). Bibliography keys refer to
 `docs/index_refs.bib`. Test names refer to `tests/test_indices.py` (and
 `tests/test_graph.py` for standardisation). The tests
@@ -62,11 +62,11 @@ if a registry index or a legacy name is missing from this file.
   Z, ...) are returned as Python `int`. Hosoya Z is exact whenever it is
   returned; above the frontier-width cap it is NaN with a reason.
 * **Invariance and determinism.** `test_invariance_under_atom_renumbering`
-  (random RDKit atom orders, 5 drugs, all 86 indices),
+  (random RDKit atom orders, 5 drugs, all 95 indices),
   `test_invariance_under_graph_relabelling`,
   `test_values_are_in_registry_order_and_deterministic`.
 * **No duplicates.** `test_no_two_indices_are_identical_on_the_drug_panel`
-  checks every pair of the 86 indices on 24 approved drugs.
+  checks every pair of the 95 indices on 24 approved drugs.
 * **Edge-function notation.** Edge-additive indices are
   `sum_{uv in E} phi(x_u, x_v)` with x = d (degree family), S (neighbourhood
   degree sum, `S_u = sum_{w ~ u} d_w`) or `M_kR(d)` (modified reverse degree).
@@ -181,6 +181,9 @@ per row.
 | `R1_ABC`, `R2_ABC`, `R3_ABC` | sqrt((a + b - 2)/(a b)) | godlin2026; arockiaraj2025lung | `test_registry_reproduces_godlin_2026`, `test_gemcitabine_matches_arockiaraj_2025` | verified |
 | `R1_ISI`, `R2_ISI`, `R3_ISI` | a b/(a + b) ("ReZ_2" in the source) | godlin2026 | `test_hydrochlorothiazide_matches_godlin_2026` (18.42, 23.39, 20.51), `test_cycle_closed_forms_for_every_degree_index` | verified |
 | `R1_RR`, `R2_RR`, `R3_RR` | sqrt(a b) ("G" in the source) | arockiaraj2025lung | weight-table test only | verified |
+| `R1_GA`, `R2_GA`, `R3_GA` | 2 sqrt(a b)/(a + b) | arockiaraj2023ijqc Eq. (2) | `test_rk_matches_arockiaraj_2023_ijqc`, `test_dexamethasone_graph_has_ijqc_2023_partition_and_values` | verified |
+| `R1_AG`, `R2_AG`, `R3_AG` | (a + b)/(2 sqrt(a b)) | arockiaraj2023ijqc Eq. (3) | `test_rk_matches_arockiaraj_2023_ijqc` | verified |
+| `R1_ReZ1`, `R2_ReZ1`, `R3_ReZ1` | (a + b)/(a b) | arockiaraj2023ijqc Eq. (8) | `test_rk_matches_arockiaraj_2023_ijqc` | verified |
 | `HCM2` | (c_u c_v)^2 with c = Delta - d + 1 | kulli2018 Eq. (2) | `test_star_closed_forms`, `test_cycle_closed_forms_for_every_degree_index` | verified |
 
 ## Decision: reverse degree
@@ -216,6 +219,17 @@ Kulli's indices are edge sums.
 
 
 **Primary-source status (2026-10-03).** The original R_k paper (Arockiaraj, Greeni & Kalaam, *Int. J. Quantum Chem.* 123(16), 2023, doi:10.1002/qua.27136) is not open access (no PMC copy; Unpaywall: closed), so its full text has not been read. The definition used here is the one printed verbatim in the open-access follow-up by the same authors (Kalaam, Greeni & Arockiaraj, *Front. Chem.* 12:1470231, 2024, PMC11462630), and `test_modified_reverse_degree_matches_kalaam_2024_verbatim` checks the implementation against it for every Δ ≤ 8, 1 ≤ d ≤ Δ, 1 ≤ k ≤ Δ.
+
+
+**Original R_k paper read (2026-10-03).** The full text of Arockiaraj, Greeni & Kalaam, *Int. J. Quantum Chem.* 123:e27136 (2023) was read from a copy supplied by a co-author. Findings:
+
+- The definition is printed as "Δ(G) − d_v + k (mod Δ(G)) : k > d_v", without parentheses. The paper's own worked example for dexamethasone (Δ = 4) maps d = 1 to 1 at k = 2 and d = 1, 2 to 2, 1 at k = 3, which is only consistent with the mod applying to the whole sum. That is the reading implemented.
+- The paper defines ten R_k functions (GA, AG, ABC, M2, R_{1/2}, F, M1, ReZ1, ReZ2, ReZ3). GA, AG and ReZ1 were added to v1 (`R{k}_GA`, `R{k}_AG`, `R{k}_ReZ1`); R_{1/2} is `R{k}_RR` and ReZ2 is `R{k}_ISI`.
+- Our dexamethasone graph has exactly the bond partition used in the paper, and 21 printed values are reproduced (Table 2 and the worked examples; `test_rk_matches_arockiaraj_2023_ijqc`).
+- **Errata found (three printed values inconsistent with the paper's own definitions):**
+  dexamethasone M1ℜGA = 32.939 in Table 2 and in the text is impossible (dexamethasone has m = 31 bonds and every GA term is ≤ 1); summing the paper's own printed expansion gives 29.168.
+  Molnupiravir M1ℜReZ1 = 36.667 and M1ℜReZ3 = 182 in Table 2; the partition that reproduces the paper's own M1/M2/M3ℜF = 146/241/285 gives 36.333 and 200.
+  These do not affect the definitions, only the printed numbers. They matter for any re-analysis of the paper's regressions (Experiment D).
 
 ## Decision: generalised / modified reverse degree R_k
 
