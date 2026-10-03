@@ -59,6 +59,7 @@ __all__ = [
     "GraphContext",
     "compute_indices",
     "hosoya_z",
+    "HOSOYA_MAX_FRONTIER",
     "distance_matrix",
     "modified_reverse_degree",
     "RK_VALUES",
@@ -151,6 +152,10 @@ class GraphContext:
 
     def rk(self, k: int) -> tuple[int, ...]:
         delta = self.g.max_degree
+        if delta < 1:
+            # checked here, not only inside modified_reverse_degree, so that
+            # the empty graph (no vertices to map) is NaN like K1, not 0
+            raise UndefinedIndex("modified reverse degree needs Delta(G) >= 1")
         return tuple(modified_reverse_degree(d, k, delta) for d in self.g.degrees)
 
     @cached_property
@@ -491,7 +496,36 @@ def _elimination_order(graph: MolGraph) -> list[int]:
     return order
 
 
-def hosoya_z(graph: MolGraph) -> int:
+#: Default cap on the frontier width ``w`` of :func:`hosoya_z` (states <= 2**w).
+HOSOYA_MAX_FRONTIER: int = 12
+
+
+def _frontier_width(graph: MolGraph, order: Sequence[int]) -> int:
+    """Largest number of state bits the DP of :func:`hosoya_z` will use.
+
+    Replays the DP's bookkeeping (a vertex enters when processed and leaves
+    once all its neighbours are processed) without counting anything.
+    """
+    adj = graph.adjacency
+    done = [False] * graph.n
+    remaining = [len(a) for a in adj]
+    size = width = 0
+    for v in order:
+        size += 1  # v enters the state
+        width = max(width, size)
+        done[v] = True
+        for u in adj[v]:
+            if done[u] and u != v:
+                remaining[u] -= 1
+                if remaining[u] == 0:
+                    size -= 1
+        remaining[v] = sum(1 for u in adj[v] if not done[u])
+        if remaining[v] == 0:
+            size -= 1
+    return width
+
+
+def hosoya_z(graph: MolGraph, max_frontier: Optional[int] = HOSOYA_MAX_FRONTIER) -> int:
     """Hosoya index Z(G): the number of matchings of G, the empty one included.
 
     Z(G) = sum_k p(G, k), p(G, k) = number of k-element sets of pairwise
@@ -503,14 +537,35 @@ def hosoya_z(graph: MolGraph) -> int:
     are not yet matched; each state carries the number of partial matchings
     leading to it. Adding vertex v either leaves v unmatched or matches it to
     one free processed neighbour; vertices whose neighbours are all processed
-    leave the state. The cost is O(n * 2^w * Delta) for frontier width w,
-    which is small for molecular graphs (w <= ~8 for drugs with <= 150 heavy
-    atoms), so this is exact and fast. Verified against brute-force
-    enumeration and the closed forms Z(P_n) = F_{n+1}, Z(C_n) = L_n,
-    Z(K_{1,n-1}) = n.
+    leave the state. The cost is O(n * 2^w * Delta) for frontier width w of
+    the greedy order (w = largest number of state bits, as counted by
+    ``_frontier_width``), so it is exponential in w. Measured on one CPU
+    core: vancomycin w = 6 (0.02 s), C60 11 (0.2 s), 160-vertex hexagonal
+    (PAH-like) sheet 10 (0.8 s), 10x15 grid 11 (1.4 s), 12x12 grid 13
+    (4.7 s), random 3-regular graphs on 100 vertices 16-18 (8-17 s).
+    Molecular graphs are usually narrow, but cages, large polycyclic sheets
+    and non-chemical graphs need not be.
+
+    Guard: if ``max_frontier`` is not ``None`` and w exceeds it, raise
+    :class:`UndefinedIndex` before any counting, so the index becomes NaN
+    with a reason instead of a long run. The default
+    :data:`HOSOYA_MAX_FRONTIER` = 12 admits every graph above with w <= 11
+    (all real drugs and cages tried, C60 included) and refuses the 12x12
+    grid and the random cubic graphs; pass ``max_frontier=None`` to always
+    count exactly.
+
+    Verified against brute-force enumeration and the closed forms
+    Z(P_n) = F_{n+1}, Z(C_n) = L_n, Z(K_{1,n-1}) = n.
     """
     n, adj = graph.n, graph.adjacency
     order = _elimination_order(graph)
+    if max_frontier is not None:
+        w = _frontier_width(graph, order)
+        if w > max_frontier:
+            raise UndefinedIndex(
+                f"Hosoya Z: frontier width {w} exceeds the cap {max_frontier} "
+                "(exact count would need up to 2**w states)"
+            )
     done = [False] * n
     remaining = [len(adj[v]) for v in range(n)]
     states: dict[int, int] = {0: 1}  # bitmask of free frontier vertices -> count

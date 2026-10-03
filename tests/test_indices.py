@@ -34,6 +34,7 @@ from topoqspr.indices import (
     RK_VALUES,
     UndefinedIndex,
     compute_indices,
+    HOSOYA_MAX_FRONTIER,
     hosoya_z,
     modified_reverse_degree,
 )
@@ -498,7 +499,7 @@ GODLIN_HCTZ = {
     0: dict(ABC=13.43, R=7.72, ReZ1=17, ReZ2=20.51, ReZ3=618, SSD=50.08, AG=19.59, HG=3.11, BMG=82.91, GBM=3.94),
     1: dict(ABC=13.55, R=8.55, ReZ1=18.83, ReZ2=18.42, ReZ3=462, SSD=50.92, AG=19.69, HG=3.89, BMG=79.02, GBM=4.14),
     2: dict(ABC=12.26, R=7.89, ReZ1=16.5, ReZ2=23.39, ReZ3=934, SSD=41.08, AG=18.61, HG=3.85, BMG=85.07, GBM=3.95),
-    3: dict(ABC=11.91, R=8.55, ReZ1=18.67, ReZ2=20.51, ReZ3=738, SSD=50.08),
+    3: dict(ABC=11.91, R=8.55, ReZ1=18.67, ReZ2=20.51, ReZ3=738, SSD=50.08, AG=19.59, HG=4.51, BMG=82.91, GBM=4.04),
 }
 
 
@@ -749,3 +750,51 @@ def test_legacy_defects_are_fixed(drug_graphs):
     assert hosoya_z(path(21)) == fib(22) == 17711
     v, _ = compute_indices(drug_graphs["imatinib"].graph)
     assert v["Z"] == 79_015_504
+
+
+# ---------------------------------------------------------------------------
+# regressions from the v1 verification round
+# ---------------------------------------------------------------------------
+def test_godlin_hctz_table_is_complete():
+    # Godlin & Radha 2026, Table 5: 10 indices for degree and l = 1, 2, 3
+    assert sum(len(row) for row in GODLIN_HCTZ.values()) == 40
+    assert all(len(row) == 10 for row in GODLIN_HCTZ.values())
+
+
+@pytest.mark.parametrize("n", [0, 1])
+def test_rk_is_nan_on_graphs_without_edges_including_empty(n):
+    v, why = compute_indices(MolGraph.from_edges(n, []))
+    for name in ("R1_M1", "R3_ABC", "HCM2"):
+        assert math.isnan(v[name]), (n, name, v[name])
+        assert "Delta(G) >= 1" in why[name]
+
+
+def _mg(G) -> MolGraph:
+    G = nx.convert_node_labels_to_integers(G)
+    return MolGraph.from_edges(G.number_of_nodes(), G.edges())
+
+
+def test_hosoya_frontier_cap_gives_nan_with_reason_quickly():
+    g = _mg(nx.random_regular_graph(3, 100, seed=0))  # width 18, ~17 s uncapped
+    t0 = time.perf_counter()
+    with pytest.raises(UndefinedIndex, match=r"frontier width 18 exceeds the cap 12"):
+        hosoya_z(g)
+    v, why = compute_indices(g, ["Z"])
+    assert time.perf_counter() - t0 < 1.0
+    assert math.isnan(v["Z"]) and "frontier width" in why["Z"]
+
+
+def test_hosoya_cap_is_configurable_and_exact_when_lifted():
+    g = _mg(nx.grid_2d_graph(3, 4))  # 12 vertices, 17 edges
+    with pytest.raises(UndefinedIndex):
+        hosoya_z(g, max_frontier=1)
+    assert hosoya_z(g, max_frontier=None) == hosoya_z(g) == brute_force_matchings(g)
+
+
+def test_hosoya_default_cap_admits_c60():
+    c60 = standardize(
+        "c12c3c4c5c1c1c6c7c2c2c8c3c3c9c4c4c%10c5c5c1c1c6c6c%11c7c2c2c7c8c3c3c8c9c4c4"
+        "c9c%10c5c5c1c1c6c6c%11c2c2c7c3c3c8c4c4c9c5c1c1c6c2c3c41"
+    ).graph
+    assert HOSOYA_MAX_FRONTIER >= 10
+    assert hosoya_z(c60) == 1417036634543488

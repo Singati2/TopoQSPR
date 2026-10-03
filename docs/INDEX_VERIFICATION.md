@@ -16,10 +16,31 @@ if a registry index or a legacy name is missing from this file.
   the parent: heavy atoms are vertices, bonds between heavy atoms are edges.
   Bond order, charge, element and isotope are ignored. The pipeline strips
   isotope labels, so `[2H]` drugs get the graph of the protium parent.
+  Input with internal whitespace is rejected as `unparsable`, because RDKit
+  would otherwise read `"CCO junk"` as ethanol named "junk".
+* **Parent fallback.** `get_parent_mol` keeps *every* fragment when all of
+  them are on its salt list, so sodium benzoate, sodium salicylate, choline
+  chloride and ammonium stearate used to come out as `disallowed_element` or
+  `mixture`, while the free acid or base was accepted. When more than one
+  fragment survives, v1 drops fragments without heavy atoms (`[H+]`),
+  single-heavy-atom Li/Na/K/Rb/Cs/Mg/Ca/Sr/Ba/F/Cl/Br/I/N ions, and the
+  counter-ions in `SUPPLEMENTARY_COUNTERIONS`. Of 24 common pharmaceutical
+  counter-ions tested, xinafoate was the only one missing from the ChEMBL
+  1.2.4 list. Identical copies are then merged. If one organic fragment
+  remains, it is uncharged and becomes the parent, and
+  `StandardizationResult.parent_note` records what was dropped. Lithium
+  carbonate is not turned into carbonic acid. If several fragments remain
+  and every one is on the ChEMBL salt list (choline salicylate), the input
+  is rejected as `parent_ambiguous`. Tests:
+  `test_salts_and_solvents_are_stripped_to_the_parent`,
+  `test_choline_chloride_keeps_the_quaternary_cation`,
+  `test_parent_fallback_is_recorded_and_absent_when_unused`,
+  `test_lithium_carbonate_is_not_turned_into_carbonic_acid`.
 * **Rejections** (`Rejection.code`): `unparsable`, `standardization_failed`,
   `disallowed_element` (default allowed set H, B, C, N, O, F, Si, P, S, Cl,
   Se, Br, I; configurable), `no_carbon`, `mixture` (more than one fragment
-  after parent extraction), `too_few_heavy_atoms` (< 3, configurable),
+  after parent extraction and fallback), `parent_ambiguous` (more than one
+  fragment, all on the ChEMBL salt list), `too_few_heavy_atoms` (< 3, configurable),
   `disconnected_graph`. The standardised canonical SMILES and the full
   InChIKey are recorded for accepted structures and for most rejections.
   Tests: `test_rejection_reasons`, `test_salts_and_solvents_are_stripped_to_the_parent`,
@@ -28,13 +49,18 @@ if a registry index or a legacy name is missing from this file.
   `compute_indices` returns the reason in its second dict. Cases: division by
   zero in an edge function (for example AZI on an edge with d_u = d_v = 1),
   a disconnected or empty graph for any distance index, no edges for the
-  entropy, and k outside 1..Delta(G) for the modified reverse degree. A real
+  entropy, k outside 1..Delta(G) for the modified reverse degree (and
+  Delta(G) = 0, which includes the empty graph), and Hosoya Z when the
+  frontier width exceeds `HOSOYA_MAX_FRONTIER` (see the Hosoya Z decision). A real
   zero (for example sigma of a regular graph, or ABC of K2) stays 0. Nothing is
   imputed. Tests: `test_reasons_are_given_exactly_for_nan_values`,
   `test_division_by_zero_is_nan_with_reason`, `test_disconnected_graph_distance_indices_are_nan`,
-  `test_rk_beyond_delta_is_nan_with_reason`, `test_edgeless_graph`.
+  `test_rk_beyond_delta_is_nan_with_reason`, `test_edgeless_graph`,
+  `test_rk_is_nan_on_graphs_without_edges_including_empty`,
+  `test_hosoya_frontier_cap_gives_nan_with_reason_quickly`.
 * **Exactness.** Integer-valued indices (Zagreb-type, W, Sz, PI, Mo, DD, Gut,
-  Z, ...) are returned as Python `int`. Hosoya Z is exact for any size.
+  Z, ...) are returned as Python `int`. Hosoya Z is exact whenever it is
+  returned; above the frontier-width cap it is NaN with a reason.
 * **Invariance and determinism.** `test_invariance_under_atom_renumbering`
   (random RDKit atom orders, 5 drugs, all 86 indices),
   `test_invariance_under_graph_relabelling`,
@@ -64,7 +90,9 @@ if a registry index or a legacy name is missing from this file.
   recomputes part of it live): ABC, BalabanJ, WPath, Zagreb1, Zagreb2, Xp-1d
   agree with ABC, J, W, M1, M2, R to 1e-10.
 * Published worked examples: all 40 values of the hydrochlorothiazide example
-  of Godlin & Radha 2026 (degree and k = 1, 2, 3; rounding to 2 decimals) and
+  of Godlin & Radha 2026, Table 5 (10 indices for the degree and for k = 1, 2,
+  3; rounding to 2 decimals; `test_godlin_hctz_table_is_complete` checks that
+  all 40 are encoded) and
   the five gemcitabine ABC values of Arockiaraj et al. 2025 (degree,
   neighbourhood, k = 1, 2, 3) are reproduced.
 * Hosoya Z of 5 drugs equals the values of the independent recomputation in
@@ -285,9 +313,20 @@ re-ran the legacy code: imatinib 452, true value 79,015,504; eicosane 1, true
 F_21 = 10,946). v1 counts matchings exactly with a frontier dynamic programme
 over a greedy low-width vertex order (state: free processed vertices that still
 have unprocessed neighbours). It is exact for every graph and returns a Python
-int; the cost grows as 2^(frontier width), which is small for molecules.
-Timings on this machine: vancomycin (101 heavy atoms) 0.02 s, cyclosporine
-(85) 0.01 s, a 148-atom peptide 0.01 s, a 150-vertex 37-ring ladder 0.01 s.
+int. The cost grows as 2^w for frontier width w of the greedy order, and
+the width is not bounded by the atom count. Timings on this machine:
+vancomycin (101 heavy atoms, w = 6) 0.02 s, cyclosporine (85) 0.01 s, a
+148-atom peptide 0.01 s, a 150-vertex 37-ring ladder 0.01 s, C60 (w = 11)
+0.2 s, a 160-vertex hexagonal sheet (w = 10) 0.8 s, a 10x15 grid (w = 11)
+1.4 s, a 12x12 grid (w = 13) 4.7 s, and random 3-regular graphs on 100
+vertices (w = 16-18) 8-17 s. An earlier "w <= ~8 for drugs" claim was
+untested and is withdrawn (C60 alone is 11). `hosoya_z` therefore computes
+w before counting. If w > `HOSOYA_MAX_FRONTIER` (= 12, configurable via
+`max_frontier`; `None` disables the cap), it raises `UndefinedIndex`, so Z
+is NaN with the reason "frontier width w exceeds the cap" instead of
+stalling. Tests: `test_hosoya_frontier_cap_gives_nan_with_reason_quickly`,
+`test_hosoya_cap_is_configurable_and_exact_when_lifted`,
+`test_hosoya_default_cap_admits_c60` (Z(C60) = 1,417,036,634,543,488).
 Hosoya Z is a matching count, not a distance index, so its family is
 `matching`.
 
