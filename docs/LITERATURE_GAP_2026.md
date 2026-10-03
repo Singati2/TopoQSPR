@@ -14,7 +14,7 @@ Items marked † come from the landscape audit only and were **not** independent
 | DOPtools (Byadi et al., *Digital Discovery* 2025) | Descriptor calculation + hyperparameter optimisation | SMILES | ColorAtom/fragment descriptors | yes | no | no | partial |
 | QSPRpred (*J Cheminform* 2024, 16:128) | Reproducible, serialised QSPR modelling | SMILES | via descriptor plug-ins | yes | no | CV, no size baseline | yes (model serialisation) |
 | "QSAR in the Browser" (*JCIM* 2026, doi:10.1021/acs.jcim.6c01010) | No-code web QSAR with ChEMBL access | ChEMBL / upload | general descriptors | yes | no (target-based) | not stated | not stated |
-| PyTIE (arXiv 2510.26813) †, topoindex (PyPI) †, MathChem (MATCH 2014) † | Topological-index calculators | various | degree / NDS / entropy | no | no | no | no |
+| PyTIE (Jeyaraj et al., arXiv 2510.26813, 2025), MathChem (MATCH 71:657-680, 2014), topoindex (PyPI) † | Topological-index calculators | various | degree / NDS / entropy | no | no | no | no |
 | Genre pipelines on GitHub †: aliberkanbektas/drug-indices-project_1 (PubChem → RDKit → indices); HakanKucuk38/Topological-Indices-PhysChem (indices + RF/XGB + SHAP, 4,711 antibiotics) | Scripts for one study | names / SMILES | yes | yes (latter) | no | no | no |
 
 **Conclusion.** Computing many topological indices, and combining indices with ML, are both
@@ -37,18 +37,20 @@ study and evaluation layer for drug QSPR, and it uses ChemGraphX as an independe
 ## 3. The genre this paper addresses
 
 - Europe PMC hits for ("topological indices" OR "topological index") AND QSPR AND (drug OR drugs):
-  16 (2022), 40 (2023), 62 (2024), 113 (2025), 77 (2026 to date); about half of the 2025–26 papers
-  mention ML. (Counts reported by the landscape audit.)
+  16 (2022), 40 (2023), 62 (2024), 113 (2025), 78 (2026 to 2026-10-03); papers also mentioning machine
+  learning, random forest or XGBoost: 5, 13, 18, 59, 47. (Recomputed on 2026-10-03 with `tools/genre_counts.py`; query:
+  `("topological indices" OR "topological index") AND QSPR AND (drug OR drugs) AND PUB_YEAR:<year>`;
+  the landscape audit's counts agree.)
 - Typical studies use 9–50 manually listed drugs and in-sample or LOOCV R², often on properties that
   are computed (PubChem) or predicted (ChemSpider/ACD Labs) rather than measured. Verified
   examples: Almulla et al., *Sci Rep* 16:25695 (2026), 20 antifungal drugs, polynomial regression;
-  Kara et al., *Sci Rep* 2025 (doi:10.1038/s41598-025-32906-x), n = 30, no CV, linear R² 0.999 for
+  Kara et al., *Sci Rep* 2025 (doi:10.1038/s41598-025-32906-x), n = 30, no CV, linear R² 0.999 (full text, PMC12830717, read by the audit skeptic) for
   heavy-atom count; Ramachandran et al., *Chem Pap* 2026, anti-glaucoma drugs with ML.
 - The Arockiaraj group has several drug-QSPR papers (lung cancer *Sci Rep* 2025; TB *Heliyon* 2024;
   cardiovascular and anticancer *EPJE* 2024/2025; COVID *IJQC* 2021) †. Any re-analysis of these
   is chosen with the group and framed constructively.
 - Methodological critiques to cite: Dearden, Cronin & Kaiser 2009 (21 QSAR error types);
-  Gutman et al. 2012 and Furtula et al. 2013 on index quality †; Ash et al. 2025 (*JCIM* 65:9398)
+  Gutman & Tošović 2013 (*J Serb Chem Soc* 78:805, doi:10.2298/JSC121002134G) and Furtula et al. 2013 on index quality (tested on octane isomers, where size is fixed); Ash et al. 2025 (*JCIM* 65:9398)
   for method comparison. No meta-analysis specific to drug-TI-QSPR was found.
 
 ## 4. What the evidence so far says (preliminary, not paper results)
