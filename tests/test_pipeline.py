@@ -409,6 +409,13 @@ def test_cli_bad_config_exit_code(tmp_path, capsys):
     assert "unknown key" in capsys.readouterr().err
 
 
+def test_cli_offline_cache_miss_exit_code(tmp_path, capsys):
+    (tmp_path / "empty").mkdir()
+    rc = cli.main(["cohort", "--mesh", MIGRAINE, "--cache-dir", str(tmp_path / "empty"),
+                   "--offline", "--out", str(tmp_path / "o")])
+    assert rc == 2 and "no cached ChEMBL status" in capsys.readouterr().err
+
+
 def test_module_entry_point():
     env = {**os.environ, "PYTHONPATH": str(SRC)}
     r = subprocess.run([sys.executable, "-m", "topoqspr", "--version"], capture_output=True,

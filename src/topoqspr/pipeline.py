@@ -604,6 +604,7 @@ def run_study(config: Mapping, out_dir: str | os.PathLike, *, timestamp_utc: str
     client : optional :class:`topoqspr.chembl.ChemblClient` (e.g. offline,
         pinned to a release); built from ``config.runtime`` otherwise.
     """
+    code = pv.git_info()  # the source tree as imported, before anything can change it
     cfg = resolve_config(config)
     out = Path(out_dir)
     if out.exists() and any(out.iterdir()):
@@ -673,7 +674,7 @@ def run_study(config: Mapping, out_dir: str | os.PathLike, *, timestamp_utc: str
     record = pv.build_run_record(
         config=cfg, timestamp_utc=timestamp_utc, chembl=chembl, seeds=seeds, inputs=inputs,
         manifest_sha256=manifest_sha, outputs=pv.file_records(out, written),
-        timings_s=timer.t, counts=counts, base_dir=str(base),
+        timings_s=timer.t, counts=counts, base_dir=str(base), code=code,
         extra=dict(result_csvs=[c for c in RESULT_CSVS if c in written]))
     pv.write_run_record(record, out / "run_record.json")
     return StudyResult(out, record, res["summary"], mol_table_all, written + ["run_record.json"])

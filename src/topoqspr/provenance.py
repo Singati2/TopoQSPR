@@ -171,15 +171,20 @@ def file_records(root: str | os.PathLike, names: list[str]) -> dict[str, dict]:
 def build_run_record(*, config: Mapping, timestamp_utc: str, chembl: Mapping | None,
                      seeds: Mapping, inputs: Mapping, manifest_sha256: str | None,
                      outputs: Mapping, timings_s: Mapping, counts: Mapping,
-                     base_dir: str | None, extra: Mapping | None = None) -> dict:
-    """Assemble the run record (pure function of its arguments + the environment)."""
+                     base_dir: str | None, code: Mapping | None = None,
+                     extra: Mapping | None = None) -> dict:
+    """Assemble the run record (pure function of its arguments + the environment).
+
+    ``code`` is :func:`git_info` taken when the run *started* (the code that was
+    imported); it is read now if not given.
+    """
     if not isinstance(timestamp_utc, str) or not timestamp_utc:
         raise ValueError("timestamp_utc must be supplied by the caller (ISO 8601 string)")
     return dict(
         schema=RUN_RECORD_SCHEMA,
         created_utc=timestamp_utc,
         topoqspr_version=__version__,
-        code=git_info(),
+        code=dict(code) if code is not None else git_info(),
         environment=environment_info(),
         chembl=dict(chembl) if chembl is not None else None,
         config=dict(config),
