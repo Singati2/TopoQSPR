@@ -49,7 +49,7 @@ C2 & Permanent link to code/repository & \url{https://github.com/Singati2/TopoQS
 C3 & Permanent link to reproducible capsule & \todo{Zenodo DOI / Code Ocean} \\
 C4 & Legal code license & MIT \\
 C5 & Code versioning system used & git \\
-C6 & Software code languages, tools and services used & Python 3.12, RDKit, scikit-learn, XGBoost, SHAP, FastAPI; ChEMBL, PubChem and UniChem web services \\
+C6 & Software code languages, tools and services used & Python 3.12, RDKit \cite{rdkit}, scikit-learn, XGBoost, SHAP, FastAPI; ChEMBL, PubChem and UniChem web services \\
 C7 & Compilation requirements, operating environments and dependencies & Linux/macOS/Windows; pinned \texttt{requirements.txt}; Docker image \todo{} \\
 C8 & Link to developer documentation & \todo{docs URL} \\
 C9 & Support email & \todo{} \\
@@ -159,6 +159,7 @@ Information-theoretic     &  1 & graph entropy \\
 Each target property is modelled with \todo{11} regressors (ordinary least squares, ridge, lasso, elastic net, random forest, extra trees, gradient boosting, XGBoost \cite{chen2016xgboost}, support-vector regression, multilayer perceptron, \todo{11th}) implemented in scikit-learn \cite{pedregosa2011}. The evaluation protocol is designed to prevent optimistic bias:
 \begin{itemize}
   \item \textbf{Nested cross-validation.} Both the hyperparameters and the choice of model family are made inside each outer training fold only. The outer $k$ folds (default $k=5$, repeated \todo{5} times) give the reported performance, so the score of the ``best'' model is not inflated by selecting it on its own test folds \cite{varma2006,cawley2010}. Per-family scores are reported as well.
+  \item \textbf{Scaffold-grouped validation.} As a stricter test of generalisation, outer folds are also grouped by Bemis--Murcko scaffold \cite{bemis1996}; acyclic molecules, which all share the empty scaffold, each form their own group. The change from ordinary to nested to scaffold-grouped estimates quantifies evaluation optimism.
   \item \textbf{Mandatory baselines.} Every result is reported next to a mean-only null model and a \emph{size baseline} fitted on heavy-atom and bond counts. A standard RDKit 2D descriptor set serves as an upper reference. The gain over the size baseline, $\Delta R^2_{\text{size}}=R^2_{\text{TI}}-R^2_{\text{size}}$, is the headline metric, because it isolates information that the indices carry beyond molecular size. It is reported with a confidence interval from repeated nested CV from the corrected repeated $k$-fold $t$-test \cite{nadeau2003}, with a bootstrap of the whole nested procedure as sensitivity analysis because cross-validation intervals can undercover \cite{bates2023cv}.
   \item \textbf{Multiplicity control.} Index--property correlations are reported as effect sizes with confidence intervals. Significance is controlled by the Benjamini--Hochberg false discovery rate across all index--property pairs \cite{benjamini1995}, with Benjamini--Yekutieli \cite{benjamini2001} as a sensitivity analysis.
   \item \textbf{Failures are explicit.} An index that cannot be computed for a molecule is recorded as missing with a reason. It is never imputed as zero.
