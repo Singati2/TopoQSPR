@@ -21,7 +21,10 @@ for the schema and every output file):
 3. **indices** - :func:`topoqspr.indices.compute_indices` (NaN + reason);
 4. **features** - the baseline ladder of :mod:`topoqspr.features` plus ``TI``
    and one ``TI_<family>`` set per index family; ``rdkit2d`` is subset per
-   target with that target's exclusion rule;
+   target with that target's exclusion rule. The ``null``, ``size`` and
+   ``composition`` baselines and the ``size`` reference are mandatory
+   (:func:`resolve_config` rejects a config without them unless
+   ``evaluation.allow_custom_baselines`` is true, which the run record shows);
 5. **targets** - from :mod:`topoqspr.target_providers` (shipped: RDKit
    computed targets); rows with a missing target value are dropped for that
    target only, and counted;
@@ -33,7 +36,9 @@ for the schema and every output file):
 7. **protocol** - the confirmatory protocol of EXPERIMENT_PLAN §7 on the
    confirmatory family named in ``config.protocol.family``: the
    Y-randomised control (:func:`permutation_control`), the whole-procedure
-   paired bootstrap (:func:`paired_bootstrap`) and the confirmatory table
+   paired bootstrap (:func:`paired_bootstrap`; by default only for the pooled
+   cohort, other cohorts need ``protocol.bootstrap.enabled = true``) and the
+   confirmatory table
    (corrected-t CI, BH and BY q, practical-significance flag, AD share,
    permutation p); plus applicability-domain coverage and in-domain metrics
    for every evaluated (target, learner, set) (:func:`ad_report`);
@@ -80,6 +85,8 @@ from .target_providers import TargetSpec, get_target_provider
 __all__ = [
     "CONFIG_SCHEMA",
     "DEFAULT_FEATURE_SETS",
+    "MANDATORY_BASELINES",
+    "MANDATORY_REFERENCE",
     "RESULT_CSVS",
     "StudyResult",
     "load_config",
@@ -133,8 +140,23 @@ _PROTOCOL_DEFAULTS: dict[str, Any] = {
     "q": 0.05,                      # FDR level for BH / BY
     "permutation": {"enabled": True, "n_permutations": 200, "seed": 0,
                     "learner": None, "feature_sets": None, "quantile": 0.95},
-    "bootstrap": {"enabled": True, "n_boot": 200, "seed": 0, "families": None},
+    # enabled null (default): on for cohort.source "pooled" only (EXPERIMENT_PLAN §7: at
+    # per-disease n most resamples are undefined); any other cohort needs an explicit
+    # true, which the resolved config (and so the run record) then carries
+    "bootstrap": {"enabled": None, "n_boot": 200, "seed": 0, "families": None},
 }
+
+#: Baselines every study must evaluate (EXPERIMENT_PLAN §5), and the reference
+#: every paired difference is taken against. Overridable only with
+#: ``evaluation.allow_custom_baselines = true``, which is kept in the resolved
+#: config and written to the run record (``baselines``).
+MANDATORY_BASELINES: tuple[str, ...] = ("null", "size", "composition")
+MANDATORY_REFERENCE = "size"
+
+#: Default of protocol.bootstrap.enabled (written to run_record.protocol.bootstrap).
+ENABLED_RULE_BOOT = ("protocol.bootstrap.enabled null (default) = on for cohort.source "
+                     "'pooled' only (EXPERIMENT_PLAN §7); other cohorts run it only with an "
+                     "explicit true")
 
 _DEFAULTS: dict[str, Any] = {
     "schema": CONFIG_SCHEMA,
@@ -158,6 +180,9 @@ _DEFAULTS: dict[str, Any] = {
         "alpha": 0.05,
         "min_n": 50,
         "min_n_test": 10,
+        # true lets feature_sets omit a mandatory baseline or use another reference;
+        # dropped from the resolved config when false so existing config hashes hold
+        "allow_custom_baselines": False,
     },
     # null = no protocol stage (and no "protocol" key in the resolved config, so
     # configs written before the protocol stage keep their config_sha256)
@@ -335,6 +360,22 @@ def resolve_config(config: Mapping) -> dict:
         raise ValueError("evaluation.ad must be 'knn', 'leverage' or null")
     if e["reference"] not in cfg["feature_sets"] or e["reference"] == "TI_family":
         raise ValueError(f"evaluation.reference {e['reference']!r} must be one of the feature sets")
+    if not isinstance(e["allow_custom_baselines"], bool):
+        raise ValueError("evaluation.allow_custom_baselines must be true or false")
+    if e["allow_custom_baselines"]:
+        e["allow_custom_baselines"] = True
+    else:
+        missing = [b for b in MANDATORY_BASELINES if b not in cfg["feature_sets"]]
+        if missing:
+            raise ValueError(f"feature_sets {cfg['feature_sets']} lack the mandatory baseline(s) "
+                             f"{missing} (EXPERIMENT_PLAN §5); set "
+                             "evaluation.allow_custom_baselines = true to override (recorded "
+                             "in the run record)")
+        if e["reference"] != MANDATORY_REFERENCE:
+            raise ValueError(f"evaluation.reference {e['reference']!r}: the mandatory reference "
+                             f"is {MANDATORY_REFERENCE!r}; set evaluation.allow_custom_baselines "
+                             "= true to override (recorded in the run record)")
+        del e["allow_custom_baselines"]
     if cfg["output"]["features_format"] not in ("csv", "parquet"):
         raise ValueError("output.features_format must be 'csv' or 'parquet'")
     if cfg["output"]["features_format"] == "parquet" and not _parquet_engine():
@@ -436,7 +477,9 @@ def _resolve_protocol(given, cfg: dict) -> dict:
             raise ValueError(f"protocol.permutation.feature_sets {fs}: unknown, empty or duplicated")
         perm["feature_sets"] = fs
     boot = p["bootstrap"]
-    boot["enabled"] = bool(boot["enabled"])
+    # null = default: pooled cohort only; other cohorts need an explicit opt-in
+    boot["enabled"] = (cfg["cohort"]["source"] == "pooled") if boot["enabled"] is None \
+        else bool(boot["enabled"])
     boot["n_boot"] = int(boot["n_boot"])
     boot["seed"] = int(boot["seed"])
     if boot["enabled"] and boot["n_boot"] < 2:
@@ -956,8 +999,11 @@ PERMUTATION_SCHEME = (
     "singleton groups and of groups whose size no other group shares are permuted row-wise "
     "among themselves (first draw), then, for each group size s >= 2 shared by >= 2 groups "
     "(ascending s; groups in sorted label order), whole groups' y blocks are exchanged by a "
-    "random permutation of those groups (row order inside a block kept). y values never "
-    "leave their CV group's block, so the within-group dependence of y is kept under the null.")
+    "random permutation of those groups (row order inside a block kept). Only groups of a "
+    "size shared with another group keep their within-group y structure under the null; a "
+    "group whose size is unique (e.g. the only 3-member group) has its rows permuted "
+    "row-wise with the singletons, so its rows can draw y from different groups. Every "
+    "draw is a permutation of y, so the p-value stays valid.")
 
 
 def permutation_indices(n: int, groups, rng: np.random.Generator) -> np.ndarray:
@@ -965,11 +1011,13 @@ def permutation_indices(n: int, groups, rng: np.random.Generator) -> np.ndarray:
 
     ``groups=None``: ``rng.permutation(n)`` (exchangeable rows). With CV group
     labels the permutation is **restricted** (:data:`PERMUTATION_SCHEME`):
-    blocks of equal-size groups swap their y values whole, so a target that
-    is shared within a group (stereoisomers, scaffold series) keeps that
-    structure under the null and the grouped CV sees a null of the same kind
-    as the real data. Row-wise permutation with grouped folds breaks the
-    within-group correlation and makes the test conservative.
+    groups of size >= 2 that share their size with at least one other group
+    swap their y values whole, so a target that is shared within such a group
+    (stereoisomers, scaffold series) keeps that structure under the null.
+    Groups whose size no other group has cannot be exchanged as a block; their
+    rows are permuted row-wise together with the singletons, so for them (and
+    only them) the within-group structure is *not* kept and the null is the
+    row-wise one. The result is always a permutation of ``range(n)``.
     """
     if groups is None:
         return rng.permutation(n)
@@ -1466,7 +1514,10 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
         record["permutation"] = dict(
             n_permutations=perm["n_permutations"], seed=perm["seed"], learner=pl_learner,
             families=list(fams), quantile=perm["quantile"],
-            rng_rule="permutation b of a target: numpy.random.default_rng([seed, b]).permutation(n)",
+            rng_rule=("permutation b of a target: permutation_indices(n, groups, "
+                      "numpy.random.default_rng([seed, b])), i.e. rng.permutation(n) for a "
+                      "row-wise target and the restricted block draw of `scheme` for a "
+                      "block target (see scheme_by_target)"),
             statistic="mean over repeats of pooled out-of-fold R2 (NaN if any outer fold failed)",
             p_rule="(1 + #{null >= observed}) / (1 + K_valid)",
             uninformative_rule="observed <= quantile of the permutation distribution",
@@ -1519,6 +1570,7 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
             families_rule=("fast subset (protocol.bootstrap.families), cost-aware sensitivity"
                            if boot["families"] else "the confirmatory learner's families"),
             rng_rule="resample b: numpy.random.default_rng([seed, b]); stats.group_bootstrap",
+            enabled_rule=ENABLED_RULE_BOOT,
             unit="connectivity group (stereoisomers/isotopologues drawn together); other "
                  "molecules singly",
             cv_groups="every copy keeps its original group label (main-analysis CV group, or "
@@ -1526,7 +1578,7 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
             interval="percentile, alpha = evaluation.alpha; NaN if any resample failed",
             enabled=True)
     else:
-        record["bootstrap"] = dict(enabled=False, reason=(
+        record["bootstrap"] = dict(enabled=False, enabled_rule=ENABLED_RULE_BOOT, reason=(
             "protocol.bootstrap.enabled = false" if not boot["enabled"] else "empty family"))
     timer.t["protocol:bootstrap"] = time.perf_counter() - t0
     out["bootstrap"] = pd.concat(boot_rows, ignore_index=True) if boot_rows else pd.DataFrame(
@@ -1730,9 +1782,22 @@ def _run_stages(cfg, providers, out: Path, base: Path, timestamp_utc: str, clien
                                 if c in written],
                    targets=[s.as_dict() for s in specs],
                    target_providers=_json_ready(tprov),
-                   protocol=_json_ready(proto_record)))
+                   protocol=_json_ready(proto_record),
+                   baselines=_baselines_record(cfg)))
     pv.write_run_record(record, out / "run_record.json")
     return record, res["summary"], mol_table_all, written
+
+
+def _baselines_record(cfg: Mapping) -> dict:
+    """Run-record entry: were the mandatory baselines and reference used?"""
+    e = cfg["evaluation"]
+    custom = bool(e.get("allow_custom_baselines", False))
+    return dict(mandatory=list(MANDATORY_BASELINES), mandatory_reference=MANDATORY_REFERENCE,
+                allow_custom_baselines=custom,
+                missing=[b for b in MANDATORY_BASELINES if b not in cfg["feature_sets"]],
+                reference=e["reference"],
+                rule=("custom baselines allowed (evaluation.allow_custom_baselines = true)"
+                      if custom else "enforced by resolve_config"))
 
 
 # ----------------------------------------------------------------- rerun

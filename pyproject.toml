@@ -18,11 +18,14 @@ dependencies = [
   "scikit-learn>=1.4",
   "xgboost>=2.0",
   "requests>=2.31",
+  "joblib>=1.3",     # imported directly (evaluate.py, pipeline.py), not only via scikit-learn
+  "openpyxl>=3.1",   # expdata reads the Bradley melting-point source (mp_bradley, .xlsx)
 ]
 
 [project.optional-dependencies]
 web = ["fastapi>=0.110", "uvicorn>=0.29"]
 test = ["pytest>=8", "networkx>=3.2", "mordredcommunity>=2.0"]
+# kept for existing install commands; openpyxl is now a core dependency
 expdata = ["openpyxl>=3.1"]
 
 [project.scripts]
