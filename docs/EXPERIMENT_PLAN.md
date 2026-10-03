@@ -28,14 +28,14 @@ Negative results (TIs not beating size; published R² collapsing) are reported a
 ### 3.1 Controlled cohort (v1.0 default)
 Free text → user-confirmed MeSH heading (and EFO ID where present) → ChEMBL `drug_indication`
 rows for that exact heading (no substring, no keyword fallback) → indication-specific
-`max_phase_for_ind` = 4 → small molecules → parent compound → largest organic fragment →
+`max_phase_for_ind` = 4 → small molecules → parent compound → ChEMBL structure-pipeline parent (salts/solvents removed); structures still containing >1 fragment, metals or no carbon are **excluded with a reason**, not reduced to a fragment →
 dedup by full InChIKey of the standardised parent → sorted by ChEMBL ID → manifest.
 The ChEMBL release is recorded; the study uses one fixed release (ChEMBL 37 unless a newer
 release is out at freeze time).
 
 ### 3.2 Naive cohort (for Experiment A only)
-The v0.x retrieval, frozen as a function (`mesh_heading__icontains`, all phases, keyword
-fallback), with **all** candidates kept (no random truncation) so that it is deterministic.
+The v0.x retrieval, frozen as a function (`mesh_heading__icontains`, all phases; its keyword
+fallback is omitted because it never ran: the ChEMBL search endpoint returns 404), with **all** candidates kept (no random truncation) so that it is deterministic.
 
 ### 3.3 Disease panel — selection rule (fixed before any modelling)
 1. Candidate list (MeSH headings, written down before counting):
@@ -76,7 +76,7 @@ Bioactivity values are excluded from v1.0 modelling.
 |---|---|
 | M0 null | none (training-fold mean) |
 | M_size | heavy-atom count, bond count |
-| M_size+ (sensitivity) | + ring count |
+| M_size+ (sensitivity) | + ring count (for single-fragment molecules ring count = bonds − atoms + 1, so this only matters for non-linear learners) |
 | M_comp | element counts (C, N, O, S, P, halogens, other) + H count |
 | M_TI | all verified TIs (after removing exact duplicates) |
 | M_TI-family | one model per index family (Experiment B, family contributions) |
