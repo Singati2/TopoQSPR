@@ -23,6 +23,7 @@ dependencies = [
 [project.optional-dependencies]
 web = ["fastapi>=0.110", "uvicorn>=0.29"]
 test = ["pytest>=8", "networkx>=3.2", "mordredcommunity>=2.0"]
+expdata = ["openpyxl>=3.1"]
 
 [project.scripts]
 topoqspr = "topoqspr.cli:main"
