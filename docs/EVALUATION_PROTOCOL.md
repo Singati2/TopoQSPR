@@ -369,3 +369,8 @@ plan; one full-family real-data smoke run is required before freezing.
 * Bickerton GR et al. (2012) Quantifying the chemical beauty of drugs. *Nat Chem* 4:90–98. doi:10.1038/nchem.1243
 
 Every DOI above was checked against Crossref on 2026-10-02 (Cawley & Talbot has no DOI; JMLR volume and pages from the journal).
+
+
+## Benjamini–Yekutieli (sensitivity analysis)
+
+`stats.benjamini_yekutieli(pvals, q)` applies the BY step-up procedure, valid under arbitrary dependence (Benjamini & Yekutieli 2001): BH applied to c(m)·p with c(m) = Σ_{i=1..m} 1/i. It is reported next to BH for the confirmatory family because those endpoints share drugs and CV folds (EXPERIMENT_PLAN §7). Verified against a brute-force implementation of the definition (`test_benjamini_yekutieli_matches_definition`).

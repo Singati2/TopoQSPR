@@ -183,3 +183,30 @@ def test_ad_handles_nan_and_constant_columns():
     ad = stats.ApplicabilityDomain("knn", k=3).fit(X)
     assert list(ad.keep_) == [0, 2]
     assert ad.score(X).shape == (10,)
+
+
+def test_benjamini_yekutieli_matches_definition():
+    """Brute-force check of q_(i) = min_{j>=i} min(1, c(m) m p_(j) / j), c(m) = sum 1/k."""
+    from topoqspr.stats import benjamini_yekutieli
+
+    rng = np.random.default_rng(1)
+    for _ in range(200):
+        m = int(rng.integers(1, 40))
+        p = rng.uniform(0, 1, m) ** rng.uniform(0.5, 4)
+        adj, rej = benjamini_yekutieli(p, 0.05)
+        c = sum(1.0 / k for k in range(1, m + 1))
+        o = np.argsort(p)
+        ps = p[o]
+        ref = np.empty(m)
+        for i in range(m):
+            ref[o[i]] = min(1.0, min(c * m * ps[j] / (j + 1) for j in range(i, m)))
+        assert np.allclose(adj, ref, atol=1e-12)
+        assert (rej == (ref <= 0.05)).all()
+
+
+def test_benjamini_yekutieli_is_never_more_liberal_than_bh():
+    from topoqspr.stats import benjamini_hochberg, benjamini_yekutieli
+
+    rng = np.random.default_rng(2)
+    p = rng.uniform(0, 0.2, 50)
+    assert (benjamini_yekutieli(p)[0] >= benjamini_hochberg(p)[0] - 1e-15).all()
