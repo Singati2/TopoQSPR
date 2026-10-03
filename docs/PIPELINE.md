@@ -214,4 +214,73 @@ same CLI. Exit codes: 0 success, 1 re-run mismatch, 2 input or configuration err
 
 ## 8. Pilot smoke run (Migraine Disorders only)
 
-SMOKE_RUN_PLACEHOLDER
+Purpose: check that the full pipeline runs end to end on real data with every learner
+family and measure its cost before the plan is frozen (EVALUATION_PROTOCOL §9). Only the
+quarantined pilot disease was used; **no performance number was read or is reported
+here**, and none may set a threshold, metric, target or panel (EXPERIMENT_PLAN §2).
+
+Command (2026-10-03, mpcrlab12, 16 cores, load average 35–57 from other jobs; each of the
+13 workers got about 25 % of a core):
+
+```bash
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  topoqspr -v run --config examples/pilot_migraine.json --out <scratch>/pilot_smoke --n-jobs 13
+```
+
+Run record: commit `ec7ae2c` (clean tree), Python 3.10.12, ChEMBL_37 (2026-05-01, live
+API, default cache), `config_sha256` `f9478a2c…e2cdea`, `manifest_sha256` `7d3e104d…ccb62a`.
+The results directory stays in scratch space and is not committed.
+
+**Cohort.** Migraine Disorders (D008881): 152 manifest rows: 33 included parents,
+30 salt forms collapsed onto their parents, 84 parents below phase 4, 5 not small
+molecules. All 33 passed standardisation (no rejections, no InChIKey duplicates) and
+all four targets were defined for all 33 (n = 33). No feature value was undefined
+(`failures.csv` is empty; every parent has maximum degree ≥ 3, so the R₃ indices
+exist). Every summary row is labelled `underpowered` (n = 33 < 50; smallest outer test
+fold 6 < 10), as the protocol requires.
+
+**Scale.** 4 targets × 11 learners (`selected` + 10 families) × 12 feature sets
+(null, size, size_rings, composition, TI, 6 TI families, rdkit2d) × 25 outer folds =
+13,200 outer folds.
+
+**Wall time per stage**
+
+| stage | seconds |
+|---|---|
+| cohort (live ChEMBL incl. the 61-page heading index; cached afterwards) | 32.9 |
+| standardize | 2.0 |
+| features (102 indices + rdkit2d + baselines) | 3.5 |
+| targets | 0.2 |
+| evaluate | 23,050.6 (6.4 h) |
+| write | 8.9 |
+
+**Evaluate, by learner** (seconds summed over the 4 targets, 12 sets × 25 folds each):
+
+| selected | rf | extratrees | gbr | xgb | elasticnet | knn | ridge | svr | pls | linear |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 11,637 | 4,083 | 2,905 | 2,076 | 961 | 717 | 183 | 160 | 141 | 130 | 40 |
+
+By target: MolWt 7,281 s (ran first, under the heaviest load), MolLogP 5,538 s, TPSA 5,271 s,
+MolMR 4,941 s. The four tree ensembles take 88 % of the single-family time. `selected`
+repeats the inner fits of all ten families, so it costs about as much as the ten
+single-family runs together (11,637 s vs 11,396 s). Taking `selected` from the
+single-family inner tables (same splits and seeds, so the same choice) would halve
+`evaluate`; not implemented.
+
+**Failures (expected by the protocol, reported, not dropped).** 400 of 13,200 outer folds
+failed, all with reason "no family could be fitted": the `linear` (OLS) learner on `TI`,
+`TI_degree`, `TI_reverse_degree` and `rdkit2d`, where p ≥ n_inner_train − 1 (e.g. "needs
+n_train >= 104 for p=102, got 17"), for all 25 folds and 4 targets. Those 16 summary rows
+have NaN fold means and NaN CIs with the reason. In the `selected` learner OLS is skipped
+on those sets in the inner loop (800 `skipped` rows in `inner.csv`) and another family is
+chosen. No other fold failed or had an undefined metric; the AD was fitted in every fold
+except the 1,100 folds of the zero-column `null` set ("no feature columns").
+
+**Output sizes**: predictions.csv 6.8 MB, inner.csv 2.6 MB, folds.csv 2.3 MB,
+paired.csv 1.1 MB, summary.csv 0.19 MB (528 rows), features.csv 0.12 MB.
+
+**Budget implication** (cost only): at this load, one disease × 4 targets with all
+learners took 6.4 h for n = 33. Tree-ensemble cost grows with n_train, and the protocol's
+own measurement (§9) is about 340 s per outer fold at n_train = 123 for the ten families,
+so main-panel cohorts (n ≥ 50) with all eleven learners will need a dedicated machine or
+a reduced learner list, decided before the plan is frozen.
