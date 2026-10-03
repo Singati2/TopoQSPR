@@ -10,6 +10,12 @@ spearman_ci
     Spearman rho with a Fisher-z confidence interval.
 y_scrambling
     Permutation (y-randomisation) test of any scoring function.
+permutation_pvalue
+    Empirical p-value (+1 correction) and 95th-percentile rule for a given null.
+percentile_interval
+    Percentile bootstrap interval that never drops failed resamples silently.
+group_bootstrap
+    Cluster (group) bootstrap resample of row indices.
 ApplicabilityDomain
     kNN-distance or leverage applicability-domain flag.
 
@@ -50,6 +56,9 @@ __all__ = [
     "benjamini_yekutieli",
     "spearman_ci",
     "y_scrambling",
+    "permutation_pvalue",
+    "percentile_interval",
+    "group_bootstrap",
     "ApplicabilityDomain",
 ]
 
@@ -108,26 +117,41 @@ def corrected_ttest(diffs: Sequence[float], n_train, n_test, alpha: float = 0.05
     return out
 
 
-def benjamini_hochberg(pvals: Sequence[float], q: float = 0.05):
+def _family_size(p: np.ndarray, m: int | None) -> int:
+    k = int(np.sum(~np.isnan(p)))
+    if m is None:
+        return k
+    m = int(m)
+    if m < k:
+        raise ValueError(f"family size m={m} is smaller than the {k} finite p-values")
+    return m
+
+
+def benjamini_hochberg(pvals: Sequence[float], q: float = 0.05, m: int | None = None):
     """Benjamini-Hochberg step-up procedure.
 
-    For the m non-NaN p-values sorted p_(1) <= ... <= p_(m), the adjusted
-    value is q_(i) = min_{j >= i} min(1, m * p_(j) / j); hypothesis i is
-    rejected iff q_(i) <= q (equivalently: reject H_(1..k) with
-    k = max{i : p_(i) <= i q / m}). NaN p-values stay NaN, are not rejected
-    and do not count towards m.
+    For the k non-NaN p-values sorted p_(1) <= ... <= p_(k) and a family of
+    m >= k hypotheses, the adjusted value is
+    q_(i) = min_{j >= i} min(1, m * p_(j) / j); hypothesis i is rejected iff
+    q_(i) <= q (equivalently: reject H_(1..r) with r = max{i : p_(i) <= i q / m}).
+    NaN p-values stay NaN and are never rejected. By default (``m=None``)
+    m = k, i.e. a NaN does not count towards m. Passing the pre-specified
+    family size ``m`` keeps the untestable members in m (equivalent to
+    giving them p = 1), so a member that fails to evaluate cannot loosen
+    the correction for the others.
 
     Returns (adjusted, reject) as numpy arrays in the input order.
     """
     p = np.asarray(pvals, dtype=float).ravel()
     if np.any((p[~np.isnan(p)] < 0) | (p[~np.isnan(p)] > 1)):
         raise ValueError("p-values must lie in [0, 1]")
+    m = _family_size(p, m)
     adj = np.full(p.shape, np.nan)
     ok = np.flatnonzero(~np.isnan(p))
-    m = ok.size
-    if m:
+    k = ok.size
+    if k:
         order = ok[np.argsort(p[ok], kind="mergesort")]
-        ranked = p[order] * m / np.arange(1, m + 1)
+        ranked = p[order] * m / np.arange(1, k + 1)
         ranked = np.minimum.accumulate(ranked[::-1])[::-1]
         adj[order] = np.minimum(ranked, 1.0)
     reject = np.zeros(p.shape, dtype=bool)
@@ -135,23 +159,24 @@ def benjamini_hochberg(pvals: Sequence[float], q: float = 0.05):
     return adj, reject
 
 
-def benjamini_yekutieli(pvals: Sequence[float], q: float = 0.05):
+def benjamini_yekutieli(pvals: Sequence[float], q: float = 0.05, m: int | None = None):
     """Benjamini-Yekutieli step-up procedure (valid under arbitrary dependence).
 
     Same as :func:`benjamini_hochberg` with every p-value multiplied by
     c(m) = sum_{i=1..m} 1/i (Benjamini & Yekutieli 2001, Thm 1.3):
     q_(i) = min_{j >= i} min(1, c(m) * m * p_(j) / j). Used as the sensitivity
     analysis for BH because the confirmatory endpoints share drugs and folds.
+    ``m`` as in :func:`benjamini_hochberg` (default: the number of finite p).
 
     Returns (adjusted, reject) in the input order; NaN p-values stay NaN.
     """
     p = np.asarray(pvals, dtype=float).ravel()
-    m = int(np.sum(~np.isnan(p)))
-    if m == 0:
+    m = _family_size(p, m)
+    if m == 0 or np.all(np.isnan(p)):
         return np.full(p.shape, np.nan), np.zeros(p.shape, dtype=bool)
     c = float(np.sum(1.0 / np.arange(1, m + 1)))
     scaled = np.where(np.isnan(p), np.nan, np.minimum(1.0, p * c))
-    adj, _ = benjamini_hochberg(scaled, q)
+    adj, _ = benjamini_hochberg(scaled, q, m=m)
     # BH on c*p caps at 1 before the step-up; recompute the reject set on the adjusted values
     adj = np.minimum(1.0, adj)
     return adj, np.where(np.isnan(adj), False, adj <= q)
@@ -222,6 +247,92 @@ def y_scrambling(score_fn: Callable[[np.ndarray, np.ndarray], float], X, y,
     return dict(observed=obs, null=null, p=p, n_valid=int(valid.size),
                 null_mean=float(valid.mean()) if valid.size else math.nan,
                 null_max=float(valid.max()) if valid.size else math.nan)
+
+
+def permutation_pvalue(observed: float, null: Sequence[float], quantile: float = 0.95) -> dict:
+    """Empirical permutation p-value and the "uninformative" rule.
+
+    With s_obs the observed statistic and s_1..s_K the statistics of K
+    permuted targets (larger is better),
+
+        p = (1 + #{b : s_b >= s_obs}) / (1 + K_valid)     (Phipson & Smyth 2010)
+        q95 = numpy.quantile(valid null, quantile)        (linear interpolation)
+        uninformative = s_obs <= q95                       (EXPERIMENT_PLAN 7)
+
+    NaN null statistics (a permutation whose nested CV failed) are reported as
+    ``n_failed`` and excluded from K_valid; a NaN observed statistic or an
+    empty valid null makes p, q95 and the flag NaN/None with ``reason``.
+    Returns observed, p, n, n_valid, n_failed, null_mean, null_sd, null_q95,
+    null_max, uninformative (bool or None), reason.
+    """
+    null = np.asarray(null, dtype=float).ravel()
+    valid = null[np.isfinite(null)]
+    out = dict(observed=float(observed), p=math.nan, n=int(null.size), n_valid=int(valid.size),
+               n_failed=int(null.size - valid.size), null_mean=math.nan, null_sd=math.nan,
+               null_q95=math.nan, null_max=math.nan, uninformative=None, reason="")
+    why = []
+    if out["n_failed"]:
+        why.append(f"{out['n_failed']} of {null.size} permutations failed (excluded)")
+    if valid.size:
+        out.update(null_mean=float(valid.mean()),
+                   null_sd=float(valid.std(ddof=1)) if valid.size > 1 else math.nan,
+                   null_q95=float(np.quantile(valid, quantile)), null_max=float(valid.max()))
+    if not math.isfinite(out["observed"]):
+        why.append("observed statistic undefined")
+    elif valid.size == 0:
+        why.append("no valid permutation")
+    else:
+        out["p"] = (1 + int(np.sum(valid >= out["observed"]))) / (1 + valid.size)
+        out["uninformative"] = bool(out["observed"] <= out["null_q95"])
+    out["reason"] = "; ".join(why)
+    return out
+
+
+def percentile_interval(values: Sequence[float], alpha: float = 0.05) -> dict:
+    """Percentile bootstrap interval [Q(alpha/2), Q(1 - alpha/2)] of ``values``.
+
+    Quantiles use ``numpy.quantile`` (linear interpolation). A NaN value (a
+    resample whose procedure failed or whose metric is undefined) is **not**
+    dropped: the interval is then NaN with a reason, because keeping only the
+    resamples that succeeded would condition on success. Returns ci_low,
+    ci_high, mean, sd, n, n_valid, reason.
+    """
+    v = np.asarray(values, dtype=float).ravel()
+    ok = np.isfinite(v)
+    out = dict(ci_low=math.nan, ci_high=math.nan, mean=math.nan, sd=math.nan,
+               n=int(v.size), n_valid=int(ok.sum()), reason="")
+    if v.size == 0:
+        out["reason"] = "no resamples"
+        return out
+    if not ok.all():
+        out["reason"] = f"{int((~ok).sum())} of {v.size} resamples undefined; interval not computed"
+        return out
+    lo, hi = np.quantile(v, [alpha / 2, 1 - alpha / 2])
+    out.update(ci_low=float(lo), ci_high=float(hi), mean=float(v.mean()),
+               sd=float(v.std(ddof=1)) if v.size > 1 else math.nan)
+    return out
+
+
+def group_bootstrap(groups: Sequence, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
+    """One cluster-bootstrap resample: draw G groups with replacement from the
+    G distinct ``groups`` and take every row of each drawn group.
+
+    Returns ``(rows, draw)``: ``rows`` are indices into the original rows (a
+    row appears once per draw of its group) and ``draw`` labels every resampled
+    row with the position of its group's draw (0..G-1). Rows from different
+    draws of the same group are copies of one another; callers that run CV on
+    the resample must keep all copies of an original group together (pass the
+    original group label as the CV group), otherwise a copy lands in the
+    training and the test fold at once. Groups are taken in sorted order of
+    their labels, so the result depends only on ``rng`` and the labels.
+    """
+    g = np.asarray(groups, dtype=object).astype(str)
+    uniq, inv = np.unique(g, return_inverse=True)
+    members = [np.flatnonzero(inv == i) for i in range(uniq.size)]
+    pick = rng.integers(0, uniq.size, size=uniq.size)
+    rows = np.concatenate([members[i] for i in pick])
+    draw = np.concatenate([np.full(members[i].size, j) for j, i in enumerate(pick)])
+    return rows, draw
 
 
 class ApplicabilityDomain:
