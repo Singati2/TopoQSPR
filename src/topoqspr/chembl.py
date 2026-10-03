@@ -44,6 +44,7 @@ import requests
 __all__ = [
     "CHEMBL_BASE_URL",
     "MESH_BASE_URL",
+    "CHEMBL_DATA_LICENCE",
     "CacheMiss",
     "ChemblClient",
     "MeshClient",
@@ -53,6 +54,11 @@ __all__ = [
 
 CHEMBL_BASE_URL = "https://www.ebi.ac.uk/chembl/api/data"
 MESH_BASE_URL = "https://id.nlm.nih.gov/mesh"
+
+#: Licence of ChEMBL data and of files derived from it (recorded in cohort
+#: sidecars and run records; redistributed ChEMBL-derived files must carry it).
+CHEMBL_DATA_LICENCE = ("CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/); "
+                       "ChEMBL, EMBL-EBI")
 
 #: Fields kept from a ChEMBL ``molecule`` record (the molfile is dropped to keep the cache small).
 MOLECULE_FIELDS = (

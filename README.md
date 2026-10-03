@@ -22,6 +22,23 @@ python main.py --disease "asthma"          # command line, writes outputs/
 uvicorn website:app --port 8000            # web app at http://localhost:8000
 ```
 
+## Quick start (v1.0, in development)
+
+```bash
+pip install -r requirements-lock.txt && pip install --no-deps -e .
+topoqspr headings "migraine"                          # find the MeSH descriptor ID
+topoqspr cohort --mesh D008881 --out cohort/          # controlled cohort manifest
+topoqspr indices --smiles-csv my.csv --out idx.csv    # verified indices (id,smiles columns)
+topoqspr run --config examples/pilot_migraine.json --out results/pilot
+topoqspr rerun results/pilot/run_record.json --out results/pilot-rerun   # byte-identical check
+```
+
+`docker build -t topoqspr --build-arg GIT_COMMIT="$(git rev-parse HEAD)" --build-arg GIT_DIRTY=0 .`
+gives the same CLI from the lock file (the commit is baked in so that run records from the
+image name the code; docs/PIPELINE.md §7). The pipeline, the
+study-config schema, the outputs and the run record are described in
+[docs/PIPELINE.md](docs/PIPELINE.md).
+
 ## Repository layout
 
 | Path | Purpose |

@@ -1,0 +1,10 @@
+# Exact test dependencies (pytest plus the cross-check libraries used by tests/),
+# from the same venv as requirements-lock.txt.
+-r requirements-lock.txt
+iniconfig==2.3.0
+mordredcommunity==2.0.7
+networkx==3.4.2
+packaging==26.3
+pluggy==1.6.0
+Pygments==2.21.0
+pytest==9.1.1

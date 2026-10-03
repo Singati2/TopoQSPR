@@ -15,3 +15,4 @@ paper/*.pdf
 .pytest_cache/
 build/
 .claude/
+src/topoqspr/_build_info.py
