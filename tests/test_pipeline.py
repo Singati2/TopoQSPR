@@ -421,3 +421,245 @@ def test_module_entry_point():
     r = subprocess.run([sys.executable, "-m", "topoqspr", "--version"], capture_output=True,
                        text=True, env=env, check=True)
     assert r.stdout.startswith("topoqspr ")
+
+
+# ------------------------------------------------- regression tests (phase-1 review)
+@pytest.mark.parametrize("over, match", [
+    ({"evaluation": {"seeds": [0, 0, 0]}}, "duplicate outer seeds"),
+    ({"evaluation": {"seeds": []}}, "seeds must be a non-empty"),
+    ({"evaluation": {"outer_splits": 1}}, "outer_splits must be >= 2"),
+    ({"evaluation": {"inner_splits": 1}}, "inner_splits must be >= 2"),
+    ({"evaluation": {"families": [], "learners": ["selected"]}}, "families is empty"),
+    ({"evaluation": {"learners": []}}, "learners is empty"),
+    ({"targets": []}, "targets must be a non-empty list"),
+    ({"targets": [{"provider": "rdkit", "names": []}]}, "'names' is empty"),
+    ({"targets": [{"provider": "rdkit", "names": ["TPSA", "TPSA"]}]}, "duplicate names"),
+])
+def test_resolve_rejects_degenerate_evaluation(over, match):
+    cfg = {"cohort": {"source": "chembl", "mesh_ids": [MIGRAINE]}, **over}
+    with pytest.raises(ValueError, match=match):
+        pl.resolve_config(cfg)
+
+
+def test_non_mapping_config_is_a_value_error(tmp_path):
+    with pytest.raises(ValueError, match="mapping"):
+        pl.resolve_config([1])
+    p = tmp_path / "list.json"
+    p.write_text("[1]")
+    with pytest.raises(ValueError, match="mapping"):
+        pl.load_config(p)
+
+
+def test_parquet_needs_an_engine_before_anything_runs(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(pl, "_parquet_engine", lambda: None)
+    cfg = _tiny_config(output={"features_format": "parquet"})
+    with pytest.raises(ValueError, match="pyarrow or fastparquet"):
+        pl.resolve_config(cfg)
+    cfg["cohort"]["path"] = str(TINY)
+    p = tmp_path / "pq.json"
+    p.write_text(json.dumps(cfg))
+    out = tmp_path / "res"
+    assert cli.main(["run", "--config", str(p), "--out", str(out)]) == 2
+    assert "pyarrow or fastparquet" in capsys.readouterr().err
+    assert not out.exists()
+
+
+class _Failing(_Experimental):
+    def compute(self, molecules, mols):
+        raise RuntimeError("provider exploded")
+
+
+def make_failing(names=None, **opts):
+    return _Failing(names, **opts)
+
+
+def test_failed_run_leaves_no_partial_results(tmp_path):
+    cfg = _tiny_config(feature_sets=["null", "size"],
+                       targets=[{"provider": f"{__name__}:make_failing"}])
+    out = tmp_path / "res"
+    with pytest.raises(RuntimeError, match="exploded"):
+        pl.run_study(cfg, out, timestamp_utc=TS, base_dir=FIX)
+    assert not out.exists()
+    assert list(tmp_path.iterdir()) == []  # no staging directory left either
+    # a failed overwrite keeps the previous results
+    out.mkdir()
+    (out / "keep.txt").write_text("old")
+    with pytest.raises(RuntimeError):
+        pl.run_study(cfg, out, timestamp_utc=TS, base_dir=FIX, overwrite=True)
+    assert [x.name for x in out.iterdir()] == ["keep.txt"]
+
+
+def test_cli_exit_codes_for_config_and_internal_errors(tmp_path, monkeypatch, capsys):
+    p = tmp_path / "list.json"
+    p.write_text("[]")
+    assert cli.main(["run", "--config", str(p), "--out", str(tmp_path / "a")]) == 2
+    cfg = _tiny_config(targets=[{"provider": "nosuch.mod:f"}])
+    cfg["cohort"]["path"] = str(TINY)
+    p = tmp_path / "mod.json"
+    p.write_text(json.dumps(cfg))
+    assert cli.main(["run", "--config", str(p), "--out", str(tmp_path / "b")]) == 2
+    assert "could not be loaded" in capsys.readouterr().err
+    assert not (tmp_path / "b").exists()  # provider checked before the cohort stage
+
+    def boom(*a, **k):
+        raise ZeroDivisionError("bug")
+
+    monkeypatch.setattr(pl, "run_study", boom)
+    p = tmp_path / "ok.json"
+    p.write_text(json.dumps({"cohort": {"source": "smiles_csv", "path": str(TINY)}}))
+    rc = cli.main(["run", "--config", str(p), "--out", str(tmp_path / "c")])
+    assert rc == cli.EXIT_INTERNAL == 3
+    assert "ZeroDivisionError" in capsys.readouterr().err
+
+
+def test_read_results_keeps_the_null_set(tiny_run):
+    assert pd.read_csv(tiny_run.out_dir / "summary.csv")["set"].isna().any()  # the pitfall
+    s = pl.read_results(tiny_run.out_dir, "summary")
+    assert "null" in set(s["set"]) and not s["set"].isna().any()
+    assert s["d_r2_mean"].dtype == float  # empty cells are still NaN
+    f = pl.read_results(tiny_run.out_dir, "folds.csv")
+    assert (f["set"] == "null").sum() == 3 * 2  # 3 folds x 2 targets
+
+
+class _NoReason(_Experimental):
+    def compute(self, molecules, mols):
+        tv = super().compute(molecules, mols)
+        return tp.TargetValues(tv.values, [])  # NaN for m02, m03 but no reasons
+
+
+def make_no_reason(names=None, **opts):
+    return _NoReason(names, **opts)
+
+
+def test_nan_target_without_reason_is_rejected(tmp_path):
+    cfg = _tiny_config(feature_sets=["null", "size"],
+                       targets=[{"provider": f"{__name__}:make_no_reason"}])
+    with pytest.raises(ValueError, match="2 NaN value.*without a failure reason"):
+        pl.run_study(cfg, tmp_path / "res", timestamp_utc=TS, base_dir=FIX)
+    v = pd.DataFrame({"t": [1.0, math.inf]}, index=["a", "b"])
+    with pytest.raises(ValueError, match="infinite"):
+        pl._check_target_contract("x", v, [])
+
+
+STEREO = {"citalopram": "CN(C)CCCC1(c2ccc(F)cc2)OCc2cc(C#N)ccc21",
+          "escitalopram": "CN(C)CCC[C@@]1(c2ccc(F)cc2)OCc2cc(C#N)ccc21",
+          "cetirizine": "OC(=O)COCCN1CCN(CC1)C(c1ccccc1)c1ccc(Cl)cc1",
+          "levocetirizine": "OC(=O)COCCN1CCN(CC1)[C@@H](c1ccccc1)c1ccc(Cl)cc1"}
+
+
+def test_stereoisomers_share_a_fold(tmp_path):
+    tiny = pd.read_csv(TINY, dtype=str, keep_default_na=False)
+    extra = pd.DataFrame({"id": list(STEREO), "smiles": list(STEREO.values())})
+    pd.concat([tiny, extra]).to_csv(tmp_path / "s.csv", index=False)
+    cfg = _tiny_config(cohort={"source": "smiles_csv", "path": "s.csv"},
+                       feature_sets=["null", "size", "composition", "TI"],
+                       targets=[{"provider": "rdkit", "names": ["MolLogP"]}])
+    cfg["evaluation"] = dict(FAST_EVAL, seeds=[0, 1, 2])
+    res = pl.run_study(cfg, tmp_path / "res", timestamp_utc=TS, base_dir=tmp_path)
+    mol = pl.read_results(res.out_dir, "molecules", dtype=str).set_index("id")
+    grp = mol["connectivity_group"].fillna("")
+    assert (mol.loc[list(STEREO), "status"] == "ok").all()  # all four kept
+    assert grp["citalopram"] == grp["escitalopram"] == "citalopram"
+    assert grp["cetirizine"] == grp["levocetirizine"] == "cetirizine"
+    assert (grp.drop(list(STEREO)) == "").all()
+    rec = res.run_record
+    assert rec["counts"]["connectivity_groups"]["groups"] == 2
+    assert rec["counts"]["connectivity_groups"]["molecules"] == 4
+    assert rec["seeds"]["outer_splitter"].startswith("balanced_group_kfold (connectivity")
+    pred = pl.read_results(res.out_dir, "predictions")
+    fold = pred[pred["set"] == "size"].set_index(["repeat", "row"])["fold"]
+    for r in range(3):
+        assert fold[(r, "citalopram")] == fold[(r, "escitalopram")]
+        assert fold[(r, "cetirizine")] == fold[(r, "levocetirizine")]
+    # identical 2D features within a pair: exactly why they must not straddle folds
+    feats = pl.read_results(res.out_dir, "features").set_index("id")
+    cols = [c for c in feats.columns if c.startswith(("ti.", "size.", "composition."))]
+    assert feats.loc["citalopram", cols].equals(feats.loc["escitalopram", cols])
+
+
+def test_cv_groups_rules():
+    from rdkit import Chem
+
+    mols = [Chem.MolFromSmiles(s) for s in ("C[C@H](O)CC", "C[C@@H](O)CC", "c1ccccc1CC", "CCCO")]
+    ids = ["a", "b", "c", "d"]
+    conn = ["a", "a", "", ""]
+    assert pl._cv_groups("random", mols, ["", "", "", ""], ids) is None  # plain KFold
+    assert list(pl._cv_groups("random", mols, conn, ids)) == ["a", "a", "c", "d"]
+    g = pl._cv_groups("scaffold", mols, conn, ids)
+    assert g[0] == g[1] and len({g[0], g[2], g[3]}) == 3  # acyclic pair merged
+
+
+def _pilot_manifest_copy(pilot_run, dst: Path) -> Path:
+    dst.mkdir()
+    for n in ("manifest.csv", "manifest.json"):
+        (dst / n).write_bytes((pilot_run.out_dir / n).read_bytes())
+    return dst / "manifest.csv"
+
+
+def _manifest_config(path):
+    return {"name": "from-manifest", "cohort": {"source": "manifest", "path": str(path)},
+            "feature_sets": ["null", "size"], "targets": [{"provider": "rdkit", "names": ["TPSA"]}],
+            "evaluation": dict(FAST_EVAL)}
+
+
+def test_edited_manifest_is_refused(pilot_run, tmp_path):
+    man = _pilot_manifest_copy(pilot_run, tmp_path / "m")
+    res = pl.run_study(_manifest_config(man), tmp_path / "ok", timestamp_utc=TS)
+    assert res.run_record["chembl"]["manifest_verified"] is True
+    assert res.run_record["chembl"]["release"] == "ChEMBL_37"
+    df = pd.read_csv(man, dtype=str, keep_default_na=False)
+    i = df.index[df["decision"] == "include"][0]
+    df.loc[i, "canonical_smiles"] = "CCCCCCCCCC"
+    man.write_bytes(df.to_csv(index=False, lineterminator="\n").encode())
+    with pytest.raises(ValueError, match="edited after it was built"):
+        pl.run_study(_manifest_config(man), tmp_path / "bad", timestamp_utc=TS)
+    assert not (tmp_path / "bad").exists()
+    (tmp_path / "m" / "manifest.json").unlink()  # explicit opt-out: runs, labelled unverified
+    res = pl.run_study(_manifest_config(man), tmp_path / "unverified", timestamp_utc=TS)
+    assert res.run_record["chembl"]["manifest_verified"] is False
+
+
+def test_chembl_licence_recorded(pilot_run):
+    from topoqspr.chembl import CHEMBL_DATA_LICENCE
+
+    assert "CC BY-SA 3.0" in CHEMBL_DATA_LICENCE
+    assert pilot_run.run_record["chembl"]["data_licence"] == CHEMBL_DATA_LICENCE
+    side = json.loads((pilot_run.out_dir / "manifest.json").read_text())
+    assert side["data_licence"] == CHEMBL_DATA_LICENCE
+    notice = (CHEMBL / "LICENSE").read_text()
+    assert "CC BY-SA 3.0" in notice and "ChEMBL_37" in notice and "EMBL-EBI" in notice
+
+
+def _dockerfile_build_info(dst: Path, commit: str, dirty: str) -> None:
+    """Write _build_info.py exactly as the Dockerfile's RUN line does."""
+    text = (REPO / "Dockerfile").read_text()
+    m = re.search(r"printf ('[^']*')", text)
+    assert m, "Dockerfile no longer writes _build_info.py with printf"
+    subprocess.run(["sh", "-c", f'printf {m.group(1)} "$GIT_COMMIT" "$GIT_DIRTY" > "$OUT"'],
+                   env={**os.environ, "GIT_COMMIT": commit, "GIT_DIRTY": dirty,
+                        "OUT": str(dst / "_build_info.py")}, check=True)
+
+
+def test_installed_copy_outside_git_names_the_build_commit(tmp_path):
+    """The Docker situation: the package lives outside any git work tree."""
+    import shutil
+
+    site = tmp_path / "site"
+    shutil.copytree(SRC / "topoqspr", site / "topoqspr",
+                    ignore=shutil.ignore_patterns("__pycache__", "_build_info.py"))
+    probe = "import json, topoqspr.provenance as p; print(json.dumps(p.git_info()))"
+
+    def probe_git_info():
+        r = subprocess.run([sys.executable, "-c", probe], cwd=tmp_path, capture_output=True,
+                           text=True, env={**os.environ, "PYTHONPATH": str(site)}, check=True)
+        return json.loads(r.stdout)
+
+    no_info = probe_git_info()
+    assert no_info["commit"] is None and "_build_info" in no_info["reason"]
+    commit = "0123456789abcdef0123456789abcdef01234567"
+    _dockerfile_build_info(site / "topoqspr", commit, "1")
+    info = probe_git_info()
+    assert info["commit"] == commit and info["dirty"] is True
+    assert info["source"] == "build_info"
+    # inside the repository the live git state is used, never a build-info file
+    assert pv.git_info()["source"] in ("git", None)

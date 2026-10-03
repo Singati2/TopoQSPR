@@ -99,7 +99,7 @@ gets a decision row.
 | Structure source | ChEMBL parent `canonical_smiles` | The ChEMBL parent is already salt-stripped by the ChEMBL structure pipeline. Using it keeps the manifest traceable to one ChEMBL record. |
 | Metal salts | excluded (`metal_containing`) | Some ChEMBL parents keep a metal counter-ion, for example sodium butyrate, potassium citrate and zinc gluconate. We exclude these rather than strip the ion silently. **Deviation from EXPERIMENT_PLAN §3.1**, which says "parent compound → largest organic fragment": see the note below the table. |
 | Mixtures | excluded | A multi-fragment *parent* is a co-crystal or multi-component product, such as omega-3-acid ethyl esters or ipragliflozin L-proline. Its graph is not one molecule. Same deviation as above. |
-| De-duplication key | full standard InChIKey | Stereoisomers are distinct compounds with distinct properties, so we do not merge on the first InChIKey block. This choice does not affect any of the four cohorts below: there were 0 InChIKey duplicates. |
+| De-duplication key | full standard InChIKey | Stereoisomers are distinct compounds with distinct properties, so we do not merge on the first InChIKey block. This choice does not affect any of the four cohorts below: there were 0 InChIKey duplicates. Pairs that share the first block (identical 2D graph) are kept, and the pipeline keeps each such pair in one CV fold (PIPELINE.md §1, *Connectivity groups*). |
 | Tie-break / order | lowest ChEMBL ID; numeric ChEMBL ID sort | Deterministic and independent of API order and of `PYTHONHASHSEED`. |
 
 **Deviation from the experiment plan.** EXPERIMENT_PLAN §3.1 specifies "parent compound →

@@ -30,7 +30,9 @@ topoqspr run --config examples/pilot_migraine.json --out results/pilot
 topoqspr rerun results/pilot/run_record.json --out results/pilot-rerun   # byte-identical check
 ```
 
-`docker build -t topoqspr .` gives the same CLI from the lock file. The pipeline, the
+`docker build -t topoqspr --build-arg GIT_COMMIT="$(git rev-parse HEAD)" --build-arg GIT_DIRTY=0 .`
+gives the same CLI from the lock file (the commit is baked in so that run records from the
+image name the code; docs/PIPELINE.md §7). The pipeline, the
 study-config schema, the outputs and the run record are described in
 [docs/PIPELINE.md](docs/PIPELINE.md).
 

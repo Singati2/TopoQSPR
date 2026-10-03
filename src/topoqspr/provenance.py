@@ -5,7 +5,12 @@ A run record (``run_record.json``, written last into a results directory by
 
 * ``code``: the git commit of the source tree the package was imported from,
   whether tracked files differ from that commit (``dirty``) and the number of
-  untracked files, plus ``topoqspr.__version__``;
+  untracked files, plus ``topoqspr.__version__``. An installed copy outside
+  any git tree (the Docker image) falls back to the commit written into
+  ``topoqspr/_build_info.py`` at build time (:func:`build_info`); ``source``
+  says which (``"git"``, ``"build_info"`` or ``None``);
+* ``chembl`` also names the data licence (``data_licence``) of ChEMBL-derived
+  results;
 * ``environment``: Python version and implementation, platform, the version of
   every installed distribution (``importlib.metadata``) and the environment
   variables that can change numerical results (``PYTHONHASHSEED`` and the
@@ -31,6 +36,7 @@ import hashlib
 import json
 import os
 import platform
+import re
 import subprocess
 import sys
 from importlib import metadata
@@ -47,6 +53,7 @@ __all__ = [
     "sha256_file",
     "config_sha256",
     "git_info",
+    "build_info",
     "package_versions",
     "environment_info",
     "file_records",
@@ -116,13 +123,21 @@ def git_info(path: str | os.PathLike | None = None) -> dict:
 
     ``path`` defaults to the directory this package was imported from, so the
     record names the code that actually ran. Outside a git checkout (an
-    installed wheel) every field is ``None`` and ``reason`` says why.
+    installed wheel) the commit baked in at build time is used when there is
+    one (:func:`build_info`); otherwise every field is ``None`` and ``reason``
+    says why.
     """
     here = Path(path) if path is not None else Path(__file__).resolve().parent
     top = _git(["rev-parse", "--show-toplevel"], here)
     if top is None:
+        if path is None:
+            built = build_info()
+            if built is not None:
+                return built
         return dict(commit=None, dirty=None, untracked=None, describe=None, root=None,
-                    reason="not inside a git work tree (or git unavailable)")
+                    source=None,
+                    reason="not inside a git work tree (or git unavailable) and no "
+                           "topoqspr/_build_info.py (see the Dockerfile)")
     commit = (_git(["rev-parse", "HEAD"], here) or "").strip() or None
     tracked = _git(["status", "--porcelain", "--untracked-files=no"], here)
     untracked = _git(["ls-files", "--others", "--exclude-standard"], here)
@@ -133,8 +148,33 @@ def git_info(path: str | os.PathLike | None = None) -> dict:
         untracked=None if untracked is None else len([x for x in untracked.splitlines() if x]),
         describe=None if describe is None else describe.strip(),
         root=top.strip(),
+        source="git",
         reason="",
     )
+
+
+def build_info() -> dict | None:
+    """The commit baked into an installed copy at build time, or ``None``.
+
+    ``docker build --build-arg GIT_COMMIT=... --build-arg GIT_DIRTY=...``
+    writes ``topoqspr/_build_info.py`` before the package is installed, so a
+    container (where the package lives in site-packages, outside any git
+    tree) still names the code it runs. Same keys as :func:`git_info`, with
+    ``source="build_info"``.
+    """
+    try:
+        from . import _build_info  # type: ignore[attr-defined]
+    except ImportError:
+        return None
+    commit = str(getattr(_build_info, "GIT_COMMIT", "") or "").strip().lower()
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        return None
+    dirty = {"1": True, "true": True, "0": False, "false": False}.get(
+        str(getattr(_build_info, "GIT_DIRTY", "")).strip().lower())
+    return dict(commit=commit, dirty=dirty, untracked=None,
+                describe=str(getattr(_build_info, "GIT_DESCRIBE", "") or "") or None,
+                root=None, source="build_info",
+                reason="installed copy; commit recorded at build time (topoqspr/_build_info.py)")
 
 
 def package_versions() -> dict[str, str]:

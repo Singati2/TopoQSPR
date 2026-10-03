@@ -43,7 +43,7 @@ import pandas as pd
 from rdkit import Chem, RDLogger
 
 from . import __version__
-from .chembl import ChemblClient, MeshClient, chembl_sort_key
+from .chembl import CHEMBL_DATA_LICENCE, ChemblClient, MeshClient, chembl_sort_key
 
 __all__ = [
     "MANIFEST_COLUMNS",
@@ -277,6 +277,7 @@ class Cohort:
             "disease_label": self.disease_label,
             "chembl_release": self.release,
             "chembl_release_date": self.release_date,
+            "data_licence": CHEMBL_DATA_LICENCE,
             "parameters": self.parameters,
             "counts": {
                 "manifest_rows": int(len(self.manifest)),

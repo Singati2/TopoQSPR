@@ -11,12 +11,12 @@ Roadmap item M6.
 | # | Stage | What happens | Module |
 |---|---|---|---|
 | 1 | cohort | Controlled cohort from confirmed MeSH IDs (ChEMBL, cached per release), or a cohort manifest written earlier, or a SMILES CSV. Writes `manifest.csv` (+ `manifest.json`). | `cohort.build_cohort` |
-| 2 | standardize | `graph.standardize` on every included structure. Rejections stay in `molecules.csv` with their code. A structure whose standardised parent has the same full InChIKey as an earlier one is excluded as `duplicate_inchikey:<kept id>` (it would otherwise sit in a training and a test fold at once). | `graph` |
+| 2 | standardize | `graph.standardize` on every included structure. Rejections stay in `molecules.csv` with their code. A structure whose standardised parent has the same full InChIKey as an earlier one is excluded as `duplicate_inchikey:<kept id>` (it would otherwise sit in a training and a test fold at once). Parents that share only the InChIKey **first block** (stereoisomers, racemate and enantiomer, isotopologues) are all kept but get a common `connectivity_group` (see *Connectivity groups* below). | `graph` |
 | 3 | indices | All `indices.REGISTRY` entries (or `indices.names`). An undefined index is NaN with the registry's reason in `failures.csv`; an unexpected exception makes that molecule's indices NaN with the exception text. Never 0. | `indices` |
 | 4 | features | `size`, `size_rings`, `composition`, `rdkit2d` (all of `descList`, subset per target below), `TI` and one `TI_<family>` set per index family. | `features` |
 | 5 | targets | Each configured provider returns values (NaN + reason when missing). Rows with a missing value are dropped **for that target only**; the count is `n_target_missing` in `summary.csv`. | `target_providers` |
 | 6 | evaluate | For every target and every learner: `evaluate.compare_feature_sets` on all feature sets with identical outer folds (EVALUATION_PROTOCOL.md §3–5). | `evaluate` |
-| 7 | write | Result CSVs, `study.json`, then `run_record.json` last. | `provenance` |
+| 7 | write | Result CSVs, `study.json`, then `run_record.json` last. Everything is written to a staging directory `.<out>.partial` next to `--out` and moved into `--out` only when the run has succeeded: a failed run leaves no partial results directory, and with `--overwrite` the old results are replaced only by a finished run. | `provenance` |
 
 **Learners.** `selected` is the protocol's default: family and hyperparameters are
 chosen in the inner loop among all configured families. Every family name listed in
@@ -31,6 +31,30 @@ in `study.json` (`feature_sets.rdkit2d.<target>`).
 
 **Groups.** `evaluation.split = "scaffold"` passes `evaluate.scaffold_groups` (Bemis–Murcko,
 acyclic molecules as singletons) as `groups`, so outer and inner folds are scaffold-grouped.
+
+**Connectivity groups.** COHORT_DEFINITION.md de-duplicates on the full InChIKey because
+stereoisomers are different compounds with possibly different measured properties, so
+pairs such as citalopram/escitalopram, cetirizine/levocetirizine or omeprazole/esomeprazole
+stay in the cohort. They have the same molecular graph, so every `size`, `composition` and
+`ti.*` feature, all class 1 and 2 targets, and every `rdkit2d` column except
+`NumUnspecifiedAtomStereoCenters` are identical within a pair. Splitting such a pair
+between a training and a test fold would hand the learner its test answer. The pipeline
+therefore keeps both members and labels each group of standardised parents that share the
+InChIKey first block with the ID of its first member (`molecules.csv`,
+`connectivity_group`; empty for molecules without such a partner), and **every group is
+kept in one fold**, both outer and inner:
+
+* `split = "random"` with at least one connectivity group: `balanced_group_kfold` with one
+  group per connectivity group and every other molecule as a singleton. Without any
+  connectivity group the split stays `KFold(shuffle=True)`, so cohorts without such pairs
+  (the pilot) are unchanged;
+* `split = "scaffold"`: members take the scaffold group of their first member (they share a
+  scaffold anyway, except acyclic molecules, which would otherwise be singletons).
+
+The run record gives the number of groups and molecules (`counts.connectivity_groups`) and
+the splitter actually used (`seeds.outer_splitter`). Whether to keep one member per group
+instead (for class 1 and 2 targets) is left to the frozen plan; grouping is the safe default
+that keeps every compound and never leaks.
 
 ## 2. Study configuration (JSON; YAML only if PyYAML is installed)
 
@@ -67,10 +91,19 @@ what is stored and hashed.
     "random_state": 0, "ad": "knn", "split": "random",
     "reference": "size", "alpha": 0.05, "min_n": 50, "min_n_test": 10
   },
-  "output": {"features_format": "csv"},   // "parquet" additionally writes features.parquet (needs pyarrow)
+  "output": {"features_format": "csv"},   // "parquet" additionally writes features.parquet
   "runtime": {"n_jobs": 1, "chembl_cache_dir": null, "offline": false}
 }
 ```
+
+**Validation happens before any work.** Besides unknown keys, `resolve_config` rejects an
+empty or duplicated `evaluation.seeds` (identical repeats would be counted as independent
+and narrow every CI and p value), `outer_splits` or `inner_splits` below 2, empty
+`families`/`learners`, an empty `targets` list or an empty or duplicated `names` list
+(`null` means all of a provider's targets), and `features_format: "parquet"` when neither
+pyarrow nor fastparquet is installed (neither is in `requirements-lock.txt`). Every target
+provider is imported and instantiated, and target names are checked for collisions, before
+the cohort stage, so these errors cost seconds, not an evaluation.
 
 `runtime` holds settings that cannot change a result (outer folds run in parallel give
 identical frames; the cache location and offline mode do not change what is read). It is
@@ -106,7 +139,10 @@ The shipped provider `rdkit` computes, on `Chem.RemoveHs` of the standardised pa
 Experimental (class 3) providers are added by `register_target_provider(name, factory)`
 or named in the config as `"package.module:factory"`; the factory is called as
 `factory(names=<list or None>, **options)`. The pipeline checks that the returned columns
-and index match the specs and that target names are unique across providers.
+and index match the specs and that target names are unique across providers, and it
+**enforces the NaN + reason rule**: a provider that returns a NaN without a matching
+`{"row", "feature", "reason"}` failure record, or any ±inf, stops the run with a
+`ValueError` naming the cells (before the evaluate stage).
 
 ## 4. Outputs
 
@@ -114,10 +150,21 @@ All CSVs: UTF-8, `\n` line endings, no index column, floats in Python's shortest
 round-trip form, rows in a fixed order (manifest order; then target, learner, set,
 repeat, fold/position). Missing values are empty cells.
 
+**Reading the CSVs.** Only empty cells are missing values. A default `pandas.read_csv`
+also turns the strings `null`, `NA`, `None`, `nan`, ... into NaN, which silently drops the
+`null` baseline set (`set == "null"`) from every result table. Read with
+`keep_default_na=False, na_values=[""]`, or use the helper
+`topoqspr.pipeline.read_results(out_dir, "summary")`, which does exactly that.
+
+**Licence.** When the cohort comes from ChEMBL, `manifest.csv`, `molecules.csv` and every
+file derived from them contain ChEMBL data (CC BY-SA 3.0, EMBL-EBI). The sidecar
+`manifest.json` and `run_record.json` (`chembl.data_licence`) name the licence;
+redistributed results must keep the attribution and the licence (README, *Data*).
+
 | file | content |
 |---|---|
-| `manifest.csv`, `manifest.json` | the cohort manifest and its sidecar (COHORT_DEFINITION.md §3); for a SMILES input, `id,smiles` and a sidecar with the input's SHA-256 |
-| `molecules.csv` | one row per candidate: `id, input_smiles, status (ok/rejected), reason, detail, smiles, inchikey, parent_note, n_heavy, n_edges` |
+| `manifest.csv`, `manifest.json` | the cohort manifest and its sidecar (COHORT_DEFINITION.md §3, plus `data_licence`); for a SMILES input, `id,smiles` and a sidecar with the input's SHA-256. With `cohort.source = "manifest"` the input CSV must hash to its sidecar's `manifest_sha256`, otherwise the run stops (an edited manifest would otherwise be labelled with the ChEMBL release); without a sidecar the run proceeds and the record says `chembl.manifest_verified: false` |
+| `molecules.csv` | one row per candidate: `id, input_smiles, status (ok/rejected), reason, detail, smiles, inchikey, parent_note, n_heavy, n_edges, connectivity_group` |
 | `features.csv` | one row per standardised molecule; columns prefixed by block: `size.*`, `composition.*`, `ti.*`, `rdkit2d.*` |
 | `targets.csv` | `id` + one column per target |
 | `failures.csv` | `block, row, feature, reason` for every NaN feature or target value |
@@ -140,15 +187,15 @@ by the analysis that collects `d_r2_p` across runs, not by a single run.
 |---|---|
 | `created_utc` | time stamp **passed in** by the caller (`--timestamp`, default: now) |
 | `topoqspr_version` | `topoqspr.__version__` |
-| `code` | `commit`, `dirty` (tracked files differ from HEAD), `untracked` (count), `describe`, `root` of the git tree the package was imported from; all `None` plus `reason` outside a checkout |
+| `code` | `commit`, `dirty` (tracked files differ from HEAD), `untracked` (count), `describe`, `root` of the git tree the package was imported from, and `source = "git"`. An installed copy outside any git tree (the Docker image) uses the commit and dirty flag written into `topoqspr/_build_info.py` at build time (`source = "build_info"`, §7). Otherwise all `None` plus `reason` |
 | `environment` | Python version/implementation/executable, platform, machine, `packages` (every installed distribution and version, `importlib.metadata`), and `env` (`PYTHONHASHSEED`, `OMP_NUM_THREADS`, `OPENBLAS_NUM_THREADS`, `MKL_NUM_THREADS`, `OMP_PROC_BIND`) |
-| `chembl` | `release`, `release_date` (from the client), source, offline flag; `null` for SMILES input |
+| `chembl` | `release`, `release_date` (from the client), source, offline flag, `data_licence`, and for a manifest input `manifest_verified`; `null` for SMILES input |
 | `config`, `config_sha256` | the full resolved config and the SHA-256 of the canonical JSON (sorted keys, `(",", ":")` separators, ASCII, NaN forbidden) of everything except `runtime` |
 | `base_dir` | directory that relative input paths refer to |
-| `seeds` | outer seeds, the inner-seed rule (`1000 * outer_seed + fold`), the estimator `random_state`, the outer splitter |
+| `seeds` | outer seeds, the inner-seed rule (`1000 * outer_seed + fold`), the estimator `random_state`, the outer splitter actually used (§1 *Connectivity groups*) |
 | `inputs` | SHA-256 of every input file (SMILES CSV / manifest + sidecar) |
 | `manifest_sha256` | SHA-256 of the written `manifest.csv` |
-| `counts` | candidates, standardised, rejections by code, non-missing values per target, feature-set sizes, number of failure records |
+| `counts` | candidates, standardised, rejections by code, non-missing values per target, feature-set sizes, number of failure records, `connectivity_groups` (groups and molecules) |
 | `outputs` | SHA-256 and size of every file written before the record |
 | `result_csvs` | the files a re-run must reproduce byte for byte |
 | `timings_s` | wall time per stage, and per target × learner for `evaluate` |
@@ -197,7 +244,17 @@ topoqspr rerun RUN_RECORD --out DIR [--timestamp ISO] [--cache-dir D] [--base-di
 `indices` writes the standardisation status and every index per molecule (exact
 integers, e.g. Hosoya Z beyond 2⁵³, are kept) and `<out stem>.failures.csv` with the
 reason for every undefined value or rejected structure. `python -m topoqspr` is the
-same CLI. Exit codes: 0 success, 1 re-run mismatch, 2 input or configuration error.
+same CLI.
+
+| exit code | meaning |
+|---|---|
+| 0 | success |
+| 1 | `rerun`: a result CSV differs from the record (only this) |
+| 2 | input or configuration error: invalid or non-mapping config, unknown key, missing file, non-empty `--out`, offline cache miss, release mismatch, missing optional dependency (parquet engine), target provider that cannot be imported or breaks its contract |
+| 3 | unexpected internal error (a bug); the traceback is printed to stderr |
+
+A run that fails leaves no results directory behind (§1, stage 7), so it can be repeated
+without `--overwrite`.
 
 ## 7. Packaging
 
@@ -208,6 +265,20 @@ same CLI. Exit codes: 0 success, 1 re-run mismatch, 2 input or configuration err
 * `Dockerfile`: `python:3.12-slim`, installs the lock, then the package; entry point
   `topoqspr`; BLAS/OpenMP threads set to 1. Built and checked locally on 2026-10-03
   (`topoqspr --version`, `indices` and an offline `cohort` from the fixture cache).
+  In the image the package sits in site-packages, outside any git tree, so git cannot
+  name the commit at run time (mounting the source tree does not help). The build
+  therefore **requires** the commit and writes it into `topoqspr/_build_info.py`:
+
+  ```bash
+  docker build -t topoqspr \
+      --build-arg GIT_COMMIT="$(git rev-parse HEAD)" \
+      --build-arg GIT_DIRTY="$(git status --porcelain --untracked-files=no | grep -q . && echo 1 || echo 0)" .
+  ```
+
+  A build without these arguments fails. Run records from the image then carry
+  `code.commit`, `code.dirty` and `code.source = "build_info"`; the image is also labelled
+  `org.opencontainers.image.revision`. `_build_info.py` is git-ignored and never used inside
+  a git checkout, where the live git state wins.
 * CI (`.github/workflows/tests.yml`) installs `requirements-lock-test.txt`, then the
   package with `--no-deps`, and runs `pytest -q` (`pyproject.toml` adds
   `-m "not network"`).
