@@ -171,6 +171,9 @@ def benjamini_yekutieli(pvals: Sequence[float], q: float = 0.05, m: int | None =
     Returns (adjusted, reject) in the input order; NaN p-values stay NaN.
     """
     p = np.asarray(pvals, dtype=float).ravel()
+    if np.any((p[~np.isnan(p)] < 0) | (p[~np.isnan(p)] > 1)):
+        # validated here: the c(m) scaling below clips at 1 before BH could see it
+        raise ValueError("p-values must lie in [0, 1]")
     m = _family_size(p, m)
     if m == 0 or np.all(np.isnan(p)):
         return np.full(p.shape, np.nan), np.zeros(p.shape, dtype=bool)
@@ -191,6 +194,8 @@ def spearman_ci(x: Sequence[float], y: Sequence[float], alpha: float = 0.05,
       se = sqrt((1 + rho^2 / 2) / (n - 3))   (method="bonett-wright"; 2000)
     The p-value is scipy's (t approximation). Pairs with a NaN are dropped.
     Returns rho, ci_low, ci_high, p, n and ``reason`` (empty if defined).
+    At |rho| = 1 the Fisher z is infinite and neither interval is defined:
+    rho and p are returned, the CI is NaN and ``reason`` says why.
     """
     x = np.asarray(x, dtype=float)
     y = np.asarray(y, dtype=float)
@@ -214,7 +219,8 @@ def spearman_ci(x: Sequence[float], y: Sequence[float], alpha: float = 0.05,
         raise ValueError("method must be 'fieller' or 'bonett-wright'")
     zc = float(_st.norm.ppf(1 - alpha / 2))
     if abs(rho) >= 1.0:
-        lo = hi = rho
+        lo = hi = math.nan
+        out["reason"] = "rho = +/-1: Fisher-z interval undefined"
     else:
         z = math.atanh(rho)
         lo, hi = math.tanh(z - zc * se), math.tanh(z + zc * se)
@@ -343,7 +349,13 @@ class ApplicabilityDomain:
 
     method="knn" (default; usable when p >= n):
         d(x) = mean Euclidean distance from x to its k nearest training rows.
-        For training rows the row itself is excluded (leave-one-out).
+        For training rows the row itself is excluded (leave-one-out); with
+        ``groups`` passed to :meth:`fit` (the CV group labels of the training
+        rows), every row of the same group is excluded (leave-one-group-out),
+        because a grouped CV never puts a test row's group mates in training.
+        Without this, identical duplicates (connectivity groups share their 2D
+        features) contribute distance 0 and pull the threshold down.
+        k is then capped at n - (largest group size).
         Threshold = the ``quantile`` (default 0.95) of training d values;
         x is in the domain iff d(x) <= threshold.
     method="leverage" (Tropsha et al. 2003 "Williams plot" convention):
@@ -363,7 +375,10 @@ class ApplicabilityDomain:
         X = np.where(np.isnan(X), self.median_, X)
         return (X[:, self.keep_] - self.mean_) / self.sd_
 
-    def fit(self, X):
+    def fit(self, X, groups=None):
+        """Fit on training rows ``X``; ``groups`` (optional, knn only): CV group
+        label per row, whose same-group neighbours are excluded from the
+        training distances (see the class docstring)."""
         X = np.asarray(X, dtype=float)
         if X.ndim != 2 or X.shape[1] == 0:
             raise ValueError("AD needs at least one feature column")
@@ -380,13 +395,24 @@ class ApplicabilityDomain:
         Z = self._z(X)
         n, p = Z.shape
         if self.method == "knn":
-            k = min(self.k, n - 1)
-            if k < 1:
-                raise ValueError("knn AD needs at least 2 training rows")
+            if groups is None:
+                k = min(self.k, n - 1)
+                if k < 1:
+                    raise ValueError("knn AD needs at least 2 training rows")
+            else:
+                g = np.asarray(groups, dtype=object).astype(str)
+                if g.size != n:
+                    raise ValueError(f"groups has {g.size} labels for {n} training rows")
+                _, inv, cnt = np.unique(g, return_inverse=True, return_counts=True)
+                k = min(self.k, n - int(cnt.max()))
+                if k < 1:
+                    raise ValueError("knn AD needs training rows from at least 2 groups")
             self.k_ = k
             self.train_ = Z
             D = _cdist(Z, Z)
             np.fill_diagonal(D, np.inf)
+            if groups is not None:
+                D[inv[:, None] == inv[None, :]] = np.inf
             d = np.sort(D, axis=1)[:, :k].mean(axis=1)
             self.threshold_ = float(np.quantile(d, self.quantile))
         else:

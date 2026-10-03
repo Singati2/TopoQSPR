@@ -210,3 +210,85 @@ def test_benjamini_yekutieli_is_never_more_liberal_than_bh():
     rng = np.random.default_rng(2)
     p = rng.uniform(0, 0.2, 50)
     assert (benjamini_yekutieli(p)[0] >= benjamini_hochberg(p)[0] - 1e-15).all()
+
+
+# ------------------------------------------- regressions (audit:math findings)
+def test_benjamini_yekutieli_rejects_p_outside_unit_interval():
+    # regression: BY clipped c*p to 1 before BH's range check, so p > 1 passed silently
+    for bad in ([1.5, 0.01], [-0.1, 0.2]):
+        with pytest.raises(ValueError, match=r"\[0, 1\]"):
+            stats.benjamini_yekutieli(bad)
+        with pytest.raises(ValueError, match=r"\[0, 1\]"):
+            stats.benjamini_hochberg(bad)
+    adj, rej = stats.benjamini_yekutieli([np.nan, 1.0, 0.0])  # NaN and the bounds are fine
+    assert math.isnan(adj[0]) and not rej[0] and rej[2]
+
+
+@pytest.mark.parametrize("y, sign", [([2, 3, 5, 9], 1.0), ([9, 5, 3, 2], -1.0)])
+def test_spearman_ci_undefined_at_perfect_rank_correlation(y, sign):
+    # regression: |rho| = 1 gave a zero-width CI [rho, rho] with an empty reason
+    out = stats.spearman_ci([1, 2, 3, 4], y)
+    assert out["rho"] == sign and out["n"] == 4
+    assert math.isnan(out["ci_low"]) and math.isnan(out["ci_high"])
+    assert out["reason"] == "rho = +/-1: Fisher-z interval undefined"
+    bw = stats.spearman_ci([1, 2, 3, 4], y, method="bonett-wright")
+    assert math.isnan(bw["ci_low"]) and bw["reason"] == out["reason"]
+
+
+def test_ad_knn_groups_exclude_same_group_neighbours():
+    # regression: duplicate training rows (connectivity groups: identical 2D features)
+    # contributed distance 0 to each other's kNN distance and biased the threshold low
+    rng = np.random.default_rng(5)
+    base = rng.normal(size=(60, 3))
+    X = np.vstack([base, base[:30]])                       # 30 molecules duplicated
+    groups = np.r_[np.arange(60), np.arange(30)].astype(str)
+    plain = stats.ApplicabilityDomain("knn", k=5).fit(X)
+    grp = stats.ApplicabilityDomain("knn", k=5).fit(X, groups=groups)
+    assert grp.threshold_ > plain.threshold_
+    # threshold = quantile of the leave-one-group-out kNN distances
+    Z = grp.train_
+    D = np.sqrt(((Z[:, None, :] - Z[None, :, :]) ** 2).sum(-1))
+    D[groups[:, None] == groups[None, :]] = np.inf
+    d = np.sort(D, axis=1)[:, :5].mean(axis=1)
+    assert np.all(np.isfinite(d))
+    assert grp.threshold_ == pytest.approx(float(np.quantile(d, 0.95)))
+    # singleton groups reproduce the leave-one-out rule exactly
+    solo = stats.ApplicabilityDomain("knn", k=5).fit(base, groups=np.arange(60).astype(str))
+    assert solo.threshold_ == stats.ApplicabilityDomain("knn", k=5).fit(base).threshold_
+    # coverage of fresh in-distribution rows moves towards the nominal 95% with groups
+    rng2 = np.random.default_rng(6)
+    cov_plain, cov_grp = [], []
+    for _ in range(40):
+        b = rng2.normal(size=(60, 3))
+        Xr, test = np.vstack([b, b[:30]]), rng2.normal(size=(400, 3))
+        cov_plain.append(stats.ApplicabilityDomain("knn", k=5).fit(Xr).in_domain(test).mean())
+        cov_grp.append(stats.ApplicabilityDomain("knn", k=5).fit(Xr, groups=groups)
+                       .in_domain(test).mean())
+    assert np.mean(cov_grp) > np.mean(cov_plain)
+    with pytest.raises(ValueError, match="2 groups"):
+        stats.ApplicabilityDomain("knn").fit(base[:4], groups=["a"] * 4)
+    with pytest.raises(ValueError, match="labels"):
+        stats.ApplicabilityDomain("knn").fit(base, groups=["a", "b"])
+
+
+def test_nested_cv_passes_groups_to_knn_ad():
+    # the outer-fold AD is fitted with the training rows' CV groups
+    from unittest import mock
+
+    from topoqspr import evaluate as ev
+
+    rng = np.random.default_rng(1)
+    X = rng.normal(size=(40, 2))
+    y = X[:, 0] + rng.normal(scale=0.3, size=40)
+    groups = np.array([f"g{i // 2}" for i in range(40)], dtype=object)
+    seen = []
+    real_fit = stats.ApplicabilityDomain.fit
+
+    def spy(self, Xtr, groups=None):
+        seen.append(None if groups is None else np.asarray(groups).copy())
+        return real_fit(self, Xtr, groups=groups)
+
+    with mock.patch.object(stats.ApplicabilityDomain, "fit", spy):
+        ev.nested_cv(X, y, ("ridge",), outer_splits=3, seeds=(0,), inner_splits=2,
+                     groups=groups, ad="knn", min_n=10, min_n_test=3)
+    assert len(seen) == 3 and all(g is not None and g.size > 0 for g in seen)
