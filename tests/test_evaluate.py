@@ -427,3 +427,181 @@ def test_failing_family_is_reported_not_imputed():
     assert (only.folds["status"] == "failed").all()
     assert only.predictions["y_pred"].isna().all()
     assert only.folds["r2"].isna().all()
+
+
+# ------------------------------------------- regression tests (verifier defects)
+class _FailOnBigRefit(RegressorMixin, BaseEstimator):
+    """Fits on inner folds (n < 30); the outer refit fails when row 0 is in it."""
+
+    def __init__(self, a=1):
+        self.a = a
+
+    def fit(self, X, y):
+        if len(y) >= 30 and 0 in np.asarray(X)[:, 0].astype(int):
+            raise RuntimeError("boom")
+        self.m_ = float(np.mean(y))
+        return self
+
+    def predict(self, X):
+        return np.full(len(X), self.m_)
+
+
+def _partial_fail_run():
+    n = 40
+    rng = np.random.default_rng(0)
+    X = np.column_stack([np.arange(n), rng.normal(size=n)])
+    y = rng.normal(size=n)
+    fam = md.ModelFamily("failbig", lambda rs: _FailOnBigRefit(), {"a": [1]})
+    return X, y, fam, ev.nested_cv(X, y, (fam,), seeds=(0, 1), ad=None)
+
+
+def test_summary_does_not_skip_failed_folds():
+    X, y, fam, res = _partial_fail_run()
+    n_failed = int((res.folds["status"] == "failed").sum())
+    assert 0 < n_failed < len(res.folds)              # some folds survive
+    assert res.folds["r2"].notna().any()
+    s = res.summary()
+    for key in ("r2_fold_mean", "r2_fold_sd", "r2_fold_median", "mae_fold_mean",
+                "rmse_fold_mean", "r2_pooled_mean", "mae_pooled_mean"):
+        assert np.isnan(s[key]), key
+    assert s["n_failed_folds"] == n_failed
+    assert s["n_valid_folds"] == len(res.folds) - n_failed
+    assert f"{n_failed} of 10 outer folds failed" in s["reason"]
+    o = ev.optimism(ev.LegacyResult(pd.DataFrame(), "x", 0.1, 0.5, 40, []), res)
+    for key in ("r2_nested", "B_train", "B_CV", "B_train_pooled", "B_CV_pooled"):
+        assert np.isnan(o[key]), key
+    assert o["reason"] == s["reason"]
+    stat = ev.nested_r2_statistic(families=(fam,), seeds=(0, 1), ad=None)
+    assert np.isnan(stat(X, y))
+
+
+def test_pooled_mean_not_skipping_a_failed_repeat():
+    """One repeat undefined, the other fine: the pooled mean must be NaN."""
+    ok = ev.nested_cv(*_noise(1, n=40), FAST, seeds=(0, 1), ad=None)
+    s = ok.summary()
+    assert s["reason"] == "" and s["n_valid_folds"] == 10
+    assert np.isfinite(s["r2_fold_mean"]) and np.isfinite(s["r2_pooled_mean"])
+    ok.repeats.loc[0, "r2"] = np.nan
+    s = ok.summary()
+    assert np.isnan(s["r2_pooled_mean"]) and np.isnan(s["r2_pooled_sd"])
+    assert "1 of 2 repeats have undefined pooled R2" in s["reason"]
+
+
+def test_undefined_fold_r2_has_reason_and_underpowered_label():
+    rng = np.random.default_rng(0)
+    res = ev.nested_cv(rng.normal(size=(6, 3)), rng.normal(size=6), ("ridge",),
+                       seeds=(0,), ad=None)
+    undef = res.folds[res.folds["r2"].isna()]
+    assert len(undef) == 4 and (undef["status"] == "ok").all()
+    assert undef["reason"].str.contains("n_test=1 < 2").all()
+    assert res.meta["underpowered"]
+    assert "n=6 < min_n=50" in res.meta["underpowered_reason"]
+    assert "min_n_test=10" in res.meta["underpowered_reason"]
+    s = res.summary()
+    assert s["underpowered"] and np.isnan(s["r2_fold_mean"])
+    assert "undefined R2" in s["reason"]
+    # constant y in a test fold: SST = 0
+    y = np.r_[np.zeros(10), rng.normal(size=10)]
+    split = (0, 0, 0, np.arange(10, 20), np.arange(10))
+    row, *_ = ev._run_fold(rng.normal(size=(20, 2)), y, split, ("ridge",), 3, None,
+                           0, None, False)
+    assert np.isnan(row["r2"]) and row["status"] == "ok"
+    assert "constant y_test" in row["reason"]
+    big = ev.nested_cv(*_noise(2, n=60), FAST, seeds=(0,), ad=None)
+    assert not big.meta["underpowered"] and big.meta["underpowered_reason"] == ""
+
+
+@pytest.mark.parametrize("X,expect", [
+    (np.random.default_rng(0).normal(size=(40, 60)), "leverage AD undefined"),
+    (np.ones((40, 2)), "all features constant"),
+])
+def test_ad_failure_reason_recorded(X, expect):
+    y = np.random.default_rng(1).normal(size=40)
+    res = ev.nested_cv(X, y, ("ridge",), seeds=(0,), ad="leverage")
+    assert res.folds["ad_coverage"].isna().all()
+    assert res.folds["ad_reason"].str.contains(expect).all()
+    assert res.meta["n_ad_failed"] == 5
+    assert res.predictions["in_domain"].isna().all()
+    noad = ev.nested_cv(*_noise(1, n=40), ("ridge",), seeds=(0,), ad=None)
+    assert (noad.folds["ad_reason"] == "ad=None").all()
+    knn = ev.nested_cv(*_noise(1, n=40), ("ridge",), seeds=(0,), ad="knn")
+    assert (knn.folds["ad_reason"] == "").all() and knn.meta["n_ad_failed"] == 0
+
+
+@pytest.mark.parametrize("col", [np.ones(40), np.full(40, np.nan),
+                                 np.r_[1.0, np.full(39, np.nan)]])
+def test_uninformative_set_falls_back_to_null_model(col):
+    y = np.random.default_rng(3).normal(size=40)
+    res = ev.nested_cv(pd.DataFrame({"a": col}), y, ("ridge",), seeds=(0,), ad=None)
+    null = ev.nested_cv(pd.DataFrame(index=range(40)), y, seeds=(0,), ad=None)
+    assert (res.folds["status"] == "ok").all()
+    assert set(res.folds["family"]) == {"mean"}
+    assert res.folds["reason"].str.contains("null model 'mean' used").all()
+    np.testing.assert_allclose(res.folds["r2"], null.folds["r2"])
+    # an informative set is unaffected
+    sel = ev.select_and_refit(np.c_[np.ones(40), y], y, ("ridge",), inner=3)
+    assert sel.family == "ridge" and sel.reason == ""
+
+
+def test_size_exact_target_ti_not_superior():
+    """y = f(size) exactly: the decision rule is non-superiority of TI over size.
+
+    With an exact size model, d_R2 = R2_TI - R2_size is a tiny *negative*
+    number with near-zero variance (ridge spreads weight over the collinear TI
+    columns), so its CI can exclude 0 on the negative side. "CI covers 0" is
+    therefore not the criterion here; the criterion is that the upper CI bound
+    does not exceed a small margin (no spurious TI gain). The noisy-target
+    test above keeps the "CI covers 0" check.
+    """
+    size, ti, _, _ = _size_like(0)
+    for y in (0.5 * size["n_heavy"] + 0.3 * size["n_bonds"],
+              np.log(size["n_heavy"]) * np.sqrt(size["n_bonds"])):
+        comp = ev.compare_feature_sets({"size": size, "TI": ti}, y, families=("ridge",),
+                                       seeds=(0, 1, 2), ad=None)
+        row = comp.summary.set_index("set").loc["TI"]
+        assert row["d_r2_ci_high"] <= 0.01
+        assert row["d_r2_mean"] <= 0.001
+
+
+def test_balanced_group_kfold_rows_and_groups():
+    g = np.r_[np.zeros(24, int), np.arange(1, 17)]  # one large scaffold + singletons
+    for seed in (0, 1, 2):
+        splits = ev.balanced_group_kfold(g, 5, seed)
+        assert sorted(len(te) for _, te in splits) == [4, 4, 4, 4, 24]
+        assert sorted(np.concatenate([te for _, te in splits])) == list(range(40))
+        for tr, te in splits:
+            assert not set(g[tr]) & set(g[te])
+    # equal-size groups: equal folds; seeds differ; same seed is deterministic
+    g2 = np.repeat(np.arange(20), 3)
+    a = ev.balanced_group_kfold(g2, 5, 0)
+    b = ev.balanced_group_kfold(g2, 5, 1)
+    c = ev.balanced_group_kfold(g2, 5, 0)
+    assert {len(te) for _, te in a} == {12}
+    assert any(not np.array_equal(x[1], z[1]) for x, z in zip(a, b))
+    assert all(np.array_equal(x[1], z[1]) for x, z in zip(a, c))
+    with pytest.raises(ValueError, match="groups"):
+        ev.balanced_group_kfold(np.arange(3), 5, 0)
+    # GroupKFold(shuffle=True) gave 3-row folds next to 26-row ones here
+    res = ev.nested_cv(np.random.default_rng(0).normal(size=(40, 3)),
+                       np.random.default_rng(1).normal(size=40), ("ridge",),
+                       seeds=(0, 1), groups=g, ad=None)
+    assert res.meta["min_n_test"] == 4 and res.meta["max_n_test"] == 24
+    assert res.meta["underpowered"]
+
+
+def test_rdkit2d_rules_cover_v0x_targets():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("v0_config", REPO / "config.py")
+    cfg = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cfg)
+    for t in cfg.ML_TARGETS:
+        ft.rdkit2d_names(t)  # no KeyError: every v0.x target has a rule
+    assert {"NumHDonors", "NHOHCount", "qed"}.isdisjoint(ft.rdkit2d_names("PC_HBD"))
+    assert {"NumHAcceptors", "NOCount", "qed"}.isdisjoint(ft.rdkit2d_names("PC_HBA"))
+    assert "NumRotatableBonds" not in ft.rdkit2d_names("PC_RotatableBonds")
+    assert "HeavyAtomCount" not in ft.rdkit2d_names("PC_HeavyAtomCount")
+    assert {"NumAtomStereoCenters", "NumUnspecifiedAtomStereoCenters"}.isdisjoint(
+        ft.rdkit2d_names("PC_AtomStereoCount"))
+    assert {"NumValenceElectrons", "MaxPartialCharge", "BCUT2D_CHGHI"}.isdisjoint(
+        ft.rdkit2d_names("PC_FormalCharge"))
+    assert len(ft.rdkit2d_names("BIO_IC50")) == len(Descriptors.descList)

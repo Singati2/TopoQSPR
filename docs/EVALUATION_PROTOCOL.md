@@ -45,6 +45,12 @@ conventional baseline would use them.
 | `RotBonds` (`PC_RotatableBondCount`) | `NumRotatableBonds`, `qed` | QED uses rotatable bonds |
 | `PC_Complexity` | `BertzCT` | PubChem complexity is the Bertz/Hendrickson/Ihlenfeldt formula |
 | `PC_XLogP`, `XLogP3` | none | Crippen `MolLogP` is a different, separately fitted estimator |
+| `PC_HBD`, `PC_HBA`, `PC_RotatableBonds` | as `HBD`, `HBA`, `RotBonds` | v0.x column names (`config.ML_TARGETS`) for PubChem HBondDonorCount, HBondAcceptorCount, RotatableBondCount |
+| `PC_HeavyAtomCount` | `HeavyAtomCount` | same quantity. **The target equals `size.n_heavy` and the sum of the composition heavy-atom counts**, so it is a sanity check, never a QSPR result |
+| `PC_AtomStereoCount` | `NumAtomStereoCenters`, `NumUnspecifiedAtomStereoCenters` | PubChem counts defined + undefined stereocentres |
+| `PC_FormalCharge` | `NumValenceElectrons`, `Max/MinPartialCharge`, `Max/MinAbsPartialCharge`, `BCUT2D_CHGHI/LO` | NumValenceElectrons subtracts each atom's formal charge; Gasteiger charges start from formal charges (over all atoms incl. H they sum to the net charge) |
+| `PC_CovalentUnitCount` | none | no descList entry counts fragments. **`size_rings` encodes it exactly**: c = n_rings − n_bonds + n_heavy |
+| `BIO_IC50`, `BIO_Ki`, `BIO_EC50`, `BIO_Kd` | none | measured activities; no descriptor is computed from them |
 
 The BCUT and QED dependencies were checked in RDKit 2026.03
 (`rdMolDescriptors.BCUT2D(mol, crippen_contribs)` reproduces
@@ -100,9 +106,15 @@ Defaults: K = 5 outer folds, R = 5 repeats with seeds 0–4, L = 3 inner folds.
 For repeat r (seed s_r):
 
 1. Outer split: `KFold(5, shuffle=True, random_state=s_r)`; with `groups`,
-   `GroupKFold(5, shuffle=True, random_state=s_r)` (scikit-learn ≥ 1.6:
-   groups are permuted and cut into 5 blocks of near-equal *group* count, so
-   row counts per fold can differ).
+   `balanced_group_kfold(groups, 5, s_r)`: groups ordered by size
+   (descending, ties in a random order from `default_rng(s_r)`), each placed
+   in the fold with the fewest rows so far (Graham's LPT rule). This balances
+   **rows**, not group counts. `GroupKFold(shuffle=True)` (scikit-learn ≥ 1.6)
+   balances group counts, and on a Murcko-like distribution (one 24-row
+   group plus 16 singletons, n = 40) gave 3-row test folds next to a 26-row
+   one; LPT gives 24/4/4/4/4. A group larger than n/K still makes one large
+   fold; `meta["min_n_test"]`, `meta["max_n_test"]` and the underpowered
+   label (below) report it.
 2. For outer fold k, on the outer-training rows **only**:
    inner split `KFold(3, shuffle=True, random_state=1000·s_r + k)` (grouped
    if groups are given). For every feasible family and grid point, the inner
@@ -157,16 +169,34 @@ MAE = mean |y − ŷ|, RMSE = √(mean (y − ŷ)²).
 | family, params | the family and hyperparameters chosen by the inner loop (JSON) |
 | inner_mse | the winning inner-CV MSE |
 | r2, mae, rmse | test-fold metrics |
-| ad_coverage | fraction of test rows inside the AD |
-| status, reason | `ok`, or `failed` with the reason (no family fit, non-finite predictions) |
+| ad_coverage | fraction of test rows inside the AD (NaN if not fitted) |
+| ad_reason | why the AD was not fitted (`ad=None`, no columns, or the `ValueError` text, e.g. leverage with n ≤ p′ + 1, all columns constant); empty if fitted |
+| status, reason | `ok`, or `failed` with the reason (no family fit, refit/predict error, non-finite predictions). An `ok` fold also carries a reason when R² is undefined (`n_test < 2`, constant y_test) or when the null family was substituted (below) |
 
 `repeats` — repeat, seed, n, pooled r2, mae, rmse.
 `inner` — for every outer fold and family: status (`ok`/`skipped`/`failed`),
 reason, best inner MSE, best params, number of grid points and failed points.
 `summary()` — fold mean/SD/median of R², fold-mean MAE/RMSE, mean/SD over
-repeats of pooled R² and MAE, number of failed folds, how often each family
-was chosen. `meta` — n, p, columns, families, seeds, split settings,
-`n_missing_cells` in X.
+repeats of pooled R² and MAE, `n_failed_folds`, `n_valid_folds` (finite R²),
+how often each family was chosen, `underpowered`, and `reason`.
+**No NaN is skipped**: if any fold failed or has an undefined R², the fold
+statistics are NaN, and if any repeat's pooled R² is undefined the pooled
+statistics are NaN; `reason` gives the counts. Averaging only the surviving
+folds would select on success. `optimism()` and `nested_r2_statistic()`
+inherit this (NaN plus reason), so B_train/B_CV are never computed on a
+subset of folds. `meta` — n, p, columns, families, seeds, split settings,
+`n_missing_cells` in X, `min_n_test`, `max_n_test`, `n_ad_failed`,
+`underpowered`, `underpowered_reason`.
+
+**Uninformative feature sets.** If, in an outer-training part, every column
+is all-NaN or constant (nothing would survive imputation and
+`DropConstantAndDuplicate`), the fold uses the null family `mean` and records
+the reason, so such a set scores as the null model instead of failing.
+
+**Underpowered label.** `meta["underpowered"]` is True when n < `min_n`
+(default 50, EXPERIMENT_PLAN §3.3) or the smallest outer test fold has fewer
+than `min_n_test` (default 10) rows. The run still completes; an
+underpowered result is reported descriptively, with no ML claim.
 
 ## 4. Paired comparison of feature sets (`evaluate.compare_feature_sets`)
 
@@ -181,8 +211,18 @@ reference (default `size`), per outer fold j:
 (positive = S is better). The headline ΔR²(TI − size) is the mean of d_R²
 over all R·K folds with the corrected repeated-CV t interval (§5).
 
+**Decision rule when the size model is exact.** If y is an exact function of
+size (synthetic control), R²_size ≈ 1 and d_R² is a tiny negative number with
+near-zero variance (ridge spreads weight over collinear TI columns), so the CI
+can exclude 0 on the negative side (observed: d = −1·10⁻⁵, CI
+[−1·10⁻⁵, −0], p = 0.001). "CI covers 0" is then the wrong criterion. The
+rule that matters is **non-superiority**: the upper CI bound of d_R² must not
+exceed a small margin (tested: ≤ 0.01). With noise in y (the realistic case),
+"CI covers 0" holds and is tested separately.
+
 `summary` columns: set, p (number of input columns), r2_fold_mean,
-r2_pooled_mean, mae_fold_mean, n_failed_folds, and for every non-reference
+r2_pooled_mean, mae_fold_mean, n_failed_folds, n_valid_folds, underpowered,
+reason, and for every non-reference
 set d_r2_mean, d_r2_ci_low, d_r2_ci_high, d_r2_p, d_mae_mean, d_mae_ci_low,
 d_mae_ci_high, d_mae_p, and d_r2_q (BH across the sets in this call). The
 study-level BH correction across disease × target pairs (EXPERIMENT_PLAN §7)
@@ -280,11 +320,24 @@ results are sorted by (repeat, pos); parameters are serialised with sorted
 keys. Running twice, or with `n_jobs > 1` over outer folds, gives identical
 frames (tested).
 
-## 9. Defaults at a glance
+## 9. Runtime
+
+Measured on mpcrlab12 (16 cores, load average ≈ 22 from other jobs) for one
+outer fold of a drug-sized set (n_train = 123, p = 200 rdkit2d-like columns),
+inner 3-fold selection plus refit, `n_jobs = 1`: ridge 1.4 s, elastic net
+6.4 s, PLS 2.0 s, OLS skipped (p ≥ n), kNN 3.2 s, SVR 1.2 s, RF 86 s,
+extra trees 49 s, GBR 90 s, XGBoost 98 s: ≈ 340 s per outer fold, so
+≈ 2.4 h per 5 × 5 nested CV per feature set, target and disease with all ten
+families (an independent run under load ≈ 25 measured ≈ 420 s per fold).
+The four tree ensembles take ≈ 95 % of it. Use `n_jobs` > 1 (outer folds in
+parallel; results identical) and budget the full grid before freezing the
+plan; one full-family real-data smoke run is required before freezing.
+
+## 10. Defaults at a glance
 
 | Setting | Default |
 |---|---|
-| outer CV | 5-fold × 5 repeats, seeds 0–4 |
+| outer CV | 5-fold × 5 repeats, seeds 0–4 (grouped: row-balanced LPT) |
 | inner CV | 3-fold, seed 1000·s_r + k |
 | selection criterion | inner mean MSE, ties → family order |
 | estimator seed | 0 |
@@ -292,6 +345,7 @@ frames (tested).
 | CI | corrected repeated-CV t, α = 0.05 |
 | multiple testing | BH, q = 0.05 |
 | permutations | B = 100 |
+| underpowered | n < 50 or min n_test < 10 |
 
 ## References
 
@@ -308,6 +362,7 @@ frames (tested).
 * Cawley GC, Talbot NLC (2010) On over-fitting in model selection and subsequent selection bias in performance evaluation. *J Mach Learn Res* 11:2079–2107.
 * Krstajic D, Buturovic LJ, Leahy DE, Thomas S (2014) Cross-validation pitfalls when selecting and assessing regression and classification models. *J Cheminform* 6:10. doi:10.1186/1758-2946-6-10
 * Alexander DLJ, Tropsha A, Winkler DA (2015) Beware of R²: simple, unambiguous assessment of the prediction accuracy of QSAR and QSPR models. *J Chem Inf Model* 55:1316–1322. doi:10.1021/acs.jcim.5b00206
+* Graham RL (1969) Bounds on multiprocessing timing anomalies. *SIAM J Appl Math* 17:416–429. doi:10.1137/0117039
 * Bemis GW, Murcko MA (1996) The properties of known drugs. 1. Molecular frameworks. *J Med Chem* 39:2887–2893. doi:10.1021/jm9602928
 * Wildman SA, Crippen GM (1999) Prediction of physicochemical parameters by atomic contributions. *J Chem Inf Comput Sci* 39:868–873. doi:10.1021/ci990307l
 * Ertl P, Rohde B, Selzer P (2000) Fast calculation of molecular polar surface area. *J Med Chem* 43:3714–3717. doi:10.1021/jm000942e
