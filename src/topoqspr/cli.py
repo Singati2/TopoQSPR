@@ -215,7 +215,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                         format="%(asctime)s %(name)s %(message)s", stream=sys.stderr)
     try:
         return int(args.func(args) or 0)
-    except (ValueError, KeyError, FileNotFoundError, FileExistsError) as exc:
+    except (ValueError, LookupError, FileNotFoundError, FileExistsError, RuntimeError) as exc:
+        # LookupError covers KeyError and chembl.CacheMiss (offline cache miss)
         print(f"error: {exc}", file=sys.stderr)
         return 2
 
