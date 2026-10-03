@@ -1,0 +1,126 @@
+{
+ "source": "PubChem PUG REST, property IsomericSMILES",
+ "retrieved": "2026-10-02",
+ "drugs": [
+  {
+   "name": "aspirin",
+   "pubchem_cid": 2244,
+   "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+  },
+  {
+   "name": "ibuprofen",
+   "pubchem_cid": 3672,
+   "smiles": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O"
+  },
+  {
+   "name": "acetaminophen",
+   "pubchem_cid": 1983,
+   "smiles": "CC(=O)NC1=CC=C(C=C1)O"
+  },
+  {
+   "name": "caffeine",
+   "pubchem_cid": 2519,
+   "smiles": "CN1C=NC2=C1C(=O)N(C(=O)N2C)C"
+  },
+  {
+   "name": "metformin",
+   "pubchem_cid": 4091,
+   "smiles": "CN(C)C(=N)N=C(N)N"
+  },
+  {
+   "name": "imatinib",
+   "pubchem_cid": 5291,
+   "smiles": "CC1=C(C=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)NC4=NC=CC(=N4)C5=CN=CC=C5"
+  },
+  {
+   "name": "atorvastatin",
+   "pubchem_cid": 60823,
+   "smiles": "CC(C)C1=C(C(=C(N1CC[C@H](C[C@H](CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4"
+  },
+  {
+   "name": "donepezil",
+   "pubchem_cid": 3152,
+   "smiles": "COC1=C(C=C2C(=C1)CC(C2=O)CC3CCN(CC3)CC4=CC=CC=C4)OC"
+  },
+  {
+   "name": "memantine",
+   "pubchem_cid": 4054,
+   "smiles": "CC12CC3CC(C1)(CC(C3)(C2)N)C"
+  },
+  {
+   "name": "sitagliptin",
+   "pubchem_cid": 4369359,
+   "smiles": "C1CN2C(=NN=C2C(F)(F)F)CN1C(=O)C[C@@H](CC3=CC(=C(C=C3F)F)F)N"
+  },
+  {
+   "name": "hydrochlorothiazide",
+   "pubchem_cid": 3639,
+   "smiles": "C1NC2=CC(=C(C=C2S(=O)(=O)N1)S(=O)(=O)N)Cl"
+  },
+  {
+   "name": "gemcitabine",
+   "pubchem_cid": 60750,
+   "smiles": "C1=CN(C(=O)N=C1N)[C@H]2C([C@@H]([C@H](O2)CO)O)(F)F"
+  },
+  {
+   "name": "diazepam",
+   "pubchem_cid": 3016,
+   "smiles": "CN1C(=O)CN=C(C2=C1C=CC(=C2)Cl)C3=CC=CC=C3"
+  },
+  {
+   "name": "warfarin",
+   "pubchem_cid": 54678486,
+   "smiles": "CC(=O)CC(C1=CC=CC=C1)C2=C(C3=CC=CC=C3OC2=O)O"
+  },
+  {
+   "name": "lisinopril",
+   "pubchem_cid": 5362119,
+   "smiles": "C1C[C@H](N(C1)C(=O)[C@H](CCCCN)N[C@@H](CCC2=CC=CC=C2)C(=O)O)C(=O)O"
+  },
+  {
+   "name": "amlodipine",
+   "pubchem_cid": 2162,
+   "smiles": "CCOC(=O)C1=C(NC(=C(C1C2=CC=CC=C2Cl)C(=O)OC)C)COCCN"
+  },
+  {
+   "name": "ciprofloxacin",
+   "pubchem_cid": 2764,
+   "smiles": "C1CC1N2C=C(C(=O)C3=CC(=C(C=C32)N4CCNCC4)F)C(=O)O"
+  },
+  {
+   "name": "morphine",
+   "pubchem_cid": 5288826,
+   "smiles": "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O"
+  },
+  {
+   "name": "nicotine",
+   "pubchem_cid": 89594,
+   "smiles": "CN1CCC[C@H]1C2=CN=CC=C2"
+  },
+  {
+   "name": "sildenafil",
+   "pubchem_cid": 135398744,
+   "smiles": "CCCC1=NN(C2=C1N=C(NC2=O)C3=C(C=CC(=C3)S(=O)(=O)N4CCN(CC4)C)OCC)C"
+  },
+  {
+   "name": "vancomycin",
+   "pubchem_cid": 14969,
+   "smiles": "C[C@H]1[C@H]([C@@](C[C@@H](O1)O[C@@H]2[C@H]([C@@H]([C@H](O[C@H]2OC3=C4C=C5C=C3OC6=C(C=C(C=C6)[C@H]([C@H](C(=O)N[C@H](C(=O)N[C@H]5C(=O)N[C@@H]7C8=CC(=C(C=C8)O)C9=C(C=C(C=C9O)O)[C@H](NC(=O)[C@H]([C@@H](C1=CC(=C(O4)C=C1)Cl)O)NC7=O)C(=O)O)CC(=O)N)NC(=O)[C@@H](CC(C)C)NC)O)Cl)CO)O)O)(C)N)O"
+  },
+  {
+   "name": "cyclosporine",
+   "pubchem_cid": 5284373,
+   "smiles": "CC[C@H]1C(=O)N(CC(=O)N([C@H](C(=O)N[C@H](C(=O)N([C@H](C(=O)N[C@H](C(=O)N[C@@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N([C@H](C(=O)N1)[C@@H]([C@H](C)C/C=C/C)O)C)C(C)C)C)CC(C)C)C)CC(C)C)C)C)C)CC(C)C)C)C(C)C)CC(C)C)C)C"
+  },
+  {
+   "name": "rifampicin",
+   "pubchem_cid": 135398735,
+   "smiles": "C[C@H]1/C=C/C=C(\\C(=O)NC2=C(C(=C3C(=C2O)C(=C(C4=C3C(=O)[C@](O4)(O/C=C/[C@@H]([C@H]([C@H]([C@@H]([C@@H]([C@@H]([C@H]1O)C)O)C)OC(=O)C)C)OC)C)C)O)O)/C=N/N5CCN(CC5)C)/C"
+  },
+  {
+   "name": "paclitaxel",
+   "pubchem_cid": 36314,
+   "smiles": "CC1=C2[C@H](C(=O)[C@@]3([C@H](C[C@@H]4[C@]([C@H]3[C@@H]([C@@](C2(C)C)(C[C@@H]1OC(=O)[C@@H]([C@H](C5=CC=CC=C5)NC(=O)C6=CC=CC=C6)O)O)OC(=O)C7=CC=CC=C7)(CO4)OC(=O)C)O)C)OC(=O)C"
+  }
+ ]
+}
