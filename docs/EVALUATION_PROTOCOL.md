@@ -390,3 +390,123 @@ Nested CV correctly reports no signal. The v0.x cross-validated score is not opt
 setting (its tuning leak is small relative to split-to-split variance, as the audit also found), but
 the **in-sample R² of a random forest on pure noise is about 0.85**: in-sample fit statistics, as
 reported by most published disease-specific TI-QSPR studies, carry no evidence of predictive power.
+
+## 11. Confirmatory protocol (pipeline protocol stage)
+
+Implements the remaining parts of EXPERIMENT_PLAN §7 inside `pipeline.run_study`
+(configuration and output files: PIPELINE.md §9). Code: `pipeline.permutation_control`,
+`pipeline.paired_bootstrap`, `pipeline.ad_report`, `pipeline.confirmatory_table`;
+`stats.permutation_pvalue`, `stats.percentile_interval`, `stats.group_bootstrap`.
+Tests: `tests/test_protocol.py` (synthetic data only). **The plan is not frozen**: the
+family, threshold, K and B below are defaults that the frozen plan must confirm.
+
+### 11.1 Confirmatory family
+
+`protocol.family` lists (target, set, reference) triples, or `"auto"` = every class-3
+target × (TI vs `evaluation.reference`), the primary endpoint of EXPERIMENT_PLAN §7. The
+reference must be `evaluation.reference` (paired differences exist only against it). The
+table uses the results of one learner, `protocol.learner` (default `selected`). The expanded
+family, the learner, the threshold and the rules below are written to the run record
+(`protocol`).
+
+### 11.2 Confirmatory table (`confirmatory.csv`)
+
+One row per family member. From the main analysis of that learner: n, `d_r2_mean`
+(mean of the R·K paired fold differences R²_set − R²_ref), its corrected repeated-CV t CI
+and p (§5), and the same for d_MAE = MAE_ref − MAE_set. Then, **across the family**
+(m = number of finite p values):
+
+| column | definition |
+|---|---|
+| `d_r2_q_bh` | `stats.benjamini_hochberg(d_r2_p)` (§5) |
+| `d_r2_q_by` | `stats.benjamini_yekutieli(d_r2_p)` (sensitivity under arbitrary dependence: the endpoints share drugs and folds) |
+| `informative_bh` / `_by` | q ≤ `protocol.q` (0.05) **and** d_r2_mean > 0: the CI excludes 0 on the positive side after FDR control (EXPERIMENT_PLAN §7) |
+| `practically_significant` | d_r2_mean ≥ `protocol.practical_threshold` (default 0.05, the plan's minimal meaningful gain; to be confirmed by the co-authors) |
+| `ad_share_outside_set` / `_reference` | mean over outer folds of the share of outer-test molecules outside the kNN AD (§11.4) |
+| `perm_k`, `perm_p_set`, `perm_uninformative_set` (+ `_reference`) | §11.3 |
+| `boot_*` | §11.5 |
+| `reason` | everything that makes a value missing or qualifies it (target not evaluated, failed folds, underpowered, failed bootstrap resamples) |
+
+A row whose p is NaN keeps NaN q values and NaN flags and does not count towards m.
+
+### 11.3 Y-randomised control (`permutation.csv`, `permutation_summary.csv`)
+
+For every target of the family and every set in it (both the set and the reference, or
+`protocol.permutation.feature_sets`), the target is permuted K times (default **K = 200**,
+EXPERIMENT_PLAN §7; Rücker et al. 2007) and the **whole** nested procedure is rerun with
+the learner's families, the same outer seeds, inner rule and groups:
+
+* permutation b of a target is `numpy.random.default_rng([seed, b]).permutation(n)`, the
+  same for every set of that target, so sets are compared on identical nulls;
+* X, its rows and the CV group labels are not moved, so outer and inner folds are those of
+  the real analysis (they depend only on n, seeds and groups);
+* statistic: mean over repeats of the pooled out-of-fold R² (NaN if any outer fold
+  failed); the observed value is the main analysis's `r2_pooled_mean` of the same learner
+  (`protocol.permutation.learner` may name another learner from `evaluation.learners`, to
+  save time; the observed value then comes from that learner);
+* p = (1 + #{b: s_b ≥ s_obs}) / (1 + K_valid) (Phipson & Smyth 2010); failed permutations
+  are counted (`n_failed`) and excluded from K_valid;
+* `uninformative` = s_obs ≤ the 95th percentile (`numpy.quantile`, linear) of the valid
+  null values: the plan's rule for reporting a feature set as uninformative.
+
+Calibration is tested two ways: `stats.permutation_pvalue` on exchangeable draws
+(K = 19, 4,000 replicates: P(p ≤ a) within 0.025 of a for a ∈ {0.05, 0.1, 0.25, 0.5}),
+and the nested procedure itself on six pure-noise data sets (OLS, K = 9: mean p in
+[0.25, 0.85], at most two p ≤ 0.1) and on a strong-signal data set (p = 1/(K + 1),
+not uninformative).
+
+### 11.4 Applicability-domain coverage (`ad.csv`, `ad_summary.csv`)
+
+Written for every run with `evaluation.ad` set (every target, learner and set, not only
+the family). Per outer fold: number of outer-test molecules inside / outside the kNN AD
+fitted on that fold's training part (§5), share outside, and R²/MAE on the in-domain and
+on the outside test rows. Per (target, learner, set): mean and max share outside over
+folds, pooled share, and the mean over repeats of the pooled per-repeat R² and MAE on all
+rows (primary), on in-domain rows and on outside rows (**secondary**, EXPERIMENT_PLAN §7).
+An undefined metric (fewer than two rows, constant y) is NaN, never 0; a fold without an
+AD (the zero-column `null` set) makes the summary shares NaN with the reason.
+
+### 11.5 Whole-procedure paired bootstrap (`bootstrap.csv`)
+
+Sensitivity analysis for the CI of the primary ΔR²(TI − size) and ΔMAE (CV intervals can
+undercover; Bates, Hastie & Tibshirani 2023). For b = 0..B−1 (default B = 200):
+
+1. **Resample units, not rows.** The units are the connectivity groups (stereoisomers,
+   racemate/enantiomer, isotopologues; PIPELINE.md §1) and every other molecule on its
+   own; G units are drawn with replacement with `default_rng([seed, b])`
+   (`stats.group_bootstrap`), taking all rows of each drawn unit.
+2. **Rerun the identical procedure** on the resample: repeated nested CV of the set and
+   the reference with the same outer seeds, inner rule and families. Every copy of an
+   original molecule keeps its original CV group label (the main analysis's group, e.g.
+   scaffold, or the unit), so copies and partners never straddle a fold boundary
+   (a duplicated molecule in training and test would inflate both R²).
+3. Record d_R² = fold mean of R²_set − R²_ref and d_MAE likewise (the estimands of §11.2).
+
+Row `resample = −1` reruns the procedure on the original data with the same families
+(equal to the main analysis when the families are the confirmatory learner's). The
+interval is the percentile interval [Q(α/2), Q(1 − α/2)] (`numpy.quantile`, linear) with
+α = `evaluation.alpha`; **if any resample failed, the interval is NaN with the reason**
+rather than computed from the successful resamples (that would condition on success).
+
+**Cost and the fast learner subset.** One resample costs two full nested CVs, so B = 200
+costs 400 nested CVs per family row. `protocol.bootstrap.families` may name a faster
+subset (e.g. `["ridge", "pls", "knn"]` or `["ridge"]`) than the confirmatory learner; the
+run record then labels the families as a "fast subset, cost-aware sensitivity", and the
+bootstrap describes the variability of that cheaper procedure, not of the confirmatory
+learner (`boot_d_r2_original` gives its original-data estimate next to `d_r2_mean`).
+
+Tested on synthetic data with a known effect (y = s + t + ε, set {s, t} vs reference {s},
+population ΔR² = 1/3, n = 120, OLS, B = 15): the percentile interval covers 1/3 and
+excludes 0; for an added pure-noise column it covers 0.
+
+### 11.6 Determinism
+
+All randomness is seeded (`default_rng([seed, b])` per permutation and resample; the nested
+CV is deterministic, §8). Permutations and resamples run in parallel with
+`runtime.n_jobs` and give identical rows. A re-run of a protocol run record reproduces
+`confirmatory.csv`, `permutation*.csv`, `bootstrap.csv` and the AD files byte for byte
+(`test_protocol_is_deterministic`).
+
+* Bates S, Hastie T, Tibshirani R (2023, online; 2024, issue 546) Cross-validation: what does it estimate and how well does it do it? *J Am Stat Assoc* 119:1434–1445. doi:10.1080/01621459.2023.2197686
+* Benjamini Y, Yekutieli D (2001) The control of the false discovery rate in multiple testing under dependency. *Ann Stat* 29:1165–1188. doi:10.1214/aos/1013699998
+References of §11 checked against Crossref on 2026-10-03.

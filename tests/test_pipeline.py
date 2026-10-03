@@ -226,7 +226,7 @@ def test_run_record_complete(tiny_run):
     assert rec["manifest_sha256"] == pv.sha256_file(tiny_run.out_dir / "manifest.csv")
     for name, info in rec["outputs"].items():
         assert pv.sha256_file(tiny_run.out_dir / name) == info["sha256"], name
-    assert set(rec["result_csvs"]) == set(pl.RESULT_CSVS)
+    assert set(rec["result_csvs"]) == set(pl.RESULT_CSVS + pl.AD_CSVS)  # no protocol section
     assert {"cohort", "standardize", "features", "targets", "evaluate"} <= set(rec["timings_s"])
     assert pv.read_run_record(tiny_run.out_dir / "run_record.json")["config_sha256"] == rec["config_sha256"]
 
@@ -263,8 +263,8 @@ def test_rerun_byte_identical(pilot_run, tmp_path):
     rep = pl.rerun(pilot_run.out_dir / "run_record.json", tmp_path / "again",
                    timestamp_utc="2027-01-01T00:00:00Z", cache_dir=CHEMBL)
     assert rep["ok"], rep
-    assert sorted(rep["identical"]) == sorted(pl.RESULT_CSVS)
-    for name in pl.RESULT_CSVS:
+    assert sorted(rep["identical"]) == sorted(pl.RESULT_CSVS + pl.AD_CSVS)
+    for name in pl.RESULT_CSVS + pl.AD_CSVS:
         assert (tmp_path / "again" / name).read_bytes() == (pilot_run.out_dir / name).read_bytes()
     assert json.loads((tmp_path / "again" / "rerun_report.json").read_text())["ok"]
 
@@ -663,3 +663,192 @@ def test_installed_copy_outside_git_names_the_build_commit(tmp_path):
     assert info["source"] == "build_info"
     # inside the repository the live git state is used, never a build-info file
     assert pv.git_info()["source"] in ("git", None)
+
+
+# ------------------------------------------------- expdata provider (class 3)
+def _std_key(smi):
+    from topoqspr.graph import standardize
+
+    return standardize(smi).inchikey
+
+
+def _fake_expdata_loader(name, cache_dir, *, offline, drop_disagreeing, keep_salt_forms,
+                         client=None):
+    """get_target stand-in: values for the tiny molecules m01-m24 (as get_target would
+    return them: one row per full InChIKey, sorted), escitalopram only (not citalopram),
+    and one parent (m02) whose replicates disagree."""
+    tiny = pd.read_csv(TINY, dtype=str, keep_default_na=False).set_index("id")["smiles"]
+    rows = []
+    for i in range(1, 25):
+        rows.append(dict(inchikey=_std_key(tiny[f"m{i:02d}"]),
+                         value=float(i) + (0.5 if name == "mp_bradley" else 0.0),
+                         n_measurements=1, source="fake", sd=math.nan,
+                         replicates_disagree=False))
+    rows[1].update(sd=2.0, replicates_disagree=True, n_measurements=2)  # m02
+    rows.append(dict(inchikey=_std_key(STEREO["escitalopram"]), value=-1.0, n_measurements=1,
+                     source="fake", sd=math.nan, replicates_disagree=False))
+    df = pd.DataFrame(rows).sort_values("inchikey").reset_index(drop=True)
+    df.attrs.update(raw_sha256="f" * 64, processing_fingerprint="fp-test")
+    return df
+
+
+def make_fake_expdata(names=None, **opts):
+    return tp.ExpdataTargetProvider(names, loader=_fake_expdata_loader, **opts)
+
+
+def _stereo_csv(tmp_path):
+    tiny = pd.read_csv(TINY, dtype=str, keep_default_na=False)
+    extra = pd.DataFrame({"id": list(STEREO), "smiles": list(STEREO.values())})
+    pd.concat([tiny, extra]).to_csv(tmp_path / "s.csv", index=False)
+
+
+def test_expdata_provider_full_key_join_and_reasons(tmp_path):
+    _stereo_csv(tmp_path)
+    cfg = _tiny_config(cohort={"source": "smiles_csv", "path": "s.csv"},
+                       feature_sets=["null", "size"],
+                       targets=[{"provider": f"{__name__}:make_fake_expdata",
+                                 "names": ["logs_aqsoldb", "mp_bradley"]}])
+    res = pl.run_study(cfg, tmp_path / "res", timestamp_utc=TS, base_dir=tmp_path)
+    tv = pl.read_results(res.out_dir, "targets").set_index("id")
+    assert tv.loc["m01", "logs_aqsoldb"] == 1.0 and tv.loc["m01", "mp_bradley"] == 1.5
+    assert tv.loc["escitalopram", "logs_aqsoldb"] == -1.0
+    for rid in ("m02", "citalopram", "m25", "cetirizine"):  # NaN, never 0
+        assert math.isnan(tv.loc[rid, "logs_aqsoldb"])
+    fail = pl.read_results(res.out_dir, "failures")
+    why = fail[fail["feature"] == "logs_aqsoldb"].set_index("row")["reason"]
+    assert why["m02"].startswith("replicates_disagree")
+    assert why["citalopram"].startswith("no_measurement_stereo_mismatch")
+    assert why["m25"].startswith("no_measurement:")
+    assert "escitalopram" not in why.index and "m01" not in why.index
+    s = res.summary
+    assert (s["target_class"] == 3).all() and set(s["target"]) == {"logs_aqsoldb", "mp_bradley"}
+    assert (s["n"] == 24).all()  # m01, m03-m24, escitalopram
+    rec = res.run_record
+    tg = {t["name"]: t for t in rec["targets"]}
+    assert tg["logs_aqsoldb"]["target_class"] == 3
+    assert tg["logs_aqsoldb"]["source"] == "expdata:aqsoldb"
+    assert tg["logs_aqsoldb"]["rdkit2d_exclusion"] is None
+    prov = rec["target_providers"][0]
+    assert prov["provider"] == "expdata" and "full standard InChIKey" in prov["matching"]
+    by_t = {t["target"]: t for t in prov["targets"]}
+    t0 = by_t["logs_aqsoldb"]
+    assert t0["licence"] == "CC0 1.0" and t0["doi"] == "10.1038/s41597-019-0151-1"
+    assert t0["raw_sha256"] == "f" * 64 and t0["n_values"] == 24
+    assert t0["n_dropped_disagreeing"] == 1 and t0["n_matched_full_key"] == 25
+    assert by_t["mp_bradley"]["licence"] == "CC0"
+
+
+def test_expdata_provider_options_and_client():
+    p = tp.get_target_provider("expdata", ["logd74_az"], {"drop_disagreeing": False})
+    assert [s.name for s in p.specs()] == ["logd74_az"] and p.specs()[0].target_class == 3
+    with pytest.raises(KeyError, match="unknown expdata targets"):
+        tp.get_target_provider("expdata", ["logS_esol"])
+    seen = {}
+
+    def loader(name, cache_dir, **kw):
+        seen.update(kw, cache_dir=cache_dir)
+        return pd.DataFrame(dict(inchikey=["AAAAAAAAAAAAAA-BBBBBBBBBB-N"], value=[9.0], sd=[3.0],
+                                 replicates_disagree=[True]))
+
+    class _Client:
+        release = "ChEMBL_37"
+
+    prov = tp.ExpdataTargetProvider(["logd74_az"], drop_disagreeing=False, loader=loader)
+    prov.set_runtime(cache_dir="/c", offline=True, client=_Client())
+    mt = pd.DataFrame({"inchikey": ["AAAAAAAAAAAAAA-BBBBBBBBBB-N", ""]},
+                      index=pd.Index(["a", "b"], name="id"))
+    out = prov.compute(mt, [None, None])
+    assert out.values["logd74_az"].tolist()[0] == 9.0  # kept: drop_disagreeing=False
+    assert out.failures == [{"row": "b", "feature": "logd74_az",
+                             "reason": "no_inchikey: standardised parent has no InChIKey"}]
+    assert seen["client"].release == "ChEMBL_37" and seen["offline"] is True
+    assert seen["cache_dir"] == "/c" and seen["drop_disagreeing"] is False
+    pinned = tp.ExpdataTargetProvider(["logd74_az"], chembl_release="ChEMBL_36", loader=loader)
+    pinned.set_runtime(client=_Client())
+    with pytest.raises(RuntimeError, match="pins ChEMBL_36"):
+        pinned.compute(mt, [None, None])
+    json.dumps(prov.provenance(), allow_nan=False)  # run-record safe
+
+
+# ---------------------------------------------------------- pooled cohort
+class _PooledClient:
+    """ChEMBL stand-in for expdata.approved_drug_pool: the first 24 tiny molecules as
+    approved parents (one with a salt form), plus a protein."""
+
+    release = "ChEMBL_37"
+    offline = True
+
+    def __init__(self):
+        from rdkit import Chem
+
+        tiny = pd.read_csv(TINY, dtype=str, keep_default_na=False)
+        self.db, rows = {}, []
+        for i, smi in enumerate(tiny["smiles"][:24], start=1):
+            cid = f"CHEMBL{i}"
+            self.db[cid] = self._rec(cid, smi, cid, Chem.MolToInchiKey(Chem.MolFromSmiles(smi)))
+            rows.append(dict(drugind_id=i, molecule_chembl_id=cid, parent_molecule_chembl_id=cid,
+                             max_phase_for_ind="4.0", mesh_id=f"D{i % 3}"))
+        self.db["CHEMBL900"] = self._rec("CHEMBL900", "CCN.Cl", "CHEMBL22", "SALT-KEY")
+        rows.append(dict(drugind_id=90, molecule_chembl_id="CHEMBL900",
+                         parent_molecule_chembl_id="CHEMBL22", max_phase_for_ind="4.0",
+                         mesh_id="D9"))
+        self.db["CHEMBL999"] = self._rec("CHEMBL999", "", "CHEMBL999", "", mtype="Protein")
+        rows.append(dict(drugind_id=99, molecule_chembl_id="CHEMBL999",
+                         parent_molecule_chembl_id="CHEMBL999", max_phase_for_ind="4.0",
+                         mesh_id="D1"))
+        self.rows = rows
+
+    @staticmethod
+    def _rec(cid, smi, parent, key, mtype="Small molecule"):
+        return dict(molecule_chembl_id=cid, pref_name=cid, molecule_type=mtype,
+                    structure_type="MOL", inorganic_flag=0, max_phase="4.0",
+                    atc_classifications=[], molecule_hierarchy={"parent_chembl_id": parent},
+                    molecule_structures={"canonical_smiles": smi, "standard_inchi_key": key})
+
+    def fetch_all(self, endpoint, params):
+        assert endpoint == "drug_indication" and params["max_phase_for_ind"] == "4"
+        return list(self.rows)
+
+    def molecules(self, ids):
+        return {i: self.db.get(i) for i in ids}
+
+    def verify_release(self):
+        pass
+
+    def status(self):
+        return {"chembl_db_version": self.release, "chembl_release_date": "2026-05-01"}
+
+
+def test_pooled_cohort_source(tmp_path):
+    cfg = _tiny_config(cohort={"source": "pooled", "chembl_release": "ChEMBL_37"},
+                       feature_sets=["null", "size"],
+                       targets=[{"provider": "rdkit", "names": ["MolLogP"]}])
+    res = pl.run_study(cfg, tmp_path / "res", timestamp_utc=TS, client=_PooledClient())
+    side = json.loads((res.out_dir / "manifest.json").read_text())
+    assert side["kind"] == "pooled" and side["chembl_release"] == "ChEMBL_37"
+    assert side["indication_rows"] == 26 and side["counts"]["included"] == 24
+    man = pl.read_results(res.out_dir, "manifest", dtype=str).set_index("molecule_chembl_id")
+    assert man.loc["CHEMBL900", "reason"] == "collapsed_to_parent"
+    assert man.loc["CHEMBL999", "reason"] == "not_small_molecule"
+    assert res.run_record["chembl"]["release"] == "ChEMBL_37"
+    assert res.run_record["config"]["cohort"] == {"source": "pooled", "chembl_release": "ChEMBL_37"}
+    assert (res.summary["n"] == 24).all()
+    cfg["cohort"]["chembl_release"] = "ChEMBL_36"
+    with pytest.raises(RuntimeError, match="pins ChEMBL_36"):
+        pl.run_study(cfg, tmp_path / "res2", timestamp_utc=TS, client=_PooledClient())
+
+
+def test_target_with_too_few_values_is_skipped_not_crashed(tmp_path):
+    cfg = _tiny_config(feature_sets=["null", "size"],
+                       targets=[{"provider": f"{__name__}:make_toy", "names": None,
+                                 "options": {"missing": [f"m{i:02d}" for i in range(1, 29)]}}],
+                       protocol={"family": ["logS_toy:size-null"],
+                                 "permutation": {"n_permutations": 2},
+                                 "bootstrap": {"n_boot": 2}})
+    cfg["evaluation"] = dict(FAST_EVAL, reference="null")
+    res = pl.run_study(cfg, tmp_path / "res", timestamp_utc=TS, base_dir=FIX)
+    assert "logS_toy" in res.run_record["counts"]["skipped_targets"]
+    assert len(res.summary) == 0
+    conf = pl.read_results(res.out_dir, "confirmatory")
+    assert len(conf) == 1 and "target not evaluated" in conf["reason"].iloc[0]
+    assert math.isnan(conf["d_r2_mean"].iloc[0])

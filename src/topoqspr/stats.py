@@ -10,6 +10,12 @@ spearman_ci
     Spearman rho with a Fisher-z confidence interval.
 y_scrambling
     Permutation (y-randomisation) test of any scoring function.
+permutation_pvalue
+    Empirical p-value (+1 correction) and 95th-percentile rule for a given null.
+percentile_interval
+    Percentile bootstrap interval that never drops failed resamples silently.
+group_bootstrap
+    Cluster (group) bootstrap resample of row indices.
 ApplicabilityDomain
     kNN-distance or leverage applicability-domain flag.
 
@@ -50,6 +56,9 @@ __all__ = [
     "benjamini_yekutieli",
     "spearman_ci",
     "y_scrambling",
+    "permutation_pvalue",
+    "percentile_interval",
+    "group_bootstrap",
     "ApplicabilityDomain",
 ]
 
@@ -222,6 +231,92 @@ def y_scrambling(score_fn: Callable[[np.ndarray, np.ndarray], float], X, y,
     return dict(observed=obs, null=null, p=p, n_valid=int(valid.size),
                 null_mean=float(valid.mean()) if valid.size else math.nan,
                 null_max=float(valid.max()) if valid.size else math.nan)
+
+
+def permutation_pvalue(observed: float, null: Sequence[float], quantile: float = 0.95) -> dict:
+    """Empirical permutation p-value and the "uninformative" rule.
+
+    With s_obs the observed statistic and s_1..s_K the statistics of K
+    permuted targets (larger is better),
+
+        p = (1 + #{b : s_b >= s_obs}) / (1 + K_valid)     (Phipson & Smyth 2010)
+        q95 = numpy.quantile(valid null, quantile)        (linear interpolation)
+        uninformative = s_obs <= q95                       (EXPERIMENT_PLAN 7)
+
+    NaN null statistics (a permutation whose nested CV failed) are reported as
+    ``n_failed`` and excluded from K_valid; a NaN observed statistic or an
+    empty valid null makes p, q95 and the flag NaN/None with ``reason``.
+    Returns observed, p, n, n_valid, n_failed, null_mean, null_sd, null_q95,
+    null_max, uninformative (bool or None), reason.
+    """
+    null = np.asarray(null, dtype=float).ravel()
+    valid = null[np.isfinite(null)]
+    out = dict(observed=float(observed), p=math.nan, n=int(null.size), n_valid=int(valid.size),
+               n_failed=int(null.size - valid.size), null_mean=math.nan, null_sd=math.nan,
+               null_q95=math.nan, null_max=math.nan, uninformative=None, reason="")
+    why = []
+    if out["n_failed"]:
+        why.append(f"{out['n_failed']} of {null.size} permutations failed (excluded)")
+    if valid.size:
+        out.update(null_mean=float(valid.mean()),
+                   null_sd=float(valid.std(ddof=1)) if valid.size > 1 else math.nan,
+                   null_q95=float(np.quantile(valid, quantile)), null_max=float(valid.max()))
+    if not math.isfinite(out["observed"]):
+        why.append("observed statistic undefined")
+    elif valid.size == 0:
+        why.append("no valid permutation")
+    else:
+        out["p"] = (1 + int(np.sum(valid >= out["observed"]))) / (1 + valid.size)
+        out["uninformative"] = bool(out["observed"] <= out["null_q95"])
+    out["reason"] = "; ".join(why)
+    return out
+
+
+def percentile_interval(values: Sequence[float], alpha: float = 0.05) -> dict:
+    """Percentile bootstrap interval [Q(alpha/2), Q(1 - alpha/2)] of ``values``.
+
+    Quantiles use ``numpy.quantile`` (linear interpolation). A NaN value (a
+    resample whose procedure failed or whose metric is undefined) is **not**
+    dropped: the interval is then NaN with a reason, because keeping only the
+    resamples that succeeded would condition on success. Returns ci_low,
+    ci_high, mean, sd, n, n_valid, reason.
+    """
+    v = np.asarray(values, dtype=float).ravel()
+    ok = np.isfinite(v)
+    out = dict(ci_low=math.nan, ci_high=math.nan, mean=math.nan, sd=math.nan,
+               n=int(v.size), n_valid=int(ok.sum()), reason="")
+    if v.size == 0:
+        out["reason"] = "no resamples"
+        return out
+    if not ok.all():
+        out["reason"] = f"{int((~ok).sum())} of {v.size} resamples undefined; interval not computed"
+        return out
+    lo, hi = np.quantile(v, [alpha / 2, 1 - alpha / 2])
+    out.update(ci_low=float(lo), ci_high=float(hi), mean=float(v.mean()),
+               sd=float(v.std(ddof=1)) if v.size > 1 else math.nan)
+    return out
+
+
+def group_bootstrap(groups: Sequence, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
+    """One cluster-bootstrap resample: draw G groups with replacement from the
+    G distinct ``groups`` and take every row of each drawn group.
+
+    Returns ``(rows, draw)``: ``rows`` are indices into the original rows (a
+    row appears once per draw of its group) and ``draw`` labels every resampled
+    row with the position of its group's draw (0..G-1). Rows from different
+    draws of the same group are copies of one another; callers that run CV on
+    the resample must keep all copies of an original group together (pass the
+    original group label as the CV group), otherwise a copy lands in the
+    training and the test fold at once. Groups are taken in sorted order of
+    their labels, so the result depends only on ``rng`` and the labels.
+    """
+    g = np.asarray(groups, dtype=object).astype(str)
+    uniq, inv = np.unique(g, return_inverse=True)
+    members = [np.flatnonzero(inv == i) for i in range(uniq.size)]
+    pick = rng.integers(0, uniq.size, size=uniq.size)
+    rows = np.concatenate([members[i] for i in pick])
+    draw = np.concatenate([np.full(members[i].size, j) for j, i in enumerate(pick)])
+    return rows, draw
 
 
 class ApplicabilityDomain:

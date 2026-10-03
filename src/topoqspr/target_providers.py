@@ -20,13 +20,22 @@ standardised parent, :func:`topoqspr.graph.standardize`) and ``inchikey``
 block) in their ``provenance()``. The RDKit ``Mol`` objects of the
 standardised parents are passed alongside, in the same order.
 
-Shipped provider: ``rdkit`` (:class:`RDKitTargetProvider`) - computed
-targets Crippen logP, Crippen molar refractivity, Ertl TPSA (class 2,
-"computed physicochemical": genre replication only, no headline claims) and
-molecular weight (class 1, sanity check only). Experimental (class 3)
-providers plug in through :func:`register_target_provider` or by naming
-``"package.module:factory"`` as the provider in the study config; the
-factory is called as ``factory(names=<list or None>, **options)``.
+Shipped providers:
+
+* ``rdkit`` (:class:`RDKitTargetProvider`) - computed targets Crippen logP,
+  Crippen molar refractivity, Ertl TPSA (class 2, "computed
+  physicochemical": genre replication only, no headline claims) and
+  molecular weight (class 1, sanity check only);
+* ``expdata`` (:class:`ExpdataTargetProvider`) - the licence-checked
+  measured targets of :mod:`topoqspr.expdata` (class 3), joined on the full
+  standard InChIKey of the standardised parent.
+
+Other providers plug in through :func:`register_target_provider` or by
+naming ``"package.module:factory"`` as the provider in the study config; the
+factory is called as ``factory(names=<list or None>, **options)``. A provider
+may also define ``set_runtime(**runtime)``: the pipeline calls it before
+``compute`` with machine-local settings that are not part of the hashed
+config (``cache_dir``, ``chembl_cache_dir``, ``offline``, ``client``).
 
 References
 ----------
@@ -53,6 +62,7 @@ __all__ = [
     "TargetValues",
     "TargetProvider",
     "RDKitTargetProvider",
+    "ExpdataTargetProvider",
     "register_target_provider",
     "get_target_provider",
     "PROVIDERS",
@@ -199,10 +209,185 @@ class RDKitTargetProvider:
                     targets=list(self.names))
 
 
+# ------------------------------------------------------------- expdata
+def _json_safe(x):
+    """NaN/inf -> None, numpy scalars -> Python (the run record forbids NaN)."""
+    if isinstance(x, Mapping):
+        return {str(k): _json_safe(v) for k, v in x.items()}
+    if isinstance(x, (list, tuple)):
+        return [_json_safe(v) for v in x]
+    if hasattr(x, "item") and not isinstance(x, (str, bytes)):
+        x = x.item()
+    if isinstance(x, float) and not math.isfinite(x):
+        return None
+    return x
+
+
+class ExpdataTargetProvider:
+    """Measured (class 3) targets from :func:`topoqspr.expdata.get_target`.
+
+    Matching rule: a molecule gets the value of the ``get_target`` row whose
+    ``inchikey`` equals the **full** standard InChIKey of its standardised
+    parent (``molecules["inchikey"]``); there is no first-block fallback, so a
+    stereoisomer never inherits its partner's measurement. Every molecule
+    without a value is NaN with one of these reasons:
+
+    * ``no_inchikey`` - the standardised parent has no InChIKey;
+    * ``no_measurement`` - no curated record of this target has the full key;
+    * ``no_measurement_stereo_mismatch`` - no full-key match, but a record of
+      another stereoisomer (same first block) exists; it is not used;
+    * ``replicates_disagree`` - the parent's replicate SD exceeds the target's
+      ``disagreement_sd`` (the ``get_target`` rule, applied here so that the
+      reason is recorded; ``drop_disagreeing=False`` keeps such values).
+
+    Options (JSON, part of the hashed config): ``drop_disagreeing`` (default
+    True), ``keep_salt_forms`` (default False; sensitivity analysis),
+    ``chembl_release`` (release the AstraZeneca ChEMBL records are pinned to;
+    default: the release of the client passed by the pipeline, else
+    ``"ChEMBL_37"``). Machine-local settings come through :meth:`set_runtime`.
+
+    ``loader`` (Python API only) replaces :func:`topoqspr.expdata.get_target`,
+    called as ``loader(name, cache_dir, offline=..., drop_disagreeing=False,
+    keep_salt_forms=..., client=...)``; the offline tests use it.
+    """
+
+    name = "expdata"
+
+    def __init__(self, names: Sequence[str] | None = None, *, drop_disagreeing: bool = True,
+                 keep_salt_forms: bool = False, chembl_release: str | None = None,
+                 loader: Callable[..., pd.DataFrame] | None = None) -> None:
+        from . import expdata
+
+        self._ed = expdata
+        available = tuple(expdata.TARGETS)
+        names = list(available) if names is None else [str(n) for n in names]
+        unknown = [n for n in names if n not in expdata.TARGETS]
+        if unknown:
+            raise KeyError(f"unknown expdata targets {unknown}; available: {list(available)}")
+        if len(set(names)) != len(names):
+            raise ValueError(f"duplicate target names in {names}")
+        self.names = names
+        self.drop_disagreeing = bool(drop_disagreeing)
+        self.keep_salt_forms = bool(keep_salt_forms)
+        self.chembl_release = chembl_release
+        self._loader = loader
+        self._runtime: dict[str, Any] = {}
+        self._prov: dict[str, dict] = {}
+
+    def set_runtime(self, *, cache_dir=None, chembl_cache_dir=None, offline: bool = False,
+                    client=None, **_ignored) -> None:
+        """Machine-local settings (not hashed): the expdata cache directory
+        (default ``<topoqspr cache>/expdata``), the ChEMBL cache and offline
+        mode for the AstraZeneca (ChEMBL-hosted) targets, or a ready client."""
+        self._runtime = dict(cache_dir=cache_dir, chembl_cache_dir=chembl_cache_dir,
+                             offline=bool(offline), client=client)
+
+    def specs(self) -> list[TargetSpec]:
+        out = []
+        for n in self.names:
+            t = self._ed.TARGETS[n]
+            src = self._ed.SOURCES[t.source]
+            # Measured values are not computed from any RDKit descriptor; alternative
+            # estimators of the same quantity (e.g. Crippen logP for measured logP) are
+            # kept by the leakage rule (features.TARGET_EXCLUSIONS docstring).
+            out.append(TargetSpec(n, 3, None, t.unit, f"expdata:{t.source}",
+                                  f"{t.endpoint}; {t.description}; licence {src.licence}"))
+        return out
+
+    def _client(self):
+        rt = self._runtime
+        if rt.get("client") is not None:
+            if self.chembl_release and rt["client"].release != self.chembl_release:
+                raise RuntimeError(f"expdata provider pins {self.chembl_release} but the client "
+                                   f"serves {rt['client'].release}")
+            return rt["client"]
+        from .chembl import ChemblClient
+
+        return ChemblClient(rt.get("chembl_cache_dir"), offline=bool(rt.get("offline")),
+                            release=self.chembl_release or "ChEMBL_37")
+
+    def _load(self, name: str) -> pd.DataFrame:
+        t = self._ed.TARGETS[name]
+        src = self._ed.SOURCES[t.source]
+        client = self._client() if src.chembl_assay else None
+        loader = self._loader or self._ed.get_target
+        return loader(name, self._runtime.get("cache_dir"), offline=bool(self._runtime.get("offline")),
+                      drop_disagreeing=False, keep_salt_forms=self.keep_salt_forms, client=client)
+
+    def compute(self, molecules: pd.DataFrame, mols: Sequence[Chem.Mol]) -> TargetValues:
+        if len(mols) != len(molecules):
+            raise ValueError(f"{len(mols)} molecules for {len(molecules)} table rows")
+        keys = molecules["inchikey"].fillna("").astype(str).tolist()
+        cols, failures = {}, []
+        self._prov = {}
+        for n in self.names:
+            t = self._ed.TARGETS[n]
+            src = self._ed.SOURCES[t.source]
+            df = self._load(n)
+            missing = [c for c in ("inchikey", "value", "replicates_disagree") if c not in df.columns]
+            if missing:
+                raise ValueError(f"expdata target {n!r}: loader returned no {missing} column(s)")
+            if df["inchikey"].duplicated().any():
+                raise ValueError(f"expdata target {n!r}: duplicate InChIKeys in get_target output")
+            sds = df["sd"] if "sd" in df.columns else pd.Series(math.nan, index=df.index)
+            by_key = {str(k): (float(v), bool(d), float(s)) for k, v, d, s in zip(
+                df["inchikey"], df["value"], df["replicates_disagree"], sds)}
+            blocks = {k.split("-")[0] for k in by_key}
+            vals, n_match, n_dis = [], 0, 0
+            for label, key in zip(molecules.index, keys):
+                v, why = math.nan, ""
+                if not key:
+                    why = "no_inchikey: standardised parent has no InChIKey"
+                elif key in by_key:
+                    val, dis, sd = by_key[key]
+                    n_match += 1
+                    if dis and self.drop_disagreeing:
+                        n_dis += 1
+                        why = (f"replicates_disagree: replicate SD {sd:.3g} > "
+                               f"{t.disagreement_sd:g} {t.unit}")
+                    elif not math.isfinite(val):
+                        why = f"non-finite measured value {val!r}"
+                    else:
+                        v = val
+                elif key.split("-")[0] in blocks:
+                    why = ("no_measurement_stereo_mismatch: only another stereoisomer or "
+                           "isotopologue (same InChIKey first block) has a value; not used "
+                           "(full-key matching)")
+                else:
+                    why = f"no_measurement: no curated {n} record with this full InChIKey"
+                if why:
+                    failures.append({"row": label, "feature": n, "reason": why})
+                vals.append(v)
+            cols[n] = vals
+            self._prov[n] = dict(
+                target=n, endpoint=t.endpoint, unit=t.unit, target_class=3, source=src.key,
+                title=src.title, citation=src.citation, doi=src.doi, version=src.version,
+                licence=src.licence, redistribution=src.redistribution,
+                url=src.url or None, chembl_assay=src.chembl_assay or None,
+                raw_sha256=df.attrs.get("raw_sha256"),
+                processing_fingerprint=df.attrs.get("processing_fingerprint"),
+                n_parents_in_source=int(len(df)), n_matched_full_key=int(n_match),
+                n_dropped_disagreeing=int(n_dis),
+                n_values=int(sum(math.isfinite(x) for x in vals)))
+        values = pd.DataFrame(cols, index=molecules.index, columns=self.names, dtype=float)
+        return TargetValues(values, failures)
+
+    def provenance(self) -> dict:
+        return _json_safe(dict(
+            provider=self.name,
+            matching="full standard InChIKey of the standardised parent "
+                     "(topoqspr.graph.standardize); no first-block fallback",
+            drop_disagreeing=self.drop_disagreeing, keep_salt_forms=self.keep_salt_forms,
+            chembl_release=self.chembl_release,
+            processing_version=self._ed.PROCESSING_VERSION,
+            targets=[self._prov.get(n, dict(target=n, computed=False)) for n in self.names]))
+
+
 # --------------------------------------------------------------- registry
 #: provider name -> factory(names=None | list, **options) -> TargetProvider
 PROVIDERS: dict[str, Callable[..., TargetProvider]] = {
     "rdkit": lambda names=None, **opts: RDKitTargetProvider(names, **opts),
+    "expdata": lambda names=None, **opts: ExpdataTargetProvider(names, **opts),
 }
 
 
