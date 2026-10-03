@@ -256,6 +256,12 @@ PHI: dict[str, tuple[Callable[[int, int], Number], str]] = {
     "TMH": (lambda a, b: (a * a + b * b + a * b) * (a + b) / 2, r"\frac{(x_u^2 + x_v^2 + x_u x_v)(x_u + x_v)}{2}"),
     "HCM2": (lambda a, b: (a * b) ** 2, r"(x_u x_v)^2"),
     "ReZ1": (lambda a, b: (a + b) / (a * b), r"\frac{x_u + x_v}{x_u x_v}"),
+    # Hybrid geometric-harmonic-Zagreb descriptors, Arockiaraj et al. 2023 (SAR QSAR Environ Res 34:569), p. 571-572.
+    "GH": (lambda a, b: _sqrt(a * b) * (a + b) / 2, r"\frac{\sqrt{x_u x_v}\,(x_u + x_v)}{2}"),
+    "GTM": (lambda a, b: _sqrt(a * b) / (a * a + b * b + a * b), r"\frac{\sqrt{x_u x_v}}{x_u^2 + x_v^2 + x_u x_v}"),
+    "HBM": (lambda a, b: 2.0 / ((a + b + a * b) * (a + b)), r"\frac{2}{(x_u + x_v + x_u x_v)(x_u + x_v)}"),
+    "HTM": (lambda a, b: 2.0 / ((a * a + b * b + a * b) * (a + b)), r"\frac{2}{(x_u^2 + x_v^2 + x_u x_v)(x_u + x_v)}"),
+    "TMG": (lambda a, b: (a * a + b * b + a * b) / _sqrt(a * b), r"\frac{x_u^2 + x_v^2 + x_u x_v}{\sqrt{x_u x_v}}"),
 }
 
 _INT_PHI = {"M1", "M2", "F", "HM", "sigma", "ReZ3", "BM", "TM", "HCM2"}
@@ -297,6 +303,13 @@ _DEGREE: list[tuple[str, str, str]] = [
     ("BMG", "BMG", "arockiaraj2023sar"),
     ("BMH", "BMH", "arockiaraj2023sar"),
     ("TMH", "TMH", "arockiaraj2023sar"),
+    ("BM", "BM", "arockiaraj2023sar"),
+    ("TM", "TM", "arockiaraj2023sar"),
+    ("GH", "GH", "arockiaraj2023sar"),
+    ("GTM", "GTM", "arockiaraj2023sar"),
+    ("HBM", "HBM", "arockiaraj2023sar"),
+    ("HTM", "HTM", "arockiaraj2023sar"),
+    ("TMG", "TMG", "arockiaraj2023sar"),
 ]
 
 # --- neighbourhood-degree-sum family -----------------------------------------
