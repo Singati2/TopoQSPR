@@ -1,0 +1,1998 @@
+{
+  "schema_version": 1,
+  "study_key": "kabeer2026_antidepressants",
+  "shortlist_row": 2,
+  "status": "proposed",
+  "citation": {
+    "authors": [
+      "Kabeer, Aqsa",
+      "Mufti, Zeeshan Saleem",
+      "Almehizia, Abdulrahman A",
+      "Assiri, Ahmad A",
+      "Ganati, Gamachu Adugna"
+    ],
+    "title": "QSPR modeling of physicochemical properties of SSRI and SNRI antidepressants using advanced molecular graph descriptors",
+    "journal": "Scientific Reports",
+    "year": 2026,
+    "volume": "16",
+    "article_number": "25505",
+    "doi": "10.1038/s41598-026-65586-2",
+    "pmcid": "PMC13476442",
+    "pmid": "42601387",
+    "first_publication_date": "2026-08-07"
+  },
+  "licence": {
+    "spdx": "CC-BY-4.0",
+    "statement_verbatim": "© The Author(s) 2026Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/.",
+    "data_redistribution": "stored",
+    "note": ""
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13476442/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "075a5e66c4c8d8da8030a56f4435b5aa9c09d643f3d1edb3fb3078abb7015ee0",
+    "other_sources": [
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/1",
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/3",
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/4",
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/5",
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/8",
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/9",
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/10",
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/11",
+      "https://www.nature.com/articles/s41598-026-65586-2/tables/14"
+    ]
+  },
+  "n_reported": 25,
+  "n_reported_source": "Abstract: 'Twenty-five commonly used antidepressant drugs'; N = 25 in Tables 8-10",
+  "drug_list_source": "Table 3 (property table), column Drugs",
+  "property_table": {
+    "xml_table_id": "Tab3",
+    "skip_rows": 1,
+    "label_column": 1,
+    "columns": [
+      {
+        "property": "BP",
+        "column": 2
+      },
+      {
+        "property": "MV",
+        "column": 3
+      },
+      {
+        "property": "MR",
+        "column": 4
+      },
+      {
+        "property": "MW",
+        "column": 5
+      },
+      {
+        "property": "HAC",
+        "column": 6
+      },
+      {
+        "property": "CO",
+        "column": 7
+      },
+      {
+        "property": "EV",
+        "column": 8
+      },
+      {
+        "property": "MP",
+        "column": 9
+      }
+    ],
+    "header_from_publisher_html": [
+      "Sr.No",
+      "Drugs",
+      "\\({BP} (^0 C)\\)",
+      "\\({MV} ({cm}^3/)\\)",
+      "\\({MR} ({cm}^3/)\\)",
+      "\\({MW} ({g/mol})\\)",
+      "HAC",
+      "CO",
+      "EV (\\({KJ/mol}\\))",
+      "\\({MP} (^0 C)\\)"
+    ],
+    "header_note": "the JATS XML carries most header cells as images; the TeX headers above are from https://www.nature.com/articles/s41598-026-65586-2/tables/3",
+    "label": "Table 3",
+    "caption_verbatim": "Physicochemical Properties of the Selected Antidepressant Drugs.",
+    "header_rows_verbatim": [
+      [
+        "Sr.No",
+        "Drugs",
+        "[IMG d33e1079.gif]",
+        "[IMG d33e1084.gif]",
+        "[IMG d33e1089.gif]",
+        "[IMG d33e1094.gif]",
+        "HAC",
+        "CO",
+        "EV ([IMG d33e1104.gif])",
+        "[IMG d33e1110.gif]"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "BP",
+      "name_verbatim": "boiling point",
+      "unit_verbatim": "(^0 C)",
+      "source_stated_verbatim": "not stated (DrugBank cited for drug information only)",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. Values for drugs shared with godlin2026_mdd (fluoxetine, sertraline, paroxetine, ...) match that study, which states ACD/Labs via ChemSpider."
+    },
+    {
+      "code": "MV",
+      "name_verbatim": "molar volume",
+      "unit_verbatim": "({cm}^3/)",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MR",
+      "name_verbatim": "molar refractivity",
+      "unit_verbatim": "({cm}^3/)",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MW",
+      "name_verbatim": "molecular weight",
+      "unit_verbatim": "({g/mol})",
+      "source_stated_verbatim": "not stated",
+      "source_label": "computed_pubchem",
+      "source_evidence": "compared with PubChem MolecularWeight (automated_checks)",
+      "pubchem_field": "MolecularWeight"
+    },
+    {
+      "code": "HAC",
+      "name_verbatim": "heavy atom count",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "not stated",
+      "source_label": "computed_pubchem",
+      "source_evidence": "compared with PubChem HeavyAtomCount",
+      "pubchem_field": "HeavyAtomCount"
+    },
+    {
+      "code": "CO",
+      "name_verbatim": "complexity",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "not stated",
+      "source_label": "computed_pubchem",
+      "source_evidence": "compared with PubChem Complexity",
+      "pubchem_field": "Complexity"
+    },
+    {
+      "code": "EV",
+      "name_verbatim": "enthalpy of vaporization",
+      "unit_verbatim": "({KJ/mol})",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MP",
+      "name_verbatim": "melting point",
+      "unit_verbatim": "(^0 C)",
+      "source_stated_verbatim": "not stated",
+      "source_label": "measured",
+      "source_evidence": "no source given. Spot check against PubChem experimental values (PUG-View 'Melting Point', 2026-10-03): fluoxetine 179 and sertraline 246 match listed experimental values; venlafaxine 215 fits a salt, not the base (74-76 °C). Measured, partly for salt forms; not verified per drug"
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "NM1(G)",
+      "name_verbatim": "First Zagreb Index (neighborhood version)",
+      "formula_verbatim": "NM_1(G)=\\sum _{v\\in V(G)}\\delta (v)^2",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    },
+    {
+      "symbol_verbatim": "NM2(G)",
+      "name_verbatim": "Second Zagreb Index (neighborhood version)",
+      "formula_verbatim": "NM_2(G)=\\sum _{uv\\in E(G)}\\delta (u)\\delta (v)",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    },
+    {
+      "symbol_verbatim": "NABC(G)",
+      "name_verbatim": "Neighborhood Atom Bond Connectivity Index",
+      "formula_verbatim": "NABC(G)=\\sum _{uv\\in E(G)} \\sqrt{\\frac{\\delta (u)+\\delta (v)-2}{\\delta (u)\\delta (v)}}",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    },
+    {
+      "symbol_verbatim": "NF*(G)",
+      "name_verbatim": "Neighborhood Forgotten Index",
+      "formula_verbatim": "NF^{*}(G)=\\sum _{v\\in V(G)}\\delta (v)^3",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    },
+    {
+      "symbol_verbatim": "ND1(G)",
+      "name_verbatim": "First NDe Index",
+      "formula_verbatim": "ND_1(G)= \\sum _{uv\\in E(G)}\\sqrt{\\delta (u)\\delta (v)}",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    },
+    {
+      "symbol_verbatim": "ND2(G)",
+      "name_verbatim": "Second NDe Index",
+      "formula_verbatim": "ND_2(G)= \\sum _{uv\\in E(G)} \\frac{1}{\\sqrt{\\delta (u)+\\delta (v)}}",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    },
+    {
+      "symbol_verbatim": "ND3(G)",
+      "name_verbatim": "Third NDe Index",
+      "formula_verbatim": "ND_3(G)= \\sum _{uv\\in E(G)} \\delta (u)\\delta (v)[\\delta (u)+\\delta (v)]",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    },
+    {
+      "symbol_verbatim": "ND4(G)",
+      "name_verbatim": "Fourth NDe Index",
+      "formula_verbatim": "ND_4(G)= \\sum _{uv\\in E(G)} \\frac{1}{\\sqrt{\\delta (u)\\delta (v)}}",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    },
+    {
+      "symbol_verbatim": "ND5(G)",
+      "name_verbatim": "Fifth NDe Index",
+      "formula_verbatim": "ND_5(G)= \\sum _{uv\\in E(G)} \\left[ \\frac{\\delta (u)}{\\delta (v)}+ \\frac{\\delta (v)}{\\delta (u)}\\right]",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1 (formula images in the JATS XML; TeX from the publisher table page https://www.nature.com/articles/s41598-026-65586-2/tables/1)"
+    }
+  ],
+  "index_values_table": "Table 4 (index symbols from the publisher HTML)",
+  "index_computation": "hydrogen-suppressed graphs; neighborhood degree = sum of the degrees of adjacent vertices; edge partitions in Table 2 are images",
+  "models": [
+    {
+      "id": "T8-BP",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "2.579(\\(ND_1(G)\\))+105.111",
+      "statistics": {
+        "N": "25",
+        "alpha": "105.111",
+        "beta": "2.579",
+        "p": "0.001",
+        "F": "78.501",
+        "R": "0.879",
+        "R2": "0.773",
+        "Sres": "45.537"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+    },
+    {
+      "id": "T8-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.539(\\(ND_1(G)\\)) +17.589",
+      "statistics": {
+        "N": "25",
+        "alpha": "17.589",
+        "beta": "0.539",
+        "p": "0.001",
+        "F": "149.980",
+        "R": "0.931",
+        "R2": "0.867",
+        "Sres": "6.887"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+    },
+    {
+      "id": "T8-MW",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "ND5(G)"
+      ],
+      "equation_verbatim": "5.623(\\(ND_5(G)\\))+9.439",
+      "statistics": {
+        "N": "25",
+        "alpha": "9.439",
+        "beta": "5.623",
+        "p": "0.001",
+        "F": "35.885",
+        "R": "0.781",
+        "R2": "0.609",
+        "Sres": "56.811"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+    },
+    {
+      "id": "T8-HAC",
+      "property": "HAC",
+      "form": "linear",
+      "predictors": [
+        "ND5(G)"
+      ],
+      "equation_verbatim": "0.382(\\(ND_5(G)\\))+2.623",
+      "statistics": {
+        "N": "25",
+        "alpha": "2.623",
+        "beta": "0.382",
+        "p": "0.001",
+        "F": "141.072",
+        "R": "0.927",
+        "R2": "0.860",
+        "Sres": "1.949"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+    },
+    {
+      "id": "T8-CO",
+      "property": "CO",
+      "form": "linear",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "4.287(\\(ND_1(G)\\))−197.708",
+      "statistics": {
+        "N": "25",
+        "alpha": "−197.708",
+        "beta": "4.287",
+        "p": "0.001",
+        "F": "57.697",
+        "R": "0.846",
+        "R2": "0.715",
+        "Sres": "88.307"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+    },
+    {
+      "id": "T8-EV",
+      "property": "EV",
+      "form": "linear",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.313(\\(ND_1(G)\\))+29.804",
+      "statistics": {
+        "N": "25",
+        "alpha": "29.804",
+        "beta": "0.313",
+        "p": "0.001",
+        "F": "61.113",
+        "R": "0.852",
+        "R2": "0.727",
+        "Sres": "6.263"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (index symbols from the publisher table page; images in the JATS XML)"
+    },
+    {
+      "id": "T9-BP",
+      "property": "BP",
+      "form": "quadratic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.018(\\(ND_1(G)\\))\\(^{2}\\)−1.864(\\(ND_1(G\\))+367.084",
+      "statistics": {
+        "N": "25",
+        "alpha": "367.084",
+        "beta": "−1.864",
+        "p": "0.001",
+        "F": "86.291",
+        "R": "0.942",
+        "R2": "0.887",
+        "Sres": "32.889",
+        "gamma": "0.018"
+      },
+      "fit": "in_sample",
+      "source": "Table 9 (index symbols from the publisher table page)"
+    },
+    {
+      "id": "T9-MR",
+      "property": "MR",
+      "form": "quadratic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.001(\\(ND_1(G)\\))\\(^{2}\\)+0.271(\\(ND_1(G)\\))+33.369",
+      "statistics": {
+        "N": "25",
+        "alpha": "33.369",
+        "beta": "0.271",
+        "p": "0.001",
+        "F": "78.872",
+        "R": "0.937",
+        "R2": "0.878",
+        "Sres": "6.756",
+        "gamma": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 9 (index symbols from the publisher table page)"
+    },
+    {
+      "id": "T9-CO",
+      "property": "CO",
+      "form": "quadratic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.022(\\(ND_1(G)\\))\\(^{2}\\)−1.273(\\(ND_1(G)\\))+130.115",
+      "statistics": {
+        "N": "25",
+        "alpha": "130.115",
+        "beta": "−1.273",
+        "p": "0.001",
+        "F": "37.769",
+        "R": "0.880",
+        "R2": "0.774",
+        "Sres": "80.323",
+        "gamma": "0.022"
+      },
+      "fit": "in_sample",
+      "source": "Table 9 (index symbols from the publisher table page)"
+    },
+    {
+      "id": "T9-EV",
+      "property": "EV",
+      "form": "quadratic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.002(\\(ND_1(G)\\))\\(^{2}\\)−0.287(\\(ND_1(G)\\))+65.175",
+      "statistics": {
+        "N": "25",
+        "alpha": "65.175",
+        "beta": "−0.287",
+        "p": "0.001",
+        "F": "66.793",
+        "R": "0.927",
+        "R2": "0.859",
+        "Sres": "4.605",
+        "gamma": "0.002"
+      },
+      "fit": "in_sample",
+      "source": "Table 9 (index symbols from the publisher table page)"
+    },
+    {
+      "id": "T10-MR",
+      "property": "MR",
+      "form": "logarithmic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "−178.770+55.169(\\(lnND_1(G)\\))",
+      "statistics": {
+        "N": "25",
+        "alpha": "−178.770",
+        "beta": "55.169",
+        "p": "0.001",
+        "F": "78.786",
+        "R": "0.880",
+        "R2": "0.774",
+        "Sres": "8.978"
+      },
+      "fit": "in_sample",
+      "source": "Table 10 (index symbols from the publisher table page)"
+    },
+    {
+      "id": "T10-HAC",
+      "property": "HAC",
+      "form": "logarithmic",
+      "predictors": [
+        "ND5(G)"
+      ],
+      "equation_verbatim": "−44.647+17.125(\\(lnND_5(G)\\))",
+      "statistics": {
+        "N": "25",
+        "alpha": "−44.647",
+        "beta": "17.125",
+        "p": "0.001",
+        "F": "103.496",
+        "R": "0.905",
+        "R2": "0.818",
+        "Sres": "2.219"
+      },
+      "fit": "in_sample",
+      "source": "Table 10 (index symbols from the publisher table page)"
+    },
+    {
+      "id": "T14-01-BP-linear",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "2.579(\\(ND_1(G)\\))+105.111",
+      "statistics": {
+        "R2": "0.773",
+        "Q2": "0.7734",
+        "R": "0.879",
+        "RMSE": "43.6775",
+        "MSE": "1907.721"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+    },
+    {
+      "id": "T14-02-MR-linear",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.539(\\(ND_5(G)\\)) +17.589",
+      "statistics": {
+        "R2": "0.867",
+        "Q2": "0.867",
+        "R": "0.931",
+        "RMSE": "6.6059",
+        "MSE": "43.6375"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "note": "Table 14 prints ND_5(G) for this equation; Table 8 gives the same coefficients with ND_1(G)"
+    },
+    {
+      "id": "T14-03-MW-linear",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "ND5(G)"
+      ],
+      "equation_verbatim": "5.623(\\(ND_5(G)\\))+9.439",
+      "statistics": {
+        "R2": "0.609",
+        "Q2": "0.7735",
+        "R": "0.781",
+        "RMSE": "34.7216",
+        "MSE": "1205.5899"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "note": "LOOCV Q2 (0.7735) exceeds the in-sample R2 (0.609), which is impossible for OLS"
+    },
+    {
+      "id": "T14-04-HAC-linear",
+      "property": "HAC",
+      "form": "linear",
+      "predictors": [
+        "ND5(G)"
+      ],
+      "equation_verbatim": "0.382(\\(ND_5(G)\\))+2.623",
+      "statistics": {
+        "R2": "0.860",
+        "Q2": "0.8598",
+        "R": "0.927",
+        "RMSE": "1.8692",
+        "MSE": "3.4941"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+    },
+    {
+      "id": "T14-05-CO-linear",
+      "property": "CO",
+      "form": "linear",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "4.287(\\(ND_1(G)\\))−197.708",
+      "statistics": {
+        "R2": "0.715",
+        "Q2": "0.715",
+        "R": "0.846",
+        "RMSE": "84.7012",
+        "MSE": "7174.2859"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+    },
+    {
+      "id": "T14-06-EV-linear",
+      "property": "EV",
+      "form": "linear",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.313(\\(ND_1(G)\\))+29.804",
+      "statistics": {
+        "R2": "0.727",
+        "Q2": "0.7266",
+        "R": "0.852",
+        "RMSE": "6.0071",
+        "MSE": "36.0848"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+    },
+    {
+      "id": "T14-07-BP-quadratic",
+      "property": "BP",
+      "form": "quadratic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.018(\\(ND_1(G)\\))\\(^{2}\\)−1.864(\\(ND_1(G)\\))+367.084",
+      "statistics": {
+        "R2": "0.887",
+        "Q2": "0.7109",
+        "R": "0.942",
+        "RMSE": "49.3352",
+        "MSE": "2433.9583"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+    },
+    {
+      "id": "T14-08-MR-quadratic",
+      "property": "MR",
+      "form": "quadratic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.001(\\(ND_1(G)\\))\\(^{2}\\)+0.271(\\(ND_1(G)\\))+33.369",
+      "statistics": {
+        "R2": "0.878",
+        "Q2": "0.8006",
+        "R": "0.937",
+        "RMSE": "8.0904",
+        "MSE": "65.4545"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+    },
+    {
+      "id": "T14-09-CO-quadratic",
+      "property": "CO",
+      "form": "quadratic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "0.022(\\(ND_1(G)\\))\\(^{2}\\)−1.273(\\(ND_1(G)\\))+130.115",
+      "statistics": {
+        "R2": "0.774",
+        "Q2": "0.6845",
+        "R": "0.880",
+        "RMSE": "89.1132",
+        "MSE": "7941.1677"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+    },
+    {
+      "id": "T14-10-MR-logarithmic",
+      "property": "MR",
+      "form": "logarithmic",
+      "predictors": [
+        "ND1(G)"
+      ],
+      "equation_verbatim": "55.169(\\(lnND_1(G)\\))−178.770",
+      "statistics": {
+        "R2": "0.774",
+        "Q2": "0.772",
+        "R": "0.880",
+        "RMSE": "8.6116",
+        "MSE": "74.1597"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+    },
+    {
+      "id": "T14-11-HAC-logarithmic",
+      "property": "HAC",
+      "form": "logarithmic",
+      "predictors": [
+        "ND5(G)"
+      ],
+      "equation_verbatim": "17.125(\\(lnND_1(G)\\))−44.647",
+      "statistics": {
+        "R2": "0.818",
+        "Q2": "0.8182",
+        "R": "0.906",
+        "RMSE": "2.1287",
+        "MSE": "4.5313"
+      },
+      "fit": "loocv",
+      "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)",
+      "note": "Table 14 prints lnND_1(G); Table 10 gives the same coefficients with lnND_5(G)"
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "leave-one-out cross-validation",
+      "detail": "Q2, RMSE and MSE for the 11 best equations (Table 14)",
+      "source": "Table 14"
+    },
+    {
+      "what": "model comparison",
+      "detail": "linear, quadratic and logarithmic single-index fits of 9 indices x 8 properties (R2 in Tables 5-7); best per property in Table 11; SPSS",
+      "source": "Tables 5-7, 11"
+    }
+  ],
+  "reported_tables": [
+    {
+      "xml_table_id": "Tab5",
+      "label": "Table 5",
+      "caption": "Outcomes of Linear Regression Model.",
+      "rows": [
+        [
+          "Property",
+          "Predictors",
+          "[IMG d33e2399.gif]",
+          "Best Predictor"
+        ],
+        [
+          "BP",
+          "[IMG d33e2410.gif]",
+          "0.771",
+          "[IMG d33e2417.gif]"
+        ],
+        [
+          "[IMG d33e2423.gif]",
+          "0.471"
+        ],
+        [
+          "NABC(G)",
+          "0.743"
+        ],
+        [
+          "[IMG d33e2442.gif]",
+          "0.734"
+        ],
+        [
+          "[IMG d33e2450.gif]",
+          "0.773"
+        ],
+        [
+          "[IMG d33e2458.gif]",
+          "0.397"
+        ],
+        [
+          "[IMG d33e2466.gif]",
+          "0.626"
+        ],
+        [
+          "[IMG d33e2474.gif]",
+          "0.198"
+        ],
+        [
+          "[IMG d33e2482.gif]",
+          "0.573"
+        ],
+        [
+          "MV",
+          "[IMG d33e2492.gif]",
+          "0.347",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e2502.gif]",
+          "0.085"
+        ],
+        [
+          "NABC(G)",
+          "0.407"
+        ],
+        [
+          "[IMG d33e2522.gif]",
+          "0.403"
+        ],
+        [
+          "[IMG d33e2530.gif]",
+          "0.349"
+        ],
+        [
+          "[IMG d33e2538.gif]",
+          "0.050"
+        ],
+        [
+          "[IMG d33e2546.gif]",
+          "0.383"
+        ],
+        [
+          "[IMG d33e2554.gif]",
+          "0.001"
+        ],
+        [
+          "[IMG d33e2562.gif]",
+          "0.147"
+        ],
+        [
+          "MR",
+          "[IMG d33e2572.gif]",
+          "0.807",
+          "[IMG d33e2579.gif]"
+        ],
+        [
+          "[IMG d33e2585.gif]",
+          "0.605"
+        ],
+        [
+          "NABC(G)",
+          "0.810"
+        ],
+        [
+          "[IMG d33e2604.gif]",
+          "0.809"
+        ],
+        [
+          "[IMG d33e2613.gif]",
+          "0.867"
+        ],
+        [
+          "[IMG d33e2621.gif]",
+          "0.527"
+        ],
+        [
+          "[IMG d33e2629.gif]",
+          "0.685"
+        ],
+        [
+          "[IMG d33e2637.gif]",
+          "0.303"
+        ],
+        [
+          "[IMG d33e2645.gif]",
+          "0.711"
+        ],
+        [
+          "MW",
+          "[IMG d33e2655.gif]",
+          "0.523",
+          "[IMG d33e2662.gif]"
+        ],
+        [
+          "[IMG d33e2668.gif]",
+          "0.580"
+        ],
+        [
+          "NABC(G)",
+          "0.392"
+        ],
+        [
+          "[IMG d33e2687.gif]",
+          "0.405"
+        ],
+        [
+          "[IMG d33e2695.gif]",
+          "0.519"
+        ],
+        [
+          "[IMG d33e2703.gif]",
+          "0.547"
+        ],
+        [
+          "[IMG d33e2712.gif]",
+          "0.284"
+        ],
+        [
+          "[IMG d33e2720.gif]",
+          "0.433"
+        ],
+        [
+          "[IMG d33e2728.gif]",
+          "0.609"
+        ],
+        [
+          "HAC",
+          "[IMG d33e2738.gif]",
+          "0.830",
+          "[IMG d33e2745.gif]"
+        ],
+        [
+          "[IMG d33e2751.gif]",
+          "0.803"
+        ],
+        [
+          "NABC(G)",
+          "0.685"
+        ],
+        [
+          "[IMG d33e2770.gif]",
+          "0.693"
+        ],
+        [
+          "[IMG d33e2778.gif]",
+          "0.827"
+        ],
+        [
+          "[IMG d33e2786.gif]",
+          "0.749"
+        ],
+        [
+          "[IMG d33e2794.gif]",
+          "0.539"
+        ],
+        [
+          "[IMG d33e2802.gif]",
+          "0.556"
+        ],
+        [
+          "[IMG d33e2811.gif]",
+          "0.860"
+        ],
+        [
+          "CO",
+          "[IMG d33e2821.gif]",
+          "0.714",
+          "[IMG d33e2828.gif]"
+        ],
+        [
+          "[IMG d33e2834.gif]",
+          "0.587"
+        ],
+        [
+          "NABC(G)",
+          "0.625"
+        ],
+        [
+          "[IMG d33e2853.gif]",
+          "0.621"
+        ],
+        [
+          "[IMG d33e2861.gif]",
+          "0.715"
+        ],
+        [
+          "[IMG d33e2869.gif]",
+          "0.530"
+        ],
+        [
+          "[IMG d33e2877.gif]",
+          "0.504"
+        ],
+        [
+          "[IMG d33e2885.gif]",
+          "0.346"
+        ],
+        [
+          "[IMG d33e2893.gif]",
+          "0.649"
+        ],
+        [
+          "EV",
+          "[IMG d33e2903.gif]",
+          "0.725",
+          "[IMG d33e2910.gif]"
+        ],
+        [
+          "[IMG d33e2917.gif]",
+          "0.437"
+        ],
+        [
+          "NABC(G)",
+          "0.706"
+        ],
+        [
+          "[IMG d33e2936.gif]",
+          "0.701"
+        ],
+        [
+          "[IMG d33e2944.gif]",
+          "0.727"
+        ],
+        [
+          "[IMG d33e2952.gif]",
+          "0.367"
+        ],
+        [
+          "[IMG d33e2960.gif]",
+          "0.605"
+        ],
+        [
+          "[IMG d33e2968.gif]",
+          "0.181"
+        ],
+        [
+          "[IMG d33e2976.gif]",
+          "0.536"
+        ],
+        [
+          "MP",
+          "[IMG d33e2986.gif]",
+          "0.040",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e2996.gif]",
+          "0.037"
+        ],
+        [
+          "NABC(G)",
+          "0.029"
+        ],
+        [
+          "[IMG d33e3016.gif]",
+          "0.025"
+        ],
+        [
+          "[IMG d33e3024.gif]",
+          "0.041"
+        ],
+        [
+          "[IMG d33e3032.gif]",
+          "0.034"
+        ],
+        [
+          "[IMG d33e3040.gif]",
+          "0.017"
+        ],
+        [
+          "[IMG d33e3048.gif]",
+          "0.020"
+        ],
+        [
+          "[IMG d33e3056.gif]",
+          "0.036"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "Tab6",
+      "label": "Table 6",
+      "caption": "Outcomes of Quadratic Regression Model.",
+      "rows": [
+        [
+          "Property",
+          "Predictors",
+          "[IMG d33e3079.gif]",
+          "Best Predictor"
+        ],
+        [
+          "BP",
+          "[IMG d33e3090.gif]",
+          "0.885",
+          "[IMG d33e3097.gif]"
+        ],
+        [
+          "[IMG d33e3103.gif]",
+          "0.476"
+        ],
+        [
+          "NABC(G)",
+          "0.869"
+        ],
+        [
+          "[IMG d33e3122.gif]",
+          "0.858"
+        ],
+        [
+          "[IMG d33e3130.gif]",
+          "0.887"
+        ],
+        [
+          "[IMG d33e3138.gif]",
+          "0.444"
+        ],
+        [
+          "[IMG d33e3146.gif]",
+          "0.700"
+        ],
+        [
+          "[IMG d33e3154.gif]",
+          "0.561"
+        ],
+        [
+          "[IMG d33e3162.gif]",
+          "0.586"
+        ],
+        [
+          "MV",
+          "[IMG d33e3172.gif]",
+          "0.353",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e3182.gif]",
+          "0.187"
+        ],
+        [
+          "NABC(G)",
+          "0.410"
+        ],
+        [
+          "[IMG d33e3202.gif]",
+          "0.406"
+        ],
+        [
+          "[IMG d33e3210.gif]",
+          "0.355"
+        ],
+        [
+          "[IMG d33e3218.gif]",
+          "0.257"
+        ],
+        [
+          "[IMG d33e3226.gif]",
+          "0.383"
+        ],
+        [
+          "[IMG d33e3234.gif]",
+          "0.586"
+        ],
+        [
+          "[IMG d33e3242.gif]",
+          "0.170"
+        ],
+        [
+          "MR",
+          "[IMG d33e3252.gif]",
+          "0.877",
+          "[IMG d33e3259.gif]"
+        ],
+        [
+          "[IMG d33e3265.gif]",
+          "0.645"
+        ],
+        [
+          "NABC(G)",
+          "0.816"
+        ],
+        [
+          "[IMG d33e3284.gif]",
+          "0.816"
+        ],
+        [
+          "[IMG d33e3293.gif]",
+          "0.878"
+        ],
+        [
+          "[IMG d33e3301.gif]",
+          "0.632"
+        ],
+        [
+          "[IMG d33e3309.gif]",
+          "0.685"
+        ],
+        [
+          "[IMG d33e3317.gif]",
+          "0.751"
+        ],
+        [
+          "[IMG d33e3325.gif]",
+          "0.713"
+        ],
+        [
+          "MW",
+          "[IMG d33e3335.gif]",
+          "0.542",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e3345.gif]",
+          "0.580"
+        ],
+        [
+          "NABC(G)",
+          "0.406"
+        ],
+        [
+          "[IMG d33e3364.gif]",
+          "0.421"
+        ],
+        [
+          "[IMG d33e3372.gif]",
+          "0.537"
+        ],
+        [
+          "[IMG d33e3380.gif]",
+          "0.551"
+        ],
+        [
+          "[IMG d33e3389.gif]",
+          "0.288"
+        ],
+        [
+          "[IMG d33e3397.gif]",
+          "0.543"
+        ],
+        [
+          "[IMG d33e3405.gif]",
+          "0.619"
+        ],
+        [
+          "HAC",
+          "[IMG d33e3415.gif]",
+          "0.836",
+          "[IMG d33e3422.gif]"
+        ],
+        [
+          "[IMG d33e3428.gif]",
+          "0.813"
+        ],
+        [
+          "NNABC(G)",
+          "0.6889"
+        ],
+        [
+          "[IMG d33e3447.gif]",
+          "0.697"
+        ],
+        [
+          "[IMG d33e3455.gif]",
+          "0.832"
+        ],
+        [
+          "[IMG d33e3463.gif]",
+          "0.786"
+        ],
+        [
+          "[IMG d33e3471.gif]",
+          "0.539"
+        ],
+        [
+          "[IMG d33e3479.gif]",
+          "0.784"
+        ],
+        [
+          "[IMG d33e3488.gif]",
+          "0.860"
+        ],
+        [
+          "CO",
+          "[IMG d33e3498.gif]",
+          "0.773",
+          "[IMG d33e3505.gif]"
+        ],
+        [
+          "[IMG d33e3511.gif]",
+          "0.588"
+        ],
+        [
+          "NABC(G)",
+          "0.694"
+        ],
+        [
+          "[IMG d33e3530.gif]",
+          "0.690"
+        ],
+        [
+          "[IMG d33e3538.gif]",
+          "0.774"
+        ],
+        [
+          "[IMG d33e3546.gif]",
+          "0.553"
+        ],
+        [
+          "[IMG d33e3554.gif]",
+          "0.548"
+        ],
+        [
+          "[IMG d33e3562.gif]",
+          "0.571"
+        ],
+        [
+          "[IMG d33e3570.gif]",
+          "0.662"
+        ],
+        [
+          "EV",
+          "[IMG d33e3580.gif]",
+          "0.858",
+          "[IMG d33e3587.gif]"
+        ],
+        [
+          "[IMG d33e3594.gif]",
+          "0.439"
+        ],
+        [
+          "NABC(G)",
+          "0.857"
+        ],
+        [
+          "[IMG d33e3613.gif]",
+          "0.851"
+        ],
+        [
+          "[IMG d33e3621.gif]",
+          "0.859"
+        ],
+        [
+          "[IMG d33e3629.gif]",
+          "0.404"
+        ],
+        [
+          "[IMG d33e3637.gif]",
+          "0.704"
+        ],
+        [
+          "[IMG d33e3645.gif]",
+          "0.517"
+        ],
+        [
+          "[IMG d33e3653.gif]",
+          "0.556"
+        ],
+        [
+          "MP",
+          "[IMG d33e3663.gif]",
+          "0.040",
+          "No best predictore"
+        ],
+        [
+          "[IMG d33e3673.gif]",
+          "0.037"
+        ],
+        [
+          "NABC(G)",
+          "0.029"
+        ],
+        [
+          "[IMG d33e3693.gif]",
+          "0.026"
+        ],
+        [
+          "[IMG d33e3701.gif]",
+          "0.041"
+        ],
+        [
+          "[IMG d33e3709.gif]",
+          "0.035"
+        ],
+        [
+          "[IMG d33e3717.gif]",
+          "0.019"
+        ],
+        [
+          "[IMG d33e3725.gif]",
+          "0.026"
+        ],
+        [
+          "[IMG d33e3733.gif]",
+          "0.037"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "Tab7",
+      "label": "Table 7",
+      "caption": "Outcomes of Logarithmic Regression Model.",
+      "rows": [
+        [
+          "Property",
+          "Predictors",
+          "[IMG d33e3756.gif]",
+          "Best Predictor"
+        ],
+        [
+          "BP",
+          "[IMG d33e3767.gif]",
+          "0.598",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e3777.gif]",
+          "0.467"
+        ],
+        [
+          "NABC(G)",
+          "0.557"
+        ],
+        [
+          "[IMG d33e3796.gif]",
+          "0.546"
+        ],
+        [
+          "[IMG d33e3804.gif]",
+          "0.601"
+        ],
+        [
+          "[IMG d33e3812.gif]",
+          "0.425"
+        ],
+        [
+          "[IMG d33e3820.gif]",
+          "0.477"
+        ],
+        [
+          "[IMG d33e3828.gif]",
+          "0.289"
+        ],
+        [
+          "[IMG d33e3836.gif]",
+          "0.515"
+        ],
+        [
+          "MV",
+          "[IMG d33e3846.gif]",
+          "0.313",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e3856.gif]",
+          "0.123"
+        ],
+        [
+          "NABC(G)",
+          "0.361"
+        ],
+        [
+          "[IMG d33e3876.gif]",
+          "0.354"
+        ],
+        [
+          "[IMG d33e3884.gif]",
+          "0.314"
+        ],
+        [
+          "[IMG d33e3892.gif]",
+          "0.093"
+        ],
+        [
+          "[IMG d33e3900.gif]",
+          "0.352"
+        ],
+        [
+          "[IMG d33e3908.gif]",
+          "0.027"
+        ],
+        [
+          "[IMG d33e3916.gif]",
+          "0.173"
+        ],
+        [
+          "MR",
+          "[IMG d33e3926.gif]",
+          "0.773",
+          "[IMG d33e3933.gif]"
+        ],
+        [
+          "[IMG d33e3939.gif]",
+          "0.643"
+        ],
+        [
+          "NABC(G)",
+          "0.721"
+        ],
+        [
+          "[IMG d33e3958.gif]",
+          "0.717"
+        ],
+        [
+          "[IMG d33e3967.gif]",
+          "0.774"
+        ],
+        [
+          "[IMG d33e3975.gif]",
+          "0.594"
+        ],
+        [
+          "[IMG d33e3983.gif]",
+          "0.640"
+        ],
+        [
+          "[IMG d33e3991.gif]",
+          "0.436"
+        ],
+        [
+          "[IMG d33e3999.gif]",
+          "0.702"
+        ],
+        [
+          "MW",
+          "[IMG d33e4009.gif]",
+          "0.449",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e4019.gif]",
+          "0.551"
+        ],
+        [
+          "NABC(G)",
+          "0.343"
+        ],
+        [
+          "[IMG d33e4038.gif]",
+          "0.350"
+        ],
+        [
+          "[IMG d33e4046.gif]",
+          "0.446"
+        ],
+        [
+          "[IMG d33e4054.gif]",
+          "0.539"
+        ],
+        [
+          "[IMG d33e4063.gif]",
+          "0.267"
+        ],
+        [
+          "[IMG d33e4071.gif]",
+          "0.491"
+        ],
+        [
+          "[IMG d33e4079.gif]",
+          "0.550"
+        ],
+        [
+          "HAC",
+          "[IMG d33e4089.gif]",
+          "0.747",
+          "[IMG d33e4096.gif]"
+        ],
+        [
+          "[IMG d33e4102.gif]",
+          "0.805"
+        ],
+        [
+          "NABC(G)",
+          "0.622"
+        ],
+        [
+          "[IMG d33e4121.gif]",
+          "0.626"
+        ],
+        [
+          "[IMG d33e4129.gif]",
+          "0.746"
+        ],
+        [
+          "[IMG d33e4137.gif]",
+          "0.779"
+        ],
+        [
+          "[IMG d33e4145.gif]",
+          "0.518"
+        ],
+        [
+          "[IMG d33e4153.gif]",
+          "0.670"
+        ],
+        [
+          "[IMG d33e4162.gif]",
+          "0.818"
+        ],
+        [
+          "CO",
+          "[IMG d33e4172.gif]",
+          "0.573",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e4182.gif]",
+          "0.565"
+        ],
+        [
+          "NABC(G)",
+          "0.489"
+        ],
+        [
+          "[IMG d33e4201.gif]",
+          "0.483"
+        ],
+        [
+          "[IMG d33e4209.gif]",
+          "0.575"
+        ],
+        [
+          "[IMG d33e4217.gif]",
+          "0.538"
+        ],
+        [
+          "[IMG d33e4225.gif]",
+          "0.403"
+        ],
+        [
+          "[IMG d33e4233.gif]",
+          "0.430"
+        ],
+        [
+          "[IMG d33e4241.gif]",
+          "0.580"
+        ],
+        [
+          "EV",
+          "[IMG d33e4251.gif]",
+          "0.551",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e4262.gif]",
+          "0.428"
+        ],
+        [
+          "NABC(G)",
+          "0.516"
+        ],
+        [
+          "[IMG d33e4281.gif]",
+          "0.508"
+        ],
+        [
+          "[IMG d33e4289.gif]",
+          "0.553"
+        ],
+        [
+          "[IMG d33e4297.gif]",
+          "0.388"
+        ],
+        [
+          "[IMG d33e4305.gif]",
+          "0.446"
+        ],
+        [
+          "[IMG d33e4313.gif]",
+          "0.263"
+        ],
+        [
+          "[IMG d33e4321.gif]",
+          "0.474"
+        ],
+        [
+          "MP",
+          "[IMG d33e4331.gif]",
+          "0.028",
+          "No best predictor"
+        ],
+        [
+          "[IMG d33e4341.gif]",
+          "0.032"
+        ],
+        [
+          "NABC(G)",
+          "0.018"
+        ],
+        [
+          "[IMG d33e4361.gif]",
+          "0.015"
+        ],
+        [
+          "[IMG d33e4369.gif]",
+          "0.029"
+        ],
+        [
+          "[IMG d33e4377.gif]",
+          "0.032"
+        ],
+        [
+          "[IMG d33e4385.gif]",
+          "0.008"
+        ],
+        [
+          "[IMG d33e4393.gif]",
+          "0.023"
+        ],
+        [
+          "[IMG d33e4401.gif]",
+          "0.028"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "Tab11",
+      "label": "Table 11",
+      "caption": "Optimal Regression Model for Each Physicochemical Property.",
+      "rows": [
+        [
+          "Property",
+          "Best Model",
+          "Best Predictor",
+          "[IMG d33e5279.gif]",
+          "Improvement over Linear Model"
+        ],
+        [
+          "Boiling Point (BP)",
+          "Quadratic",
+          "[IMG d33e5292.gif]",
+          "0.887",
+          "14.7% higher"
+        ],
+        [
+          "Molar Volume (MV)",
+          "Quadratic",
+          "[IMG d33e5306.gif]",
+          "0.586",
+          "2.3% higher"
+        ],
+        [
+          "Molar Refractivity (MR)",
+          "Quadratic",
+          "[IMG d33e5320.gif]",
+          "0.878",
+          "151.6% higher"
+        ],
+        [
+          "Molecular Weight (MW)",
+          "Logarithmic",
+          "[IMG d33e5334.gif]",
+          "0.774",
+          "426.5% higher"
+        ],
+        [
+          "Heavy Atom Count (HAC)",
+          "Linear/Quadratic",
+          "[IMG d33e5348.gif]",
+          "0.860",
+          "0% (tie)"
+        ],
+        [
+          "Complexity (CO)",
+          "Quadratic",
+          "[IMG d33e5362.gif]",
+          "0.774",
+          "8.3% higher"
+        ],
+        [
+          "Enthalpy of Vaporization (EV)",
+          "Quadratic",
+          "[IMG d33e5376.gif]",
+          "0.859",
+          "18.2% higher"
+        ],
+        [
+          "Melting Point (MP)",
+          "Linear",
+          "[IMG d33e5390.gif]",
+          "0.041",
+          "Comparable to quadratic"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "Tab14",
+      "label": "Table 14",
+      "caption": "Leave one out cross validation results.",
+      "rows": [
+        [
+          "Regression equations",
+          "[IMG d33e5743.gif]",
+          "[IMG d33e5748.gif]",
+          "R",
+          "RMSE",
+          "MSE"
+        ],
+        [
+          "2.579([IMG d33e5764.gif])+105.111",
+          "0.773",
+          "0.7734",
+          "0.879",
+          "43.6775",
+          "1907.721"
+        ],
+        [
+          "0.539([IMG d33e5782.gif]) +17.589",
+          "0.867",
+          "0.867",
+          "0.931",
+          "6.6059",
+          "43.6375"
+        ],
+        [
+          "5.623([IMG d33e5800.gif])+9.439",
+          "0.609",
+          "0.7735",
+          "0.781",
+          "34.7216",
+          "1205.5899"
+        ],
+        [
+          "0.382([IMG d33e5818.gif])+2.623",
+          "0.860",
+          "0.8598",
+          "0.927",
+          "1.8692",
+          "3.4941"
+        ],
+        [
+          "4.287([IMG d33e5836.gif])−197.708",
+          "0.715",
+          "0.715",
+          "0.846",
+          "84.7012",
+          "7174.2859"
+        ],
+        [
+          "0.313([IMG d33e5854.gif])+29.804",
+          "0.727",
+          "0.7266",
+          "0.852",
+          "6.0071",
+          "36.0848"
+        ],
+        [
+          "0.018([IMG d33e5872.gif])[IMG d33e5876.gif]−1.864([IMG d33e5880.gif])+367.084",
+          "0.887",
+          "0.7109",
+          "0.942",
+          "49.3352",
+          "2433.9583"
+        ],
+        [
+          "0.001([IMG d33e5898.gif])[IMG d33e5902.gif]+0.271([IMG d33e5906.gif])+33.369",
+          "0.878",
+          "0.8006",
+          "0.937",
+          "8.0904",
+          "65.4545"
+        ],
+        [
+          "0.022([IMG d33e5924.gif])[IMG d33e5928.gif]−1.273([IMG d33e5932.gif])+130.115",
+          "0.774",
+          "0.6845",
+          "0.880",
+          "89.1132",
+          "7941.1677"
+        ],
+        [
+          "55.169([IMG d33e5950.gif])−178.770",
+          "0.774",
+          "0.772",
+          "0.880",
+          "8.6116",
+          "74.1597"
+        ],
+        [
+          "17.125([IMG d33e5968.gif])−44.647",
+          "0.818",
+          "0.8182",
+          "0.906",
+          "2.1287",
+          "4.5313"
+        ]
+      ]
+    }
+  ],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "ok",
+      "detail": "25 drugs listed, N = 25 in the regression tables."
+    },
+    {
+      "check": "PubChem MW",
+      "result": "issue",
+      "detail": "MW matches PubChem for 23/25 drugs; fluvoxamine is the maleate salt and desvenlafaxine is printed 263.381 (PubChem 263.37)."
+    },
+    {
+      "check": "PubChem complexity",
+      "result": "issue",
+      "detail": "CO matches current PubChem for drugs 10-25 only; drugs 1-9 differ (e.g. fluoxetine 296 vs 308, escitalopram 401 vs 466), so the column mixes sources or PubChem versions."
+    },
+    {
+      "check": "MP source",
+      "result": "info",
+      "detail": "PubChem experimental melting points (PUG-View 'Melting Point', checked 2026-10-03): fluoxetine 179 matches '179 - 182 °C', sertraline 246 matches '245-246'; venlafaxine 215 does not match the base (74-76 °C) and fits a salt form. MP looks measured, partly for salts."
+    },
+    {
+      "check": "fluvoxamine MV",
+      "result": "issue",
+      "detail": "MV is printed 27.3, an order of magnitude below every other drug (likely a dropped digit); kept as printed."
+    },
+    {
+      "check": "stereo pair indices",
+      "result": "issue",
+      "detail": "Citalopram and escitalopram have the same hydrogen-suppressed graph but different index values in Table 4 (e.g. NM1 285 vs 280), so at least one row is miscomputed."
+    },
+    {
+      "check": "Table 14 vs Tables 8-10",
+      "result": "issue",
+      "detail": "Rows 2 and 11 of Table 14 print a different index (ND5 / ND1) from the matching equations in Tables 8 and 10. For MW the LOOCV Q2 (0.7735) exceeds the in-sample R2 (0.609)."
+    },
+    {
+      "check": "Table 11 vs Tables 5-10",
+      "result": "issue",
+      "detail": "Table 11 lists MW as best fitted by a logarithmic ND1 model (R2 0.774), but Table 10 has no MW model (0.774 is the MR logarithmic model); the 'improvement over linear' percentages do not follow from the R2 values (e.g. MR 0.867 -> 0.878 printed as 151.6% higher)."
+    },
+    {
+      "check": "abstract",
+      "result": "info",
+      "detail": "The abstract calls all eight properties 'measured'."
+    }
+  ],
+  "resolution_issues": [
+    "Fluvoxamine: MW 434.4 and HAC 30 are those of fluvoxamine maleate (PubChem base: 318.33, 22 heavy atoms). The name resolves to the base (CID 5324346); the MW/HAC/CO values of this row describe the salt.",
+    "Citalopram and escitalopram share the InChIKey connectivity block (racemate vs S-enantiomer); they must be kept in the same CV fold."
+  ],
+  "reproducibility": {
+    "verdict": "exact",
+    "reasons": [
+      "drug names, all 8 property columns and all 9 index columns are printed; the index definitions are standard neighborhood-degree formulas",
+      "linear, quadratic and logarithmic OLS with one index and LOOCV need no free choices",
+      "caveats: index symbols in the JATS XML are images (taken from the publisher HTML); several internal inconsistencies (Table 11 vs Tables 5-10, Table 14 symbols, Q2 > R2 for MW) mean some printed numbers cannot all be matched at once"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 25,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 25
+    },
+    "duplicate_structures": [],
+    "shared_connectivity_groups": [
+      [
+        "03",
+        "05"
+      ]
+    ],
+    "formula_checked": 0,
+    "formula_mismatch": [],
+    "cid_checked": 0,
+    "cid_mismatch": [],
+    "properties": {
+      "BP": {
+        "n_values": 25,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MV": {
+        "n_values": 25,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MR": {
+        "n_values": 25,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MW": {
+        "n_values": 25,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "MolecularWeight",
+        "pubchem_compared": 25,
+        "pubchem_match": 23,
+        "pubchem_mismatch": [
+          "08",
+          "09"
+        ],
+        "mismatch_equal_to_exact_mass": []
+      },
+      "HAC": {
+        "n_values": 25,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "HeavyAtomCount",
+        "pubchem_compared": 25,
+        "pubchem_match": 24,
+        "pubchem_mismatch": [
+          "09"
+        ]
+      },
+      "CO": {
+        "n_values": 25,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "Complexity",
+        "pubchem_compared": 25,
+        "pubchem_match": 16,
+        "pubchem_mismatch": [
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09"
+        ]
+      },
+      "EV": {
+        "n_values": 25,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MP": {
+        "n_values": 25,
+        "n_missing": 0,
+        "missing": []
+      }
+    },
+    "identical_property_rows": []
+  }
+}

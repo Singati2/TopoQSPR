@@ -1,0 +1,917 @@
+{
+  "schema_version": 1,
+  "study_key": "almulla2026_antifungal",
+  "shortlist_row": 4,
+  "status": "proposed",
+  "citation": {
+    "authors": [
+      "Almulla, Abdullah Ahmed",
+      "Irfan, Ibrahim",
+      "Mufti, Zeeshan Saleem",
+      "Almulla, Mazen Omar",
+      "Ganati, Gamachu Adugna"
+    ],
+    "title": "Predicting properties of antifungal drug molecules using neighborhood degree topological indices",
+    "journal": "Scientific Reports",
+    "year": 2026,
+    "volume": "16",
+    "article_number": "25695",
+    "doi": "10.1038/s41598-026-61020-9",
+    "pmcid": "PMC13483912",
+    "pmid": "42414491",
+    "first_publication_date": "2026-07-07"
+  },
+  "licence": {
+    "spdx": "CC-BY-4.0",
+    "statement_verbatim": "© The Author(s) 20262026https://creativecommons.org/licenses/by/4.0/Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by/4.0/.",
+    "data_redistribution": "stored",
+    "note": ""
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13483912/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "6780746d338b651f82d2e8e4c116bb1a7fae0ce23ac6eb30c65845359e08d8f8",
+    "other_sources": []
+  },
+  "n_reported": 20,
+  "n_reported_source": "Abstract: 'twenty antifungal drug molecules'; N = 20 in Tables 6-8",
+  "drug_list_source": "Table 3 (property table), column Drugs",
+  "property_table": {
+    "xml_table_id": "Tab3",
+    "skip_rows": 1,
+    "label_column": 1,
+    "columns": [
+      {
+        "property": "BP",
+        "column": 2
+      },
+      {
+        "property": "D",
+        "column": 3
+      },
+      {
+        "property": "EOV",
+        "column": 4
+      },
+      {
+        "property": "FP",
+        "column": 5
+      },
+      {
+        "property": "IOR",
+        "column": 6
+      },
+      {
+        "property": "MR",
+        "column": 7
+      },
+      {
+        "property": "P",
+        "column": 8
+      },
+      {
+        "property": "ST",
+        "column": 9
+      },
+      {
+        "property": "MV",
+        "column": 10
+      }
+    ],
+    "label": "Table 3",
+    "caption_verbatim": "Properties of drugs.",
+    "header_rows_verbatim": [
+      [
+        "Sr. no",
+        "Drugs",
+        "B.P (°C)",
+        "D (g/cm3)",
+        "E.O.V (kJ/MOL)",
+        "F.P (°C)",
+        "I.O.R",
+        "M.R (cm3)",
+        "P (cm3)",
+        "S.T (dyne/cm)",
+        "M.V (cm3)"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "BP",
+      "name_verbatim": "B.P",
+      "unit_verbatim": "°C",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "D",
+      "name_verbatim": "D",
+      "unit_verbatim": "g/cm3",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "EOV",
+      "name_verbatim": "E.O.V",
+      "unit_verbatim": "kJ/MOL",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "FP",
+      "name_verbatim": "F.P",
+      "unit_verbatim": "°C",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "IOR",
+      "name_verbatim": "I.O.R",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MR",
+      "name_verbatim": "M.R",
+      "unit_verbatim": "cm3",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "P",
+      "name_verbatim": "P",
+      "unit_verbatim": "cm3",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "ST",
+      "name_verbatim": "S.T",
+      "unit_verbatim": "dyne/cm",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MV",
+      "name_verbatim": "M.V",
+      "unit_verbatim": "cm3",
+      "source_stated_verbatim": "not stated",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "NM_1",
+      "name_verbatim": "First neighbourhood Zagreb26",
+      "formula_verbatim": "$NM_1 = \\sum _{v \\in V(G)} \\delta (v)^2$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "NM_2",
+      "name_verbatim": "Second Neighbourhood Zagreb26",
+      "formula_verbatim": "$NM_2 = \\sum _{uv \\in E(G)} \\delta (u)\\delta (v)$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "NABC",
+      "name_verbatim": "Neighbourhood atom bond connectivity27",
+      "formula_verbatim": "$NABC = \\sum _{uv \\in E(G)} \\sqrt{\\frac{\\delta (u) + \\delta (v) - 2}{\\delta (u)\\delta (v)}}$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "NF_1",
+      "name_verbatim": "Neighbourhood forgotten",
+      "formula_verbatim": "$NF_1 = \\sum _{v \\in V(G)} \\delta (v)^3$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ND_1",
+      "name_verbatim": "First neighbourhood degree product27",
+      "formula_verbatim": "$ND_1=\\sum _{uv \\in E(G)} \\sqrt{(\\delta (u)\\delta (v)}$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ND_2",
+      "name_verbatim": "Second neighbourhood degree product27",
+      "formula_verbatim": "$ND_2 = \\sum _{uv \\in E(G)} \\frac{1}{\\sqrt{\\delta (u)+\\delta (v)}}$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ND_3",
+      "name_verbatim": "Third neighbourhood degree product27",
+      "formula_verbatim": "$ND_3= \\sum _{uv \\in E(G)} \\delta (u)\\delta (v)[\\delta (u) + \\delta (v)]$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ND_4",
+      "name_verbatim": "Fourth neighbourhood degree product27",
+      "formula_verbatim": "$ND_4 = \\sum _{uv \\in E(G)} \\frac{1}{\\sqrt{\\delta (u)\\delta (v)}}$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ND_5",
+      "name_verbatim": "Fifth neighbourhood degree product",
+      "formula_verbatim": "$ND_5 = \\sum _{uv \\in E(G)} [\\frac{\\delta (u)}{\\delta (v)}+\\frac{\\delta (v)}{\\delta (u)}]$",
+      "family": "neighborhood_degree_sum",
+      "source": "Table 1"
+    }
+  ],
+  "index_values_table": "Table 4",
+  "index_computation": "hydrogen-suppressed graphs, multiple bonds drawn as single edges; neighborhood degree = sum of adjacent degrees; edge partitions in Table 2",
+  "models": [
+    {
+      "id": "Tab6-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "M.R = 19.577($ND_4$) − 3.259",
+      "statistics": {
+        "N": "20",
+        "a": "19.577",
+        "b": "− 3.259",
+        "p": "0.001",
+        "F": "176.335",
+        "R": "0.995",
+        "R2": "0.914",
+        "Sres": "1177.692"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "Tab6-P",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "P = 7.757($ND_4$) − 1.275",
+      "statistics": {
+        "N": "20",
+        "a": "7.757",
+        "b": "− 1.275",
+        "p": "0.001",
+        "F": "175.277",
+        "R": "0.955",
+        "R2": "0.913",
+        "Sres": "186.034"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "Tab6-MV",
+      "property": "MV",
+      "form": "linear",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "M.V = 60.529($ND_4$) − 17.348",
+      "statistics": {
+        "N": "20",
+        "a": "60.529",
+        "b": "− 17.348",
+        "p": "0.001",
+        "F": "87.079",
+        "R": "0.915",
+        "R2": "0.840",
+        "Sres": "22846.070"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "Tab7-MR",
+      "property": "MR",
+      "form": "quadratic",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "M.R = $-0.908(ND_{4})^{2} + 27.361(ND_{4}) -18.418$",
+      "statistics": {
+        "N": "20",
+        "c": "− 0.908",
+        "d": "27.361",
+        "e": "− 18.418",
+        "p": "0.001",
+        "F": "91.562",
+        "R": "0.959",
+        "R2": "0.921",
+        "Sres": "1076.192"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "Tab7-P",
+      "property": "P",
+      "form": "quadratic",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "P = $-0.364(ND_{4})^{2} + 10.877( ND_{4}) - 7.350$",
+      "statistics": {
+        "N": "20",
+        "c": "− 0.364",
+        "d": "10.877",
+        "e": "10.877",
+        "p": "0.001",
+        "F": "91.171",
+        "R": "0.959",
+        "R2": "0.920",
+        "Sres": "169.736"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "Tab7-MV",
+      "property": "MV",
+      "form": "quadratic",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "M.V = $4.951(ND_{4})^{2} + 18.153(ND_{4}) + 65.299$",
+      "statistics": {
+        "N": "20",
+        "c": "4.951",
+        "d": "18.153",
+        "e": "65.299",
+        "p": "0.001",
+        "F": "48.430",
+        "R": "0.926",
+        "R2": "0.861",
+        "Sres": "19829.016"
+      },
+      "fit": "in_sample",
+      "source": "Table 7"
+    },
+    {
+      "id": "Tab8-MR",
+      "property": "MR",
+      "form": "cubic",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "M.R = $-0.145(ND_4)^3 +1.099(ND_4)^2 +18.968(ND_4) - 8.107$",
+      "statistics": {
+        "N": "20",
+        "f": "− 0.145",
+        "g": "1.099",
+        "h": "18.968",
+        "i": "− 8.107",
+        "p": "0.001",
+        "F": "57.498",
+        "R": "0.959",
+        "R2": "0.922",
+        "Sres": "1071.512"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "Tab8-P",
+      "property": "P",
+      "form": "cubic",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "P = $-0.059(ND_4)^3 +0.448(ND_4)^2 +7.481(ND_4) - 3.178$",
+      "statistics": {
+        "N": "20",
+        "f": "− 0.059",
+        "g": "0.448",
+        "h": "7.481",
+        "i": "− 3.178",
+        "p": "0.001",
+        "F": "57.263",
+        "R": "0.959",
+        "R2": "0.922",
+        "Sres": "168.970"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    },
+    {
+      "id": "Tab8-MV",
+      "property": "MV",
+      "form": "cubic",
+      "predictors": [
+        "ND_4"
+      ],
+      "equation_verbatim": "M.V = $3.443(ND_4)^3 - 42.598(ND_4)^2 +216.946(ND_4) -178.924$",
+      "statistics": {
+        "N": "20",
+        "f": "3.443",
+        "g": "42.598",
+        "h": "216.946",
+        "i": "− 178.924",
+        "p": "0.001",
+        "F": "35.652",
+        "R": "0.936",
+        "R2": "0.880",
+        "Sres": "17203.506"
+      },
+      "fit": "in_sample",
+      "source": "Table 8"
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "none",
+      "detail": "only in-sample linear, quadratic and cubic fits (Tables 5-8); only MR, P and MV were modelled although nine properties are tabulated; overfitting risk acknowledged",
+      "source": "Tables 5-8, Discussion"
+    }
+  ],
+  "reported_tables": [
+    {
+      "xml_table_id": "Tab5",
+      "label": "Table 5",
+      "caption": "Combined outcomes of linear, quadratic and cubic regression models.",
+      "rows": [
+        [
+          "Property",
+          "Predictors",
+          "Linear $R^2$",
+          "Quadratic $R^2$",
+          "Cubic $R^2$",
+          "Best Predictor"
+        ],
+        [
+          "M.R",
+          "NM1",
+          "0.555",
+          "0.614",
+          "0.618",
+          "ND4"
+        ],
+        [
+          "NM2",
+          "0.352",
+          "0.433",
+          "0.438"
+        ],
+        [
+          "NABC",
+          "0.880",
+          "0.882",
+          "0.892"
+        ],
+        [
+          "NF1",
+          "0.323",
+          "0.406",
+          "0.413"
+        ],
+        [
+          "ND1",
+          "0.567",
+          "0.620",
+          "0.624"
+        ],
+        [
+          "ND2",
+          "0.905",
+          "0.907",
+          "0.911"
+        ],
+        [
+          "ND3",
+          "0.214",
+          "0.271",
+          "0.273"
+        ],
+        [
+          "ND4",
+          "0.914",
+          "0.921",
+          "0.922"
+        ],
+        [
+          "ND5",
+          "0.759",
+          "0.768",
+          "0.783"
+        ],
+        [
+          "P",
+          "NM1",
+          "0.550",
+          "0.61",
+          "0.618",
+          "ND4"
+        ],
+        [
+          "NM2",
+          "0.350",
+          "0.43",
+          "0.439"
+        ],
+        [
+          "NABC",
+          "0.870",
+          "0.88",
+          "0.892"
+        ],
+        [
+          "NF1",
+          "0.323",
+          "0.407",
+          "0.414"
+        ],
+        [
+          "ND1",
+          "0.560",
+          "0.62",
+          "0.625"
+        ],
+        [
+          "ND2",
+          "0.902",
+          "0.907",
+          "0.911"
+        ],
+        [
+          "ND3",
+          "0.214",
+          "0.272",
+          "0.273"
+        ],
+        [
+          "ND4",
+          "0.913",
+          "0.920",
+          "0.922"
+        ],
+        [
+          "ND5",
+          "0.759",
+          "0.768",
+          "0.784"
+        ],
+        [
+          "M.V",
+          "NM1",
+          "0.277",
+          "0.382",
+          "0.382",
+          "ND4"
+        ],
+        [
+          "NM2",
+          "0.121",
+          "0.207",
+          "0.239"
+        ],
+        [
+          "NABC",
+          "0.679",
+          "0.697",
+          "0.777"
+        ],
+        [
+          "NF1",
+          "0.105",
+          "0.181",
+          "0.219"
+        ],
+        [
+          "ND1",
+          "0.287",
+          "0.386",
+          "0.387"
+        ],
+        [
+          "ND2",
+          "0.734",
+          "0.768",
+          "0.844"
+        ],
+        [
+          "ND3",
+          "0.048",
+          "0.073",
+          "0.088"
+        ],
+        [
+          "ND4",
+          "0.840",
+          "0.861",
+          "0.880"
+        ],
+        [
+          "ND5",
+          "0.506",
+          "0.524",
+          "0.554"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "Tab6",
+      "label": "Table 6",
+      "caption": "Statistical calculation of best predictors of linear regression models.",
+      "rows": [
+        [
+          "Regression Equation",
+          "N",
+          "a",
+          "b",
+          "p",
+          "F",
+          "R",
+          "$R^{2}$",
+          "$S_{res}$"
+        ],
+        [
+          "M.R = 19.577($ND_4$) − 3.259",
+          "20",
+          "19.577",
+          "− 3.259",
+          "0.001",
+          "176.335",
+          "0.995",
+          "0.914",
+          "1177.692"
+        ],
+        [
+          "P = 7.757($ND_4$) − 1.275",
+          "20",
+          "7.757",
+          "− 1.275",
+          "0.001",
+          "175.277",
+          "0.955",
+          "0.913",
+          "186.034"
+        ],
+        [
+          "M.V = 60.529($ND_4$) − 17.348",
+          "20",
+          "60.529",
+          "− 17.348",
+          "0.001",
+          "87.079",
+          "0.915",
+          "0.840",
+          "22846.070"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "Tab7",
+      "label": "Table 7",
+      "caption": "Statistical calculation of best predictors of quadratic regression models.",
+      "rows": [
+        [
+          "Regression Equation",
+          "N",
+          "c",
+          "d",
+          "e",
+          "p",
+          "F",
+          "R",
+          "$R^{2}$",
+          "Sres"
+        ],
+        [
+          "M.R = $-0.908(ND_{4})^{2} + 27.361(ND_{4}) -18.418$",
+          "20",
+          "− 0.908",
+          "27.361",
+          "− 18.418",
+          "0.001",
+          "91.562",
+          "0.959",
+          "0.921",
+          "1076.192"
+        ],
+        [
+          "P = $-0.364(ND_{4})^{2} + 10.877( ND_{4}) - 7.350$",
+          "20",
+          "− 0.364",
+          "10.877",
+          "10.877",
+          "0.001",
+          "91.171",
+          "0.959",
+          "0.920",
+          "169.736"
+        ],
+        [
+          "M.V = $4.951(ND_{4})^{2} + 18.153(ND_{4}) + 65.299$",
+          "20",
+          "4.951",
+          "18.153",
+          "65.299",
+          "0.001",
+          "48.430",
+          "0.926",
+          "0.861",
+          "19829.016"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "Tab8",
+      "label": "Table 8",
+      "caption": "Statistical calculation of best predictors of cubic regression models.",
+      "rows": [
+        [
+          "Regression Equation",
+          "N",
+          "f",
+          "g",
+          "h",
+          "i",
+          "p",
+          "F",
+          "R",
+          "$R^{2}$",
+          "Sres"
+        ],
+        [
+          "M.R = $-0.145(ND_4)^3 +1.099(ND_4)^2 +18.968(ND_4) - 8.107$",
+          "20",
+          "− 0.145",
+          "1.099",
+          "18.968",
+          "− 8.107",
+          "0.001",
+          "57.498",
+          "0.959",
+          "0.922",
+          "1071.512"
+        ],
+        [
+          "P = $-0.059(ND_4)^3 +0.448(ND_4)^2 +7.481(ND_4) - 3.178$",
+          "20",
+          "− 0.059",
+          "0.448",
+          "7.481",
+          "− 3.178",
+          "0.001",
+          "57.263",
+          "0.959",
+          "0.922",
+          "168.970"
+        ],
+        [
+          "M.V = $3.443(ND_4)^3 - 42.598(ND_4)^2 +216.946(ND_4) -178.924$",
+          "20",
+          "3.443",
+          "42.598",
+          "216.946",
+          "− 178.924",
+          "0.001",
+          "35.652",
+          "0.936",
+          "0.880",
+          "17203.506"
+        ]
+      ]
+    }
+  ],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "ok",
+      "detail": "20 drugs listed, N = 20 in Tables 6-8."
+    },
+    {
+      "check": "Table 6 R vs R2",
+      "result": "issue",
+      "detail": "MR: R = 0.995 but R2 = 0.914 (sqrt 0.914 = 0.956)."
+    },
+    {
+      "check": "Table 7",
+      "result": "issue",
+      "detail": "P row prints e = 10.877 (the d value); the equation has -7.350."
+    },
+    {
+      "check": "Table 8",
+      "result": "issue",
+      "detail": "MV row prints g = 42.598; the equation has -42.598."
+    },
+    {
+      "check": "abstract vs tables",
+      "result": "issue",
+      "detail": "The abstract reports cubic R2 = 0.98 for MR and P; Table 8 gives 0.922."
+    },
+    {
+      "check": "scope of modelling",
+      "result": "info",
+      "detail": "Nine properties are tabulated but only MR, P and MV are modelled (Tables 5-8)."
+    },
+    {
+      "check": "Sres",
+      "result": "info",
+      "detail": "The Sres column (e.g. 1177.692 for MR) has the size of a residual sum of squares, not a standard error."
+    },
+    {
+      "check": "Table 1",
+      "result": "info",
+      "detail": "The ND1 formula has an unbalanced parenthesis; the caption ('Comparative edge distribution of different drugs') does not describe the table."
+    },
+    {
+      "check": "density resolution",
+      "result": "info",
+      "detail": "Density is printed to one decimal only."
+    }
+  ],
+  "resolution_issues": [
+    "Levalbuterol resolves to CID 123600, titled '(-)-Salbutamol' in PubChem (the R-enantiomer of salbutamol).",
+    "Only 10 of the 20 drugs are antifungals (octacosanol, L-threonic acid, menthyl salicylate, amiloxate, emylcamate, fluindione, levalbuterol, arbutin, marbofloxacin and florfenicol are not)."
+  ],
+  "reproducibility": {
+    "verdict": "exact",
+    "reasons": [
+      "names, all nine property columns, edge partitions and index values are printed; formulas in Table 1 are standard",
+      "polynomial OLS fits of one index need no free choices",
+      "caveats: Table 6 R and R2 disagree (R = 0.995 with R2 = 0.914); Table 7 P row repeats d in the e column; the abstract quotes cubic R2 = 0.98 while Table 8 gives 0.922; Sres looks like a residual sum of squares"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 20,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 20
+    },
+    "duplicate_structures": [],
+    "shared_connectivity_groups": [],
+    "formula_checked": 0,
+    "formula_mismatch": [],
+    "cid_checked": 0,
+    "cid_mismatch": [],
+    "properties": {
+      "BP": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      },
+      "D": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      },
+      "EOV": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      },
+      "FP": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      },
+      "IOR": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MR": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      },
+      "P": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      },
+      "ST": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MV": {
+        "n_values": 20,
+        "n_missing": 0,
+        "missing": []
+      }
+    },
+    "identical_property_rows": []
+  }
+}

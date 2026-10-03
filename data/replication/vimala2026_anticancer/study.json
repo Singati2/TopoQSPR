@@ -1,0 +1,1525 @@
+{
+  "schema_version": 1,
+  "study_key": "vimala2026_anticancer",
+  "shortlist_row": 3,
+  "status": "proposed",
+  "citation": {
+    "authors": [
+      "Vimala, R",
+      "Ravi Sankar, J"
+    ],
+    "title": "Eccentricity-based topological indices of QSPR modelling using anti-cancer drugs",
+    "journal": "Frontiers in Chemistry",
+    "year": 2026,
+    "volume": "14",
+    "article_number": "1860531",
+    "doi": "10.3389/fchem.2026.1860531",
+    "pmcid": "PMC13388843",
+    "pmid": "42487927",
+    "first_publication_date": "2026-07-08"
+  },
+  "licence": {
+    "spdx": "CC-BY-4.0",
+    "statement_verbatim": "Copyright © 2026 Vimala and Ravi Sankar.This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY). The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms.",
+    "data_redistribution": "stored",
+    "note": ""
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13388843/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "33ec5c66d1a9bcd24e77f08b9c90e03c4957cd5aa37a21c2aeb896600931e214",
+    "other_sources": []
+  },
+  "n_reported": 23,
+  "n_reported_source": "Abstract: 'predicts the properties of 23 anti-cancer drugs'",
+  "drug_list_source": "Table 2 (property table); Table 1 (names, molecular formulas, uses)",
+  "property_table": {
+    "xml_table_id": "T2",
+    "skip_rows": 1,
+    "label_column": 0,
+    "columns": [
+      {
+        "property": "BP",
+        "column": 1
+      },
+      {
+        "property": "MP",
+        "column": 2
+      },
+      {
+        "property": "E",
+        "column": 3
+      },
+      {
+        "property": "FP",
+        "column": 4
+      },
+      {
+        "property": "MR",
+        "column": 5
+      },
+      {
+        "property": "P",
+        "column": 6
+      },
+      {
+        "property": "ST",
+        "column": 7
+      },
+      {
+        "property": "MV",
+        "column": 8
+      }
+    ],
+    "label": "TABLE 2",
+    "caption_verbatim": "Anti-cancer drugs and their physicochemical properties.",
+    "header_rows_verbatim": [
+      [
+        "Drug",
+        "BP",
+        "MP",
+        "E",
+        "FP",
+        "MR",
+        "P",
+        "ST",
+        "MV"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "BP",
+      "name_verbatim": "boiling point",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'taken from Kour and Sankar (2024)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. Units not stated."
+    },
+    {
+      "code": "MP",
+      "name_verbatim": "melting point",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'taken from Kour and Sankar (2024)'",
+      "source_label": "measured",
+      "source_evidence": "ChemSpider's ACD set has no MP. Spot check against PubChem experimental values (PUG-View 'Melting Point', 2026-10-03): altretamine 168, busulfan 118 and carmustine 30 match or are within the listed experimental ranges; not verified per drug"
+    },
+    {
+      "code": "E",
+      "name_verbatim": "enthalpy",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'taken from Kour and Sankar (2024)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "FP",
+      "name_verbatim": "flash point",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'taken from Kour and Sankar (2024)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MR",
+      "name_verbatim": "molar refractivity",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'taken from Kour and Sankar (2024)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "P",
+      "name_verbatim": "polarizability",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'taken from Kour and Sankar (2024)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "ST",
+      "name_verbatim": "surface tension",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'taken from Kour and Sankar (2024)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "MV",
+      "name_verbatim": "molar volume",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'taken from Kour and Sankar (2024)'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "ECI",
+      "name_verbatim": "Eccentric connectivity index",
+      "formula_verbatim": "$ECI=∑_{v∈V(G)}d(v)e(v)$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "AECI",
+      "name_verbatim": "Augmented eccentric connectivity index",
+      "formula_verbatim": "$AECI=∑_{u∈V(G)}(M(u))/(e(u))$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "TEI",
+      "name_verbatim": "Total eccentricity index",
+      "formula_verbatim": "$TEI=∑_{v∈V(G)}e(v)$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "IEI",
+      "name_verbatim": "Inverse eccentricity index",
+      "formula_verbatim": "$IEI=∑_{v∈V(G)}(1)/(e(v))$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "AEI",
+      "name_verbatim": "Average eccentricity index",
+      "formula_verbatim": "$AEI=(1)/(n)∑_{v∈V(G)}e(v)$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "EDS",
+      "name_verbatim": "Eccentric distance sum index",
+      "formula_verbatim": "$EDS=∑_{v∈V(G)}e(v)D(v)$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "CEI",
+      "name_verbatim": "Connective eccentricity index",
+      "formula_verbatim": "$CEI=∑_{v∈V(G)}(d(v))/(e(v))$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "EHI",
+      "name_verbatim": "Eccentric-based harmonic index",
+      "formula_verbatim": "$EHI=∑_{uv∈E(G)}(2)/(e(u)+e(v))$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "EM_{1}",
+      "name_verbatim": "First Zagreb eccentricity index",
+      "formula_verbatim": "$EM_{1}=∑_{v∈V(G)}(e(v))^{2}$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "EM_{2}",
+      "name_verbatim": "Second Zagreb eccentricity index",
+      "formula_verbatim": "$EM_{2}=∑_{uv∈E(G)}e(u)e(v)$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "EGA",
+      "name_verbatim": "Geometric Arithmetic eccentricity index",
+      "formula_verbatim": "$EGA=∑_{uv∈E(G)}(2sqrt(e(u)e(v)))/(e(u)+e(v))$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "EABC",
+      "name_verbatim": "ABC eccentricity index",
+      "formula_verbatim": "$EABC=∑_{uv∈E(G)}sqrt((e(u)+e(v)−2)/(e(u)e(v)))$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    },
+    {
+      "symbol_verbatim": "MECI",
+      "name_verbatim": "Modified eccentric connectivity index",
+      "formula_verbatim": "$MECI=∑_{v∈V(G)}δ_{v}e(v)$",
+      "family": "eccentricity",
+      "source": "Table 3"
+    }
+  ],
+  "index_values_table": "Table 4",
+  "index_computation": "hydrogen-depleted graphs; Python (numpy, pandas, scikit-learn 1.3.0, RDKit)",
+  "models": [
+    {
+      "id": "T5-BP",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=209.8966+11.7257x$",
+      "statistics": {
+        "R2": "0.9207",
+        "F": "243.8234",
+        "p": "p<0.01",
+        "RMSE": "73.8602"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-MP",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "EABC"
+      ],
+      "equation_verbatim": "$Y=88.0151+5.7816x$",
+      "statistics": {
+        "R2": "0.2510",
+        "F": "7.00039",
+        "p": "p<0.01",
+        "RMSE": "63.0169"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-E",
+      "property": "E",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=40.6971+1.6702x$",
+      "statistics": {
+        "R2": "0.9269",
+        "F": "266.6427",
+        "p": "p<0.01",
+        "RMSE": "10.0606"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-FP",
+      "property": "FP",
+      "form": "linear",
+      "predictors": [
+        "MECI"
+      ],
+      "equation_verbatim": "$Y=152.5895+0.0643x$",
+      "statistics": {
+        "R2": "0.8406",
+        "F": "110.7616",
+        "p": "p<0.01",
+        "RMSE": "63.4684"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=8.2127+3.1486x$",
+      "statistics": {
+        "R2": "0.9841",
+        "F": "1298.1738",
+        "p": "p<0.01",
+        "RMSE": "8.5953"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-P",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=3.2667+1.2478x$",
+      "statistics": {
+        "R2": "0.9841",
+        "F": "1300.6143",
+        "p": "p<0.01",
+        "RMSE": "3.4031"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-ST",
+      "property": "ST",
+      "form": "linear",
+      "predictors": [
+        "AECI"
+      ],
+      "equation_verbatim": "$Y=42.5548+0.6526x$",
+      "statistics": {
+        "R2": "0.1404",
+        "F": "3.4299",
+        "p": "0.0781",
+        "RMSE": "17.8033"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-MV",
+      "property": "MV",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=40.4899+08.5142x$",
+      "statistics": {
+        "R2": "0.9561",
+        "F": "457.7715",
+        "p": "p<0.01",
+        "RMSE": "39.1408"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T6-BP",
+      "property": "BP",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=209.9276+11.7246x$",
+      "statistics": {
+        "R2": "0.9207",
+        "F": "243.8234",
+        "p": "p<0.01",
+        "RMSE": "73.8602"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "alpha = 1.0 (text)"
+    },
+    {
+      "id": "T6-MP",
+      "property": "MP",
+      "form": "ridge",
+      "predictors": [
+        "EABC"
+      ],
+      "equation_verbatim": "$Y=88.09161+5.7753x$",
+      "statistics": {
+        "R2": "0.2510",
+        "F": "7.00039",
+        "p": "p<0.01",
+        "RMSE": "63.0169"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "alpha = 1.0 (text)"
+    },
+    {
+      "id": "T6-E",
+      "property": "E",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=40.7015+1.6701x$",
+      "statistics": {
+        "R2": "0.9269",
+        "F": "266.6427",
+        "p": "p<0.01",
+        "RMSE": "10.0606"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "alpha = 1.0 (text)"
+    },
+    {
+      "id": "T6-FP",
+      "property": "FP",
+      "form": "ridge",
+      "predictors": [
+        "MECI"
+      ],
+      "equation_verbatim": "$Y=15.5895+0.0643x$",
+      "statistics": {
+        "R2": "0.8406",
+        "F": "110.7616",
+        "p": "p<0.01",
+        "RMSE": "63.4684"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "alpha = 1.0 (text)"
+    },
+    {
+      "id": "T6-MR",
+      "property": "MR",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=8.2209+3.1486x$",
+      "statistics": {
+        "R2": "0.9841",
+        "F": "1298.1738",
+        "p": "p<0.01",
+        "RMSE": "8.5953"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "alpha = 1.0 (text)"
+    },
+    {
+      "id": "T6-P",
+      "property": "P",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=3.2700+1.2477x$",
+      "statistics": {
+        "R2": "0.9841",
+        "F": "1300.6143",
+        "p": "p<0.01",
+        "RMSE": "3.4031"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "alpha = 1.0 (text)"
+    },
+    {
+      "id": "T6-ST",
+      "property": "ST",
+      "form": "ridge",
+      "predictors": [
+        "AECI"
+      ],
+      "equation_verbatim": "$Y=42.5604+0.6523x$",
+      "statistics": {
+        "R2": "0.0140",
+        "F": "3.4299",
+        "p": "0.0781",
+        "RMSE": "17.8033"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "alpha = 1.0 (text)"
+    },
+    {
+      "id": "T6-MV",
+      "property": "MV",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=40.5124+08.5134x$",
+      "statistics": {
+        "R2": "0.9561",
+        "F": "457.7715",
+        "p": "p<0.01",
+        "RMSE": "39.1408"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "alpha = 1.0 (text)"
+    },
+    {
+      "id": "T7-BP",
+      "property": "BP",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=209.8966+11.7257x$",
+      "statistics": {
+        "R2": "0.9207",
+        "F": "243.2460",
+        "p": "p<0.01",
+        "RMSE": "73.8602"
+      },
+      "fit": "in_sample",
+      "source": "Table 7",
+      "note": "alpha = 1.0, l1_ratio = 0.5 (text)"
+    },
+    {
+      "id": "T7-MP",
+      "property": "MP",
+      "form": "elastic_net",
+      "predictors": [
+        "EABC"
+      ],
+      "equation_verbatim": "$Y=88.0151+5.7816x$",
+      "statistics": {
+        "R2": "0.2510",
+        "F": "6.8002",
+        "p": "p<0.01",
+        "RMSE": "63.0169"
+      },
+      "fit": "in_sample",
+      "source": "Table 7",
+      "note": "alpha = 1.0, l1_ratio = 0.5 (text)"
+    },
+    {
+      "id": "T7-E",
+      "property": "E",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=40.6971+1.6702x$",
+      "statistics": {
+        "R2": "0.9269",
+        "F": "265.7090",
+        "p": "p<0.01",
+        "RMSE": "10.0606"
+      },
+      "fit": "in_sample",
+      "source": "Table 7",
+      "note": "alpha = 1.0, l1_ratio = 0.5 (text)"
+    },
+    {
+      "id": "T7-FP",
+      "property": "FP",
+      "form": "elastic_net",
+      "predictors": [
+        "MECI"
+      ],
+      "equation_verbatim": "$Y=152.5895+0.0643x$",
+      "statistics": {
+        "R2": "0.8406",
+        "F": "110.7613",
+        "p": "p<0.01",
+        "RMSE": "63.4684"
+      },
+      "fit": "in_sample",
+      "source": "Table 7",
+      "note": "alpha = 1.0, l1_ratio = 0.5 (text)"
+    },
+    {
+      "id": "T7-MR",
+      "property": "MR",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=8.2127+3.1486x$",
+      "statistics": {
+        "R2": "0.9841",
+        "F": "1294.3043",
+        "p": "p<0.01",
+        "RMSE": "8.5953"
+      },
+      "fit": "in_sample",
+      "source": "Table 7",
+      "note": "alpha = 1.0, l1_ratio = 0.5 (text)"
+    },
+    {
+      "id": "T7-P",
+      "property": "P",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=3.2667+1.2478x$",
+      "statistics": {
+        "R2": "0.9841",
+        "F": "1295.2329",
+        "p": "p<0.01",
+        "RMSE": "3.4031"
+      },
+      "fit": "in_sample",
+      "source": "Table 7",
+      "note": "alpha = 1.0, l1_ratio = 0.5 (text)"
+    },
+    {
+      "id": "T7-ST",
+      "property": "ST",
+      "form": "elastic_net",
+      "predictors": [
+        "AECI"
+      ],
+      "equation_verbatim": "$Y=42.5548+0.6526x$",
+      "statistics": {
+        "R2": "0.1404",
+        "F": "3.3591",
+        "p": "0.0811",
+        "RMSE": "17.8033"
+      },
+      "fit": "in_sample",
+      "source": "Table 7",
+      "note": "alpha = 1.0, l1_ratio = 0.5 (text)"
+    },
+    {
+      "id": "T7-MV",
+      "property": "MV",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": "$Y=40.4899+08.5142x$",
+      "statistics": {
+        "R2": "0.9561",
+        "F": "456.6484",
+        "p": "p<0.01",
+        "RMSE": "39.1408"
+      },
+      "fit": "in_sample",
+      "source": "Table 7",
+      "note": "alpha = 1.0, l1_ratio = 0.5 (text)"
+    },
+    {
+      "id": "T8-BP-linear",
+      "property": "BP",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9039",
+        "LOOCV_RMSE": "81.3003"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-BP-ridge",
+      "property": "BP",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9039",
+        "LOOCV_RMSE": "81.3043"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-BP-elastic_net",
+      "property": "BP",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9038",
+        "LOOCV_RMSE": "81.3498"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MP-linear",
+      "property": "MP",
+      "form": "linear",
+      "predictors": [
+        "EABC"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.1464",
+        "LOOCV_RMSE": "67.2340"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MP-ridge",
+      "property": "MP",
+      "form": "ridge",
+      "predictors": [
+        "EABC"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.1464",
+        "LOOCV_RMSE": "67.2314"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MP-elastic_net",
+      "property": "MP",
+      "form": "elastic_net",
+      "predictors": [
+        "EABC"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.1470",
+        "LOOCV_RMSE": "67.2098"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-E-linear",
+      "property": "E",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9072",
+        "LOOCV_RMSE": "11.3437"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-E-ridge",
+      "property": "E",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9072",
+        "LOOCV_RMSE": "11.3445"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-E-elastic_net",
+      "property": "E",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9069",
+        "LOOCV_RMSE": "11.3597"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-FP-linear",
+      "property": "FP",
+      "form": "linear",
+      "predictors": [
+        "MECI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.8100",
+        "LOOCV_RMSE": "69.3010"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-FP-ridge",
+      "property": "FP",
+      "form": "ridge",
+      "predictors": [
+        "MECI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.8100",
+        "LOOCV_RMSE": "69.3010"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-FP-elastic_net",
+      "property": "FP",
+      "form": "elastic_net",
+      "predictors": [
+        "MECI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.8100",
+        "LOOCV_RMSE": "69.3009"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MR-linear",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9777",
+        "LOOCV_RMSE": "10.1735"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MR-ridge",
+      "property": "MR",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9777",
+        "LOOCV_RMSE": "10.1761"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MR-elastic_net",
+      "property": "MR",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9775",
+        "LOOCV_RMSE": "10.2125"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-P-linear",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9777",
+        "LOOCV_RMSE": "4.0299"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-P-ridge",
+      "property": "P",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9777",
+        "LOOCV_RMSE": "4.0309"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-P-elastic_net",
+      "property": "P",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9775",
+        "LOOCV_RMSE": "4.0516"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-ST-linear",
+      "property": "ST",
+      "form": "linear",
+      "predictors": [
+        "AECI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.0299",
+        "LOOCV_RMSE": "18.9127"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-ST-ridge",
+      "property": "ST",
+      "form": "ridge",
+      "predictors": [
+        "AECI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.0299",
+        "LOOCV_RMSE": "18.9126"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-ST-elastic_net",
+      "property": "ST",
+      "form": "elastic_net",
+      "predictors": [
+        "AECI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.0299",
+        "LOOCV_RMSE": "18.9127"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MV-linear",
+      "property": "MV",
+      "form": "linear",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9486",
+        "LOOCV_RMSE": "42.3634"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MV-ridge",
+      "property": "MV",
+      "form": "ridge",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9486",
+        "LOOCV_RMSE": "42.3660"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    },
+    {
+      "id": "T8-MV-elastic_net",
+      "property": "MV",
+      "form": "elastic_net",
+      "predictors": [
+        "EGA"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2": "0.9485",
+        "LOOCV_RMSE": "42.4005"
+      },
+      "fit": "loocv",
+      "source": "Table 8"
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "leave-one-out cross-validation",
+      "detail": "Q2 and LOOCV RMSE for the best index per property under linear, ridge and elastic net (Table 8)",
+      "source": "Table 8"
+    },
+    {
+      "what": "hyperparameters",
+      "detail": "ridge alpha = 1.0; elastic net alpha = 1.0, l1_ratio = 0.5; Python 3.10, scikit-learn 1.3.0",
+      "source": "Methods (text)"
+    }
+  ],
+  "reported_tables": [
+    {
+      "xml_table_id": "T5",
+      "label": "TABLE 5",
+      "caption": "Linear regression analysis between physicochemical properties and topological indices.",
+      "rows": [
+        [
+          "Property",
+          "Index",
+          "Regression equation",
+          "$R^{2}$",
+          "F-test",
+          "p-value",
+          "RMSE"
+        ],
+        [
+          "Boiling point",
+          "EGA",
+          "$Y=209.8966+11.7257x$",
+          "0.9207",
+          "243.8234",
+          "$p<0.01$",
+          "73.8602"
+        ],
+        [
+          "Melting point",
+          "EABC",
+          "$Y=88.0151+5.7816x$",
+          "0.2510",
+          "7.00039",
+          "$p<0.01$",
+          "63.0169"
+        ],
+        [
+          "Enthalpy",
+          "EGA",
+          "$Y=40.6971+1.6702x$",
+          "0.9269",
+          "266.6427",
+          "$p<0.01$",
+          "10.0606"
+        ],
+        [
+          "Flash point",
+          "MECI",
+          "$Y=152.5895+0.0643x$",
+          "0.8406",
+          "110.7616",
+          "$p<0.01$",
+          "63.4684"
+        ],
+        [
+          "Molar refractivity",
+          "EGA",
+          "$Y=8.2127+3.1486x$",
+          "0.9841",
+          "1298.1738",
+          "$p<0.01$",
+          "8.5953"
+        ],
+        [
+          "Polarizability",
+          "EGA",
+          "$Y=3.2667+1.2478x$",
+          "0.9841",
+          "1300.6143",
+          "$p<0.01$",
+          "3.4031"
+        ],
+        [
+          "Surface tension",
+          "AECI",
+          "$Y=42.5548+0.6526x$",
+          "0.1404",
+          "3.4299",
+          "$0.0781$",
+          "17.8033"
+        ],
+        [
+          "Molar volume",
+          "EGA",
+          "$Y=40.4899+08.5142x$",
+          "0.9561",
+          "457.7715",
+          "$p<0.01$",
+          "39.1408"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T6",
+      "label": "TABLE 6",
+      "caption": "Ridge regression analysis between physicochemical properties and topological indices.",
+      "rows": [
+        [
+          "Property",
+          "Index",
+          "Regression equation",
+          "$R^{2}$",
+          "F-test",
+          "p-value",
+          "RMSE"
+        ],
+        [
+          "Boiling point",
+          "EGA",
+          "$Y=209.9276+11.7246x$",
+          "0.9207",
+          "243.8234",
+          "$p<0.01$",
+          "73.8602"
+        ],
+        [
+          "Melting point",
+          "EABC",
+          "$Y=88.09161+5.7753x$",
+          "0.2510",
+          "7.00039",
+          "$p<0.01$",
+          "63.0169"
+        ],
+        [
+          "Enthalpy",
+          "EGA",
+          "$Y=40.7015+1.6701x$",
+          "0.9269",
+          "266.6427",
+          "$p<0.01$",
+          "10.0606"
+        ],
+        [
+          "Flash point",
+          "MECI",
+          "$Y=15.5895+0.0643x$",
+          "0.8406",
+          "110.7616",
+          "$p<0.01$",
+          "63.4684"
+        ],
+        [
+          "Molar refractivity",
+          "EGA",
+          "$Y=8.2209+3.1486x$",
+          "0.9841",
+          "1298.1738",
+          "$p<0.01$",
+          "8.5953"
+        ],
+        [
+          "Polarizability",
+          "EGA",
+          "$Y=3.2700+1.2477x$",
+          "0.9841",
+          "1300.6143",
+          "$p<0.01$",
+          "3.4031"
+        ],
+        [
+          "Surface tension",
+          "AECI",
+          "$Y=42.5604+0.6523x$",
+          "0.0140",
+          "3.4299",
+          "0.0781",
+          "17.8033"
+        ],
+        [
+          "Molar volume",
+          "EGA",
+          "$Y=40.5124+08.5134x$",
+          "0.9561",
+          "457.7715",
+          "$p<0.01$",
+          "39.1408"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T7",
+      "label": "TABLE 7",
+      "caption": "Elastic net regression analysis between physicochemical properties and topological indices.",
+      "rows": [
+        [
+          "Property",
+          "Index",
+          "Regression equation",
+          "$R^{2}$",
+          "F-test",
+          "p-value",
+          "RMSE"
+        ],
+        [
+          "Boiling point",
+          "EGA",
+          "$Y=209.8966+11.7257x$",
+          "0.9207",
+          "243.2460",
+          "$p<0.01$",
+          "73.8602"
+        ],
+        [
+          "Melting point",
+          "EABC",
+          "$Y=88.0151+5.7816x$",
+          "0.2510",
+          "6.8002",
+          "$p<0.01$",
+          "63.0169"
+        ],
+        [
+          "Enthalpy",
+          "EGA",
+          "$Y=40.6971+1.6702x$",
+          "0.9269",
+          "265.7090",
+          "$p<0.01$",
+          "10.0606"
+        ],
+        [
+          "Flash point",
+          "MECI",
+          "$Y=152.5895+0.0643x$",
+          "0.8406",
+          "110.7613",
+          "$p<0.01$",
+          "63.4684"
+        ],
+        [
+          "Molar refractivity",
+          "EGA",
+          "$Y=8.2127+3.1486x$",
+          "0.9841",
+          "1294.3043",
+          "$p<0.01$",
+          "8.5953"
+        ],
+        [
+          "Polarizability",
+          "EGA",
+          "$Y=3.2667+1.2478x$",
+          "0.9841",
+          "1295.2329",
+          "$p<0.01$",
+          "3.4031"
+        ],
+        [
+          "Surface tension",
+          "AECI",
+          "$Y=42.5548+0.6526x$",
+          "0.1404",
+          "3.3591",
+          "0.0811",
+          "17.8033"
+        ],
+        [
+          "Molar volume",
+          "EGA",
+          "$Y=40.4899+08.5142x$",
+          "0.9561",
+          "456.6484",
+          "$p<0.01$",
+          "39.1408"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T8",
+      "label": "TABLE 8",
+      "caption": "Comparison of $Q^{2}$ and LOOCV RMSE across linear, ridge, and elastic net models.",
+      "rows": [
+        [
+          "Property",
+          "Index",
+          "Linear",
+          "Ridge",
+          "Elastic net"
+        ],
+        [
+          "",
+          "",
+          "$Q^{2}$",
+          "LOOCV RMSE",
+          "$Q^{2}$",
+          "LOOCV RMSE",
+          "$Q^{2}$",
+          "LOOCV RMSE"
+        ],
+        [
+          "BP",
+          "EGA",
+          "0.9039",
+          "81.3003",
+          "0.9039",
+          "81.3043",
+          "0.9038",
+          "81.3498"
+        ],
+        [
+          "MP",
+          "EABC",
+          "0.1464",
+          "67.2340",
+          "0.1464",
+          "67.2314",
+          "0.1470",
+          "67.2098"
+        ],
+        [
+          "E",
+          "EGA",
+          "0.9072",
+          "11.3437",
+          "0.9072",
+          "11.3445",
+          "0.9069",
+          "11.3597"
+        ],
+        [
+          "FP",
+          "MECI",
+          "0.8100",
+          "69.3010",
+          "0.8100",
+          "69.3010",
+          "0.8100",
+          "69.3009"
+        ],
+        [
+          "MR",
+          "EGA",
+          "0.9777",
+          "10.1735",
+          "0.9777",
+          "10.1761",
+          "0.9775",
+          "10.2125"
+        ],
+        [
+          "P",
+          "EGA",
+          "0.9777",
+          "4.0299",
+          "0.9777",
+          "4.0309",
+          "0.9775",
+          "4.0516"
+        ],
+        [
+          "ST",
+          "AECI",
+          "0.0299",
+          "18.9127",
+          "0.0299",
+          "18.9126",
+          "0.0299",
+          "18.9127"
+        ],
+        [
+          "MV",
+          "EGA",
+          "0.9486",
+          "42.3634",
+          "0.9486",
+          "42.3660",
+          "0.9485",
+          "42.4005"
+        ]
+      ]
+    }
+  ],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "ok",
+      "detail": "23 drugs listed, 23 reported."
+    },
+    {
+      "check": "units",
+      "result": "issue",
+      "detail": "No units are given for any property."
+    },
+    {
+      "check": "isomers",
+      "result": "info",
+      "detail": "Cyclophosphamide and ifosfamide (constitutional isomers) have identical BP, E, FP, MR, P, ST and MV, as expected for additive ACD predictions; their MPs differ."
+    },
+    {
+      "check": "MP source",
+      "result": "info",
+      "detail": "PubChem experimental melting points (PUG-View, checked 2026-10-03): altretamine 168 matches '[168]', busulfan 118 is within '114-118 °C', carmustine 30 is close to '31 °C'. MP looks measured."
+    },
+    {
+      "check": "Table 6 typos",
+      "result": "issue",
+      "detail": "Ridge table: FP intercept 15.5895 (linear and elastic net give 152.5895); ST R2 0.0140 (others 0.1404); MV slope printed 08.5142."
+    },
+    {
+      "check": "p-values",
+      "result": "issue",
+      "detail": "MP: F = 7.00 on (1, 21) df gives p of about 0.015, but Table 5 prints p < 0.01."
+    },
+    {
+      "check": "ridge = OLS",
+      "result": "info",
+      "detail": "Ridge (alpha = 1.0, unscaled) and elastic net reproduce the OLS R2 to four decimals; with a single raw index the penalty is negligible."
+    }
+  ],
+  "resolution_issues": [
+    "Table 1 spells 'Azacytidine', Table 2 'Azacitidine'; both resolve to CID 9444.",
+    "'Actinomycin D' resolves to PubChem 'Dactinomycin' (CID 457193), a synonym.",
+    "All 23 molecular formulas printed in Table 1 equal the PubChem formulas (automated_checks.formula_mismatch is empty)."
+  ],
+  "reproducibility": {
+    "verdict": "exact",
+    "reasons": [
+      "drug names with molecular formulas, property values and all 13 index values are printed; eccentricity indices are uniquely defined on the hydrogen-depleted graph",
+      "single-index linear, ridge (alpha = 1.0) and elastic-net (alpha = 1.0, l1_ratio = 0.5) fits in scikit-learn 1.3.0 and LOOCV are fully specified (scaling not mentioned, so none is assumed)",
+      "caveat: Table 6 has typos (FP intercept 15.5895 vs 152.5895; ST R2 0.0140 vs 0.1404) and MV slope is printed as 08.5142"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 23,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 23
+    },
+    "duplicate_structures": [],
+    "shared_connectivity_groups": [],
+    "formula_checked": 23,
+    "formula_mismatch": [],
+    "cid_checked": 0,
+    "cid_mismatch": [],
+    "properties": {
+      "BP": {
+        "n_values": 23,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MP": {
+        "n_values": 23,
+        "n_missing": 0,
+        "missing": []
+      },
+      "E": {
+        "n_values": 23,
+        "n_missing": 0,
+        "missing": []
+      },
+      "FP": {
+        "n_values": 23,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MR": {
+        "n_values": 23,
+        "n_missing": 0,
+        "missing": []
+      },
+      "P": {
+        "n_values": 23,
+        "n_missing": 0,
+        "missing": []
+      },
+      "ST": {
+        "n_values": 23,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MV": {
+        "n_values": 23,
+        "n_missing": 0,
+        "missing": []
+      }
+    },
+    "identical_property_rows": []
+  }
+}

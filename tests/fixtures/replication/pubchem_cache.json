@@ -1,0 +1,24 @@
+{
+ "/compound/cid/1/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {"PropertyTable": {"Properties": [{"CID": 1, "SMILES": "CCO", "ConnectivitySMILES": "CCO", "InChIKey": "LFQSCWFLJHTTHZ-UHFFFAOYSA-N", "MolecularFormula": "C2H6O", "MolecularWeight": "46.07", "ExactMass": "46.041864811", "HeavyAtomCount": 3, "Complexity": 2.8, "TPSA": 20.2, "XLogP": -0.1, "Title": "Ethanol"}]}},
+  "status": 200
+ },
+ "/compound/cid/2/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {"PropertyTable": {"Properties": [{"CID": 2, "SMILES": "C[C@@H](O)CC", "ConnectivitySMILES": "CC(O)CC", "InChIKey": "BTANRVKWQNVYAZ-SCSAIBSYSA-N", "MolecularFormula": "C4H10O", "MolecularWeight": "74.12", "ExactMass": "74.073164938", "HeavyAtomCount": 5, "Complexity": 19.1, "TPSA": 20.2, "XLogP": 0.6, "Title": "(R)-2-Butanol"}]}},
+  "status": 200
+ },
+ "/compound/cid/3/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {"PropertyTable": {"Properties": [{"CID": 3, "SMILES": "CC(=O)[O-].[Na+]", "ConnectivitySMILES": "CC(=O)[O-].[Na+]", "InChIKey": "VMHLLURERBWHNL-UHFFFAOYSA-M", "MolecularFormula": "C2H3NaO2", "MolecularWeight": "82.03", "ExactMass": "81.99232315", "HeavyAtomCount": 5, "Complexity": 34.6, "TPSA": 40.1, "Title": "Sodium acetate"}]}},
+  "status": 200
+ },
+ "/compound/cid/4/property/SMILES,ConnectivitySMILES,InChIKey,MolecularFormula,MolecularWeight,ExactMass,HeavyAtomCount,Complexity,TPSA,XLogP,Title/JSON": {
+  "json": {"PropertyTable": {"Properties": [{"CID": 4, "SMILES": "CC(O)CC", "ConnectivitySMILES": "CC(O)CC", "InChIKey": "BTANRVKWQNVYAZ-UHFFFAOYSA-N", "MolecularFormula": "C4H10O", "MolecularWeight": "74.12", "ExactMass": "74.073164938", "HeavyAtomCount": 5, "Complexity": 19.1, "TPSA": 20.2, "XLogP": 0.6, "Title": "2-Butanol"}]}},
+  "status": 200
+ },
+ "/compound/name/2-butanol/cids/JSON": {"json": {"IdentifierList": {"CID": [4]}}, "status": 200},
+ "/compound/name/R-2-butanol/cids/JSON": {"json": {"IdentifierList": {"CID": [2]}}, "status": 200},
+ "/compound/name/ethanol/cids/JSON": {"json": {"IdentifierList": {"CID": [1]}}, "status": 200},
+ "/compound/name/ethanolum/cids/JSON": {"json": {"Fault": {"Code": "PUGREST.NotFound", "Message": "No CID found"}}, "status": 404},
+ "/compound/name/sodium%20acetate/cids/JSON": {"json": {"IdentifierList": {"CID": [3]}}, "status": 200},
+ "/compound/name/spirits/cids/JSON": {"json": {"IdentifierList": {"CID": [1, 2]}}, "status": 200}
+}

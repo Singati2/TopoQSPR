@@ -1,0 +1,414 @@
+{
+  "schema_version": 1,
+  "study_key": "supriya2026_tuberculosis",
+  "shortlist_row": 10,
+  "status": "reserve",
+  "citation": {
+    "authors": [
+      "Supriya",
+      "Iyer, Radha Rajamani"
+    ],
+    "title": "Predictive performance and QSPR analysis of SARS-CoV-2 and tuberculosis drugs using distance-based topological descriptors",
+    "journal": "Scientific Reports",
+    "year": 2026,
+    "volume": "16",
+    "article_number": "20043",
+    "doi": "10.1038/s41598-026-49132-8",
+    "pmcid": "PMC13319808",
+    "pmid": "42062328",
+    "first_publication_date": "2026-04-30"
+  },
+  "licence": {
+    "spdx": "CC-BY-NC-ND-4.0",
+    "statement_verbatim": "© The Author(s) 20262026https://creativecommons.org/licenses/by-nc-nd/4.0/Open Access This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if you modified the licensed material. You do not have permission under this licence to share adapted material derived from this article or parts of it. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.",
+    "data_redistribution": "withheld",
+    "note": "the shortlist assumed CC BY; the article is CC BY-NC-ND 4.0, so property values are not redistributed"
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13319808/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "d6b32917fa1b9b62efa3ab0429afa4a9f94d5bd0bbe74393304cae43722e3e5d",
+    "other_sources": []
+  },
+  "n_reported": 13,
+  "n_reported_source": "Text: 'we performed DESI and EDS QSPR study on 13 medications' (tuberculosis subset; the SARS-CoV-2 subset, n = 8, fails criterion iv)",
+  "drug_list_source": "Table 8 (tuberculosis property table)",
+  "property_table": {
+    "xml_table_id": "Tab8",
+    "skip_rows": 1,
+    "label_column": 0,
+    "columns": [
+      {
+        "property": "BP",
+        "column": 1
+      },
+      {
+        "property": "E",
+        "column": 2
+      },
+      {
+        "property": "FP",
+        "column": 3
+      },
+      {
+        "property": "MR",
+        "column": 4
+      },
+      {
+        "property": "P",
+        "column": 5
+      },
+      {
+        "property": "MV",
+        "column": 6
+      }
+    ],
+    "label": "Table 8",
+    "caption_verbatim": "Physico-chemical properties of tuberculosis drugs.",
+    "header_rows_verbatim": [
+      [
+        "Drugs",
+        "BP (°C at 760mmHg)",
+        "E (kJ/mol)",
+        "FP (°C)",
+        "MR (m3)/mol)",
+        "P 10-24 (cm3)",
+        "MV (cm3)"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "BP",
+      "name_verbatim": "BP",
+      "unit_verbatim": "°C at 760mmHg",
+      "source_stated_verbatim": "'The values of these properties and the molecular structures of the drugs are obtained from Chem Spider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. The paper calls them experimental values."
+    },
+    {
+      "code": "E",
+      "name_verbatim": "E",
+      "unit_verbatim": "kJ/mol",
+      "source_stated_verbatim": "'The values of these properties and the molecular structures of the drugs are obtained from Chem Spider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. The paper calls them experimental values."
+    },
+    {
+      "code": "FP",
+      "name_verbatim": "FP",
+      "unit_verbatim": "°C",
+      "source_stated_verbatim": "'The values of these properties and the molecular structures of the drugs are obtained from Chem Spider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. The paper calls them experimental values."
+    },
+    {
+      "code": "MR",
+      "name_verbatim": "MR",
+      "unit_verbatim": "(m3)/mol)",
+      "source_stated_verbatim": "'The values of these properties and the molecular structures of the drugs are obtained from Chem Spider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. The paper calls them experimental values."
+    },
+    {
+      "code": "P",
+      "name_verbatim": "P 10-24",
+      "unit_verbatim": "(cm3)",
+      "source_stated_verbatim": "'The values of these properties and the molecular structures of the drugs are obtained from Chem Spider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. The paper calls them experimental values."
+    },
+    {
+      "code": "MV",
+      "name_verbatim": "MV",
+      "unit_verbatim": "(cm3)",
+      "source_stated_verbatim": "'The values of these properties and the molecular structures of the drugs are obtained from Chem Spider'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. The paper calls them experimental values."
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "EDS",
+      "name_verbatim": "eccentric distance sum",
+      "formula_verbatim": "$\\begin{aligned} \\xi ^{d}(G)= \\sum _{x\\epsilon V(G)}e_d(x)S_d(x), \\end{aligned}$",
+      "family": "distance",
+      "source": "Introduction"
+    },
+    {
+      "symbol_verbatim": "DESI",
+      "name_verbatim": "Detour Eccentric Sum Index",
+      "formula_verbatim": "$\\begin{aligned} \\xi ^{D}(G)= \\sum _{x\\epsilon V(G)}e_D(x)S_D(x), \\end{aligned}$ (detour = longest path)",
+      "family": "detour distance",
+      "source": "Introduction"
+    }
+  ],
+  "index_values_table": "Table 7",
+  "index_computation": "python code (not provided); MATLAB for regression",
+  "models": [
+    {
+      "id": "Tab13-TB-BP",
+      "property": "BP",
+      "form": "quadratic",
+      "predictors": [
+        "EDS"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "R2": "0.85",
+        "RMSE": "93.21",
+        "adj_R2": "0.81"
+      },
+      "fit": "in_sample",
+      "source": "Table 13 (tuberculosis columns)",
+      "note": "n = 11 for BP, E, FP (isoniazid and terizidone have no value)"
+    },
+    {
+      "id": "Tab13-TB-E",
+      "property": "E",
+      "form": "multiple_linear",
+      "predictors": [
+        "DESI",
+        "EDS"
+      ],
+      "equation_verbatim": "$E = -7.444\\times 10^{-5}. DESI +9.14\\times 10^{-4}. EDS$ (Table 20 caption)",
+      "statistics": {
+        "R2": "0.82",
+        "RMSE": "14.66",
+        "adj_R2": "0.78"
+      },
+      "fit": "in_sample",
+      "source": "Table 13 (tuberculosis columns)",
+      "note": "n = 11 for BP, E, FP (isoniazid and terizidone have no value)"
+    },
+    {
+      "id": "Tab13-TB-FP",
+      "property": "FP",
+      "form": "quadratic",
+      "predictors": [
+        "EDS"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "R2": "0.84",
+        "RMSE": "60.24",
+        "adj_R2": "0.80"
+      },
+      "fit": "in_sample",
+      "source": "Table 13 (tuberculosis columns)",
+      "note": "n = 11 for BP, E, FP (isoniazid and terizidone have no value)"
+    },
+    {
+      "id": "Tab13-TB-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "DESI"
+      ],
+      "equation_verbatim": "MR=46.9421+3.4978 $\\times 10^{-4}$ DESI (Table 17 caption)",
+      "statistics": {
+        "R2": "0.94",
+        "RMSE": "10.29",
+        "adj_R2": "0.94"
+      },
+      "fit": "in_sample",
+      "source": "Table 13 (tuberculosis columns)"
+    },
+    {
+      "id": "Tab13-TB-P",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "DESI"
+      ],
+      "equation_verbatim": "$P = 18.59 +1.38 \\times 10^{-4}.DESI$ (Table 19 caption)",
+      "statistics": {
+        "R2": "0.94",
+        "RMSE": "4.08",
+        "adj_R2": "0.90"
+      },
+      "fit": "in_sample",
+      "source": "Table 13 (tuberculosis columns)"
+    },
+    {
+      "id": "Tab13-TB-MV",
+      "property": "MV",
+      "form": "quadratic",
+      "predictors": [
+        "EDS"
+      ],
+      "equation_verbatim": "$MV=108.9790+0.0059.EDS-3.014\\times 10^{-8}.EDS^{2}.$ (Table 18 caption)",
+      "statistics": {
+        "R2": "0.92",
+        "RMSE": "33.96",
+        "adj_R2": "0.90"
+      },
+      "fit": "in_sample",
+      "source": "Table 13 (tuberculosis columns)"
+    },
+    {
+      "id": "Tab16-TB-BP",
+      "property": "BP",
+      "form": "quadratic",
+      "predictors": [
+        "EDS"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2_val": "− 1.94",
+        "RMSE_val": "347.75"
+      },
+      "fit": "loocv",
+      "source": "Table 16 (tuberculosis columns)"
+    },
+    {
+      "id": "Tab16-TB-E",
+      "property": "E",
+      "form": "multiple_linear",
+      "predictors": [
+        "DESI",
+        "EDS"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2_val": "0.568",
+        "RMSE_val": "19.59"
+      },
+      "fit": "loocv",
+      "source": "Table 16 (tuberculosis columns)"
+    },
+    {
+      "id": "Tab16-TB-FP",
+      "property": "FP",
+      "form": "quadratic",
+      "predictors": [
+        "EDS"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2_val": "− 1.803",
+        "RMSE_val": "213.50"
+      },
+      "fit": "loocv",
+      "source": "Table 16 (tuberculosis columns)"
+    },
+    {
+      "id": "Tab16-TB-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "DESI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2_val": "0.919",
+        "RMSE_val": "11.13"
+      },
+      "fit": "loocv",
+      "source": "Table 16 (tuberculosis columns)"
+    },
+    {
+      "id": "Tab16-TB-P",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "DESI"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2_val": "0.92",
+        "RMSE_val": "4.41"
+      },
+      "fit": "loocv",
+      "source": "Table 16 (tuberculosis columns)"
+    },
+    {
+      "id": "Tab16-TB-MV",
+      "property": "MV",
+      "form": "quadratic",
+      "predictors": [
+        "EDS"
+      ],
+      "equation_verbatim": null,
+      "statistics": {
+        "Q2_val": "0.72",
+        "RMSE_val": "54.97"
+      },
+      "fit": "loocv",
+      "source": "Table 16 (tuberculosis columns)"
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "leave-one-out cross-validation",
+      "detail": "Q2_val and RMSE_val for the best model per property (Table 16); negative Q2 for BP and FP",
+      "source": "Table 16"
+    },
+    {
+      "what": "collinearity",
+      "detail": "VIF 5.46 for DESI and EDS; correlation 0.904 (Tables 14-15)",
+      "source": "Tables 14-15"
+    }
+  ],
+  "reported_tables": [],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "ok",
+      "detail": "13 tuberculosis drugs; 11 with BP, E and FP (isoniazid and terizidone are printed as dashes)."
+    },
+    {
+      "check": "licence",
+      "result": "issue",
+      "detail": "CC BY-NC-ND 4.0, not CC BY as the shortlist assumed: property values withheld."
+    },
+    {
+      "check": "DESI = EDS for a tree",
+      "result": "ok",
+      "detail": "Ethambutol (acyclic) has DESI = EDS = 5892, as it must: in a tree the detour distance equals the distance."
+    },
+    {
+      "check": "coefficient tables vs captions",
+      "result": "issue",
+      "detail": "Table 23: intercept 1.73 and slope 0.27 vs the caption model 98.038 log EDS - 731.2012. Table 20: the caption omits the intercept (63.35). Table 18: the EDS^2 coefficient is printed positive with t = -4.63. Several p-values are printed < 0.001 for |t| < 1."
+    },
+    {
+      "check": "units",
+      "result": "info",
+      "detail": "MR unit printed '(m3)/mol)'; values are labelled experimental although they come from ChemSpider (ACD predictions)."
+    },
+    {
+      "check": "LOOCV",
+      "result": "info",
+      "detail": "Negative Q2_val for BP (-1.94) and FP (-1.803), which the authors attribute to small n."
+    }
+  ],
+  "resolution_issues": [
+    "Imipenem-cilastatin is a two-component combination product: unresolved (rule unresolvable).",
+    "'p-AMINOSALICYLIC ACID' resolves to 4-aminosalicylic acid (CID 4649); TERIZIDONE to CID 65720."
+  ],
+  "reproducibility": {
+    "verdict": "approximate",
+    "reasons": [
+      "names, property values and both index values are printed; EDS is uniquely defined, DESI needs longest-path (detour) distances, which are computable for these sizes",
+      "imipenem-cilastatin is a combination product with one row of values; it cannot be mapped to one structure",
+      "BP, E and FP are missing for isoniazid and terizidone (n = 11 for those properties)",
+      "how the logarithmic and exponential models were fitted (linearised vs nonlinear least squares) is not stated; several coefficient tables disagree with their captions (e.g. Table 23 intercept 1.73 vs 731.2012 in the model)"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 13,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 12,
+      "unresolved": 1
+    },
+    "duplicate_structures": [],
+    "shared_connectivity_groups": [],
+    "formula_checked": 0,
+    "formula_mismatch": [],
+    "cid_checked": 0,
+    "cid_mismatch": [],
+    "properties": "withheld (licence); run `extract` to rebuild locally"
+  }
+}
