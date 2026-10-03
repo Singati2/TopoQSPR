@@ -90,6 +90,11 @@ Bioactivity values are excluded from v1.0 modelling.
 - All preprocessing (scaling, missing-value handling, constant-feature removal) is inside the pipeline.
 - Every feature set (including size and composition baselines) uses the **same** model families and
   inner tuning, so baseline comparisons are fair.
+- **Stereoisomer grouping (all CV, including random folds):** drugs sharing the InChIKey connectivity
+  block (first 14 characters) are always in the same fold. Stereoisomers have identical hydrogen-suppressed
+  graphs and therefore identical index, size and composition vectors (e.g. citalopram/escitalopram);
+  splitting them would leak (Kapoor & Narayanan 2023). The scaffold-grouped variant groups by scaffold,
+  which already contains this grouping.
 - Scaffold-grouped outer folds (Bemis–Murcko) as the third step of Experiment C. Acyclic molecules
   (empty scaffold) each form their own group; report the number of groups and the largest group's share.
 - Protocol follows Ash et al. 2025 (JCIM 65:9398) for method comparison.
@@ -107,6 +112,12 @@ Bioactivity values are excluded from v1.0 modelling.
   (to be confirmed by co-authors before freezing).
 - **Secondary (exploratory):** ΔR²(TI+comp − comp); ΔR² per TI family; M_std vs M_TI; class-2 targets;
   R² and MAE of every model (mean, SD, median); n for every endpoint.
+- **Y-randomised control:** for every feature set in the confirmatory family, the full nested pipeline on
+  200 target permutations (Rücker et al. 2007); a feature set is reported as uninformative if its real
+  R² does not exceed the 95th percentile of the permutation distribution.
+- **Applicability domain:** kNN-distance AD fitted in each outer training fold; the share of outer-test
+  molecules outside the domain is reported with every result; primary metrics use all molecules, and
+  in-domain-only metrics are secondary.
 - **Size dependence of the descriptors themselves:** for every TI and TI family, the cross-validated R²
   of that TI regressed on the size features (how much of each index *is* molecular size).
 - **Correlations:** Spearman ρ with 95% CI, BH-adjusted q, n; family-level summaries;
@@ -131,7 +142,9 @@ Bioactivity values are excluded from v1.0 modelling.
   (ii) property values tabulated, (iii) index formulas stated, (iv) n ≥ 10. The first eligible studies
   are taken, subject to co-author agreement, with no regard to their reported R². Chain per study:
   published R² → reproduced in-sample R² → ordinary CV → nested CV → scaffold CV → size baseline,
-  with CIs and the optimism gap.
+  with CIs and the optimism gap. For comparability with the genre, Q²_F3 and the concordance correlation
+  coefficient are also reported (secondary). A permuted-target and a descriptor-pool-randomised control
+  (pick the best of the same number of random indices) quantify chance correlation at the study's n.
 
 ## 9. Interpretation (SHAP)
 
@@ -146,6 +159,10 @@ results, class-2 targets, SHAP, per-disease results below the n threshold) is la
 in the paper.
 
 ## 11. GO / NO-GO checkpoint
+
+After GO, the frozen plan is registered on OSF Registries (secondary-data template) before any
+main-panel result is seen; the registration DOI and the frozen commit hash are recorded in the header.
+
 
 The main experiment starts only after `docs/CHECKPOINT.md` reports GO. It lists: unresolved code or
 definition issues; verified vs unverified indices; independent cross-checks (Mordred, ChemGraphX);
