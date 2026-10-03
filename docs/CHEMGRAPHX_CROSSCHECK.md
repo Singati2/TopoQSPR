@@ -65,8 +65,14 @@ receives the same graph through three routes:
 For molecules the molblock is RDKit's for the hydrogen-free standardised
 parent, with heteroatoms and kekulised bond orders kept. ChemGraphX ignores
 both. For closed-form graphs the molblock is all-carbon with single bonds. The
-classes are called as `server/main.py` calls them (`ColumnF(file, textarea)`
-and `ColumnCD(file, textarea)`). Values are read from the instance dicts
+classes are constructed with the `(file, textarea)` arguments `server/main.py`
+passes. Degree values are read from `ColumnF`. The `/degree_based` route in
+`main.py` uses `ColumnAB` instead, but `ColumnF` subclasses it
+(`ColumnF -> ColumnE -> ColumnAB`). Each `__init__` first calls
+`super().__init__`, and neither subclass overrides `degree_indices` or the
+methods that compute it, so the `degree_indices` dict is identical. Distance values
+come from `ColumnF` (as in `/distance_based`) and degree-sum values from
+`ColumnCD` (as in `/degree_based`). Values are read from the instance dicts
 `degree_indices` / `distance_indices`, which the endpoints only relabel
 (`capitalize_dictionary`). On every route ChemGraphX's graph is checked to be
 isomorphic to TopoQSPR's (networkx `vf2pp_is_isomorphic`). The three routes

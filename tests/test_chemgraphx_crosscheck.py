@@ -137,6 +137,63 @@ def test_relative_difference_helper():
     assert math.isnan(TOOL.rel_diff(1.0, float("nan")))
 
 
+def test_route_gap_fails_on_nonfinite_mismatch():
+    inf, nan = float("inf"), float("nan")
+    assert TOOL.route_gap(2.0, 1.0) == 1.0
+    assert TOOL.route_gap(nan, nan) == 0.0
+    assert TOOL.route_gap(inf, inf) == 0.0
+    assert TOOL.route_gap(inf, 27.0) == math.inf
+    assert TOOL.route_gap(nan, 24.0) == math.inf
+    assert TOOL.route_gap(-inf, inf) == math.inf
+    assert TOOL.route_gap(nan, inf) == math.inf
+
+
+def _stub_routes(monkeypatch, adjacency_vals):
+    """Make every ChemGraphX route return fixed values on C6 (no clone needed)."""
+    good = {"degree": {"M1": 24.0}, "degree_sum": {"x": 1.0}, "distance": {"W": 27.0}}
+
+    def fake_run(cgx, source):
+        return (adjacency_vals if source[0] == "adjacency" else good), nx.cycle_graph(6)
+
+    monkeypatch.setattr(TOOL, "run_chemgraphx", fake_run)
+    monkeypatch.setattr(TOOL, "molblock", lambda entry, v3000: b"")
+    g = MolGraph.from_edges(6, [(i, (i + 1) % 6) for i in range(6)])
+    return {"name": "C6", "graph": g, "mol": None}
+
+
+@pytest.mark.parametrize(
+    "adjacency_vals",
+    [
+        {"degree": {"M1": float("nan")}, "degree_sum": {"x": 1.0}, "distance": {"W": 27.0}},
+        {"degree": {"M1": 24.0}, "degree_sum": {"x": 1.0}, "distance": {"W": float("inf")}},
+        {"degree": {"M1": float("nan")}, "degree_sum": {"x": 1.0},
+         "distance": {"W": float("inf")}},
+        {"degree": {"M1": 24.0}, "degree_sum": {}, "distance": {"W": 27.0}},
+    ],
+    ids=["nan", "inf", "nan_and_inf", "missing_key"],
+)
+def test_route_guard_catches_nonfinite_route(monkeypatch, adjacency_vals):
+    """A route giving NaN/inf (or dropping a key) must not read as agreement:
+    max() over NaN gaps used to return 0.0 here."""
+    entry = _stub_routes(monkeypatch, adjacency_vals)
+    assert TOOL.chemgraphx_values(None, entry)["route_max_rel_diff"] == math.inf
+
+
+def test_route_guard_passes_identical_routes(monkeypatch):
+    same = {"degree": {"M1": 24.0}, "degree_sum": {"x": 1.0}, "distance": {"W": 27.0}}
+    entry = _stub_routes(monkeypatch, same)
+    assert TOOL.chemgraphx_values(None, entry)["route_max_rel_diff"] == 0.0
+
+
+def test_doc_names_the_degree_class_main_py_uses():
+    """/degree_based in main.py uses ColumnAB; the docs must not claim the
+    degree values come from ColumnF 'as main.py calls them'."""
+    text = (ROOT / "docs" / "CHEMGRAPHX_CROSSCHECK.md").read_text()
+    assert "as `server/main.py` calls them (`ColumnF" not in text
+    assert "`ColumnF -> ColumnE -> ColumnAB`" in text
+    assert "ColumnF -> ColumnE -> ColumnAB" in (TOOL.__doc__ or "")
+
+
 # ---------------------------------------------------------------------------
 # minimal examples of every documented difference (TopoQSPR side computed)
 # ---------------------------------------------------------------------------
@@ -244,6 +301,23 @@ def test_float32_accumulation_on_long_paths():
 # ---------------------------------------------------------------------------
 # optional: re-run ChemGraphX
 # ---------------------------------------------------------------------------
+@pytest.mark.network
+def test_columnf_degree_values_equal_columnab():
+    """The degree values are read from ColumnF; main.py's /degree_based uses
+    ColumnAB. They must be the same dict."""
+    clone = os.environ.get("CHEMGRAPHX_DIR")
+    if not clone or not (Path(clone) / "server" / "column_f.py").exists():
+        pytest.skip("set CHEMGRAPHX_DIR to a ChemGraphX clone to re-run it")
+    pytest.importorskip("igraph")
+    cgx = TOOL.load_chemgraphx(Path(clone))
+    assert issubclass(cgx.ColumnF, cgx.ColumnAB)
+    for n, edges in [(6, [(i, (i + 1) % 6) for i in range(6)]),
+                     (5, [(0, 1), (1, 2), (2, 3), (1, 4)])]:
+        textarea = TOOL.adjacency_json(n, edges)
+        assert cgx.ColumnF("", textarea).degree_indices == \
+            cgx.ColumnAB("", textarea).degree_indices
+
+
 @pytest.mark.network
 def test_fixture_is_reproducible_with_chemgraphx():
     clone = os.environ.get("CHEMGRAPHX_DIR")
