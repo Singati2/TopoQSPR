@@ -558,3 +558,26 @@ All 135 names of v0.x `config.py:TOPO_INDICES`, in their original order.
 | `R4_HTM` | dropped: one of the twelve hybrid descriptors of arockiaraj2023sar (per its abstract); full text not accessible and no open source restates the formula, so the definition could not be checked; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
 | `R4_BMA` | dropped: = 2m + 2 R4_ISI identically; formula not verifiable; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
 | `R4_TMA` | dropped: = 2 R4_M1 - 2 R4_ISI identically; formula not verifiable; additionally k = 4 exceeds Delta(G) = 3 for most drugs (v0.x silently dropped the zero-weight edges) |
+
+## ChemGraphX cross-check (2026-10-03)
+
+Status: **done, all shared indices agree.** ChemGraphX (Jacob et al.,
+J. Cheminform. 18:39, 2026; commit `d8fea04ffc90ec4acb93748a79392c45c93adc1d`)
+computes 41 of the 102 registry indices: 25 degree, 8 neighbourhood-degree-sum
+and 8 distance indices. The panel has 43 graphs: 9 closed-form graphs, 10 PAHs
+and the 24 drugs of the Mordred panel. Each graph was given to ChemGraphX as
+`.mol` V2000, as `.mol` V3000 and as adjacency JSON. All 41 indices agree with
+TopoQSPR to a relative 1.3e-15 (1,763 comparisons).
+
+Two indices differ only by convention, not in value. ChemGraphX "PI" is `PI_v`
+and its "Edge PI" is `PI`. ChemGraphX's edge Wiener is `W_e` - m(m-1)/2,
+because it uses the minimum endpoint distance instead of W(L(G)). No TopoQSPR
+formula changed.
+
+Other ChemGraphX behaviours have minimal examples in
+`docs/CHEMGRAPHX_CROSSCHECK.md`: explicit H atoms in a `.mol` become vertices,
+disconnected inputs and isolated atoms are handled differently, `inf` is
+returned where TopoQSPR gives NaN, and float32 sums lose exactness above 2^24.
+Tool: `tools/crosscheck_chemgraphx.py`. Fixture:
+`tests/fixtures/chemgraphx/values.json`. Tests:
+`tests/test_chemgraphx_crosscheck.py`.
