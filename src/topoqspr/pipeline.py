@@ -5,8 +5,9 @@ targets -> nested-CV baseline ladder -> results directory + run record.
 for the schema and every output file):
 
 1. **cohort** - :func:`topoqspr.cohort.build_cohort` from confirmed MeSH IDs
-   (ChEMBL, cached per release), or a cohort manifest written earlier, or a
-   user SMILES CSV (``id``, ``smiles``);
+   (ChEMBL, cached per release), or the pooled approved-drug set
+   (:func:`topoqspr.expdata.approved_drug_pool`), or a cohort manifest
+   written earlier, or a user SMILES CSV (``id``, ``smiles``);
 2. **standardize** - :func:`topoqspr.graph.standardize` on every candidate;
    rejections are kept in ``molecules.csv`` with their code. Two candidates
    whose standardised parents share a full InChIKey are de-duplicated (the
@@ -29,7 +30,14 @@ for the schema and every output file):
    corrected repeated-CV t intervals; docs/EVALUATION_PROTOCOL.md) once per
    *learner*: ``selected`` (family and hyperparameters chosen in the inner
    loop among all configured families) and each family on its own;
-7. **write** - CSV outputs, ``run_record.json`` last. All files are written
+7. **protocol** - the confirmatory protocol of EXPERIMENT_PLAN §7 on the
+   confirmatory family named in ``config.protocol.family``: the
+   Y-randomised control (:func:`permutation_control`), the whole-procedure
+   paired bootstrap (:func:`paired_bootstrap`) and the confirmatory table
+   (corrected-t CI, BH and BY q, practical-significance flag, AD share,
+   permutation p); plus applicability-domain coverage and in-domain metrics
+   for every evaluated (target, learner, set) (:func:`ad_report`);
+8. **write** - CSV outputs, ``run_record.json`` last. All files are written
    to a staging directory and moved into the results directory only when the
    run has succeeded, so a failed run leaves nothing behind.
 
@@ -61,6 +69,7 @@ from . import __version__
 from . import evaluate as ev
 from . import features as ft
 from . import provenance as pv
+from . import stats
 from .graph import standardize
 from .indices import FAMILIES as INDEX_FAMILIES
 from .chembl import CHEMBL_DATA_LICENCE
@@ -79,6 +88,12 @@ __all__ = [
     "rerun",
     "compute_index_table",
     "read_results",
+    "permutation_control",
+    "paired_bootstrap",
+    "ad_report",
+    "confirmatory_table",
+    "PROTOCOL_CSVS",
+    "AD_CSVS",
 ]
 
 log = logging.getLogger("topoqspr.pipeline")
@@ -98,6 +113,27 @@ RESULT_CSVS: tuple[str, ...] = (
     "manifest.csv", "molecules.csv", "features.csv", "targets.csv", "failures.csv",
     "folds.csv", "predictions.csv", "paired.csv", "inner.csv", "summary.csv",
 )
+
+#: Applicability-domain report, written for every run with ``evaluation.ad`` set.
+AD_CSVS: tuple[str, ...] = ("ad.csv", "ad_summary.csv")
+
+#: Files of the protocol stage (written only when ``config.protocol`` is set).
+PROTOCOL_CSVS: tuple[str, ...] = (
+    "permutation.csv", "permutation_summary.csv", "bootstrap.csv", "confirmatory.csv",
+)
+
+_PROTOCOL_DEFAULTS: dict[str, Any] = {
+    # null: no confirmatory analysis; "auto": every class-3 target x (TI vs
+    # evaluation.reference); or a list of {"target", "set", "reference"} entries
+    # (or "target:SET-REFERENCE" strings)
+    "family": None,
+    "learner": "selected",          # learner whose results form the confirmatory table
+    "practical_threshold": 0.05,    # EXPERIMENT_PLAN §7 minimal meaningful Delta R2
+    "q": 0.05,                      # FDR level for BH / BY
+    "permutation": {"enabled": True, "n_permutations": 200, "seed": 0,
+                    "learner": None, "feature_sets": None, "quantile": 0.95},
+    "bootstrap": {"enabled": True, "n_boot": 200, "seed": 0, "families": None},
+}
 
 _DEFAULTS: dict[str, Any] = {
     "schema": CONFIG_SCHEMA,
@@ -122,8 +158,12 @@ _DEFAULTS: dict[str, Any] = {
         "min_n": 50,
         "min_n_test": 10,
     },
+    # null = no protocol stage (and no "protocol" key in the resolved config, so
+    # configs written before the protocol stage keep their config_sha256)
+    "protocol": None,
     "output": {"features_format": "csv"},
-    "runtime": {"n_jobs": 1, "chembl_cache_dir": None, "offline": False},
+    "runtime": {"n_jobs": 1, "chembl_cache_dir": None, "offline": False,
+                "expdata_cache_dir": None},
 }
 
 _COHORT_DEFAULTS: dict[str, dict[str, Any]] = {
@@ -131,6 +171,8 @@ _COHORT_DEFAULTS: dict[str, dict[str, Any]] = {
                "exclude_sole_evidence": None, "exclude_diagnostics": False,
                "include_descendants": False, "disease_label": None,
                "chembl_release": None},
+    # pooled approved small-molecule drugs for any indication (expdata.approved_drug_pool)
+    "pooled": {"chembl_release": None},
     "manifest": {"path": None},
     "smiles_csv": {"path": None, "id_column": "id", "smiles_column": "smiles"},
 }
@@ -210,6 +252,8 @@ def resolve_config(config: Mapping) -> dict:
         if coh["include_descendants"]:
             raise ValueError("include_descendants needs the NLM MeSH client and is not "
                              "supported by the pipeline yet; list the descendant IDs explicitly")
+    elif src == "pooled":
+        pass
     elif not coh["path"]:
         raise ValueError(f"cohort.path is required for source {src!r}")
     cfg["cohort"] = coh
@@ -301,8 +345,108 @@ def resolve_config(config: Mapping) -> dict:
     cfg["runtime"]["n_jobs"] = int(cfg["runtime"]["n_jobs"])
     cfg["runtime"]["offline"] = bool(cfg["runtime"]["offline"])
     cfg["name"] = str(cfg["name"])
+    if cfg["protocol"] is None:
+        del cfg["protocol"]
+    else:
+        cfg["protocol"] = _resolve_protocol(cfg["protocol"], cfg)
     # round-trip through canonical JSON: only JSON types survive, hashing is exact
     return json.loads(pv.canonical_json(cfg))
+
+
+def _valid_set_name(name: str, fsets: Sequence[str]) -> bool:
+    if name == "TI_family":
+        return False
+    if name in fsets:
+        return True
+    return ("TI_family" in fsets and name.startswith("TI_")
+            and name[3:] in INDEX_FAMILIES)
+
+
+def _parse_family_entry(entry, reference: str) -> dict:
+    """``{"target", "set", "reference"}`` or ``"target:SET-REFERENCE"`` / ``"target:SET"``."""
+    if isinstance(entry, str):
+        target, sep, comp = entry.partition(":")
+        if not sep or not target or not comp:
+            raise ValueError(f"protocol.family entry {entry!r}: use 'target:SET-REFERENCE' "
+                             "or a mapping with target, set, reference")
+        st, _, ref = comp.partition("-")
+        entry = {"target": target, "set": st, "reference": ref or reference}
+    if not isinstance(entry, Mapping):
+        raise ValueError(f"protocol.family entry {entry!r} must be a mapping or a string")
+    e = _merge({"target": None, "set": None, "reference": reference}, entry, "protocol.family[]")
+    if not e["target"] or not e["set"]:
+        raise ValueError(f"protocol.family entry {dict(entry)!r} needs 'target' and 'set'")
+    return {k: str(e[k]) for k in ("target", "set", "reference")}
+
+
+def _resolve_protocol(given, cfg: dict) -> dict:
+    """Validate and complete the ``protocol`` section (see :data:`_PROTOCOL_DEFAULTS`)."""
+    if not isinstance(given, Mapping):
+        raise ValueError("config.protocol must be a mapping or null")
+    p = _merge(_PROTOCOL_DEFAULTS, given, "protocol")
+    for sub in ("permutation", "bootstrap"):
+        p[sub] = _merge(_PROTOCOL_DEFAULTS[sub], p[sub] or {}, f"protocol.{sub}")
+    e = cfg["evaluation"]
+    fsets = cfg["feature_sets"]
+    fam = p["family"]
+    if fam is None or fam == "auto":
+        pass
+    elif isinstance(fam, (str, Mapping)) or not fam:
+        raise ValueError("protocol.family must be null, 'auto' or a non-empty list of entries")
+    else:
+        rows = [_parse_family_entry(x, e["reference"]) for x in fam]
+        keys = [(r["target"], r["set"], r["reference"]) for r in rows]
+        if len(set(keys)) != len(keys):
+            raise ValueError(f"duplicate entries in protocol.family: {keys}")
+        for r in rows:
+            for k in ("set", "reference"):
+                if not _valid_set_name(r[k], fsets):
+                    raise ValueError(f"protocol.family: {k} {r[k]!r} is not an evaluated feature "
+                                     f"set ({fsets}; TI_<family> needs 'TI_family')")
+            if r["reference"] != e["reference"]:
+                raise ValueError(f"protocol.family: reference {r['reference']!r} differs from "
+                                 f"evaluation.reference {e['reference']!r}; paired differences "
+                                 "are computed against evaluation.reference only")
+            if r["set"] == r["reference"]:
+                raise ValueError(f"protocol.family: set and reference are both {r['set']!r}")
+        p["family"] = rows
+    if p["learner"] not in e["learners"]:
+        raise ValueError(f"protocol.learner {p['learner']!r} is not in evaluation.learners "
+                         f"{e['learners']}")
+    p["practical_threshold"] = float(p["practical_threshold"])
+    p["q"] = float(p["q"])
+    if not 0.0 < p["q"] < 1.0:
+        raise ValueError("protocol.q must lie in (0, 1)")
+    perm = p["permutation"]
+    perm["enabled"] = bool(perm["enabled"])
+    perm["n_permutations"] = int(perm["n_permutations"])
+    perm["seed"] = int(perm["seed"])
+    perm["quantile"] = float(perm["quantile"])
+    if perm["enabled"] and perm["n_permutations"] < 1:
+        raise ValueError("protocol.permutation.n_permutations must be >= 1")
+    if perm["learner"] is not None and perm["learner"] not in e["learners"]:
+        raise ValueError(f"protocol.permutation.learner {perm['learner']!r} is not in "
+                         "evaluation.learners (its observed R2 comes from the main evaluation)")
+    if perm["feature_sets"] is not None:
+        fs = [perm["feature_sets"]] if isinstance(perm["feature_sets"], str) \
+            else list(perm["feature_sets"])
+        bad = [s for s in fs if not _valid_set_name(s, fsets)]
+        if bad or not fs or len(set(fs)) != len(fs):
+            raise ValueError(f"protocol.permutation.feature_sets {fs}: unknown, empty or duplicated")
+        perm["feature_sets"] = fs
+    boot = p["bootstrap"]
+    boot["enabled"] = bool(boot["enabled"])
+    boot["n_boot"] = int(boot["n_boot"])
+    boot["seed"] = int(boot["seed"])
+    if boot["enabled"] and boot["n_boot"] < 2:
+        raise ValueError("protocol.bootstrap.n_boot must be >= 2")
+    if boot["families"] is not None:
+        bf = [boot["families"]] if isinstance(boot["families"], str) else list(boot["families"])
+        bad = [f for f in bf if f not in MODEL_FAMILIES]
+        if bad or not bf or len(set(bf)) != len(bf):
+            raise ValueError(f"protocol.bootstrap.families {bf}: unknown, empty or duplicated")
+        boot["families"] = bf
+    return p
 
 
 # ----------------------------------------------------------------- helpers
@@ -362,12 +506,15 @@ def read_results(out_dir: str | os.PathLike, name: str = "summary", **kwargs) ->
 
 
 def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
-    """Write manifest.csv/.json; return (candidates frame, chembl info, inputs)."""
+    """Write manifest.csv/.json; return (candidates frame, chembl info, inputs, client).
+
+    ``client`` is the ChEMBL client used for a ``chembl`` or ``pooled`` cohort
+    (None otherwise); it is handed on to target providers (ChEMBL-hosted
+    measured targets must come from the same release)."""
     coh = cfg["cohort"]
     inputs: dict[str, dict] = {}
-    if coh["source"] == "chembl":
+    if coh["source"] in ("chembl", "pooled"):
         from .chembl import ChemblClient
-        from .cohort import build_cohort
 
         if client is None:
             rt = cfg["runtime"]
@@ -376,12 +523,19 @@ def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
         if coh["chembl_release"] and client.release != coh["chembl_release"]:
             raise RuntimeError(f"config pins {coh['chembl_release']} but the client serves "
                                f"{client.release}")
-        cohort = build_cohort(
-            coh["mesh_ids"], client, min_phase=coh["min_phase"],
-            evidence_sources=coh["evidence_sources"],
-            exclude_sole_evidence=coh["exclude_sole_evidence"],
-            exclude_diagnostics=coh["exclude_diagnostics"],
-            include_descendants=False, disease_label=coh["disease_label"])
+        if coh["source"] == "pooled":
+            from .expdata import approved_drug_pool
+
+            cohort = approved_drug_pool(client)
+        else:
+            from .cohort import build_cohort
+
+            cohort = build_cohort(
+                coh["mesh_ids"], client, min_phase=coh["min_phase"],
+                evidence_sources=coh["evidence_sources"],
+                exclude_sole_evidence=coh["exclude_sole_evidence"],
+                exclude_diagnostics=coh["exclude_diagnostics"],
+                include_descendants=False, disease_label=coh["disease_label"])
         cohort.write(out / "manifest.csv", timestamp_utc=timestamp_utc)
         inc = cohort.included
         cand = pd.DataFrame({"id": inc["parent_chembl_id"].astype(str),
@@ -390,7 +544,7 @@ def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
                       source="ChEMBL REST API via topoqspr.chembl.ChemblClient",
                       offline=bool(getattr(client, "offline", False)),
                       data_licence=CHEMBL_DATA_LICENCE)
-        return cand, chembl, inputs
+        return cand, chembl, inputs, client
 
     path = Path(coh["path"])
     path = path if path.is_absolute() else base / path
@@ -439,7 +593,7 @@ def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
             if not verified:
                 log.warning("%s has no sidecar with manifest_sha256; its ChEMBL release "
                             "label %s is recorded as unverified", path, releases[0])
-        return cand, chembl, inputs
+        return cand, chembl, inputs, None
 
     # smiles_csv
     df = _read_text_csv(path)
@@ -459,7 +613,7 @@ def _cohort_stage(cfg: dict, out: Path, base: Path, timestamp_utc: str, client):
         rows=int(len(cand)), id_column=coh["id_column"], smiles_column=coh["smiles_column"],
         topoqspr_version=__version__, created_utc=timestamp_utc,
         manifest_sha256=pv.sha256_file(out / "manifest.csv")), sort_keys=True, indent=1) + "\n")
-    return cand, None, inputs
+    return cand, None, inputs, None
 
 
 # ------------------------------------------------------------ standardize
@@ -685,17 +839,43 @@ def _cv_groups(split: str, mols, conn_groups: Sequence[str], ids: Sequence[str])
     return np.asarray(conn, dtype=object)
 
 
+def _too_few_rows(n: int, groups, outer: int, inner: int) -> str:
+    """Reason why nested CV cannot be split at all ('' if it can)."""
+    units = n if groups is None else len(set(groups))
+    if units < outer:
+        return f"{units} CV units (molecules or groups) with a value < outer_splits={outer}"
+    if units - math.ceil(units / outer) < inner:
+        return (f"{units} CV units leave fewer than inner_splits={inner} units in an "
+                "outer training part")
+    return ""
+
+
 def _evaluate_stage(cfg, wide, sets, specs, values, groups_all, timer):
+    """Run the baseline ladder; returns the result frames plus ``context``:
+    per target the rows, y, CV groups, feature sets and the
+    :class:`~topoqspr.evaluate.ComparisonResult` of every learner (used by the
+    protocol stage), and ``skipped`` targets with the reason."""
     e = cfg["evaluation"]
     folds, preds, paired, inner, summ = [], [], [], [], []
     n_jobs = cfg["runtime"]["n_jobs"]
+    context: dict[str, dict] = {}
+    skipped: dict[str, str] = {}
     for spec in specs:
         y = values[spec.name]
         keep = np.isfinite(y.to_numpy(dtype=float))
         rows = np.flatnonzero(keep)
         y_t = y.iloc[rows]
         groups = None if groups_all is None else groups_all[rows]
+        why = _too_few_rows(len(rows), groups, e["outer_splits"], e["inner_splits"])
+        if why:
+            # a measured target may cover only a handful of a small cohort's drugs:
+            # reported (run record counts.skipped_targets), never a crash or a 0
+            skipped[spec.name] = why
+            log.warning("target %s not evaluated: %s", spec.name, why)
+            continue
         sets_t = _sets_for_target(wide, sets, spec, rows)
+        context[spec.name] = dict(spec=spec, rows=rows, y=y_t, groups=groups, sets=sets_t,
+                                  n_missing=int((~keep).sum()), cmp={})
         for learner in e["learners"]:
             fams = tuple(e["families"]) if learner == "selected" else (learner,)
             t0 = time.perf_counter()
@@ -708,6 +888,7 @@ def _evaluate_stage(cfg, wide, sets, specs, values, groups_all, timer):
             dt = time.perf_counter() - t0
             timer.t[f"evaluate:{spec.name}:{learner}"] = dt
             log.info("evaluate %s / %s: %.1f s", spec.name, learner, dt)
+            context[spec.name]["cmp"][learner] = cmp
             key = dict(target=spec.name, learner=learner)
             for set_name, res in cmp.results.items():
                 f = res.folds.copy()
@@ -736,15 +917,518 @@ def _evaluate_stage(cfg, wide, sets, specs, values, groups_all, timer):
     cat = lambda xs: pd.concat(xs, ignore_index=True) if xs else pd.DataFrame()  # noqa: E731
     summary = cat(summ)
     lead = ["target", "target_class", "learner", "set", "reference", "n", "n_target_missing", "p"]
-    summary = summary[lead + [c for c in summary.columns if c not in lead]]
+    if len(summary):
+        summary = summary[lead + [c for c in summary.columns if c not in lead]]
+    else:
+        summary = pd.DataFrame(columns=lead)
     return dict(folds=cat(folds), predictions=cat(preds), paired=cat(paired),
-                inner=cat(inner), summary=summary)
+                inner=cat(inner), summary=summary, context=context, skipped=skipped)
 
 
 def _prefix(df: pd.DataFrame, key: Mapping) -> pd.DataFrame:
     for i, (k, v) in enumerate(key.items()):
         df.insert(i, k, v)
     return df
+
+
+# --------------------------------------------------------------- protocol
+def _learner_families(learner: str, families: Sequence[str]) -> tuple[str, ...]:
+    return tuple(families) if learner == "selected" else (learner,)
+
+
+def _nested_stat(res: ev.NestedCVResult) -> dict:
+    """Mean pooled R^2 over repeats (the Y-randomisation statistic; NaN when any
+    outer fold failed, as :func:`topoqspr.evaluate.nested_r2_statistic`)."""
+    s = res.summary()
+    return dict(r2_pooled_mean=s["r2_pooled_mean"] if s["n_failed_folds"] == 0 else math.nan,
+                r2_fold_mean=s["r2_fold_mean"], mae_fold_mean=s["mae_fold_mean"],
+                n_failed_folds=int(s["n_failed_folds"]), reason=s["reason"])
+
+
+def _one_permutation(feature_sets, y, b, seed, groups, families, nested_kwargs):
+    perm = np.random.default_rng([seed, b]).permutation(y.size)
+    yp = y[perm]
+    out = []
+    for name, X in feature_sets.items():
+        res = ev.nested_cv(X, yp, families, groups=groups, ad=None, **nested_kwargs)
+        out.append(dict(set=name, permutation=b, rng=f"default_rng([{seed}, {b}])",
+                        **_nested_stat(res)))
+    return out
+
+
+def permutation_control(feature_sets: Mapping[str, pd.DataFrame], y, *,
+                        families: Sequence[str], n_permutations: int = 200, seed: int = 0,
+                        groups=None, n_jobs: int = 1, **nested_kwargs) -> pd.DataFrame:
+    """Y-randomised control (EXPERIMENT_PLAN §7; Ruecker et al. 2007).
+
+    For b = 0..K-1 the target is permuted with
+    ``numpy.random.default_rng([seed, b]).permutation(n)`` (the same permutation
+    for every feature set, so sets are compared on identical nulls) and the
+    **whole** nested procedure of :func:`topoqspr.evaluate.nested_cv` is rerun
+    with the same ``families``, outer seeds, inner rule and ``groups``. The
+    rows of X and their group labels are not moved, so the outer and inner
+    folds are exactly those of the real analysis. The statistic is the mean
+    pooled out-of-fold R^2 over repeats (NaN if any outer fold failed).
+
+    ``nested_kwargs`` go to :func:`~topoqspr.evaluate.nested_cv` (outer_splits,
+    seeds, inner_splits, random_state, min_n, min_n_test); the AD is not fitted
+    (it does not change predictions). Permutations run in parallel with
+    ``n_jobs`` (identical results).
+
+    Returns one row per (set, permutation): set, permutation, rng,
+    r2_pooled_mean, r2_fold_mean, mae_fold_mean, n_failed_folds, reason.
+    """
+    y = np.asarray(y, dtype=float).ravel()
+    families = tuple(families)
+    args = (feature_sets, y)
+    if n_jobs == 1:
+        outs = [_one_permutation(*args, b, seed, groups, families, nested_kwargs)
+                for b in range(n_permutations)]
+    else:
+        from joblib import Parallel, delayed
+        outs = Parallel(n_jobs=n_jobs)(
+            delayed(_one_permutation)(*args, b, seed, groups, families, nested_kwargs)
+            for b in range(n_permutations))
+    rows = [r for o in outs for r in o]
+    df = pd.DataFrame(rows, columns=["set", "permutation", "rng", "r2_pooled_mean", "r2_fold_mean",
+                                     "mae_fold_mean", "n_failed_folds", "reason"])
+    order = {s: i for i, s in enumerate(feature_sets)}
+    return df.sort_values(["set", "permutation"], key=lambda c: c.map(order) if c.name == "set"
+                          else c, kind="mergesort").reset_index(drop=True)
+
+
+def _one_resample(feature_sets, y, set_name, reference, units, cv_groups, b, seed, families,
+                  nested_kwargs):
+    labels = feature_sets[reference].index
+    if b < 0:  # the original data, same procedure and families
+        idx = np.arange(y.size)
+        groups = cv_groups
+        rng_txt = "original"
+    else:
+        idx, _ = stats.group_bootstrap(units, np.random.default_rng([seed, b]))
+        base = units if cv_groups is None else cv_groups
+        # every copy of an original molecule keeps its original group label, so
+        # copies (and connectivity-group partners) never straddle a fold boundary
+        groups = np.asarray(base, dtype=object)[idx]
+        rng_txt = f"default_rng([{seed}, {b}])"
+    new_index = pd.Index([f"{labels[i]}#{k}" for k, i in enumerate(idx)], name=labels.name)
+    fs = {nm: feature_sets[nm].iloc[idx].set_axis(new_index, axis=0)
+          for nm in (set_name, reference)}
+    yb = pd.Series(y[idx], index=new_index)
+    n_units = int(len(set(np.asarray(units, dtype=object)[idx].tolist())))
+    row = dict(resample=b, rng=rng_txt, n_rows=int(idx.size), n_units=n_units,
+               d_r2=math.nan, d_mae=math.nan, r2_set=math.nan, r2_reference=math.nan,
+               mae_set=math.nan, mae_reference=math.nan, n_failed_folds=0, reason="")
+    why = _too_few_rows(idx.size, groups, nested_kwargs["outer_splits"],
+                        nested_kwargs["inner_splits"])
+    if why:
+        row["reason"] = why
+        return row
+    cmp = ev.compare_feature_sets(fs, yb, reference=reference, families=families,
+                                  groups=groups, ad=None, **nested_kwargs)
+    d = cmp.paired[cmp.paired["set"] == set_name]
+    s = cmp.summary.set_index("set")
+    row.update(d_r2=float(d["d_r2"].mean(skipna=False)), d_mae=float(d["d_mae"].mean(skipna=False)),
+               r2_set=float(s.loc[set_name, "r2_fold_mean"]),
+               r2_reference=float(s.loc[reference, "r2_fold_mean"]),
+               mae_set=float(s.loc[set_name, "mae_fold_mean"]),
+               mae_reference=float(s.loc[reference, "mae_fold_mean"]),
+               n_failed_folds=int(s["n_failed_folds"].sum()),
+               reason="; ".join(r for r in s["reason"].astype(str) if r))
+    return row
+
+
+def paired_bootstrap(feature_sets: Mapping[str, pd.DataFrame], y, *, set_name: str,
+                     reference: str, families: Sequence[str], n_boot: int = 200, seed: int = 0,
+                     units=None, cv_groups=None, alpha: float = 0.05, n_jobs: int = 1,
+                     **nested_kwargs) -> tuple[pd.DataFrame, dict]:
+    """Whole-procedure paired bootstrap of Delta R^2 and Delta MAE (EXPERIMENT_PLAN §7
+    sensitivity; CV intervals can undercover, Bates, Hastie & Tibshirani 2023).
+
+    Resample b = 0..B-1 draws the CV *units* with replacement
+    (:func:`topoqspr.stats.group_bootstrap` with ``default_rng([seed, b])``):
+    ``units`` are the connectivity-group labels (a molecule without a
+    stereo/isotope partner is its own unit; default: every row its own unit),
+    so stereoisomers are drawn together. On each resample the identical
+    repeated nested CV is rerun for ``set_name`` and ``reference`` (same outer
+    seeds, inner rule and ``families``) with grouped folds in which every copy
+    of an original unit carries its original label (``cv_groups`` if given,
+    e.g. scaffold groups, else the unit) - otherwise a duplicated molecule
+    would sit in a training and a test fold at once. The statistics are the
+    fold means of d_R2 = R2_set - R2_ref and d_MAE = MAE_ref - MAE_set, i.e.
+    the same estimands as the corrected-t analysis.
+
+    A row ``resample = -1`` ("original") reruns the procedure once on the
+    original data with these families (it equals the main analysis when the
+    families are the confirmatory learner's). The percentile interval
+    (:func:`topoqspr.stats.percentile_interval`) is NaN with a reason if any
+    resample failed. ``families`` may be a faster subset than the main
+    learner (cost-aware sensitivity analysis; recorded).
+
+    Returns (rows per resample, summary dict).
+    """
+    y = np.asarray(y, dtype=float).ravel()
+    labels = feature_sets[reference].index
+    units = np.asarray([str(i) for i in labels] if units is None else units, dtype=object)
+    if units.size != y.size:
+        raise ValueError(f"units has {units.size} labels for {y.size} rows")
+    families = tuple(families)
+    jobs = list(range(-1, n_boot))
+    args = (feature_sets, y, set_name, reference, units, cv_groups)
+    if n_jobs == 1:
+        rows = [_one_resample(*args, b, seed, families, nested_kwargs) for b in jobs]
+    else:
+        from joblib import Parallel, delayed
+        rows = Parallel(n_jobs=n_jobs)(
+            delayed(_one_resample)(*args, b, seed, families, nested_kwargs) for b in jobs)
+    df = pd.DataFrame(rows)
+    boot = df[df["resample"] >= 0]
+    ci_r2 = stats.percentile_interval(boot["d_r2"].to_numpy(), alpha)
+    ci_mae = stats.percentile_interval(boot["d_mae"].to_numpy(), alpha)
+    orig = df[df["resample"] == -1].iloc[0]
+    summary = dict(n_boot=int(n_boot), seed=int(seed), families=list(families),
+                   d_r2_original=float(orig["d_r2"]), d_mae_original=float(orig["d_mae"]),
+                   d_r2_ci_low=ci_r2["ci_low"], d_r2_ci_high=ci_r2["ci_high"],
+                   d_r2_boot_mean=ci_r2["mean"], d_r2_boot_sd=ci_r2["sd"],
+                   d_mae_ci_low=ci_mae["ci_low"], d_mae_ci_high=ci_mae["ci_high"],
+                   n_valid=ci_r2["n_valid"],
+                   reason="; ".join(x for x in (ci_r2["reason"], str(orig["reason"])) if x))
+    return df, summary
+
+
+_AD_KEYS = ["target", "learner", "set"]
+
+
+def ad_report(predictions: pd.DataFrame, folds: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Applicability-domain coverage and in-domain metrics (EXPERIMENT_PLAN §7).
+
+    Per outer fold (``ad``): n_test, n_in_domain, n_outside, share_outside =
+    n_outside / n_test (NaN with ``ad_reason`` when the AD was not fitted, e.g.
+    the zero-column ``null`` set), and R2/MAE on the in-domain and on the
+    outside test rows (secondary; NaN when fewer than 2 / 1 rows or constant
+    y). Per (target, learner, set) (``ad_summary``): mean share outside over
+    folds, pooled share over all outer-test rows, and for in-domain and
+    outside rows the mean over repeats of the pooled per-repeat R2 and MAE,
+    next to the all-row pooled values. No NaN is skipped: a fold without an
+    AD makes the summary shares NaN and ``reason`` says so.
+    """
+    keys = _AD_KEYS + ["repeat", "fold"]
+    fcols = keys + ["n_test", "ad_reason"]
+    if predictions is None or not len(predictions):
+        return (pd.DataFrame(columns=fcols), pd.DataFrame(columns=_AD_KEYS))
+    reasons = folds.set_index(keys)["ad_reason"]
+    rows = []
+    for k, g in predictions.groupby(keys, sort=False):
+        dom = g["in_domain"].to_numpy(dtype=float)
+        yt, yp = g["y_true"].to_numpy(float), g["y_pred"].to_numpy(float)
+        n = int(len(g))
+        defined = bool(np.all(np.isfinite(dom)))
+        m_in = ev._metrics(yt[dom == 1], yp[dom == 1]) if defined else dict(r2=math.nan, mae=math.nan)
+        m_out = ev._metrics(yt[dom == 0], yp[dom == 0]) if defined else dict(r2=math.nan, mae=math.nan)
+        n_in = int(np.sum(dom == 1)) if defined else math.nan
+        n_out = int(np.sum(dom == 0)) if defined else math.nan
+        rows.append(dict(zip(keys, k), n_test=n, n_in_domain=n_in, n_outside=n_out,
+                         share_outside=(n_out / n) if defined else math.nan,
+                         r2_in_domain=m_in["r2"], mae_in_domain=m_in["mae"],
+                         r2_outside=m_out["r2"], mae_outside=m_out["mae"],
+                         ad_reason=str(reasons.get(k, "")) if not defined else ""))
+    ad = pd.DataFrame(rows)
+    summ = []
+    for k, g in predictions.groupby(_AD_KEYS, sort=False):
+        fa = ad[(ad["target"] == k[0]) & (ad["learner"] == k[1]) & (ad["set"] == k[2])]
+        n_undef = int(fa["share_outside"].isna().sum())
+        rep = []
+        for r, gr in g.groupby("repeat", sort=True):
+            dom = gr["in_domain"].to_numpy(dtype=float)
+            yt, yp = gr["y_true"].to_numpy(float), gr["y_pred"].to_numpy(float)
+            ok = bool(np.all(np.isfinite(dom)))
+            m_all = ev._metrics(yt, yp)
+            m_in = ev._metrics(yt[dom == 1], yp[dom == 1]) if ok else dict(r2=math.nan, mae=math.nan)
+            m_out = ev._metrics(yt[dom == 0], yp[dom == 0]) if ok else dict(r2=math.nan, mae=math.nan)
+            rep.append((m_all["r2"], m_all["mae"], m_in["r2"], m_in["mae"], m_out["r2"], m_out["mae"]))
+        rep = pd.DataFrame(rep, columns=["r2", "mae", "r2_in", "mae_in", "r2_out", "mae_out"])
+        dom_all = g["in_domain"].to_numpy(dtype=float)
+        pooled = float(np.mean(dom_all == 0)) if np.all(np.isfinite(dom_all)) else math.nan
+        why = []
+        if n_undef:
+            first = fa.loc[fa["share_outside"].isna(), "ad_reason"].iloc[0]
+            why.append(f"AD not available in {n_undef} of {len(fa)} folds ({first})")
+        summ.append(dict(zip(_AD_KEYS, k), n_folds=int(len(fa)),
+                         share_outside_fold_mean=float(fa["share_outside"].mean(skipna=False)),
+                         share_outside_fold_max=float(fa["share_outside"].max(skipna=False)),
+                         share_outside_pooled=pooled,
+                         r2_pooled_mean=float(rep["r2"].mean(skipna=False)),
+                         mae_pooled_mean=float(rep["mae"].mean(skipna=False)),
+                         r2_in_domain_pooled_mean=float(rep["r2_in"].mean(skipna=False)),
+                         mae_in_domain_pooled_mean=float(rep["mae_in"].mean(skipna=False)),
+                         r2_outside_pooled_mean=float(rep["r2_out"].mean(skipna=False)),
+                         mae_outside_pooled_mean=float(rep["mae_out"].mean(skipna=False)),
+                         reason="; ".join(why)))
+    return ad, pd.DataFrame(summ)
+
+
+def _expand_family(protocol: Mapping, specs: Sequence[TargetSpec], reference: str) -> list[dict]:
+    fam = protocol.get("family")
+    if fam is None:
+        return []
+    if fam == "auto":
+        return [dict(target=s.name, set="TI", reference=reference)
+                for s in specs if s.target_class == 3]
+    return [dict(r) for r in fam]
+
+
+CONFIRMATORY_COLUMNS = [
+    "target", "target_class", "comparison", "set", "reference", "learner", "n", "underpowered",
+    "d_r2_mean", "d_r2_ci_low", "d_r2_ci_high", "d_r2_p", "d_r2_q_bh", "d_r2_q_by",
+    "informative_bh", "informative_by",
+    "d_mae_mean", "d_mae_ci_low", "d_mae_ci_high", "d_mae_p",
+    "practical_threshold", "practically_significant",
+    "ad_share_outside_set", "ad_share_outside_reference",
+    "perm_k", "perm_p_set", "perm_uninformative_set", "perm_p_reference",
+    "perm_uninformative_reference",
+    "boot_b", "boot_families", "boot_d_r2_original", "boot_d_r2_ci_low", "boot_d_r2_ci_high",
+    "boot_d_mae_original", "boot_d_mae_ci_low", "boot_d_mae_ci_high",
+    "reason",
+]
+
+
+def confirmatory_table(family: Sequence[Mapping], summary: pd.DataFrame, ad_summary: pd.DataFrame,
+                       *, learner: str, practical_threshold: float = 0.05, q: float = 0.05,
+                       perm_summary: pd.DataFrame | None = None,
+                       boot: Mapping | None = None, target_classes: Mapping | None = None,
+                       skipped: Mapping | None = None) -> pd.DataFrame:
+    """One row per (target x comparison) of the confirmatory family.
+
+    From the main analysis (``summary`` of ``learner``): n, mean d_R2 with the
+    corrected repeated-CV t CI and p, d_MAE with CI and p. Across the family:
+    BH and BY adjusted q of d_r2_p (:func:`topoqspr.stats.benjamini_hochberg`,
+    :func:`~topoqspr.stats.benjamini_yekutieli`; NaN p stays NaN and does not
+    count towards m). ``informative_bh`` = q_bh <= q and d_r2_mean > 0 (the
+    CI's lower bound above 0 after BH control, EXPERIMENT_PLAN §7);
+    ``informative_by`` likewise with BY. ``practically_significant`` =
+    d_r2_mean >= ``practical_threshold``. AD: mean share of outer-test
+    molecules outside the domain for the set and the reference. Permutation:
+    K and the empirical p (+1 corrected) and 95th-percentile flag for the set
+    and for the reference. Bootstrap: B, families, original-data estimate and
+    percentile CIs. Anything unavailable is NaN, with ``reason``.
+    """
+    skipped = dict(skipped or {})
+    target_classes = dict(target_classes or {})
+    s = summary[summary["learner"] == learner].set_index(["target", "set"]) if len(summary) \
+        else pd.DataFrame()
+    ads = ad_summary[ad_summary["learner"] == learner].set_index(["target", "set"]) \
+        if ad_summary is not None and len(ad_summary) else pd.DataFrame()
+    ps = perm_summary.set_index(["target", "set"]) \
+        if perm_summary is not None and len(perm_summary) else pd.DataFrame()
+    rows = []
+    for fam in family:
+        t, st, ref = fam["target"], fam["set"], fam["reference"]
+        row = {c: math.nan for c in CONFIRMATORY_COLUMNS}
+        row.update(target=t, target_class=target_classes.get(t, math.nan),
+                   comparison=f"{st}-{ref}", set=st, reference=ref, learner=learner,
+                   practical_threshold=practical_threshold, reason="")
+        why = []
+        if t in skipped:
+            why.append(f"target not evaluated: {skipped[t]}")
+        elif (t, st) not in s.index:
+            why.append(f"no result for set {st!r} (feature set not produced for this run)")
+        else:
+            r = s.loc[(t, st)]
+            row.update(n=int(r["n"]), underpowered=bool(r["underpowered"]),
+                       **{c: float(r[c]) for c in ("d_r2_mean", "d_r2_ci_low", "d_r2_ci_high",
+                                                   "d_r2_p", "d_mae_mean", "d_mae_ci_low",
+                                                   "d_mae_ci_high", "d_mae_p")})
+            if isinstance(r["reason"], str) and r["reason"]:
+                why.append(r["reason"])
+            if bool(r["underpowered"]):
+                why.append(f"underpowered: {r['underpowered_reason']}")
+        for nm, col in ((st, "ad_share_outside_set"), (ref, "ad_share_outside_reference")):
+            if (t, nm) in ads.index:
+                row[col] = float(ads.loc[(t, nm), "share_outside_fold_mean"])
+        for nm, sfx in ((st, "set"), (ref, "reference")):
+            if (t, nm) in ps.index:
+                pr = ps.loc[(t, nm)]
+                row["perm_k"] = int(pr["n_permutations"])
+                row[f"perm_p_{sfx}"] = float(pr["p"])
+                row[f"perm_uninformative_{sfx}"] = pr["uninformative"]
+        b = (boot or {}).get((t, st, ref))
+        if b is not None:
+            row.update(boot_b=b["n_boot"], boot_families=json.dumps(b["families"]),
+                       boot_d_r2_original=b["d_r2_original"], boot_d_r2_ci_low=b["d_r2_ci_low"],
+                       boot_d_r2_ci_high=b["d_r2_ci_high"], boot_d_mae_original=b["d_mae_original"],
+                       boot_d_mae_ci_low=b["d_mae_ci_low"], boot_d_mae_ci_high=b["d_mae_ci_high"])
+            if b["reason"]:
+                why.append(f"bootstrap: {b['reason']}")
+        row["reason"] = "; ".join(why)
+        rows.append(row)
+    df = pd.DataFrame(rows, columns=CONFIRMATORY_COLUMNS)
+    if len(df):
+        p = df["d_r2_p"].to_numpy(dtype=float)
+        df["d_r2_q_bh"], rej_bh = stats.benjamini_hochberg(p, q)
+        df["d_r2_q_by"], rej_by = stats.benjamini_yekutieli(p, q)
+        pos = df["d_r2_mean"].to_numpy(dtype=float) > 0
+        defined = np.isfinite(p)
+        df["informative_bh"] = np.where(defined, rej_bh & pos, None)
+        df["informative_by"] = np.where(defined, rej_by & pos, None)
+        d = df["d_r2_mean"].to_numpy(dtype=float)
+        df["practically_significant"] = np.where(np.isfinite(d), d >= practical_threshold, None)
+        df["underpowered"] = df["underpowered"].astype(object)
+    return df
+
+
+def _protocol_stage(cfg, res, specs, units_all, timer):
+    """Permutation control, bootstrap and the confirmatory table (+ the AD report).
+
+    Returns (frames to write, protocol record for the run record)."""
+    e = cfg["evaluation"]
+    n_jobs = cfg["runtime"]["n_jobs"]
+    out: dict[str, pd.DataFrame] = {}
+    t0 = time.perf_counter()
+    out["ad"], out["ad_summary"] = ad_report(res["predictions"], res["folds"]) \
+        if e["ad"] is not None else (None, None)
+    timer.t["protocol:ad"] = time.perf_counter() - t0
+    p = cfg.get("protocol")
+    if p is None:
+        return out, None
+    family = _expand_family(p, specs, e["reference"])
+    nested_kwargs = dict(outer_splits=e["outer_splits"], seeds=e["seeds"],
+                         inner_splits=e["inner_splits"], random_state=e["random_state"],
+                         min_n=e["min_n"], min_n_test=e["min_n_test"])
+    ctx = res["context"]
+    learner = p["learner"]
+    record = dict(family=family, family_rule=("auto: every class-3 target x (TI vs reference)"
+                                              if p["family"] == "auto" else "explicit list"),
+                  learner=learner, learner_families=list(_learner_families(learner, e["families"])),
+                  practical_threshold=p["practical_threshold"], q=p["q"], alpha=e["alpha"],
+                  multiplicity="Benjamini-Hochberg over the family's d_r2_p (BY as sensitivity)",
+                  informative_rule="q <= q-level and d_r2_mean > 0",
+                  practical_rule="d_r2_mean >= practical_threshold")
+
+    # --- Y-randomised control
+    perm = p["permutation"]
+    perm_rows, perm_summ = [], []
+    t0 = time.perf_counter()
+    if perm["enabled"] and family:
+        pl_learner = perm["learner"] or learner
+        fams = _learner_families(pl_learner, e["families"])
+        targets = list(dict.fromkeys(f["target"] for f in family))
+        for t in targets:
+            if t not in ctx:
+                continue
+            t1 = time.perf_counter()
+            c = ctx[t]
+            sets_t = perm["feature_sets"] or list(dict.fromkeys(
+                x for f in family if f["target"] == t for x in (f["set"], f["reference"])))
+            sets_t = [x for x in sets_t if x in c["sets"]]
+            fs = {x: c["sets"][x] for x in sets_t}
+            df = permutation_control(fs, c["y"].to_numpy(float), families=fams,
+                                     n_permutations=perm["n_permutations"], seed=perm["seed"],
+                                     groups=c["groups"], n_jobs=n_jobs, **nested_kwargs)
+            df.insert(0, "learner", pl_learner)
+            df.insert(0, "target", t)
+            perm_rows.append(df)
+            obs = c["cmp"][pl_learner].results
+            for x in sets_t:
+                sobs = _nested_stat(obs[x])["r2_pooled_mean"]
+                pv_ = stats.permutation_pvalue(sobs, df.loc[df["set"] == x, "r2_pooled_mean"],
+                                               quantile=perm["quantile"])
+                perm_summ.append(dict(target=t, learner=pl_learner, set=x,
+                                      n_permutations=perm["n_permutations"], seed=perm["seed"],
+                                      observed_r2_pooled_mean=pv_["observed"], p=pv_["p"],
+                                      null_mean=pv_["null_mean"], null_sd=pv_["null_sd"],
+                                      null_q95=pv_["null_q95"], null_max=pv_["null_max"],
+                                      n_valid=pv_["n_valid"], n_failed=pv_["n_failed"],
+                                      uninformative=pv_["uninformative"], reason=pv_["reason"]))
+            timer.t[f"protocol:permutation:{t}"] = time.perf_counter() - t1
+        record["permutation"] = dict(
+            n_permutations=perm["n_permutations"], seed=perm["seed"], learner=pl_learner,
+            families=list(fams), quantile=perm["quantile"],
+            rng_rule="permutation b of a target: numpy.random.default_rng([seed, b]).permutation(n)",
+            statistic="mean over repeats of pooled out-of-fold R2 (NaN if any outer fold failed)",
+            p_rule="(1 + #{null >= observed}) / (1 + K_valid)",
+            uninformative_rule="observed <= quantile of the permutation distribution",
+            folds="identical to the main analysis (rows, groups and seeds unchanged)")
+    timer.t["protocol:permutation"] = time.perf_counter() - t0
+    out["permutation"] = pd.concat(perm_rows, ignore_index=True) if perm_rows else \
+        pd.DataFrame(columns=["target", "learner", "set", "permutation", "rng", "r2_pooled_mean",
+                              "r2_fold_mean", "mae_fold_mean", "n_failed_folds", "reason"])
+    perm_df = pd.DataFrame(perm_summ, columns=[
+        "target", "learner", "set", "n_permutations", "seed", "observed_r2_pooled_mean", "p",
+        "null_mean", "null_sd", "null_q95", "null_max", "n_valid", "n_failed", "uninformative",
+        "reason"])
+    out["permutation_summary"] = perm_df
+
+    # --- whole-procedure paired bootstrap
+    boot = p["bootstrap"]
+    boot_rows, boot_summ = [], {}
+    t0 = time.perf_counter()
+    if boot["enabled"] and family:
+        fams = tuple(boot["families"]) if boot["families"] else \
+            _learner_families(learner, e["families"])
+        for f in family:
+            t = f["target"]
+            if t not in ctx or f["set"] not in ctx[t]["sets"]:
+                continue
+            t1 = time.perf_counter()
+            c = ctx[t]
+            df, sm = paired_bootstrap(
+                c["sets"], c["y"].to_numpy(float), set_name=f["set"], reference=f["reference"],
+                families=fams, n_boot=boot["n_boot"], seed=boot["seed"],
+                units=units_all[c["rows"]], cv_groups=c["groups"], alpha=e["alpha"],
+                n_jobs=n_jobs, **nested_kwargs)
+            df.insert(0, "reference", f["reference"])
+            df.insert(0, "set", f["set"])
+            df.insert(0, "target", t)
+            boot_rows.append(df)
+            boot_summ[(t, f["set"], f["reference"])] = sm
+            timer.t[f"protocol:bootstrap:{t}:{f['set']}"] = time.perf_counter() - t1
+        record["bootstrap"] = dict(
+            n_boot=boot["n_boot"], seed=boot["seed"], families=list(fams),
+            families_rule=("fast subset (protocol.bootstrap.families), cost-aware sensitivity"
+                           if boot["families"] else "the confirmatory learner's families"),
+            rng_rule="resample b: numpy.random.default_rng([seed, b]); stats.group_bootstrap",
+            unit="connectivity group (stereoisomers/isotopologues drawn together); other "
+                 "molecules singly",
+            cv_groups="every copy keeps its original group label (main-analysis CV group, or "
+                      "the unit), so copies never straddle a fold",
+            interval="percentile, alpha = evaluation.alpha; NaN if any resample failed")
+    timer.t["protocol:bootstrap"] = time.perf_counter() - t0
+    out["bootstrap"] = pd.concat(boot_rows, ignore_index=True) if boot_rows else pd.DataFrame(
+        columns=["target", "set", "reference", "resample", "rng", "n_rows", "n_units", "d_r2",
+                 "d_mae", "r2_set", "r2_reference", "mae_set", "mae_reference",
+                 "n_failed_folds", "reason"])
+
+    out["confirmatory"] = confirmatory_table(
+        family, res["summary"], out["ad_summary"], learner=learner,
+        practical_threshold=p["practical_threshold"], q=p["q"], perm_summary=perm_df,
+        boot=boot_summ, target_classes={s.name: s.target_class for s in specs},
+        skipped=res["skipped"])
+    return out, record
+
+
+def _json_ready(x):
+    """NaN/inf -> None and numpy scalars -> Python, for the run record (NaN forbidden)."""
+    if isinstance(x, Mapping):
+        return {str(k): _json_ready(v) for k, v in x.items()}
+    if isinstance(x, (list, tuple)):
+        return [_json_ready(v) for v in x]
+    if isinstance(x, np.generic):
+        x = x.item()
+    if isinstance(x, float) and not math.isfinite(x):
+        return None
+    return x
+
+
+def _check_family_targets(cfg, providers) -> None:
+    """Fail fast (before the cohort stage) if the family names an unknown target."""
+    p = cfg.get("protocol")
+    if not p or not isinstance(p.get("family"), list):
+        return
+    names = {s.name for _, _, sp in providers for s in sp}
+    bad = sorted({f["target"] for f in p["family"]} - names)
+    if bad:
+        raise ValueError(f"protocol.family names targets {bad} that no provider supplies "
+                         f"({sorted(names)})")
 
 
 # ------------------------------------------------------------------- run
@@ -770,6 +1454,7 @@ def run_study(config: Mapping, out_dir: str | os.PathLike, *, timestamp_utc: str
     if final.exists() and (not final.is_dir() or any(final.iterdir())) and not overwrite:
         raise FileExistsError(f"{final} is not empty (pass overwrite=True to replace)")
     providers = _make_providers(cfg)
+    _check_family_targets(cfg, providers)
     base = Path(base_dir).resolve() if base_dir is not None else Path.cwd().resolve()
     # Everything is written into a staging directory next to the results
     # directory and moved there only when the run has finished, so a failed run
@@ -811,8 +1496,8 @@ def _publish(stage: Path, final: Path, overwrite: bool) -> None:
 def _run_stages(cfg, providers, out: Path, base: Path, timestamp_utc: str, client, code):
     timer = _Timer()
 
-    cand, chembl, inputs = timer.run("cohort", _cohort_stage, cfg, out, base, timestamp_utc,
-                                     client)
+    cand, chembl, inputs, client = timer.run("cohort", _cohort_stage, cfg, out, base,
+                                             timestamp_utc, client)
     with rdBase.BlockLogs():
         mol_table_all, mols, graphs = timer.run(
             "standardize", _standardize_stage, cand, cfg["standardize"]["min_heavy_atoms"])
@@ -827,6 +1512,12 @@ def _run_stages(cfg, providers, out: Path, base: Path, timestamp_utc: str, clien
                               "smiles": ok["smiles"].to_numpy(),
                               "inchikey": ok["inchikey"].to_numpy()},
                              index=pd.Index(ids, name="id"))
+    rt = cfg["runtime"]
+    for _, provider, _ in providers:
+        if hasattr(provider, "set_runtime"):
+            provider.set_runtime(cache_dir=rt["expdata_cache_dir"],
+                                 chembl_cache_dir=rt["chembl_cache_dir"],
+                                 offline=rt["offline"], client=client)
     with rdBase.BlockLogs():
         specs, tvalues, tfail, tprov = timer.run("targets", _target_stage, providers, mol_table,
                                                  mols)
@@ -836,6 +1527,11 @@ def _run_stages(cfg, providers, out: Path, base: Path, timestamp_utc: str, clien
     t0 = time.perf_counter()
     res = _evaluate_stage(cfg, wide, sets, specs, tvalues, groups_all, timer)
     timer.t["evaluate"] = time.perf_counter() - t0
+    # bootstrap units: connectivity group, else the molecule itself
+    units_all = np.asarray([g or i for g, i in zip(conn, ids)], dtype=object)
+    t0 = time.perf_counter()
+    proto, proto_record = _protocol_stage(cfg, res, specs, units_all, timer)
+    timer.t["protocol"] = time.perf_counter() - t0
 
     t0 = time.perf_counter()
     _write_csv(mol_table_all, out / "molecules.csv")
@@ -848,6 +1544,9 @@ def _run_stages(cfg, providers, out: Path, base: Path, timestamp_utc: str, clien
     _write_csv(fail, out / "failures.csv")
     for name in ("folds", "predictions", "paired", "inner", "summary"):
         _write_csv(res[name], out / f"{name}.csv")
+    for name, df in proto.items():
+        if df is not None:
+            _write_csv(df, out / f"{name}.csv")
     set_cols = {k: v for k, v in sets.items() if v is not None}
     set_cols["rdkit2d"] = {s.name: [f"rdkit2d.{c}" for c in ft.rdkit2d_names(s.rdkit2d_exclusion)]
                            for s in specs} if "rdkit2d" in sets else None
@@ -870,6 +1569,7 @@ def _run_stages(cfg, providers, out: Path, base: Path, timestamp_utc: str, clien
             molecules=int(sum(1 for g in conn if g)),
             rule="standardised parents sharing the InChIKey first block (stereoisomers, "
                  "racemate/enantiomer, isotopologues): all kept, always in the same CV fold"),
+        skipped_targets=dict(sorted(res["skipped"].items())),
     )
     if e["split"] == "scaffold":
         splitter = "balanced_group_kfold (Bemis-Murcko scaffolds; connectivity groups merged)"
@@ -883,7 +1583,11 @@ def _run_stages(cfg, providers, out: Path, base: Path, timestamp_utc: str, clien
         config=cfg, timestamp_utc=timestamp_utc, chembl=chembl, seeds=seeds, inputs=inputs,
         manifest_sha256=manifest_sha, outputs=pv.file_records(out, written),
         timings_s=timer.t, counts=counts, base_dir=str(base), code=code,
-        extra=dict(result_csvs=[c for c in RESULT_CSVS if c in written]))
+        extra=dict(result_csvs=[c for c in RESULT_CSVS + AD_CSVS + PROTOCOL_CSVS
+                                if c in written],
+                   targets=[s.as_dict() for s in specs],
+                   target_providers=_json_ready(tprov),
+                   protocol=_json_ready(proto_record)))
     pv.write_run_record(record, out / "run_record.json")
     return record, res["summary"], mol_table_all, written
 
@@ -918,7 +1622,7 @@ def rerun(record_path: str | os.PathLike, out_dir: str | os.PathLike, *, timesta
         if pv.sha256_file(p) != info["sha256"]:
             raise ValueError(f"input {name} ({p}) differs from the recorded file (sha256)")
     client = None
-    if cfg["cohort"]["source"] == "chembl":
+    if cfg["cohort"]["source"] in ("chembl", "pooled"):
         from .chembl import ChemblClient
 
         client = ChemblClient(cfg["runtime"]["chembl_cache_dir"], offline=cfg["runtime"]["offline"],
