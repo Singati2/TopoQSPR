@@ -48,6 +48,14 @@ fallback is omitted because it never ran: the ChEMBL search endpoint returns 404
 4. Candidates with 20 ≤ n < 50 are reported descriptively as *underpowered*; no ML claims.
 5. Record the counts table here before step 4 of the analysis begins.
 
+### 3.3a Panel rule versus measured coverage (counts only, 2026-10-03)
+Under §3.3 only Hypertension has ≥ 50 curated approved parents (85); every other candidate has 9–45.
+No disease × measured-target cell reaches 50 (largest: Hypertension × melting point, 47).
+So the per-disease *modelling* panel is effectively empty for class-3 targets. **Open decision
+before freezing** (no model results were seen): either (a) keep per-disease analyses descriptive
+(Experiment A, cohort sensitivity) and model only the pooled set, or (b) lower the per-disease
+threshold to n ≥ 30 for exploratory analyses only. Recommended: (a).
+
 ### 3.4 Open decision before freezing
 The phase-4 filter alone still admits drugs attached by label text mining (e.g. lisinopril for
 diabetes). The default evidence filter (none / exclude DailyMed-only / ATC class) is chosen from
@@ -61,7 +69,7 @@ Classified before analysis; only class 2 and 3 can support headline claims.
 |---|---|---|
 | 1 Structural / near-deterministic | Sanity checks only | Molecular weight |
 | 2 Computed physicochemical | Genre replication and Experiments A/C; **no headline claims** (these are atom-contribution sums, so modelling them is close to circular) | Crippen logP, XLogP3 (PubChem), TPSA, molar refractivity |
-| 3 External experimental | **Headline analysis (Experiment B)** | Candidates: aqueous solubility (AqSolDB), melting point (Bradley open set), experimental logP (OPERA/PHYSPROP). Each source is used only after its licence is checked; matched to drugs by InChIKey |
+| 3 External experimental | **Headline analysis (Experiment B)** | Licence-checked sources (docs/EXPERIMENTAL_DATA.md). Pooled approved-drug coverage (1,821 curated parents, full-InChIKey match): melting point Bradley 711 / OPERA 509, logP OPERA 505, logD7.4 AstraZeneca 369, aqueous solubility AqSolDB 351 / OPERA 349. All ≥ 200. **Proposed confirmatory set (to fix at freeze):** mp_bradley, logp_opera, logd74_az, logs_aqsoldb (one source per endpoint; the OPERA MP/WS sets as sensitivity analyses). |
 
 Audit note (2026-10): all v0.x indices are blind to element type and bond order (hexane, 1-pentanol,
 pentylamine and 1,4-butanediol get identical values), so polarity-type targets can only be
