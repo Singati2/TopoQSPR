@@ -46,3 +46,7 @@ Manuscript in preparation for SoftwareX (see `paper/` and the [paper roadmap](do
 ## License
 
 MIT; see [LICENSE](LICENSE).
+
+## Required Reading
+
+See [`related_papers/README.md`](related_papers/README.md) for the papers every contributor should read, starting with Arockiaraj, Greeni & Abul Kalaam (2023), *Int. J. Quantum Chem.* 123:e27136 ([doi:10.1002/qua.27136](https://doi.org/10.1002/qua.27136)).
