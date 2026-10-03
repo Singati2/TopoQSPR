@@ -1,0 +1,534 @@
+{
+ "chembl_release": "ChEMBL_37",
+ "diseases": {
+  "Alzheimer Disease": {
+   "coverage": {
+    "logd74_az": 3,
+    "logp_opera": 1,
+    "logs68_biogen": 0,
+    "logs74_az": 0,
+    "logs_aqsoldb": 0,
+    "logs_opera": 0,
+    "mp_bradley": 2,
+    "mp_opera": 1
+   },
+   "curated_parents": 9,
+   "mesh_id": "D000544",
+   "pilot": false,
+   "standardised_unique_inchikeys": 9
+  },
+  "Arthritis, Rheumatoid": {
+   "coverage": {
+    "logd74_az": 20,
+    "logp_opera": 22,
+    "logs68_biogen": 3,
+    "logs74_az": 3,
+    "logs_aqsoldb": 26,
+    "logs_opera": 19,
+    "mp_bradley": 28,
+    "mp_opera": 22
+   },
+   "curated_parents": 43,
+   "mesh_id": "D001172",
+   "pilot": false,
+   "standardised_unique_inchikeys": 43
+  },
+  "Asthma": {
+   "coverage": {
+    "logd74_az": 6,
+    "logp_opera": 10,
+    "logs68_biogen": 0,
+    "logs74_az": 3,
+    "logs_aqsoldb": 11,
+    "logs_opera": 9,
+    "mp_bradley": 18,
+    "mp_opera": 8
+   },
+   "curated_parents": 36,
+   "mesh_id": "D001249",
+   "pilot": false,
+   "standardised_unique_inchikeys": 36
+  },
+  "Breast Neoplasms": {
+   "coverage": {
+    "logd74_az": 8,
+    "logp_opera": 4,
+    "logs68_biogen": 2,
+    "logs74_az": 2,
+    "logs_aqsoldb": 4,
+    "logs_opera": 2,
+    "mp_bradley": 16,
+    "mp_opera": 6
+   },
+   "curated_parents": 35,
+   "mesh_id": "D001943",
+   "pilot": false,
+   "standardised_unique_inchikeys": 35
+  },
+  "Depressive Disorder, Major": {
+   "coverage": {
+    "logd74_az": 12,
+    "logp_opera": 7,
+    "logs68_biogen": 0,
+    "logs74_az": 2,
+    "logs_aqsoldb": 5,
+    "logs_opera": 5,
+    "mp_bradley": 13,
+    "mp_opera": 3
+   },
+   "curated_parents": 26,
+   "mesh_id": "D003865",
+   "pilot": false,
+   "standardised_unique_inchikeys": 26
+  },
+  "Diabetes Mellitus, Type 2": {
+   "coverage": {
+    "logd74_az": 14,
+    "logp_opera": 6,
+    "logs68_biogen": 1,
+    "logs74_az": 5,
+    "logs_aqsoldb": 5,
+    "logs_opera": 8,
+    "mp_bradley": 15,
+    "mp_opera": 6
+   },
+   "curated_parents": 33,
+   "mesh_id": "D003924",
+   "pilot": false,
+   "standardised_unique_inchikeys": 33
+  },
+  "Epilepsy": {
+   "coverage": {
+    "logd74_az": 16,
+    "logp_opera": 18,
+    "logs68_biogen": 0,
+    "logs74_az": 5,
+    "logs_aqsoldb": 15,
+    "logs_opera": 11,
+    "mp_bradley": 27,
+    "mp_opera": 22
+   },
+   "curated_parents": 45,
+   "mesh_id": "D004827",
+   "pilot": false,
+   "standardised_unique_inchikeys": 45
+  },
+  "HIV Infections": {
+   "coverage": {
+    "logd74_az": 3,
+    "logp_opera": 10,
+    "logs68_biogen": 1,
+    "logs74_az": 1,
+    "logs_aqsoldb": 4,
+    "logs_opera": 4,
+    "mp_bradley": 13,
+    "mp_opera": 3
+   },
+   "curated_parents": 36,
+   "mesh_id": "D015658",
+   "pilot": false,
+   "standardised_unique_inchikeys": 36
+  },
+  "Heart Failure": {
+   "coverage": {
+    "logd74_az": 12,
+    "logp_opera": 17,
+    "logs68_biogen": 1,
+    "logs74_az": 5,
+    "logs_aqsoldb": 17,
+    "logs_opera": 14,
+    "mp_bradley": 23,
+    "mp_opera": 17
+   },
+   "curated_parents": 43,
+   "mesh_id": "D006333",
+   "pilot": false,
+   "standardised_unique_inchikeys": 43
+  },
+  "Hypercholesterolemia": {
+   "coverage": {
+    "logd74_az": 3,
+    "logp_opera": 4,
+    "logs68_biogen": 0,
+    "logs74_az": 2,
+    "logs_aqsoldb": 2,
+    "logs_opera": 3,
+    "mp_bradley": 7,
+    "mp_opera": 3
+   },
+   "curated_parents": 14,
+   "mesh_id": "D006937",
+   "pilot": false,
+   "standardised_unique_inchikeys": 14
+  },
+  "Hypertension": {
+   "coverage": {
+    "logd74_az": 30,
+    "logp_opera": 37,
+    "logs68_biogen": 1,
+    "logs74_az": 9,
+    "logs_aqsoldb": 29,
+    "logs_opera": 25,
+    "mp_bradley": 47,
+    "mp_opera": 33
+   },
+   "curated_parents": 85,
+   "mesh_id": "D006973",
+   "pilot": false,
+   "standardised_unique_inchikeys": 85
+  },
+  "Migraine Disorders": {
+   "coverage": {
+    "logd74_az": 8,
+    "logp_opera": 10,
+    "logs68_biogen": 1,
+    "logs74_az": 1,
+    "logs_aqsoldb": 12,
+    "logs_opera": 12,
+    "mp_bradley": 15,
+    "mp_opera": 10
+   },
+   "curated_parents": 33,
+   "mesh_id": "D008881",
+   "pilot": true,
+   "standardised_unique_inchikeys": 33
+  },
+  "Parkinson Disease": {
+   "coverage": {
+    "logd74_az": 12,
+    "logp_opera": 9,
+    "logs68_biogen": 0,
+    "logs74_az": 0,
+    "logs_aqsoldb": 5,
+    "logs_opera": 1,
+    "mp_bradley": 12,
+    "mp_opera": 8
+   },
+   "curated_parents": 29,
+   "mesh_id": "D010300",
+   "pilot": false,
+   "standardised_unique_inchikeys": 29
+  },
+  "Prostatic Neoplasms": {
+   "coverage": {
+    "logd74_az": 3,
+    "logp_opera": 4,
+    "logs68_biogen": 0,
+    "logs74_az": 2,
+    "logs_aqsoldb": 2,
+    "logs_opera": 2,
+    "mp_bradley": 5,
+    "mp_opera": 4
+   },
+   "curated_parents": 19,
+   "mesh_id": "D011471",
+   "pilot": false,
+   "standardised_unique_inchikeys": 19
+  },
+  "Psoriasis": {
+   "coverage": {
+    "logd74_az": 5,
+    "logp_opera": 13,
+    "logs68_biogen": 1,
+    "logs74_az": 2,
+    "logs_aqsoldb": 8,
+    "logs_opera": 7,
+    "mp_bradley": 14,
+    "mp_opera": 11
+   },
+   "curated_parents": 29,
+   "mesh_id": "D011565",
+   "pilot": false,
+   "standardised_unique_inchikeys": 29
+  },
+  "Pulmonary Disease, Chronic Obstructive": {
+   "coverage": {
+    "logd74_az": 4,
+    "logp_opera": 1,
+    "logs68_biogen": 0,
+    "logs74_az": 2,
+    "logs_aqsoldb": 1,
+    "logs_opera": 1,
+    "mp_bradley": 5,
+    "mp_opera": 2
+   },
+   "curated_parents": 20,
+   "mesh_id": "D029424",
+   "pilot": false,
+   "standardised_unique_inchikeys": 20
+  },
+  "Schizophrenia": {
+   "coverage": {
+    "logd74_az": 12,
+    "logp_opera": 8,
+    "logs68_biogen": 0,
+    "logs74_az": 3,
+    "logs_aqsoldb": 7,
+    "logs_opera": 6,
+    "mp_bradley": 10,
+    "mp_opera": 7
+   },
+   "curated_parents": 25,
+   "mesh_id": "D012559",
+   "pilot": false,
+   "standardised_unique_inchikeys": 25
+  }
+ },
+ "pooled": {
+  "coverage": {
+   "logd74_az": {
+    "n": 370,
+    "n_first_block": 387
+   },
+   "logp_opera": {
+    "n": 505,
+    "n_first_block": 537
+   },
+   "logs68_biogen": {
+    "n": 35,
+    "n_first_block": 38
+   },
+   "logs74_az": {
+    "n": 84,
+    "n_first_block": 89
+   },
+   "logs_aqsoldb": {
+    "n": 351,
+    "n_first_block": 427
+   },
+   "logs_opera": {
+    "n": 349,
+    "n_first_block": 366
+   },
+   "mp_bradley": {
+    "n": 711,
+    "n_first_block": 805
+   },
+   "mp_opera": {
+    "n": 509,
+    "n_first_block": 539
+   }
+  },
+  "coverage_incl_salt_forms_and_disagreeing": {
+   "logd74_az": {
+    "n": 370,
+    "n_first_block": 387
+   },
+   "logp_opera": {
+    "n": 510,
+    "n_first_block": 542
+   },
+   "logs68_biogen": {
+    "n": 36,
+    "n_first_block": 39
+   },
+   "logs74_az": {
+    "n": 85,
+    "n_first_block": 90
+   },
+   "logs_aqsoldb": {
+    "n": 407,
+    "n_first_block": 487
+   },
+   "logs_opera": {
+    "n": 357,
+    "n_first_block": 375
+   },
+   "mp_bradley": {
+    "n": 733,
+    "n_first_block": 821
+   },
+   "mp_opera": {
+    "n": 539,
+    "n_first_block": 569
+   }
+  },
+  "curated_parents": 1821,
+  "definition": "drug_indication max_phase_for_ind=4, any MeSH heading; build_cohort curation",
+  "indication_rows": 8683,
+  "mesh_ids": 1070,
+  "standardisation_rejections": {},
+  "standardised_ok": 1821,
+  "standardised_unique_inchikeys": 1821
+ },
+ "sources": {
+  "aqsoldb": {
+   "doi": "10.1038/s41597-019-0151-1",
+   "licence": "CC0 1.0",
+   "sha256": "7c47e021d03a5720f53cfddb7aef90c8911ea276a36306c839798733d8630332",
+   "version": "Harvard Dataverse doi:10.7910/DVN/OVHAW8 V1 (2019-07-18), file curated-solubility-dataset (original CSV, id 3407241)"
+  },
+  "az_logd": {
+   "doi": "10.6019/CHEMBL3301361",
+   "licence": "CC BY-SA 3.0 (ChEMBL)",
+   "sha256": {
+    "ChEMBL_37": "71e5e47c44b7578912be28d75120dff49e498c5fea0fed5c38e2c4661a0af33a"
+   },
+   "version": "ChEMBL assay CHEMBL3301363 (records pinned per ChEMBL release)"
+  },
+  "az_solubility": {
+   "doi": "10.6019/CHEMBL3301361",
+   "licence": "CC BY-SA 3.0 (ChEMBL)",
+   "sha256": {
+    "ChEMBL_37": "6f63966724685f214fbd5ce49e26b1155d51df622ceb2b2841b0a87582fde256"
+   },
+   "version": "ChEMBL assay CHEMBL3301364 (records pinned per ChEMBL release)"
+  },
+  "biogen": {
+   "doi": "10.1021/acs.jcim.3c00160",
+   "licence": "MIT (repository LICENSE)",
+   "sha256": "2cfabc2667740c224487876c33b23124159ef43294e0f9e4d926cb6276c95a3b",
+   "version": "github.com/molecularinformatics/Computational-ADME commit 685c9c828b23 (2023-03-31)"
+  },
+  "bradley": {
+   "doi": "10.6084/m9.figshare.1031637.v2",
+   "licence": "CC0",
+   "sha256": "e8a66818609bbad6b9a67844cd98cf5d18098724b9f5fd8e0413aaf97775aa12",
+   "version": "figshare article 1031637 v2 (2014-05-20), file BradleyMeltingPointDataset.xlsx"
+  },
+  "opera": {
+   "doi": "10.1186/s13321-018-0263-1",
+   "licence": "MIT (repository LICENSE)",
+   "sha256": "9dc5d6387201df0f66e9472b034aeaa09ef7a47f705b9b5f50d7c9af8a1aadc3",
+   "version": "github.com/kmansouri/OPERA commit 22f4db60e385 (v2.9.5, 2026-08-20), OPERA_Data.zip"
+  }
+ },
+ "targets": {
+  "logd74_az": {
+   "parents": 4195,
+   "parents_disagreeing": 0,
+   "parents_incl_salt_forms_and_disagreeing": 4195,
+   "parents_used": 4195,
+   "raw_hash": "ChEMBL_37:71e5e47c44b7578912be28d75120dff49e498c5fea0fed5c38e2c4661a0af33a",
+   "records": 4200,
+   "source": "az_logd",
+   "status_counts": {
+    "ok": 4200
+   },
+   "unit": "log10"
+  },
+  "logp_opera": {
+   "parents": 13860,
+   "parents_disagreeing": 12,
+   "parents_incl_salt_forms_and_disagreeing": 13860,
+   "parents_used": 13848,
+   "raw_hash": "9dc5d6387201df0f66e9472b034aeaa09ef7a47f705b9b5f50d7c9af8a1aadc3",
+   "records": 13963,
+   "source": "opera",
+   "status_counts": {
+    "ambiguous_structure": 74,
+    "disallowed_element": 2,
+    "ok": 13872,
+    "parent_ambiguous": 1,
+    "too_few_heavy_atoms": 13,
+    "unparsable": 1
+   },
+   "unit": "log10"
+  },
+  "logs68_biogen": {
+   "parents": 2169,
+   "parents_disagreeing": 0,
+   "parents_incl_salt_forms_and_disagreeing": 2172,
+   "parents_used": 2169,
+   "raw_hash": "2cfabc2667740c224487876c33b23124159ef43294e0f9e4d926cb6276c95a3b",
+   "records": 3521,
+   "source": "biogen",
+   "status_counts": {
+    "missing_value": 1348,
+    "ok": 2170,
+    "salt_or_solvate_form": 3
+   },
+   "unit": "log10(mol/L)"
+  },
+  "logs74_az": {
+   "parents": 1762,
+   "parents_disagreeing": 0,
+   "parents_incl_salt_forms_and_disagreeing": 1763,
+   "parents_used": 1762,
+   "raw_hash": "ChEMBL_37:6f63966724685f214fbd5ce49e26b1155d51df622ceb2b2841b0a87582fde256",
+   "records": 1763,
+   "source": "az_solubility",
+   "status_counts": {
+    "ok": 1762,
+    "salt_or_solvate_form": 1
+   },
+   "unit": "log10(mol/L)"
+  },
+  "logs_aqsoldb": {
+   "parents": 8739,
+   "parents_disagreeing": 322,
+   "parents_incl_salt_forms_and_disagreeing": 9181,
+   "parents_used": 8417,
+   "raw_hash": "7c47e021d03a5720f53cfddb7aef90c8911ea276a36306c839798733d8630332",
+   "records": 9982,
+   "source": "aqsoldb",
+   "status_counts": {
+    "disallowed_element": 408,
+    "mixture": 102,
+    "no_carbon": 77,
+    "ok": 8747,
+    "parent_ambiguous": 11,
+    "salt_or_solvate_form": 616,
+    "too_few_heavy_atoms": 19,
+    "unparsable": 2
+   },
+   "unit": "log10(mol/L)"
+  },
+  "logs_opera": {
+   "parents": 5043,
+   "parents_disagreeing": 0,
+   "parents_incl_salt_forms_and_disagreeing": 5080,
+   "parents_used": 5043,
+   "raw_hash": "9dc5d6387201df0f66e9472b034aeaa09ef7a47f705b9b5f50d7c9af8a1aadc3",
+   "records": 5269,
+   "source": "opera",
+   "status_counts": {
+    "ambiguous_structure": 119,
+    "disallowed_element": 10,
+    "mixture": 1,
+    "ok": 5043,
+    "salt_or_solvate_form": 82,
+    "too_few_heavy_atoms": 14
+   },
+   "unit": "log10(mol/L)"
+  },
+  "mp_bradley": {
+   "parents": 19799,
+   "parents_disagreeing": 299,
+   "parents_incl_salt_forms_and_disagreeing": 19799,
+   "parents_used": 19500,
+   "raw_hash": "e8a66818609bbad6b9a67844cd98cf5d18098724b9f5fd8e0413aaf97775aa12",
+   "records": 28645,
+   "source": "bradley",
+   "status_counts": {
+    "disallowed_element": 1,
+    "flagged_by_source": 377,
+    "mixture": 1,
+    "no_carbon": 74,
+    "ok": 27855,
+    "too_few_heavy_atoms": 45,
+    "unparsable": 292
+   },
+   "unit": "degC"
+  },
+  "mp_opera": {
+   "parents": 8421,
+   "parents_disagreeing": 0,
+   "parents_incl_salt_forms_and_disagreeing": 8522,
+   "parents_used": 8421,
+   "raw_hash": "9dc5d6387201df0f66e9472b034aeaa09ef7a47f705b9b5f50d7c9af8a1aadc3",
+   "records": 8698,
+   "source": "opera",
+   "status_counts": {
+    "ambiguous_structure": 87,
+    "disallowed_element": 23,
+    "mixture": 4,
+    "ok": 8421,
+    "salt_or_solvate_form": 151,
+    "too_few_heavy_atoms": 12
+   },
+   "unit": "degC"
+  }
+ },
+ "topoqspr_version": "1.0.0.dev0"
+}
