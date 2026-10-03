@@ -111,7 +111,7 @@ The resulting \emph{drug manifest} is shown to the user before any computation a
 \subsection{Topological indices}
 For a molecular graph $G=(V,E)$ with vertex degrees $d(v)$, the package implements \todo{135} indices in five families (Table~\ref{tab:indices}, full definitions in Supplementary~S1):
 degree-based edge sums $\sum_{uv\in E} f(d(u),d(v))$;
-reverse-degree variants \todo{v0.x code uses $n+1-d(v)$, the literature standard is $c(v)=\Delta-d(v)+1$; reconcile in M3} and the generalised $R_k$ \todo{cite source of $R_k$};
+reverse-degree variants with $c(v)=\Delta-d(v)+1$ \cite{kulli2018} and the generalised (modified) reverse degree $R_k$ \cite{arockiaraj2023ijqc,kalaam2024};
 hybrid geometric-harmonic-Zagreb indices \cite{arockiaraj2023hybrid};
 neighbourhood-degree-sum variants, in which $d(v)$ is replaced by $S(v)=\sum_{u\sim v} d(u)$;
 distance-based indices (Wiener, Balaban~$J$ \cite{balaban1982}, Szeged, Mostar, PI, Schultz, Gutman); the matching-based Hosoya~$Z$ \cite{hosoya1971};
