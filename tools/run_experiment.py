@@ -12,8 +12,11 @@ Targets: ``--target NAME`` from a target provider (default ``rdkit``) or ``--tar
 --target-column C`` (joined on the molecule id; missing values are dropped with a count).
 
 **Quarantine.** Until docs/EXPERIMENT_PLAN.md is frozen, every modelling step on a ChEMBL
-disease cohort (exp-a ``--model``, exp-c, size-dependence) is refused for any MeSH ID other
-than the pilot D008881 (``experiments.check_modelling_allowed``), before any network access.
+disease cohort (exp-a targets/correlations/``--model``, exp-c, size-dependence) is refused for
+any MeSH ID other than the pilot D008881 (``experiments.check_modelling_allowed``), before
+any network access. A ``--manifest`` whose included rows carry no MeSH ID (an ATC / pooled
+approved-drug manifest, or no ``mesh_ids`` column) is refused too. exp-a on a non-pilot
+disease runs only with ``--counts-only`` (cohort sizes, overlaps, size distributions).
 ``--plan-frozen`` lifts the guard; pass it only after the plan's header records the frozen
 commit.
 
@@ -61,10 +64,10 @@ def _read_csv(path):
 
 
 def _manifest_mesh_ids(df) -> list[str]:
-    ids = set()
-    for v in df.get("mesh_ids", []):
-        ids |= {x.strip() for x in str(v).split(";") if x.strip()}
-    return sorted(ids)
+    """MeSH IDs of the included rows of a manifest ([] if none or no column)."""
+    from topoqspr.experiments import cohort_mesh_ids
+
+    return cohort_mesh_ids(df)
 
 
 def _load_structures(args, info: dict):
@@ -89,9 +92,11 @@ def _load_structures(args, info: dict):
         return st, coh
     if args.manifest:
         df = _read_csv(args.manifest)
+        if "decision" not in df.columns:
+            raise ValueError(f"{args.manifest}: no 'decision' column (not a cohort manifest)")
         mesh = _manifest_mesh_ids(df)
-        if mesh:
-            ex.check_modelling_allowed(mesh, args.plan_frozen)
+        # [] (ATC / pooled manifest, blank or absent mesh_ids) is refused as "disease unknown"
+        ex.check_modelling_allowed(mesh, args.plan_frozen)
         inc = df[df["decision"] == "include"]
         info["cohort"] = dict(source="manifest", path=str(args.manifest), mesh_ids=mesh,
                               sha256=pv.sha256_file(args.manifest), included=int(len(inc)))
@@ -145,8 +150,13 @@ def cmd_exp_a(args, info):
     from topoqspr import experiments as ex
     from topoqspr.cohort import build_cohort, naive_cohort
 
-    if args.model:
-        ex.check_modelling_allowed(args.mesh, args.plan_frozen)
+    if args.model and args.counts_only:
+        raise ValueError("--model contradicts --counts-only")
+    if not args.counts_only:  # refuse before any network access; the naive cohort's
+        try:                  # headings are checked by experiment_a once it is retrieved
+            ex.check_modelling_allowed(args.mesh, args.plan_frozen)
+        except ex.QuarantineError as exc:
+            raise ex.QuarantineError(f"{exc}; exp-a on this disease: pass --counts-only") from None
     client = _client(args)
     ctl = build_cohort(args.mesh, client)
     nav = naive_cohort(args.naive_text, client)
@@ -158,7 +168,9 @@ def cmd_exp_a(args, info):
                           model=args.model, families=_families(args.families),
                           seeds=args.seeds, outer_splits=args.outer_splits,
                           inner_splits=args.inner_splits, n_jobs=args.n_jobs,
-                          mesh_ids=args.mesh, plan_frozen=args.plan_frozen)
+                          min_n=args.min_n, min_n_test=args.min_n_test,
+                          mesh_ids=args.mesh, counts_only=args.counts_only,
+                          plan_frozen=args.plan_frozen)
     return res, {"manifest_controlled.csv": ctl.to_csv_bytes(),
                  "manifest_naive.csv": nav.to_csv_bytes()}
 
@@ -180,6 +192,7 @@ def cmd_exp_c(args, info):
                           families=_families(args.families), legacy_families=legacy,
                           seeds=args.seeds, outer_splits=args.outer_splits,
                           inner_splits=args.inner_splits, alpha=args.alpha, n_jobs=args.n_jobs,
+                          min_n=args.min_n, min_n_test=args.min_n_test,
                           label=f"{name} ~ {args.feature_set}")
     res.tables["molecules"] = st.table
     import pandas as pd
@@ -198,7 +211,8 @@ def cmd_exp_d(args, info):
                           outer_splits=args.outer_splits, inner_splits=args.inner_splits,
                           alpha=args.alpha, n_random=args.n_random,
                           n_permutations=args.n_permutations, random_seed=args.random_seed,
-                          n_jobs=args.n_jobs, scaffold=not args.no_scaffold)
+                          n_jobs=args.n_jobs, scaffold=not args.no_scaffold,
+                          min_n=args.min_n, min_n_test=args.min_n_test)
     return res, {}
 
 
@@ -212,7 +226,8 @@ def cmd_size_dependence(args, info):
     res = ex.size_dependence(ti, ex.size_table(st), families=_families(args.families),
                              groups=ex.cv_groups(st, "random"), seeds=args.seeds,
                              outer_splits=args.outer_splits, inner_splits=args.inner_splits,
-                             alpha=args.alpha, n_jobs=args.n_jobs)
+                             alpha=args.alpha, n_jobs=args.n_jobs, min_n=args.min_n,
+                             min_n_test=args.min_n_test)
     res.tables["molecules"] = st.table
     res.tables["index_failures"] = pd.DataFrame(fails, columns=["row", "feature", "reason"])
     return res, {}
@@ -242,6 +257,11 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--inner-splits", type=int, default=3)
         p.add_argument("--alpha", type=float, default=0.05)
         p.add_argument("--n-jobs", type=int, default=1, help="outer folds in parallel")
+        p.add_argument("--min-n", type=int, default=50,
+                       help="nested rows with n below this are flagged underpowered")
+        p.add_argument("--min-n-test", type=int, default=10,
+                       help="nested rows whose smallest outer test fold is below this are "
+                            "flagged underpowered")
         p.add_argument("--plan-frozen", action="store_true",
                        help="lift the quarantine guard (only after the plan is frozen)")
         p.add_argument("--cache-dir", default=None)
@@ -267,6 +287,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--top-k", type=int, default=10)
     p.add_argument("--model", action="store_true",
                    help="also run nested dR2(TI - size) for both cohorts (quarantine applies)")
+    p.add_argument("--counts-only", action="store_true",
+                   help="cohort sizes, overlaps and size distributions only (no targets, "
+                        "correlations or models): the only mode for a non-pilot disease "
+                        "before the plan is frozen")
 
     p = sub.add_parser("exp-c", help="optimism chain: train -> v0.x CV -> nested -> scaffold")
     common(p, ("ridge", "pls", "knn"))

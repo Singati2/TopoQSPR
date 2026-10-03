@@ -303,7 +303,7 @@ def test_experiment_d_spec_validation():
     spec = ex.load_study_spec(SPEC)
     with pytest.raises(ValueError, match="unknown study-spec keys"):
         ex.experiment_d(dict(spec, bogus=1))
-    with pytest.raises(ValueError, match="model forms"):
+    with pytest.raises(ValueError, match="model form"):
         ex.experiment_d(dict(spec, model_forms=["exponential"]))
 
 
@@ -395,8 +395,8 @@ def test_cli_exp_d_and_size_dependence(tmp_path):
     assert rc == 0
     names = sorted(p.name for p in out.iterdir())
     assert names == ["compounds.csv", "controls.csv", "fits.csv", "index_check.csv",
-                     "index_map.csv", "index_values.csv", "nested.csv", "run_info.json",
-                     "summary.json"]
+                     "index_map.csv", "index_values.csv", "nested.csv", "reported_fits.csv",
+                     "run_info.json", "summary.json"]
     info = json.loads((out / "run_info.json").read_text())
     assert info["command"] == "exp-d" and len(info["spec"]["sha256"]) == 64
     assert not (tmp_path / ".d.partial").exists()
@@ -441,3 +441,237 @@ def test_cli_exp_c_pilot_offline(tmp_path):
     assert s["n"] == 33 and s["experiment"] == "C"
     info = json.loads((out / "run_info.json").read_text())
     assert info["cohort"]["release"] == "ChEMBL_37" and "CC BY-SA" in info["data_licence"]
+
+
+# ---------------------------------------------------- review regressions
+def test_guard_refuses_empty_or_blank_mesh_lists():
+    for v in ([], [""], ["  "], "", " "):
+        with pytest.raises(ex.QuarantineError, match="disease unknown"):
+            ex.check_modelling_allowed(v)
+    ex.check_modelling_allowed([], plan_frozen=True)
+    ex.check_modelling_allowed(["D020325"], allowed=ex.PILOT_NAIVE_MESH_IDS)
+    with pytest.raises(ex.QuarantineError):
+        ex.check_modelling_allowed(["D020325"])  # controlled cohort: the pilot heading only
+
+
+def _with_mesh(c, params=None, column=None):
+    man = c.manifest.copy()
+    if column is not None:
+        man["mesh_ids"] = column
+    return Cohort(c.kind, c.disease_label, c.release, c.release_date,
+                  dict(c.parameters if params is None else params), man)
+
+
+def test_experiment_a_guard_uses_union_and_naive_cohort():
+    naive, ctl = _manifest(NAIVE, "naive"), _manifest(CONTROLLED, "controlled")
+    kw = dict(target_names=["MolLogP"], index_names=["M1"], families=("ridge",))
+    diab = _with_mesh(ctl, {"mesh_ids": ["D003924"]}, "D003924")
+    # an explicit pilot mesh_ids does not override the cohort's own MeSH IDs
+    with pytest.raises(ex.QuarantineError):
+        ex.experiment_a(naive, diab, model=True, mesh_ids=[MIGRAINE], **kw)
+    # a cohort whose MeSH list is empty is refused like an unknown disease
+    with pytest.raises(ex.QuarantineError, match="disease unknown"):
+        ex.experiment_a(naive, _with_mesh(ctl, {"mesh_ids": []}, ""), model=True, **kw)
+    # pilot controlled cohort, naive cohort of a main-panel disease: refused, with or
+    # without model=True (targets and correlations are quarantined too)
+    nav_diab = _with_mesh(naive, {"mesh_heading__icontains": "diabetes"}, "D003924")
+    for model in (True, False):
+        with pytest.raises(ex.QuarantineError, match="naive cohort"):
+            ex.experiment_a(nav_diab, ctl, model=model, **kw)
+    # counts-only mode: no targets, correlations or models
+    res = ex.experiment_a(nav_diab, diab, counts_only=True, **kw)
+    assert res.summary["mode"] == "counts_only" and "quarantined" in res.summary["quarantine"]
+    assert sorted(res.tables) == ["distributions", "membership", "molecules_controlled",
+                                  "molecules_naive"]
+    assert list(res.tables["distributions"]["variable"]) == ["n_heavy", "n_bonds", "n_rings"]
+    assert res.summary["targets"] == []
+    with pytest.raises(ValueError, match="contradicts"):
+        ex.experiment_a(naive, ctl, model=True, counts_only=True, **kw)
+    # the pilot's naive query matches the two migraine subtypes as well: allowed
+    nav_mig = _with_mesh(naive, {}, "D008881;D020325;D020326")
+    res = ex.experiment_a(nav_mig, ctl, **kw)
+    assert res.summary["mode"] == "full" and "correlations" in res.tables
+
+
+def test_experiment_a_top_k_with_ties():
+    cor = pd.DataFrame(dict(index=list("abcde"), rho=[1.0, 1.0, -1.0, 0.5, np.nan],
+                            q=[0.01, 0.01, 0.01, 0.01, np.nan]))
+    assert ex._top_k(cor, 2) == ["a", "b"]
+    assert ex._top_k_ties(cor, 2) == ["a", "b", "c"]
+    assert ex._top_k_ties(cor, 4) == ["a", "b", "c", "d"]
+    res = ex.experiment_a(_manifest(NAIVE, "naive"), _manifest(CONTROLLED, "controlled"),
+                          target_names=["MolWt"], index_names=["M1", "M2", "W", "R"], top_k=2)
+    ov = res.tables["top_overlap"].set_index("variant").loc["all"]
+    # controlled: all four indices have rho = 1 for MolWt, so the strict top-2 is registry
+    # order; the tie-inclusive set keeps all four and overlaps the naive top-2
+    assert ov["n_controlled_with_ties"] == 4 and ov["n_overlap"] == 0
+    assert ov["n_overlap_with_ties"] == 2 and ov["jaccard_with_ties"] == pytest.approx(0.5)
+
+
+def test_experiment_c_same_rows_for_b_train_and_legacy_failure():
+    smis = ["C" * k for k in range(3, 23)] + ["CC(C)" + "C" * k for k in range(0, 20)]
+    st = ex.prepare_structures([f"m{i}" for i in range(len(smis))], smis)
+    X = ex.feature_set(st, "TI", index_names=["M1", "W", "R3_M1"])
+    assert X["R3_M1"].isna().sum() == 20
+    y = np.random.default_rng(0).standard_normal(len(X))
+    kw = dict(families=("ridge",), legacy_families={"Ridge": LEGACY_MODELS["Ridge"]},
+              min_n=10, min_n_test=3, **FAST)
+    s = ex.experiment_c(X, y, **kw)
+    r = s.summary
+    assert r["legacy_n_used"] == 19 and r["n"] == 39
+    assert r["B_rows"].startswith("v0.x complete-case rows (19 of 39")
+    assert r["B_train"] == pytest.approx(r["r2_train"] - r["r2_nested_legacy_rows"])
+    assert r["B_CV"] == pytest.approx(r["r2_cv"] - r["r2_nested_legacy_rows"])
+    assert r["B_train_all_rows"] == pytest.approx(r["r2_train"] - r["r2_nested"])
+    assert "nested_random_legacy_rows" in list(s.tables["chain"]["step"])
+    nest = s.tables["nested"].set_index("step")
+    assert nest.loc["nested_random_legacy_rows", "n"] == 19
+    # fewer than 10 complete-case rows: NaN + reason instead of a crash
+    smis = ["C" * k for k in range(3, 18)] + ["CC(C)C" + "C" * k for k in range(0, 5)]
+    st = ex.prepare_structures([f"q{i}" for i in range(len(smis))], smis)
+    X = ex.feature_set(st, "TI", index_names=["M1", "R3_M1"])
+    s = ex.experiment_c(X, np.arange(len(X), dtype=float), **kw).summary
+    assert "< 10 rows" in s["legacy_reason"]
+    assert math.isnan(s["B_train"]) and math.isnan(s["B_CV"]) and math.isfinite(s["r2_nested"])
+
+
+def _nan_index_spec():
+    spec = ex.load_study_spec(SPEC)
+    comps = [c for c in spec["compounds"] if c.get("smiles")]
+    st = ex.prepare_structures([c["name"] for c in comps], [c["smiles"] for c in comps])
+    ti, _ = ex.index_table(st, ["R3_M1", "M1"])
+    out = []
+    for c in comps:
+        v = ti.loc[c["name"], "R3_M1"]
+        p = 5 + 2 * v if np.isfinite(v) else float(ti.loc[c["name"], "M1"])
+        out.append(dict(name=c["name"], smiles=c["smiles"], properties={"P": p}))
+    return dict(name="nan probe", compounds=out, properties=["P"], indices=["R3_M1", "M1"],
+                model_forms=["linear"])
+
+
+D_FAST = dict(families=("ridge",), scaffold=False, **FAST)
+
+
+def test_experiment_d_controls_use_each_index_on_its_finite_rows():
+    res = ex.experiment_d(_nan_index_spec(), n_random=50, n_permutations=50, **D_FAST)
+    fits = res.tables["fits"].set_index("index")
+    assert fits.loc["R3_M1", "n"] == 11 and fits.loc["R3_M1", "r2"] == pytest.approx(1.0)
+    c = res.tables["controls"].iloc[0]
+    assert c["observed_best"] == "R3_M1:linear" and c["observed_best_n"] == 11
+    assert c["observed_best_r2"] == pytest.approx(1.0) and bool(c["observed_matches_fits"])
+    assert json.loads(c["rows_per_index"]) == {"R3_M1": 11, "M1": 20}
+    assert json.loads(c["excluded_indices"]) == {}
+    assert c["pseudo_p"] == pytest.approx(1 / 51) and c["perm_p"] == pytest.approx(1 / 51)
+    assert c["registry_pool"] == 102 and c["registry_pool_partial_nan"] > 0
+
+
+def test_experiment_d_numeric_names_and_min_n():
+    spec = ex.load_study_spec(SPEC)
+    riv = spec["reported_index_values"]
+    for i, comp in enumerate(spec["compounds"][:3]):
+        if comp["name"] in riv:
+            riv[str(i + 1)] = riv.pop(comp["name"])
+        comp["name"] = i + 1  # papers number their compounds
+    res = ex.experiment_d(dict(spec, properties=["MV"]), n_random=10, n_permutations=10,
+                          min_n=10, min_n_test=3, **D_FAST)
+    s = res.summary
+    assert s["n_compounds_used"] == 20 and s["missing_property_values"] == []
+    assert set(res.tables["fits"]["n"]) == {20}
+    assert list(res.tables["compounds"]["name"][:3]) == ["1", "2", "3"]
+    assert s["settings"]["min_n"] == 10
+    assert not res.tables["nested"]["underpowered"].fillna(False).astype(bool).any()
+    spec2 = ex.load_study_spec(SPEC)
+    for i, comp in enumerate(spec2["compounds"]):
+        comp["name"] = i + 1
+    spec2.pop("reported_index_values")
+    assert ex.experiment_d(dict(spec2, properties=["MV"]), n_random=5, n_permutations=5,
+                           **D_FAST).summary["n_compounds_used"] == 20
+    spec2["compounds"][1]["name"] = " 1 "
+    with pytest.raises(ValueError, match="unique"):
+        ex.experiment_d(spec2)
+
+
+def test_experiment_d_reported_fits_are_validated_and_listed():
+    spec = ex.load_study_spec(SPEC)
+    spec["reported_fits"] = spec["reported_fits"] + [
+        {"property": "BP", "index": "Randic", "form": "cubic", "r2": 0.99},
+        {"property": "BP", "index": "Randic", "form": "Quadratic", "r2": 0.98},
+        {"property": "BP", "index": "XYZ index", "form": "linear", "r2": 0.7}]
+    res = ex.experiment_d(dict(spec, properties=["BP"],
+                               reported_fits=[r for r in spec["reported_fits"]
+                                              if r["property"] == "BP"]),
+                          n_random=5, n_permutations=5, **D_FAST)
+    rf = res.tables["reported_fits"]
+    assert res.summary["reported_fits"] == len(rf) == 4
+    bad = rf[~rf["compared"]].set_index(["study_label", "form"])
+    assert "not in model_forms" in bad.loc[("Randic", "cubic"), "reason"]
+    assert "unmappable" in bad.loc[("XYZ index", "linear"), "reason"]
+    assert ("Randic", "quadratic") not in bad.index  # case-normalised and compared
+    fits = res.tables["fits"].set_index(["property", "index", "form"])
+    assert fits.loc[("BP", "R", "quadratic"), "reported_r2"] == pytest.approx(0.98)
+    assert len(res.summary["reported_fits_unmatched"]) == 2
+    with pytest.raises(ValueError, match="model form"):
+        ex.experiment_d(dict(spec, reported_fits=[{"property": "BP", "index": "M1",
+                                                   "form": "exponential", "r2": 0.9}]))
+    res = ex.experiment_d(dict(spec, properties=["MV"]), n_random=5, n_permutations=5, **D_FAST)
+    rf = res.tables["reported_fits"].set_index("property")
+    assert "not among the analysed properties" in rf.loc["BP"].iloc[0]["reason"]
+    assert bool(rf.loc["MV", "compared"])
+
+
+def _manifest_csv(path, mesh, drop_column=False):
+    df = _tiny()
+    man = _manifest([(i, i, s) for i, s in zip(df["id"], df["smiles"])], "controlled").manifest
+    man["mesh_ids"] = mesh
+    if drop_column:
+        man = man.drop(columns=["mesh_ids"])
+    man.to_csv(path, index=False)
+    return path
+
+
+def test_cli_manifest_without_mesh_is_refused(tmp_path, capsys):
+    tool = _tool()
+    for name, mesh, drop in (("atc", "", False), ("nocol", "", True), ("diab", "D003924", False)):
+        man = _manifest_csv(tmp_path / f"{name}.csv", mesh, drop)
+        rc = tool.main(["exp-c", "--manifest", str(man), "--target", "MolLogP",
+                        "--out", str(tmp_path / f"o_{name}")])
+        assert rc == 2 and "quarantined" in capsys.readouterr().err, name
+        assert not (tmp_path / f"o_{name}").exists() or not any((tmp_path / f"o_{name}").iterdir())
+    man = _manifest_csv(tmp_path / "pilot.csv", MIGRAINE)
+    rc = tool.main(["size-dependence", "--manifest", str(man), "--out", str(tmp_path / "ok"),
+                    "--index", "M1", "--families", "linear", "--seeds", "0",
+                    "--outer-splits", "3", "--inner-splits", "2", "--min-n", "10",
+                    "--min-n-test", "3"])
+    assert rc == 0
+    per = pd.read_csv(tmp_path / "ok" / "per_descriptor.csv", keep_default_na=False, na_values=[""])
+    assert not per["underpowered"].astype(bool).any()
+
+
+def test_cli_exp_a_naive_quarantine_and_counts_only(tmp_path, capsys, monkeypatch):
+    import topoqspr.cohort as cohort_mod
+
+    tool = _tool()
+    df = _tiny()
+    rows = [(i, i, s) for i, s in zip(df["id"], df["smiles"])]
+    ctl = _manifest(rows[:20], "controlled")
+    nav = _with_mesh(_manifest(rows, "naive"), {"mesh_heading__icontains": "diabetes"}, "D003924")
+    monkeypatch.setattr(cohort_mod, "build_cohort", lambda m, c, **k: ctl)
+    monkeypatch.setattr(cohort_mod, "naive_cohort", lambda t, c: nav)
+    monkeypatch.setattr(tool, "_client", lambda a: None)
+    base = ["--targets", "MolLogP", "--index", "M1", "W", "--families", "ridge", "--seeds", "0",
+            "--outer-splits", "3", "--inner-splits", "2"]
+    # pilot --mesh, but the naive free text retrieves a main-panel disease
+    rc = tool.main(["exp-a", "--mesh", MIGRAINE, "--naive-text", "diabetes", "--model",
+                    "--out", str(tmp_path / "a1")] + base)
+    assert rc == 2 and "naive cohort" in capsys.readouterr().err
+    assert not (tmp_path / "a1").exists() or not any((tmp_path / "a1").iterdir())
+    # a non-pilot --mesh without --counts-only is refused before any retrieval
+    rc = tool.main(["exp-a", "--mesh", "D003924", "--naive-text", "diabetes",
+                    "--out", str(tmp_path / "a2")] + base)
+    assert rc == 2 and "--counts-only" in capsys.readouterr().err
+    rc = tool.main(["exp-a", "--mesh", "D003924", "--naive-text", "diabetes", "--counts-only",
+                    "--out", str(tmp_path / "a3")] + base)
+    assert rc == 0
+    names = sorted(p.name for p in (tmp_path / "a3").iterdir())
+    assert "correlations.csv" not in names and "top_overlap.csv" not in names
+    assert "distributions.csv" in names

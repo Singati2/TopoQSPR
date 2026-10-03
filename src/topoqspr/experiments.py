@@ -75,8 +75,10 @@ from .target_providers import get_target_provider
 
 __all__ = [
     "PILOT_MESH_IDS",
+    "PILOT_NAIVE_MESH_IDS",
     "QuarantineError",
     "check_modelling_allowed",
+    "cohort_mesh_ids",
     "Structures",
     "prepare_structures",
     "index_table",
@@ -103,29 +105,62 @@ __all__ = [
 #: MeSH IDs on which modelling is allowed before the plan is frozen (EXPERIMENT_PLAN §2).
 PILOT_MESH_IDS = frozenset({"D008881"})
 
+#: MeSH headings the pilot's *naive* (v0.x free-text) cohort may carry: Migraine Disorders
+#: and its two MeSH children that have ChEMBL drug_indication rows (ChEMBL_37 heading list:
+#: D020325 Migraine with Aura, D020326 Migraine without Aura). Used only for the naive
+#: cohort of Experiment A; the controlled cohort must be exactly :data:`PILOT_MESH_IDS`.
+PILOT_NAIVE_MESH_IDS = frozenset({"D008881", "D020325", "D020326"})
+
 
 class QuarantineError(RuntimeError):
     """Modelling was requested on a cohort that is quarantined until the plan is frozen."""
 
 
-def check_modelling_allowed(mesh_ids: Iterable[str] | None, plan_frozen: bool = False) -> None:
+def check_modelling_allowed(mesh_ids: Iterable[str] | None, plan_frozen: bool = False, *,
+                            allowed: Iterable[str] = PILOT_MESH_IDS) -> None:
     """Raise :class:`QuarantineError` unless every MeSH ID is the pilot's.
 
     EXPERIMENT_PLAN §2/§3.3: no model performance for any disease other than the
     quarantined pilot may be computed before the plan is frozen. ``plan_frozen=True``
     lifts the guard (pass it only once the plan's header records the frozen commit).
     ``None`` (no disease, e.g. a SMILES file) is not checked: the guard is a seat belt for
-    ChEMBL disease cohorts, not a lock on arbitrary inputs.
+    ChEMBL disease cohorts, not a lock on arbitrary inputs. An empty or blank list is
+    *not* ``None``: it means a cohort whose disease is unknown (e.g. an ATC / pooled
+    approved-drug manifest with an empty ``mesh_ids`` column) and is refused.
+    ``allowed`` is the permitted set (default :data:`PILOT_MESH_IDS`).
     """
     if plan_frozen or mesh_ids is None:
         return
+    if isinstance(mesh_ids, str):
+        mesh_ids = [mesh_ids]
+    allowed = {str(a).strip().upper() for a in allowed}
     ids = sorted({str(m).strip().upper() for m in mesh_ids if str(m).strip()})
-    bad = [m for m in ids if m not in PILOT_MESH_IDS]
+    bad = [m for m in ids if m not in allowed] if ids else ["<none: disease unknown>"]
     if bad:
         raise QuarantineError(
             f"modelling on MeSH {bad} is quarantined until EXPERIMENT_PLAN.md is frozen "
-            f"(only the pilot {sorted(PILOT_MESH_IDS)} is allowed); descriptive steps run "
-            "without --model, or pass plan_frozen=True after freezing")
+            f"(only the pilot {sorted(PILOT_MESH_IDS)} is allowed); before the freeze, "
+            "non-pilot cohorts run in counts-only mode, or pass plan_frozen=True after "
+            "freezing")
+
+
+def cohort_mesh_ids(c) -> list[str]:
+    """MeSH IDs of a cohort: ``parameters['mesh_ids']`` (if any) united with the
+    ``mesh_ids`` cells (``;``-separated) of the included manifest rows. ``[]`` if none
+    (disease unknown, refused by :func:`check_modelling_allowed`)."""
+    ids: set[str] = set()
+    params = getattr(c, "parameters", None) or {}
+    pm = params.get("mesh_ids") if isinstance(params, Mapping) else None
+    if pm:
+        ids |= {str(m).strip().upper() for m in ([pm] if isinstance(pm, str) else pm)
+                if str(m).strip()}
+    man = c.manifest if hasattr(c, "manifest") else c
+    if isinstance(man, pd.DataFrame) and "mesh_ids" in man.columns:
+        inc = man[man["decision"] == "include"] if "decision" in man.columns else man
+        for v in inc["mesh_ids"]:
+            if isinstance(v, str):
+                ids |= {x.strip().upper() for x in v.split(";") if x.strip()}
+    return sorted(ids)
 
 
 # =============================================================== structures
@@ -412,7 +447,8 @@ def _nested_row(res: ev.NestedCVResult, alpha: float) -> dict:
                 n_failed_folds=s["n_failed_folds"], n_valid_folds=s["n_valid_folds"],
                 min_n_test=res.meta["min_n_test"], underpowered=s["underpowered"],
                 underpowered_reason=s["underpowered_reason"], reason=s["reason"],
-                family_counts=json.dumps(s["family_counts"], sort_keys=True))
+                family_counts=json.dumps({str(k): v for k, v in s["family_counts"].items()},
+                                          sort_keys=True))
 
 
 def _r2(y: np.ndarray, p: np.ndarray) -> float:
@@ -486,6 +522,23 @@ def _top_k(cor: pd.DataFrame, k: int, alpha: float | None = None) -> list[str]:
     return list(d["index"].head(k))
 
 
+def _top_k_ties(cor: pd.DataFrame, k: int, alpha: float | None = None) -> list[str]:
+    """Like :func:`_top_k`, but every index whose |rho| ties the k-th largest |rho|
+    (relative tolerance 1e-12) is included, so the set does not depend on registry order;
+    its size can exceed k."""
+    d = cor[np.isfinite(cor["rho"].to_numpy(float))].copy()
+    if alpha is not None:
+        d = d[d["q"] <= alpha]
+    if d.empty or k <= 0:
+        return []
+    a = d["rho"].abs().to_numpy(float)
+    kth = np.sort(a)[::-1][min(k, a.size) - 1]
+    sel = (a >= kth) | np.isclose(a, kth, rtol=1e-12, atol=0.0)
+    d = d[sel].assign(_abs=a[sel], _ord=np.arange(len(d))[sel])
+    d = d.sort_values(["_abs", "_ord"], ascending=[False, True], kind="mergesort")
+    return list(d["index"])
+
+
 def experiment_a(naive, controlled, *, target_provider: str = "rdkit",
                  target_names: Sequence[str] | None = None,
                  target_options: Mapping | None = None,
@@ -494,7 +547,7 @@ def experiment_a(naive, controlled, *, target_provider: str = "rdkit",
                  families: Sequence = FAST_FAMILIES, seeds: Sequence[int] = ev.DEFAULT_SEEDS,
                  outer_splits: int = 5, inner_splits: int = 3, n_jobs: int = 1,
                  min_n: int = 50, min_n_test: int = 10, min_heavy_atoms: int = 3,
-                 mesh_ids: Iterable[str] | None = None,
+                 mesh_ids: Iterable[str] | None = None, counts_only: bool = False,
                  plan_frozen: bool = False) -> ExperimentResult:
     """Experiment A: naive vs controlled cohort of one disease.
 
@@ -504,13 +557,36 @@ def experiment_a(naive, controlled, *, target_provider: str = "rdkit",
     isolates *which drugs* each definition retrieves; the naive salt forms collapse onto
     their parents as ``duplicate_inchikey``). With ``model=True`` the nested
     ΔR²(TI − size) of each cohort × target is computed (``compare_feature_sets``,
-    identical folds, connectivity groups) after :func:`check_modelling_allowed`
-    on ``mesh_ids`` (default: the controlled cohort's ``parameters['mesh_ids']``).
+    identical folds, connectivity groups).
+
+    Quarantine (EXPERIMENT_PLAN §3.3 step 2: before the freeze, candidate diseases get
+    "counts only; no properties, no models"). Unless ``plan_frozen``, the target-dependent
+    outputs (target distributions, correlations, top-k overlap, ``model``) need the
+    controlled cohort's MeSH IDs (``mesh_ids`` united with :func:`cohort_mesh_ids`) to be
+    exactly the pilot's and the naive cohort's (:func:`cohort_mesh_ids`: the headings its
+    free text matched) to lie in :data:`PILOT_NAIVE_MESH_IDS`; an empty set is refused.
+    Otherwise :class:`QuarantineError` is raised unless ``counts_only=True``, which
+    computes only counts, overlaps, membership and the size distributions.
     """
-    if model:
-        if mesh_ids is None and hasattr(controlled, "parameters"):
-            mesh_ids = controlled.parameters.get("mesh_ids")
-        check_modelling_allowed(mesh_ids if mesh_ids is not None else ["<unknown>"], plan_frozen)
+    ctl_mesh = sorted(set(cohort_mesh_ids(controlled))
+                      | {str(m).strip().upper() for m in (mesh_ids or []) if str(m).strip()})
+    nav_mesh = cohort_mesh_ids(naive)
+    if counts_only and model:
+        raise ValueError("model=True contradicts counts_only=True")
+    quarantine = ""
+    if not plan_frozen:
+        try:
+            check_modelling_allowed(ctl_mesh, allowed=PILOT_MESH_IDS)
+            try:
+                check_modelling_allowed(nav_mesh, allowed=PILOT_NAIVE_MESH_IDS)
+            except QuarantineError as exc:
+                raise QuarantineError(f"naive cohort: {exc}") from None
+        except QuarantineError as exc:
+            quarantine = str(exc)
+    if quarantine and not counts_only:
+        raise QuarantineError(f"{quarantine}. Experiment A on this cohort pair: pass "
+                              "counts_only=True (CLI --counts-only) before the freeze")
+    full = not counts_only
     cohorts = {}
     for label, c, default_kind in (("naive", naive, "naive"), ("controlled", controlled, "controlled")):
         inc, kind = _cohort_frame(c)
@@ -550,14 +626,16 @@ def experiment_a(naive, controlled, *, target_provider: str = "rdkit",
                                     in_naive=bool(v["naive"]), in_controlled=bool(v["controlled"]))
                                for k, v in sorted(mem.items())])
 
-    # features and targets per cohort
-    tgt_names = None
+    # features and targets per cohort (targets and indices only outside counts-only mode)
+    tgt_names: list[str] = []
     for label, c in cohorts.items():
         st = c["st"]
         c["size"] = size_table(st)
-        c["ti"], _ = index_table(st, index_names)
-        c["y"], c["y_fail"], specs = compute_targets(st, target_provider, target_names, target_options)
-        tgt_names = [s.name for s in specs]
+        if full:
+            c["ti"], _ = index_table(st, index_names)
+            c["y"], c["y_fail"], specs = compute_targets(st, target_provider, target_names,
+                                                         target_options)
+            tgt_names = [s.name for s in specs]
 
     # distributions + KS
     variables = list(ft.SIZE_RINGS_COLUMNS) + tgt_names
@@ -588,19 +666,27 @@ def experiment_a(naive, controlled, *, target_provider: str = "rdkit",
             cor.insert(0, "target", t)
             cor.insert(0, "cohort", label)
             crows.append(cor)
-            tops[label] = (_top_k(cor, top_k), _top_k(cor, top_k, alpha))
+            tops[label] = (_top_k(cor, top_k), _top_k(cor, top_k, alpha),
+                           _top_k_ties(cor, top_k), _top_k_ties(cor, top_k, alpha))
         for variant, i in (("all", 0), ("bh_significant", 1)):
             a, b = set(tops["naive"][i]), set(tops["controlled"][i])
+            at, bt = set(tops["naive"][i + 2]), set(tops["controlled"][i + 2])
             orows.append(dict(target=t, variant=variant, k=top_k,
                               naive_top=";".join(tops["naive"][i]),
                               controlled_top=";".join(tops["controlled"][i]),
                               n_naive=len(a), n_controlled=len(b), n_overlap=len(a & b),
-                              jaccard=jaccard(a, b)))
-    correlations = pd.concat(crows, ignore_index=True)
+                              jaccard=jaccard(a, b),
+                              naive_top_with_ties=";".join(tops["naive"][i + 2]),
+                              controlled_top_with_ties=";".join(tops["controlled"][i + 2]),
+                              n_naive_with_ties=len(at), n_controlled_with_ties=len(bt),
+                              n_overlap_with_ties=len(at & bt),
+                              jaccard_with_ties=jaccard(at, bt)))
+    correlations = pd.concat(crows, ignore_index=True) if crows else pd.DataFrame()
     overlap = pd.DataFrame(orows)
 
-    tables = dict(membership=membership, distributions=dist, correlations=correlations,
-                  top_overlap=overlap)
+    tables = dict(membership=membership, distributions=dist)
+    if full:
+        tables.update(correlations=correlations, top_overlap=overlap)
     for label, c in cohorts.items():
         tables[f"molecules_{label}"] = c["st"].table
 
@@ -644,6 +730,8 @@ def experiment_a(naive, controlled, *, target_provider: str = "rdkit",
                      standardised_parent_inchikey=j_std),
         intersection_standardised=len(inter),
         controlled_in_naive_share=(len(inter) / len(okkeys(ct)) if okkeys(ct) else math.nan),
+        mode="counts_only" if counts_only else "full", quarantine=quarantine,
+        mesh_ids=dict(controlled=ctl_mesh, naive=nav_mesh),
         targets=tgt_names, top_k=top_k, alpha=alpha, model=model,
         ks_note="KS p-values compare overlapping, non-independent samples; descriptive only",
         settings=dict(index_names=list(index_names) if index_names else "all",
@@ -687,7 +775,12 @@ def experiment_c(X: pd.DataFrame, y, *, connectivity: Sequence[str] | None = Non
     standard errors as if the two CV estimates were independent (approximate; they share
     the data, so it is likely conservative). Rows with a missing ``y`` are dropped and
     counted; NaN features are median-imputed inside nested CV but dropped by the v0.x
-    protocol (as v0.x did; reported as ``legacy_n_used``).
+    protocol (as v0.x did; reported as ``legacy_n_used``). B_train and B_CV always compare
+    R² values on the same molecules: when the v0.x protocol drops rows, the nested CV is
+    re-run on its complete-case rows (step ``nested_random_legacy_rows``) and that is the
+    reference (``B_rows`` says which rows; ``B_train_all_rows``/``B_CV_all_rows`` keep the
+    all-rows contrast for comparison). If the v0.x protocol cannot run (< 10 complete-case
+    rows) its values are NaN with ``legacy_reason``.
     """
     if not isinstance(X, pd.DataFrame):
         X = pd.DataFrame(np.asarray(X, dtype=float))
@@ -716,7 +809,16 @@ def experiment_c(X: pd.DataFrame, y, *, connectivity: Sequence[str] | None = Non
     common = dict(seeds=seeds, outer_splits=outer_splits, inner_splits=inner_splits, ad=ad,
                   n_jobs=n_jobs, min_n=min_n, min_n_test=min_n_test)
 
-    legacy = ev.legacy_protocol(Xk, yk, families=legacy_families)
+    try:
+        legacy = ev.legacy_protocol(Xk, yk, families=legacy_families)
+        legacy_reason = ""
+    except ValueError as exc:
+        legacy_reason = f"v0.x protocol not evaluated: {exc}"
+        cc_rows = np.all(np.isfinite(Xk.to_numpy(float)), axis=1)
+        legacy = ev.LegacyResult(pd.DataFrame(columns=["family", "R2_mean", "R2_std",
+                                                       "MAE_mean", "params", "reason"]),
+                                 None, math.nan, math.nan, int(cc_rows.sum()),
+                                 list(Xk.index[~cc_rows]))
     sel = ev.select_and_refit(Xk.to_numpy(float), yk.to_numpy(float), families, inner_splits,
                               random_state=0, groups=random_groups)
     r2_train_sel = math.nan
@@ -746,7 +848,34 @@ def experiment_c(X: pd.DataFrame, y, *, connectivity: Sequence[str] | None = Non
         ss = dict(r2_fold_mean=math.nan, r2_pooled_mean=math.nan, reason=scaffold_reason)
 
     r2n, r2s = sn["r2_fold_mean"], ss["r2_fold_mean"]
-    b_train, b_cv, b_sc = legacy.train_r2 - r2n, legacy.cv_r2 - r2n, r2n - r2s
+    b_sc = r2n - r2s
+    # B_train / B_CV must compare R² values on the same molecules: the v0.x protocol drops
+    # rows with any NaN feature, so the nested reference is re-run on those rows if needed.
+    cc = np.all(np.isfinite(Xk.to_numpy(float)), axis=1)
+    cc_reason, nested_cc = "", nested
+    if legacy_reason:
+        nested_cc, cc_reason = None, "v0.x protocol not evaluated, no same-rows reference"
+    elif not cc.all():
+        sub = None
+        if random_groups is not None:
+            g = random_groups[cc]
+            sub = g if len(set(g)) < len(g) else None
+        try:
+            nested_cc = ev.nested_cv(Xk[cc], yk[cc], families, groups=sub, **common)
+        except ValueError as exc:
+            nested_cc = None
+            cc_reason = f"nested CV on the v0.x rows not possible: {exc}"[:300]
+        rows.append(dict(step="nested_random_legacy_rows", reason=cc_reason) if nested_cc is None
+                    else dict(step="nested_random_legacy_rows", **_nested_row(nested_cc, alpha)))
+    if nested_cc is not None:
+        scc, ci_c = nested_cc.summary(), _ci_of_mean(nested_cc, alpha)
+    else:
+        scc = dict(r2_fold_mean=math.nan, r2_pooled_mean=math.nan, reason=cc_reason)
+        ci_c = dict(mean=math.nan, ci_low=math.nan, ci_high=math.nan, se=math.nan, df=math.nan)
+    r2c = scc["r2_fold_mean"]
+    b_train, b_cv = legacy.train_r2 - r2c, legacy.cv_r2 - r2c
+    b_rows = ("all rows" if cc.all() else
+              f"v0.x complete-case rows ({int(cc.sum())} of {len(cc)}; NaN-feature rows dropped)")
     if math.isfinite(ci_s["se"]) and math.isfinite(ci_n["se"]):
         se = math.sqrt(ci_n["se"] ** 2 + ci_s["se"] ** 2)
         df = min(ci_n["df"], ci_s["df"])
@@ -754,28 +883,37 @@ def experiment_c(X: pd.DataFrame, y, *, connectivity: Sequence[str] | None = Non
         b_sc_ci = (b_sc - crit * se, b_sc + crit * se)
     else:
         b_sc_ci = (math.nan, math.nan)
-    chain = pd.DataFrame([
+    chain_rows = [
         dict(step="train", r2=legacy.train_r2, ci_low=math.nan, ci_high=math.nan,
-             detail=f"v0.x best family {legacy.best_family} refitted on all rows"),
+             detail=legacy_reason or f"v0.x best family {legacy.best_family} refitted on all "
+             f"{legacy.n_used} complete-case rows"),
         dict(step="train_selected", r2=r2_train_sel, ci_low=math.nan, ci_high=math.nan,
              detail=f"v1.0 inner-CV selection ({sel.family}) refitted on all rows"),
         dict(step="cv_legacy", r2=legacy.cv_r2, ci_low=math.nan, ci_high=math.nan,
-             detail="v0.x protocol: tuned on all rows, best-of-families fold-mean R2"),
+             detail=legacy_reason or "v0.x protocol: tuned on all rows, best-of-families "
+             "fold-mean R2"),
         dict(step="nested_random", r2=r2n, ci_low=ci_n["ci_low"], ci_high=ci_n["ci_high"],
              detail=sn["reason"]),
-        dict(step="nested_scaffold", r2=r2s, ci_low=ci_s["ci_low"], ci_high=ci_s["ci_high"],
-             detail=ss["reason"]),
-    ])
+    ]
+    if not cc.all():
+        chain_rows.append(dict(step="nested_random_legacy_rows", r2=r2c, ci_low=ci_c["ci_low"],
+                               ci_high=ci_c["ci_high"],
+                               detail=scc["reason"] or f"same {int(cc.sum())} rows as the v0.x "
+                               "protocol (reference of B_train and B_CV)"))
+    chain_rows.append(dict(step="nested_scaffold", r2=r2s, ci_low=ci_s["ci_low"],
+                           ci_high=ci_s["ci_high"], detail=ss["reason"]))
+    chain = pd.DataFrame(chain_rows)
     optimism = pd.DataFrame([
-        dict(term="B_train", value=b_train, ci_low=legacy.train_r2 - ci_n["ci_high"],
-             ci_high=legacy.train_r2 - ci_n["ci_low"], pooled=legacy.train_r2 - sn["r2_pooled_mean"],
-             ci_method="r2_train fixed; nested corrected-t CI reflected"),
-        dict(term="B_CV", value=b_cv, ci_low=legacy.cv_r2 - ci_n["ci_high"],
-             ci_high=legacy.cv_r2 - ci_n["ci_low"], pooled=legacy.cv_r2 - sn["r2_pooled_mean"],
-             ci_method="r2_cv fixed; nested corrected-t CI reflected"),
+        dict(term="B_train", value=b_train, ci_low=legacy.train_r2 - ci_c["ci_high"],
+             ci_high=legacy.train_r2 - ci_c["ci_low"], pooled=legacy.train_r2 - scc["r2_pooled_mean"],
+             ci_method="r2_train fixed; nested corrected-t CI reflected", rows=b_rows),
+        dict(term="B_CV", value=b_cv, ci_low=legacy.cv_r2 - ci_c["ci_high"],
+             ci_high=legacy.cv_r2 - ci_c["ci_low"], pooled=legacy.cv_r2 - scc["r2_pooled_mean"],
+             ci_method="r2_cv fixed; nested corrected-t CI reflected", rows=b_rows),
         dict(term="B_scaffold", value=b_sc, ci_low=b_sc_ci[0], ci_high=b_sc_ci[1],
              pooled=sn["r2_pooled_mean"] - ss["r2_pooled_mean"],
-             ci_method="sqrt(se_random^2 + se_scaffold^2), df = min; approximate"),
+             ci_method="sqrt(se_random^2 + se_scaffold^2), df = min; approximate",
+             rows="all rows"),
     ])
     legacy_tab = legacy.table.copy()
     summary = dict(
@@ -783,6 +921,9 @@ def experiment_c(X: pd.DataFrame, y, *, connectivity: Sequence[str] | None = Non
         r2_train=legacy.train_r2, r2_train_selected=r2_train_sel, r2_cv=legacy.cv_r2,
         r2_nested=r2n, r2_nested_pooled=sn["r2_pooled_mean"], r2_scaffold=r2s,
         r2_scaffold_pooled=ss["r2_pooled_mean"], B_train=b_train, B_CV=b_cv, B_scaffold=b_sc,
+        B_rows=b_rows, r2_nested_legacy_rows=r2c,
+        B_train_all_rows=legacy.train_r2 - r2n, B_CV_all_rows=legacy.cv_r2 - r2n,
+        legacy_reason=legacy_reason, legacy_rows_reason=cc_reason,
         legacy_best_family=legacy.best_family, legacy_n_used=legacy.n_used,
         legacy_dropped=[str(d) for d in legacy.dropped],
         connectivity_groups=0 if random_groups is None else int(
@@ -889,20 +1030,55 @@ _SPEC_KEYS = {"name", "reference", "notes", "compounds", "properties", "indices"
               "model_forms", "reported_fits", "reported_index_values"}
 
 
-def _check_spec(spec: Mapping) -> None:
+def _name(v: Any) -> str:
+    """A compound name as used everywhere in Experiment D: ``str(v).strip()`` (papers often
+    number their compounds, so JSON ints are accepted); ``None``/bool/blank are refused."""
+    if v is None or isinstance(v, bool) or not str(v).strip():
+        raise ValueError(f"every compound needs a non-blank 'name' (got {v!r})")
+    return str(v).strip()
+
+
+def _form(v: Any) -> str:
+    f = str(v).strip().lower()
+    if f not in _FORMS:
+        raise ValueError(f"unknown model form {v!r}; allowed: {sorted(_FORMS)}")
+    return f
+
+
+def _check_spec(spec: Mapping) -> dict:
+    """Validate a study spec and return a normalised copy: compound names (and the keys
+    of ``reported_index_values``) as ``str(name).strip()``, properties as strings, model
+    forms lower-case, every reported fit with a known form (one whose property is not
+    analysed is listed as not compared, not refused)."""
     unknown = sorted(set(spec) - _SPEC_KEYS)
     if unknown:
         raise ValueError(f"unknown study-spec keys {unknown}; allowed: {sorted(_SPEC_KEYS)}")
     for k in ("compounds", "properties", "indices"):
         if not spec.get(k):
             raise ValueError(f"study spec needs a non-empty {k!r}")
-    forms = spec.get("model_forms", ["linear"])
-    bad = [f for f in forms if f not in _FORMS]
-    if bad:
-        raise ValueError(f"unknown model forms {bad}; allowed: {sorted(_FORMS)}")
-    names = [c.get("name") for c in spec["compounds"]]
-    if any(not n for n in names) or len(set(names)) != len(names):
-        raise ValueError("every compound needs a unique 'name'")
+    out = dict(spec)
+    out["model_forms"] = list(dict.fromkeys(_form(f) for f in spec.get("model_forms", ["linear"])))
+    out["properties"] = [str(p).strip() for p in spec["properties"]]
+    comps = []
+    for c in spec["compounds"]:
+        if not isinstance(c, Mapping):
+            raise ValueError(f"each compound must be a mapping, got {c!r}")
+        comps.append(dict(c, name=_name(c.get("name"))))
+    names = [c["name"] for c in comps]
+    if len(set(names)) != len(names):
+        dup = sorted({n for n in names if names.count(n) > 1})
+        raise ValueError(f"every compound needs a unique 'name' (after str/strip): {dup}")
+    out["compounds"] = comps
+    riv = spec.get("reported_index_values") or {}
+    out["reported_index_values"] = {_name(k): v for k, v in riv.items()}
+    fits = []
+    for r in spec.get("reported_fits") or []:
+        if not isinstance(r, Mapping) or "property" not in r or "index" not in r:
+            raise ValueError(f"a reported fit needs 'property' and 'index': {r!r}")
+        prop = str(r["property"]).strip()
+        fits.append(dict(r, property=prop, form=_form(r.get("form", "linear"))))
+    out["reported_fits"] = fits
+    return out
 
 
 class SingleIndexPolynomial(RegressorMixin, BaseEstimator):
@@ -1028,16 +1204,34 @@ def _basis(x: np.ndarray, degree: int) -> np.ndarray | None:
     return Q
 
 
-def _best_r2(Xc: np.ndarray, Y: np.ndarray, degrees: Sequence[int]) -> np.ndarray:
-    """max over columns of Xc and degrees of in-sample polynomial R², per column of Y."""
+def _best_r2_arg(Xc: np.ndarray, Y: np.ndarray, degrees: Sequence[int]
+                 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """max over columns of Xc and degrees of in-sample polynomial R², per column of Y.
+
+    Each column is fitted on the rows where it is finite (as :func:`_poly_fit` does), so
+    an index that is undefined for some compounds is not dropped. Returns
+    ``(best, column, degree)``; ``best`` is NaN and column/degree ``-1`` where no fit is
+    defined. Ties keep the first (column, degree) in input order.
+    """
     best = np.full(Y.shape[1], -np.inf)
+    arg_j = np.full(Y.shape[1], -1)
+    arg_d = np.full(Y.shape[1], -1)
     for j in range(Xc.shape[1]):
+        m = np.isfinite(Xc[:, j])
+        x, Ym = Xc[m, j], Y[m]
         for d in degrees:
-            Q = _basis(Xc[:, j], d)
+            Q = _basis(x, d)
             if Q is None:
                 continue
-            best = np.fmax(best, _r2_projection(Q, Y))
-    return np.where(np.isfinite(best), best, np.nan)
+            r = _r2_projection(Q, Ym)
+            upd = np.isfinite(r) & (r > best)
+            best[upd], arg_j[upd], arg_d[upd] = r[upd], j, d
+    return np.where(np.isfinite(best), best, np.nan), arg_j, arg_d
+
+
+def _best_r2(Xc: np.ndarray, Y: np.ndarray, degrees: Sequence[int]) -> np.ndarray:
+    """:func:`_best_r2_arg` without the arg-max."""
+    return _best_r2_arg(Xc, Y, degrees)[0]
 
 
 def _perm_p(null: np.ndarray, obs: float) -> float:
@@ -1051,7 +1245,8 @@ def experiment_d(spec: Mapping, *, families: Sequence = ("ridge", "pls", "linear
                  seeds: Sequence[int] = ev.DEFAULT_SEEDS, outer_splits: int = 5,
                  inner_splits: int = 3, alpha: float = 0.05, n_random: int = 1000,
                  n_permutations: int = 1000, random_seed: int = 0, n_jobs: int = 1,
-                 min_heavy_atoms: int = 3, scaffold: bool = True) -> ExperimentResult:
+                 min_heavy_atoms: int = 3, scaffold: bool = True, min_n: int = 50,
+                 min_n_test: int = 10) -> ExperimentResult:
     """Experiment D: replication harness for one published single-index TI-QSPR study.
 
     Steps per property (docs/EXPERIMENTS.md §D):
@@ -1066,9 +1261,14 @@ def experiment_d(spec: Mapping, *, families: Sequence = ("ridge", "pls", "linear
     ``n_random`` draws of as many i.i.d. N(0,1) pseudo-descriptors, ``n_random`` draws of
     as many registry indices, and ``n_permutations`` y-permutations (Rücker et al. 2007);
     (vi) Q²_F3 and CCC of LOOCV and nested predictions.
+
+    ``min_n``/``min_n_test`` only set the ``underpowered`` flag of the nested rows
+    (``evaluate.nested_cv``); the defaults (50, 10) are the main-panel thresholds, so a
+    genre-sized study is flagged at them by design. Compound names are used as
+    ``str(name).strip()`` everywhere (numbered compounds are fine).
     """
-    _check_spec(spec)
-    forms = list(spec.get("model_forms", ["linear"]))
+    spec = _check_spec(spec)
+    forms = list(spec["model_forms"])
     degrees = [_FORMS[f] for f in forms]
     form_of = {d: f for f, d in _FORMS.items()}
     props = [str(p) for p in spec["properties"]]
@@ -1152,15 +1352,35 @@ def experiment_d(spec: Mapping, *, families: Sequence = ("ridge", "pls", "linear
         yrows[c["name"]] = row
     Y = pd.DataFrame.from_dict(yrows, orient="index").reindex(st.ids)[props]
 
-    # reported fits lookup
-    rep_fit = {}
-    for r in spec.get("reported_fits") or []:
-        nm = mapped.get(r["index"]) or map_index_name(r["index"])[0]
+    # reported fits lookup (every reported fit is listed in reported_fits.csv; one that
+    # matches no fitted (property, index, form) says why)
+    rep_fit, rep_rows = {}, []
+    for r in spec["reported_fits"]:
+        lab = r["index"]
+        nm = mapped.get(lab) or map_index_name(lab)[0]
         r2 = r.get("r2")
         if r2 is None and r.get("r") is not None:
             r2 = float(r["r"]) ** 2
-        rep_fit[(str(r["property"]), nm, r.get("form", "linear"))] = (
-            float(r2) if r2 is not None else math.nan, r)
+        r2 = float(r2) if r2 is not None else math.nan
+        key = (r["property"], nm, r["form"])
+        why = ""
+        if r["property"] not in props:
+            why = f"property {r['property']!r} not among the analysed properties {props}"
+        elif nm is None:
+            why = f"index label unmappable ({map_index_name(lab)[1]})"
+        elif nm not in reg_names:
+            why = f"index {nm} is not among the study's indices"
+        elif r["form"] not in forms:
+            why = f"form {r['form']!r} not in model_forms {forms} (add it to compare)"
+        elif not math.isfinite(r2):
+            why = "no reported r2 or r"
+        elif key in rep_fit:
+            why = "duplicate of an earlier reported fit (the first is compared)"
+        if not why:
+            rep_fit[key] = (r2, r)
+        rep_rows.append(dict(property=r["property"], study_label=str(lab),
+                             registry_name=nm or "", form=r["form"], reported_r2=r2,
+                             compared=not why, reason=why))
 
     size = size_table(st)
     comp = ft.composition_features(st.mols, pd.Index(st.ids, name="id"))
@@ -1168,9 +1388,6 @@ def experiment_d(spec: Mapping, *, families: Sequence = ("ridge", "pls", "linear
     groups_r = cv_groups(st, "random")
     groups_s = cv_groups(st, "scaffold") if scaffold else None
     rng = np.random.default_rng(random_seed)
-    reg_pool = [c for c in all_ti.columns
-                if np.all(np.isfinite(all_ti[c].to_numpy(float)))
-                and np.unique(all_ti[c].to_numpy(float)).size > 1]
     k = len(reg_names)
 
     fits, nested_rows, ctrl_rows = [], [], []
@@ -1193,7 +1410,7 @@ def experiment_d(spec: Mapping, *, families: Sequence = ("ridge", "pls", "linear
                 "composition": comp.iloc[keep], "TI_study": ti.iloc[keep]}
         gk = None if groups_r is None else groups_r[keep]
         common = dict(seeds=seeds, outer_splits=outer_splits, inner_splits=inner_splits,
-                      groups=gk, ad=None, n_jobs=n_jobs, min_n=50, min_n_test=10)
+                      groups=gk, ad=None, n_jobs=n_jobs, min_n=min_n, min_n_test=min_n_test)
         learners = {"genre": None, "families": tuple(families)}
         for learner in learners:
             for setname, Xs in sets.items():
@@ -1219,37 +1436,63 @@ def experiment_d(spec: Mapping, *, families: Sequence = ("ridge", "pls", "linear
                                            _group_stats(groups_s[keep]).items()}))
             except ValueError as exc:
                 nested_rows.append(dict(base, reason=f"scaffold CV not possible: {exc}"[:300]))
-        # (v) controls
+        # (v) controls: observed statistic and every null from the same computation, each
+        # index on the rows where it is finite (as in fits.csv)
         Xs = ti.to_numpy(float)[keep] if k else np.zeros((keep.size, 0))
-        obs = float(_best_r2(Xs, yk[:, None], degrees)[0]) if k else math.nan
-        best_lab = ""
+        fin = np.isfinite(Xs)
+        row = dict(property=p, n=int(keep.size), k=k,
+                   rows_per_index=json.dumps({reg_names[j]: int(fin[:, j].sum())
+                                              for j in range(k)}))
+        obs, best_lab, best_n = math.nan, "", math.nan
         if k:
-            cand = [f for f in fits if f["property"] == p and math.isfinite(f["r2"])]
-            if cand:
-                b = max(cand, key=lambda f: f["r2"])
-                best_lab = f"{b['index']}:{b['form']}"
-        row = dict(property=p, n=int(keep.size), k=k, observed_best_r2=obs, observed_best=best_lab)
+            b, bj, bd = _best_r2_arg(Xs, yk[:, None], degrees)
+            obs = float(b[0])
+            if bj[0] >= 0:
+                best_lab = f"{reg_names[bj[0]]}:{form_of[int(bd[0])]}"
+                best_n = int(fin[:, bj[0]].sum())
+            excl = {}
+            for j, nm in enumerate(reg_names):
+                if not math.isfinite(float(_best_r2(Xs[:, [j]], yk[:, None], degrees)[0])):
+                    excl[nm] = (f"no polynomial fit defined on its {int(fin[:, j].sum())} "
+                                "finite rows (too few rows or distinct values)")
+            row["excluded_indices"] = json.dumps(excl, sort_keys=True)
+        fit_best = [f["r2"] for f in fits if f["property"] == p and math.isfinite(f["r2"])]
+        fb = max(fit_best) if fit_best else math.nan
+        agree = (math.isnan(fb) and math.isnan(obs)) or (
+            math.isfinite(fb) and math.isfinite(obs) and abs(fb - obs) <= 1e-9)
+        row.update(observed_best_r2=obs, observed_best=best_lab, observed_best_n=best_n,
+                   observed_matches_fits=bool(agree),
+                   observed_reason="" if agree else
+                   f"best R2 in fits.csv {fb!r} differs from the controls' {obs!r}")
         if k:
-            pseudo = np.array([
-                float(_best_r2(rng.standard_normal((keep.size, k)), yk[:, None], degrees)[0])
-                for _ in range(n_random)])
+            Z = rng.standard_normal((n_random, keep.size, k))
+            Z[:, ~fin] = np.nan  # pseudo-descriptor j is missing where study index j is
+            pseudo = np.array([float(_best_r2(Z[b_], yk[:, None], degrees)[0])
+                               for b_ in range(n_random)])
             row.update(pseudo_null_mean=float(np.nanmean(pseudo)),
                        pseudo_null_p95=float(np.nanquantile(pseudo, 0.95)),
                        pseudo_p=_perm_p(pseudo, obs))
-            pool = reg_pool
-            pool_r2 = {}
             Xall = all_ti.to_numpy(float)[keep]
+            pool_r2 = {}
             for j, c in enumerate(all_ti.columns):
-                if c in pool:
-                    pool_r2[c] = float(_best_r2(Xall[:, [j]], yk[:, None], degrees)[0])
+                v = float(_best_r2(Xall[:, [j]], yk[:, None], degrees)[0])
+                if math.isfinite(v):
+                    pool_r2[c] = v
+            pool = list(pool_r2)
+            n_partial = int(sum(1 for j, c in enumerate(all_ti.columns)
+                                if c in pool_r2 and not np.all(np.isfinite(Xall[:, j]))))
+            row.update(registry_pool=len(pool), registry_pool_partial_nan=n_partial)
             if len(pool) >= k:
                 arr = np.array([pool_r2[c] for c in pool])
                 reg = np.array([np.nanmax(arr[rng.choice(len(pool), k, replace=False)])
                                 for _ in range(n_random)])
                 row.update(registry_null_mean=float(np.nanmean(reg)),
                            registry_null_p95=float(np.nanquantile(reg, 0.95)),
-                           registry_p=_perm_p(reg, obs), registry_pool=len(pool))
-            perms = np.stack([yk[rng.permutation(yk.size)] for _ in range(n_permutations)], axis=1)
+                           registry_p=_perm_p(reg, obs))
+            else:
+                row["registry_reason"] = f"pool of {len(pool)} defined indices < k={k}"
+            perms = np.stack([yk[rng.permutation(yk.size)] for _ in range(n_permutations)],
+                             axis=1)
             permnull = _best_r2(Xs, perms, degrees)
             row.update(perm_null_mean=float(np.nanmean(permnull)),
                        perm_null_p95=float(np.nanquantile(permnull, 0.95)),
@@ -1289,14 +1532,22 @@ def experiment_d(spec: Mapping, *, families: Sequence = ("ridge", "pls", "linear
         index_values_checked=int(len(index_check)),
         index_values_agree=int(index_check["agree"].sum()) if len(index_check) else 0,
         missing_property_values=yfail,
+        reported_fits=len(rep_rows),
+        reported_fits_unmatched=[dict(property=r["property"], study_label=r["study_label"],
+                                      form=r["form"], reason=r["reason"])
+                                 for r in rep_rows if not r["compared"]],
         settings=dict(families=[getattr(f, "name", f) for f in families], seeds=list(seeds),
                       outer_splits=outer_splits, inner_splits=inner_splits, alpha=alpha,
                       n_random=n_random, n_permutations=n_permutations,
-                      random_seed=random_seed, scaffold=scaffold),
+                      random_seed=random_seed, scaffold=scaffold, min_n=min_n,
+                      min_n_test=min_n_test),
     )
     tables = dict(compounds=compounds, index_map=index_map, index_values=values,
                   index_check=index_check, fits=pd.DataFrame(fits), nested=nested,
-                  controls=pd.DataFrame(ctrl_rows))
+                  controls=pd.DataFrame(ctrl_rows),
+                  reported_fits=pd.DataFrame(rep_rows, columns=[
+                      "property", "study_label", "registry_name", "form", "reported_r2",
+                      "compared", "reason"]))
     return ExperimentResult("D", summary, tables)
 
 
