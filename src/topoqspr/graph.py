@@ -10,17 +10,42 @@ the indices come from.
 
 Standardisation (in this order)
 -------------------------------
-1. Parse with RDKit (``Chem.MolFromSmiles``, default sanitisation).
-2. ChEMBL Structure Pipeline: ``standardize_mol`` then ``get_parent_mol``
+1. Reject input containing whitespace after trimming (``unparsable``):
+   RDKit reads text after the first space as the molecule name, so
+   ``"CCO junk"`` would otherwise be accepted as ethanol. CXSMILES
+   extensions (``"CCO |$...$|"``) are therefore not accepted either.
+2. Parse with RDKit (``Chem.MolFromSmiles``, default sanitisation).
+3. ChEMBL Structure Pipeline: ``standardize_mol`` then ``get_parent_mol``
    (Bento et al., J. Cheminform. 12 (2020) 51). This removes counter-ions,
    salts and solvents listed in the pipeline's dictionaries, neutralises
    charges where possible, and strips isotope labels (``[2H]`` becomes H).
-3. Reject the result if
+4. Parent fallback, only if more than one fragment survives step 3. The
+   pipeline keeps *every* fragment when all of them are on its salt list
+   (sodium benzoate, choline chloride, ammonium stearate), and its list
+   lacks a few pharmaceutical counter-ions. So, in order:
+
+   a. drop fragments without heavy atoms (``[H+]``);
+   b. drop monoatomic inorganic ions and ammonia/ammonium (one heavy atom
+      from :data:`SIMPLE_COUNTERION_ELEMENTS`);
+   c. drop fragments in :data:`SUPPLEMENTARY_COUNTERIONS` (matched on the
+      neutralised canonical SMILES);
+   d. merge identical fragments.
+
+   Steps a-c are each skipped if they would remove every fragment. If
+   exactly one fragment is left and it is organic (some carbon bonded to H
+   or C, so lithium carbonate and sodium cyanide are left alone and later
+   rejected as ``disallowed_element``), it is neutralised with the pipeline's
+   ``uncharge_mol`` and becomes the parent; what was dropped is recorded in
+   ``StandardizationResult.parent_note``. Otherwise the input is rejected
+   (``parent_ambiguous`` when every remaining fragment is itself on the
+   ChEMBL salt list, e.g. choline salicylate; ``mixture`` otherwise).
+5. Reject the result if
 
    * it contains an element outside ``allowed_elements``
      (default :data:`ORGANIC_ELEMENTS`)  -> ``disallowed_element``
    * it contains no carbon                -> ``no_carbon``
-   * more than one fragment remains        -> ``mixture``
+   * more than one fragment remains        -> ``mixture`` or
+     ``parent_ambiguous`` (step 4)
    * it has fewer than ``min_heavy_atoms`` heavy atoms (default 3)
                                            -> ``too_few_heavy_atoms``
    * the heavy-atom graph is disconnected (possible only when hydrogens
@@ -34,7 +59,7 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass, field
-from functools import cached_property
+from functools import cached_property, lru_cache
 from typing import Iterable, Optional, Sequence
 
 from chembl_structure_pipeline import standardizer as _csp
@@ -42,6 +67,8 @@ from rdkit import Chem, rdBase
 
 __all__ = [
     "ORGANIC_ELEMENTS",
+    "SIMPLE_COUNTERION_ELEMENTS",
+    "SUPPLEMENTARY_COUNTERIONS",
     "REJECTION_CODES",
     "MolGraph",
     "Rejection",
@@ -55,6 +82,24 @@ ORGANIC_ELEMENTS: frozenset[str] = frozenset(
     {"H", "B", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Se", "Br", "I"}
 )
 
+#: Elements whose single-heavy-atom fragments are dropped as counter-ions in
+#: the parent fallback: alkali and alkaline-earth metals, halogens, and N
+#: (ammonia / ammonium).
+SIMPLE_COUNTERION_ELEMENTS: frozenset[str] = frozenset(
+    {"Li", "Na", "K", "Rb", "Cs", "Mg", "Ca", "Sr", "Ba", "F", "Cl", "Br", "I", "N"}
+)
+
+#: Pharmaceutical counter-ions missing from the ChEMBL 1.2.4 salt list, as
+#: neutral RDKit canonical SMILES -> name. Of 24 common counter-ions tested
+#: as fluoxetine salts (besylate, camsylate, edisylate, esylate, isethionate,
+#: napadisylate, closylate, hippurate, lactobionate, gluceptate, lauryl
+#: sulfate, orotate, embonate, oxalate, adipate, benzoate, salicylate,
+#: olamine, diolamine, trolamine, benzathine, cyclamate, stearate,
+#: xinafoate) only xinafoate was not stripped.
+SUPPLEMENTARY_COUNTERIONS: dict[str, str] = {
+    "O=C(O)c1cc2ccccc2cc1O": "xinafoic acid (1-hydroxy-2-naphthoic acid)",
+}
+
 #: Every rejection code :func:`standardize` can emit.
 REJECTION_CODES: tuple[str, ...] = (
     "unparsable",
@@ -62,6 +107,7 @@ REJECTION_CODES: tuple[str, ...] = (
     "disallowed_element",
     "no_carbon",
     "mixture",
+    "parent_ambiguous",
     "too_few_heavy_atoms",
     "disconnected_graph",
 )
@@ -203,6 +249,8 @@ class StandardizationResult:
     ``inchikey`` describe the standardised parent whenever it could be
     computed (also for most rejections, which helps auditing). ``inchikey`` is
     the full 27-character key, or ``None`` if RDKit's InChI layer failed.
+    ``parent_note`` is set when the parent fallback (module docstring,
+    step 4) removed fragments that the ChEMBL pipeline kept.
     """
 
     input_smiles: str
@@ -211,6 +259,7 @@ class StandardizationResult:
     canonical_smiles: Optional[str] = None
     inchikey: Optional[str] = None
     chembl_exclude_flag: Optional[bool] = None
+    parent_note: Optional[str] = None
     rejection: Optional[Rejection] = None
 
     @property
@@ -224,6 +273,96 @@ def _inchikey(mol: Chem.Mol) -> Optional[str]:
     except Exception:  # pragma: no cover - RDKit built without InChI
         return None
     return key or None
+
+
+@lru_cache(maxsize=1)
+def _chembl_salts() -> tuple[Chem.Mol, ...]:
+    """Salt patterns of the ChEMBL pipeline (its ``data/salts.smi``)."""
+    pats = []
+    with open(_csp._salts_file) as fh:
+        for line in fh:
+            if not line or line[0] == "#":
+                continue
+            parts = line.strip().split("\t")
+            if len(parts) == 2:
+                pat = Chem.MolFromSmarts(parts[1])
+                if pat is not None:
+                    pats.append(pat)
+    return tuple(pats)
+
+
+def _on_chembl_salt_list(frag: Chem.Mol) -> bool:
+    """The test of ``get_fragment_parent_mol``: equal size and a substructure match."""
+    f = Chem.RemoveHs(frag, sanitize=False)
+    f.UpdatePropertyCache(strict=False)
+    Chem.SetAromaticity(f)
+    return any(
+        f.GetNumAtoms() == p.GetNumAtoms()
+        and f.GetNumBonds() == p.GetNumBonds()
+        and f.HasSubstructMatch(p)
+        for p in _chembl_salts()
+    )
+
+
+def _neutral_smiles(frag: Chem.Mol) -> str:
+    return Chem.MolToSmiles(_csp.uncharge_mol(Chem.Mol(frag)))
+
+
+def _n_heavy(frag: Chem.Mol) -> int:
+    return sum(1 for a in frag.GetAtoms() if a.GetAtomicNum() > 1)
+
+
+def _is_simple_counterion(frag: Chem.Mol) -> bool:
+    heavy = [a for a in frag.GetAtoms() if a.GetAtomicNum() > 1]
+    return len(heavy) == 1 and heavy[0].GetSymbol() in SIMPLE_COUNTERION_ELEMENTS
+
+
+def _is_organic(frag: Chem.Mol) -> bool:
+    """Some carbon bonded to hydrogen or to another carbon (excludes CO3, CN-)."""
+    for a in frag.GetAtoms():
+        if a.GetAtomicNum() == 6 and (
+            a.GetTotalNumHs() > 0 or any(nb.GetAtomicNum() == 6 for nb in a.GetNeighbors())
+        ):
+            return True
+    return False
+
+
+def _resolve_parent(parent: Chem.Mol) -> tuple[Chem.Mol, Optional[str], Optional[str]]:
+    """Parent fallback (module docstring, step 4).
+
+    Returns ``(mol, note, ambiguity)``. ``note`` lists the dropped fragments
+    (``None`` if the parent is unchanged); ``ambiguity`` is
+    ``"parent_ambiguous"`` or ``"mixture"`` when more than one distinct
+    fragment remains (the parent is then returned unchanged), else ``None``.
+    """
+    frags = list(Chem.GetMolFrags(parent, asMols=True, sanitizeFrags=False))
+    if len(frags) <= 1:
+        return parent, None, None
+    dropped: list[str] = []
+    rules = (
+        (lambda f: _n_heavy(f) == 0, "no heavy atom"),
+        (_is_simple_counterion, "inorganic counter-ion"),
+        (lambda f: _neutral_smiles(f) in SUPPLEMENTARY_COUNTERIONS, "supplementary counter-ion"),
+    )
+    for pred, label in rules:
+        hit = [pred(f) for f in frags]
+        if any(hit) and not all(hit):
+            dropped.extend(f"{Chem.MolToSmiles(f)} ({label})" for f, h in zip(frags, hit) if h)
+            frags = [f for f, h in zip(frags, hit) if not h]
+    unique: dict[str, Chem.Mol] = {}
+    for f in frags:
+        unique.setdefault(_neutral_smiles(f), f)
+    if len(unique) > 1:
+        salts_only = all(_on_chembl_salt_list(f) for f in unique.values())
+        return parent, None, "parent_ambiguous" if salts_only else "mixture"
+    if not _is_organic(frags[0]):
+        # e.g. lithium carbonate or sodium cyanide: removing the cation would
+        # turn an inorganic salt into carbonic acid / HCN, so leave it alone
+        return parent, None, None
+    if len(frags) > 1:
+        dropped.append(f"{len(frags) - 1} duplicate cop{'y' if len(frags) == 2 else 'ies'}")
+    mol = _csp.uncharge_mol(Chem.Mol(next(iter(unique.values()))))
+    return mol, "parent fallback dropped: " + "; ".join(sorted(dropped)), None
 
 
 def standardize(
@@ -242,6 +381,13 @@ def standardize(
     def reject(code: str, detail: str, **kw) -> StandardizationResult:
         return StandardizationResult(input_smiles=smi, rejection=Rejection(code, detail), **kw)
 
+    if any(c.isspace() for c in smi):
+        return reject(
+            "unparsable",
+            "SMILES contains whitespace; RDKit would read the text after it as a "
+            "molecule name (CXSMILES extensions are not supported)",
+        )
+
     with rdBase.BlockLogs():
         mol = Chem.MolFromSmiles(smi) if smi else None
         if mol is None or mol.GetNumAtoms() == 0:
@@ -251,12 +397,22 @@ def standardize(
             parent, exclude = _csp.get_parent_mol(std)
             parent = Chem.Mol(parent)
             Chem.SanitizeMol(parent)
+            parent, note, ambiguity = _resolve_parent(parent)
+            if note is not None:
+                parent = Chem.Mol(parent)
+                Chem.SanitizeMol(parent)
         except Exception as exc:  # the pipeline raises heterogeneous errors
             return reject("standardization_failed", f"{type(exc).__name__}: {exc}")
 
         can = Chem.MolToSmiles(parent)
         key = _inchikey(parent)
-    prov = dict(mol=parent, canonical_smiles=can, inchikey=key, chembl_exclude_flag=bool(exclude))
+    prov = dict(
+        mol=parent,
+        canonical_smiles=can,
+        inchikey=key,
+        chembl_exclude_flag=bool(exclude),
+        parent_note=note,
+    )
 
     symbols = sorted({a.GetSymbol() for a in parent.GetAtoms()})
     bad = [s for s in symbols if s not in allowed]
@@ -266,6 +422,13 @@ def standardize(
         return reject("no_carbon", "parent structure contains no carbon atom", **prov)
     n_frag = len(Chem.GetMolFrags(parent))
     if n_frag > 1:
+        if ambiguity == "parent_ambiguous":
+            return reject(
+                "parent_ambiguous",
+                f"{n_frag} fragments remain and each is on the ChEMBL salt list, "
+                "so no parent can be chosen",
+                **prov,
+            )
         return reject("mixture", f"{n_frag} fragments remain after parent extraction", **prov)
     graph = graph_from_mol(parent)
     if graph.n < min_heavy_atoms:

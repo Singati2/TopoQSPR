@@ -40,6 +40,16 @@ def test_aspirin_graph_and_provenance():
         ("CC(=O)OC1=CC=CC=C1C(=O)[O-].[Na+]", ASPIRIN_KEY),  # sodium salt
         ("CC(=O)OC1=CC=CC=C1C(=O)O.O.O", ASPIRIN_KEY),  # dihydrate
         ("CN(C)C(=N)N=C(N)N.Cl", "XZWYZXLIPXDOLR-UHFFFAOYSA-N"),  # metformin HCl
+        # every fragment is on the ChEMBL salt list, so the pipeline keeps them
+        # all; the parent fallback drops the inorganic ion
+        ("[Na+].[O-]C(=O)c1ccccc1", "WPYMKLBDIGXBTP-UHFFFAOYSA-N"),  # sodium benzoate
+        ("[Na+].[O-]C(=O)c1ccccc1O", "YGSDEFSMJLZEOE-UHFFFAOYSA-N"),  # sodium salicylate
+        ("CCCCCCCCCCCCCCCCCC(=O)[O-].[NH4+]", "QIQXTHQIDYTFRH-UHFFFAOYSA-N"),  # ammonium stearate
+        ("CC(=O)[O-].[NH4+]", "QTBSBXVTEAMEQO-UHFFFAOYSA-N"),  # ammonium acetate
+        ("CC(=O)[O-].[H+]", "QTBSBXVTEAMEQO-UHFFFAOYSA-N"),  # bare proton
+        # xinafoate is not on the ChEMBL list (supplementary list)
+        ("CNCCC(Oc1ccc(C(F)(F)F)cc1)c1ccccc1.OC(=O)c1cc2ccccc2cc1O",
+         "RTHCYVBBDHJXIQ-UHFFFAOYSA-N"),  # fluoxetine xinafoate
     ],
 )
 def test_salts_and_solvents_are_stripped_to_the_parent(salt, parent_key):
@@ -84,7 +94,10 @@ def test_selenium_boron_silicon_are_organic_by_default():
         ("OS(=O)(=O)O", "no_carbon"),  # inorganic acid
         ("[H][H]", "no_carbon"),
         ("c1ccccc1.c1ccncc1", "mixture"),  # two organic components
-        ("CC(=O)[O-].[NH4+]", "mixture"),  # ammonia is not in the salt list
+        ("C[N+](C)(C)CCO.OC(=O)c1ccccc1O", "parent_ambiguous"),  # choline salicylate
+        ("CCO ethanol", "unparsable"),  # RDKit would read 'ethanol' as a name
+        ("C1=CC=CC=C1 C", "unparsable"),
+        ("CCO\tjunk", "unparsable"),
         ("CO", "too_few_heavy_atoms"),
         ("C", "too_few_heavy_atoms"),
     ],
@@ -182,3 +195,28 @@ def test_renumbered_molecule_gives_isomorphic_graph():
 def test_standardize_is_deterministic():
     a, b = standardize(ASPIRIN), standardize(ASPIRIN)
     assert a.graph == b.graph and a.canonical_smiles == b.canonical_smiles and a.inchikey == b.inchikey
+
+
+def test_choline_chloride_keeps_the_quaternary_cation():
+    r = standardize("C[N+](C)(C)CCO.[Cl-]")
+    assert r.ok, r.rejection
+    assert r.canonical_smiles == "C[N+](C)(C)CCO" and r.graph.n == 7
+    assert "[Cl-] (inorganic counter-ion)" in r.parent_note
+
+
+def test_parent_fallback_is_recorded_and_absent_when_unused():
+    r = standardize("[Na+].[O-]C(=O)c1ccccc1")
+    assert r.parent_note == "parent fallback dropped: [Na+] (inorganic counter-ion)"
+    assert standardize("CC(=O)OC1=CC=CC=C1C(=O)[O-].[Na+]").parent_note is None
+    assert standardize(ASPIRIN).parent_note is None
+    x = standardize("CNCCC(Oc1ccc(C(F)(F)F)cc1)c1ccccc1.OC(=O)c1cc2ccccc2cc1O")
+    assert "supplementary counter-ion" in x.parent_note
+
+
+def test_lithium_carbonate_is_not_turned_into_carbonic_acid():
+    r = standardize("[Li+].[Li+].[O-]C([O-])=O")
+    assert r.rejection.code == "disallowed_element" and r.parent_note is None
+
+
+def test_salt_list_fallback_and_free_acid_give_identical_graphs():
+    assert standardize("[Na+].[O-]C(=O)c1ccccc1O").graph == standardize("OC(=O)c1ccccc1O").graph
