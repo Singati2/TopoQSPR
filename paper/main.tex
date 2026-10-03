@@ -28,7 +28,7 @@
 
 \begin{abstract}
 \todo{Abstract describes the planned v1.0; not yet true of the code.}
-Quantitative structure--property relationship (QSPR) studies based on graph-theoretic topological indices are widely published, but each study usually hand-assembles a small drug set, computes a few indices with ad-hoc scripts, and reports in-sample regression fits. As a result the studies are hard to reproduce and hard to compare. \ml{} is an open-source web platform and Python package that turns a disease concept into a fully specified QSPR study. It resolves the disease to a controlled MeSH heading, assembles an approved-drug set from ChEMBL with an explicit clinical-phase threshold and salt and parent normalisation, and writes a versioned drug manifest. It then computes \todo{135} degree-, reverse-degree-, neighbourhood-degree-sum- and distance-based topological indices that have been checked against published reference values. Finally it evaluates \todo{11} regression models under nested cross-validation against mandatory null and molecular-size baselines. Every run exports its inputs, database release and settings so that it can be re-executed exactly. \todo{One sentence on the multi-disease validation result.}
+Quantitative structure--property relationship (QSPR) studies based on graph-theoretic topological indices are widely published, but each study usually hand-assembles a small drug set, computes a few indices with ad-hoc scripts, and reports in-sample regression fits. As a result the studies are hard to reproduce and hard to compare. \ml{} is an open-source web platform and Python package that turns a disease concept into a fully specified QSPR study. It resolves the disease to a controlled MeSH heading, assembles an approved-drug set from ChEMBL with an explicit clinical-phase threshold and salt and parent normalisation, and writes a versioned drug manifest. It then computes 102 degree-, reverse-degree-, neighbourhood-degree-sum-, distance- and matching-based topological indices, each traced to its primary source and unit-tested against closed forms, an independent implementation and published values. Finally it evaluates ten regressor families under repeated nested cross-validation against mandatory null and molecular-size baselines. Every run exports its inputs, database release and settings so that it can be re-executed exactly. \todo{One sentence on the multi-disease validation result.}
 \end{abstract}
 
 \begin{keyword}
@@ -60,7 +60,7 @@ C9 & Support email & \todo{} \\
 %% ---------------------------------------------------------------
 \section{Motivation and significance}
 
-Topological indices are graph invariants of the hydrogen-suppressed molecular graph. They have been used as structural descriptors since Wiener's path-number study of paraffin boiling points \cite{wiener1947}. Degree-based families, including the Zagreb \cite{gutman1972}, Randi\'c \cite{randic1975}, atom-bond connectivity \cite{estrada1998} and Sombor \cite{gutman2021sombor} indices and their many recent variants, are now frequently correlated with physicochemical properties of drugs used for a particular disease \cite{almulla2026antifungal}. The genre is growing fast: Europe PMC records 16 such drug QSPR papers in 2022, 40 in 2023, 62 in 2024 and 113 in 2025, and the share that also applies machine learning rose from 5 to 59 of these (query in the supplementary material). We screened the 60 most recent open-access candidates against fixed eligibility criteria. In all 19 eligible disease- or drug-class-specific studies (median 20 drugs, range 10--50) the modelled ``physicochemical properties'' are values predicted by ACD/Labs (via ChemSpider) or computed by PubChem or ChemDraw, not measurements. Most such studies share three weaknesses, long recognised as common QSPR pitfalls \cite{dearden2009}.
+Topological indices are graph invariants of the hydrogen-suppressed molecular graph \cite{todeschini2009}. They have been used as structural descriptors since Wiener's path-number study of paraffin boiling points \cite{wiener1947}. Degree-based families, including the Zagreb \cite{gutman1972}, Randi\'c \cite{randic1975}, atom-bond connectivity \cite{estrada1998} and Sombor \cite{gutman2021sombor} indices and their many recent variants, are now frequently correlated with physicochemical properties of drugs used for a particular disease \cite{almulla2026antifungal}. The genre is growing fast: Europe PMC records 16 such drug QSPR papers in 2022, 40 in 2023, 62 in 2024 and 113 in 2025, and the share that also applies machine learning rose from 5 to 59 of these (query in the supplementary material). We screened the 60 most recent open-access candidates against fixed eligibility criteria. In all 19 eligible disease- or drug-class-specific studies (median 20 drugs, range 10--50) the modelled ``physicochemical properties'' are values predicted by ACD/Labs (via ChemSpider) or computed by PubChem or ChemDraw, not measurements. Most such studies share three weaknesses, long recognised as common QSPR pitfalls \cite{dearden2009}.
 
 \paragraph{The drug set is under-specified} The ``drugs for disease~X'' are usually listed without saying how they were chosen. Approved, investigational and withdrawn agents are mixed, salts and parents are counted separately, and the list cannot be regenerated. Table~\ref{tab:audit} shows how large the choice is. On ChEMBL release~37, a substring query for \emph{diabetes} returns 580 distinct molecules, and the matched headings include \emph{Diabetes Insipidus}, which is a different disease. Restricting to molecules that reached phase~4 for a matched indication leaves 103, of which only 71 are small molecules. Even these include antihypertensives such as lisinopril and valsartan, sodium chloride and vitamins, several attached to the indication through drug-label text mining. So a phase filter alone does not define a disease-specific drug set. A plain-language query such as \emph{breast cancer} matches no heading at all, because the controlled term is \emph{Breast Neoplasms} (1{,}171 indication records for the exact heading).
 
@@ -129,34 +129,36 @@ The free-text input is matched against the MeSH headings that occur in ChEMBL's 
 The resulting \emph{drug manifest} is shown to the user before any computation and can be downloaded. It lists the ChEMBL ID, preferred name, phase and the reason each candidate was included or excluded. Ordering is deterministic, so a given release and set of settings always produce the same set.
 
 \subsection{Topological indices}
-For a molecular graph $G=(V,E)$ with vertex degrees $d(v)$, the package implements \todo{135} indices in five families (Table~\ref{tab:indices}, full definitions in Supplementary~S1):
-degree-based edge sums $\sum_{uv\in E} f(d(u),d(v))$;
-reverse-degree variants with $c(v)=\Delta-d(v)+1$ \cite{kulli2018} and the generalised (modified) reverse degree $R_k$ \cite{arockiaraj2023ijqc,kalaam2024};
-hybrid geometric-harmonic-Zagreb indices \cite{arockiaraj2023hybrid};
-neighbourhood-degree-sum variants, in which $d(v)$ is replaced by $S(v)=\sum_{u\sim v} d(u)$;
-distance-based indices (Wiener, Balaban~$J$ \cite{balaban1982}, Szeged, Mostar, PI, Schultz, Gutman); the matching-based Hosoya~$Z$ \cite{hosoya1971};
-and graph entropy.
-Each index is unit-tested against closed-form values on path, cycle, star and complete graphs (e.g.\ $W(P_n)=(n^3-n)/6$) and against values reported in the literature for reference molecules \cite{todeschini2009}.
+For a molecular graph $G=(V,E)$ (the hydrogen-suppressed graph of the standardised parent structure) with vertex degrees $d(v)$ and maximum degree $\Delta$, the package implements 102 indices in six families (Table~\ref{tab:indices}; definitions, sources and tests in Supplementary~S1):
+degree-based edge sums $\sum_{uv\in E} f(d(u),d(v))$, including the bi- and tri-Zagreb indices and the hybrid geometric-harmonic-Zagreb descriptors \cite{arockiaraj2023hybrid};
+reverse-degree indices, which use Kulli's reverse degree $c(v)=\Delta-d(v)+1$ \cite{kulli2018} and its generalisation $M_kR(d)=\Delta-d+k$ for $k\le d$ and $(\Delta-d+k)\bmod\Delta$ for $k>d$ \cite{arockiaraj2023ijqc,kalaam2024}, restricted to $1\le k\le\Delta$ so that the map is a permutation of $\{1,\dots,\Delta\}$;
+neighbourhood-degree-sum indices, in which $d(v)$ is replaced by $S(v)=\sum_{u\sim v} d(u)$ \cite{mondal2021};
+distance-based indices (Wiener, Balaban~$J$ \cite{balaban1982}, Szeged, Mostar, PI, degree distance and Gutman);
+the Hosoya index $Z$ \cite{hosoya1971}, computed exactly by dynamic programming over matchings rather than approximated;
+and the degree-based graph entropy.
+Indices are verified in four independent ways: closed forms on paths, cycles, stars and complete graphs (e.g.\ $W(P_n)=(n^3-n)/6$, $Z(P_n)=F_{n+1}$, $Z(C_n)=L_n$); brute-force enumeration of matchings on random graphs; the Mordred descriptor calculator \cite{moriwaki2018mordred} for the overlapping indices on approved drugs; and values printed in the primary papers \cite{arockiaraj2023ijqc,arockiaraj2023hybrid,godlin2026,arockiaraj2025lung}. The last check also exposed three printed values in one source that contradict its own definitions (Supplementary~S1).
+An index that is undefined for a molecule (e.g.\ a division by zero) is returned as missing with a reason, never as zero.
 
 \begin{table}[t]
 \centering\small
-\caption{Index families implemented. \todo{update counts after verification; drop any index that fails tests}}
+\caption{Index families in \ml{}~v1.0 (102 indices). Every index is traced to a primary source and unit-tested (Supplementary~S1, \texttt{docs/INDEX\_VERIFICATION.md}).}
 \label{tab:indices}
 \begin{tabular}{lrl}
 \toprule
 Family & $n$ & Examples \\
 \midrule
-Degree-based              & 31 & $M_1,M_2,R,ABC,GA,H,SO,ISI,\sigma$ \\
-Reverse-degree ($R$, $R_k$) & 53 & $RM_1, RABC, R_kSO, R_kISI$ \\
-Neighbourhood degree-sum  & 35 & $S\!M_1, S\!ABC, S\!GA$ \\
-Distance / cut-based      & 15 & $W, J, Z, Sz, Mo, PI$ \\
-Information-theoretic     &  1 & graph entropy \\
+Degree-based (incl.\ 12 hybrid geometric-harmonic-Zagreb) & 30 & $M_1, M_2, R, ABC, GA, SO, ISI, GH, BMG$ \\
+Reverse degree: Kulli and generalised $R_k$, $k=1,2,3$ & 49 & $R_1M_1\,(=CM_1), R_kABC, R_kGA, R_kReZ_1$ \\
+Neighbourhood degree-sum & 10 & $S\!ABC\,(=ABC_4), S\!GA\,(=GA_5), S\!R$ \\
+Distance-based & 11 & $W, J, Sz, Mo, PI$, degree distance, Gutman \\
+Matching (Hosoya $Z$, exact) & 1 & $Z$ \\
+Information-theoretic & 1 & degree entropy \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Model evaluation}
-Each target property is modelled with \todo{11} regressors (ordinary least squares, ridge, lasso, elastic net, random forest, extra trees, gradient boosting, XGBoost \cite{chen2016xgboost}, support-vector regression, multilayer perceptron, \todo{11th}) implemented in scikit-learn \cite{pedregosa2011}. The evaluation protocol is designed to prevent optimistic bias:
+Each target property is modelled with ten regressor families (ordinary least squares, used only when the training set has more molecules than features; ridge; elastic net; partial least squares; $k$-nearest neighbours; support-vector regression; random forest; extra trees; gradient boosting; and XGBoost \cite{chen2016xgboost}), implemented in scikit-learn \cite{pedregosa2011}, plus a mean-only null model. The evaluation protocol is designed to prevent optimistic bias:
 \begin{itemize}
   \item \textbf{Nested cross-validation.} Both the hyperparameters and the choice of model family are made inside each outer training fold only. The outer $k$ folds (default $k=5$, repeated \todo{5} times) give the reported performance, so the score of the ``best'' model is not inflated by selecting it on its own test folds \cite{varma2006,cawley2010}. Per-family scores are reported as well.
   \item \textbf{Scaffold-grouped validation.} As a stricter test of generalisation, outer folds are also grouped by Bemis--Murcko scaffold \cite{bemis1996}; acyclic molecules, which all share the empty scaffold, each form their own group. The change from ordinary to nested to scaffold-grouped estimates quantifies evaluation optimism.
