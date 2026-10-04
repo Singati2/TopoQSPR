@@ -104,12 +104,22 @@ Status after Advik's feedback (`docs/ADVIK_RECOMMENDATIONS.md`, 2026-10-03):
 1. Per-disease panel: **decided** — pooled set for modelling, per-disease analyses descriptive (option (a)).
 2. Confirmatory measured targets: **decided** — mp_bradley, logp_opera, logd74_az, logs_aqsoldb. Any later
    change after freezing is a dated amendment.
-3. Practical-significance threshold (0.05 proposed); cohort evidence filter: **open** (no recommendation yet).
+3. Practical-significance threshold and cohort evidence filter: **decided by the lead author on delegation
+   (2026-10-04)**: ΔR² ≥ 0.05 (Ash et al. 2025: pre-specified practical significance); evidence filter =
+   exclude indications supported only by DailyMed label text (removes label-mining noise such as
+   lisinopril for diabetes; T2D 33 → 26, hypertension 85 → 69), with "none" and "FDA/EMA/ATC only" as
+   Experiment A sensitivity analyses ("FDA/EMA/ATC only" alone is too strict: asthma 8). The pooled
+   modelling set is almost unaffected because a drug needs only one approved indication.
 4. Compute plan for the main run (learner list or machine): **open**.
-5. Replication studies: **open**. Advik suggested studies "that show the best possible results"; choosing by
+5. Replication studies: **decided by the lead author on delegation (2026-10-04)**: Advik suggested studies "that show the best possible results"; choosing by
    reported performance would be selection on the outcome (and favours the most inflated claims), so it is
-   not used. Proposed rule, blind to reported R²: the studies that can be reproduced *exactly* from their
-   published data (`REPLICATION_DATA.md`: rows 2, 3, 4 and 8), i.e. the scientifically strongest test cases.
+   not used. Rule, blind to reported R²: the studies that can be reproduced *exactly* from their published
+   data (`REPLICATION_DATA.md` rows 2, 3, 4, 8): Kabeer et al. 2026 (antidepressants, n = 25), Vimala &
+   Ravi Sankar 2026 (anticancer, n = 23), Almulla et al. 2026 (antifungal, n = 20), Godlin & Radha 2026
+   (major depressive disorder, n = 21). Note: Kabeer and Almulla share two co-authors (Mufti, Ganati).
+   Self-contradictory printed tables in rows 2 and 4 are reported as findings, and the re-analysis uses
+   values recomputed from the stated definitions. This replaces the earlier date-order rule; changed before
+   freezing and before any re-analysis.
 
 Outside the experiment:
 - Licence: the original author grants full flexibility on licensing (Advik, 2026-10-03); a one-line

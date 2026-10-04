@@ -60,6 +60,8 @@ threshold to n ≥ 30 for exploratory analyses only. **Decided 2026-10-03 (Advik
 The phase-4 filter alone still admits drugs attached by label text mining (e.g. lisinopril for
 diabetes). The default evidence filter (none / exclude DailyMed-only / ATC class) is chosen from
 the cohort module's measured counts **before** any modelling, and recorded here.
+**Decided 2026-10-04:** exclude indications supported only by DailyMed label text; "none" and
+"FDA/EMA/ATC only" are Experiment A sensitivity analyses.
 
 ## 4. Targets
 
@@ -131,7 +133,7 @@ analyses). See PIPELINE.md §2.
   Frozen per-disease configs set `protocol.bootstrap.enabled = false` unless the code default is already
   pooled-only (PIPELINE.md §9).
   **Practical significance:** ΔR² ≥ 0.05 is the pre-specified minimal meaningful gain
-  (to be confirmed by co-authors before freezing).
+  (decided 2026-10-04).
 - **Secondary (exploratory):** ΔR²(TI+comp − comp); ΔR² per TI family; M_std vs M_TI; class-2 targets;
   R² and MAE of every model (mean, SD, median); n for every endpoint.
 - **Y-randomised control:** for every feature set in the confirmatory family, the full nested pipeline on
@@ -161,8 +163,9 @@ analyses). See PIPELINE.md §2.
 - **D. Replication:** 3–5 published disease-specific TI-QSPR studies. Selection is fixed before any
   re-analysis: the Europe PMC query fixed in `tools/replication_screen.py` (run 2026-10-03: 239 open-access candidates, `docs/replication_candidates.csv`), screened in date order
   (newest first) against eligibility criteria: (i) compound list resolvable to structures,
-  (ii) property values tabulated, (iii) index formulas stated, (iv) n ≥ 10. The first eligible studies
-  are taken, subject to co-author agreement, with no regard to their reported R². Chain per study:
+  (ii) property values tabulated, (iii) index formulas stated, (iv) n ≥ 10. Selection (decided 2026-10-04, before any re-analysis): the eligible studies that are exactly
+  reproducible from their published data (docs/REPLICATION_DATA.md rows 2, 3, 4, 8), with no regard to
+  their reported R². Chain per study:
   published R² → reproduced in-sample R² → ordinary CV → nested CV → scaffold CV → size baseline,
   with CIs and the optimism gap. For comparability with the genre, Q²_F3 and the concordance correlation
   coefficient are also reported (secondary). A permuted-target and a descriptor-pool-randomised control
