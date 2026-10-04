@@ -5,7 +5,7 @@ The manuscript lives in [`paper/`](../paper) (Overleaf-ready: `main.tex`, `refs.
 Every code change below exists to produce a section, table or figure of that paper;
 no number goes into `paper/main.tex` unless it was produced by a tagged release.
 
-Target venue: SoftwareX (Journal of Cheminformatics only if the replication result is strong).
+Target venue: **Journal of Cheminformatics (software article)** recommended, following ChemGraphX's format at Advik's request (`docs/PAPER_FORMAT.md`); SoftwareX as fallback. To confirm with all co-authors.
 External review and its verification: [`external-review-2026-10.md`](external-review-2026-10.md).
 
 ## Milestones
