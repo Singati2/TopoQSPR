@@ -72,7 +72,7 @@ Manuscript in preparation for SoftwareX (see `paper/` and the [paper roadmap](do
 
 ## License
 
-Code: MIT; see [LICENSE](LICENSE) (pending written agreement of the original author of the v0.x code).
+Code: MIT; see [LICENSE](LICENSE). The original author of the v0.x code (Advik Natarajan) has granted full flexibility on licensing (`docs/ADVIK_RECOMMENDATIONS.md`).
 
 Data: drug sets and properties retrieved from ChEMBL are licensed CC BY-SA 3.0 by EMBL-EBI. Redistributed manifests or result files that contain ChEMBL-derived data must carry attribution and the same licence.
 

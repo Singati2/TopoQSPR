@@ -99,10 +99,23 @@ External:
 
 ## Decisions needed from the authors
 
-1. Per-disease panel: descriptive only (recommended) or n ≥ 30 exploratory.
-2. Confirmatory measured targets (the four above).
-3. Practical-significance threshold (0.05 proposed); cohort evidence filter.
-4. Compute plan for the main run (learner list or machine).
-5. Replication studies (first five of the shortlist).
+Status after Advik's feedback (`docs/ADVIK_RECOMMENDATIONS.md`, 2026-10-03):
 
-Plus, outside the experiment: written MIT agreement from gcap733-bit; SoftwareX word limit.
+1. Per-disease panel: **decided** — pooled set for modelling, per-disease analyses descriptive (option (a)).
+2. Confirmatory measured targets: **decided** — mp_bradley, logp_opera, logd74_az, logs_aqsoldb. Any later
+   change after freezing is a dated amendment.
+3. Practical-significance threshold (0.05 proposed); cohort evidence filter: **open** (no recommendation yet).
+4. Compute plan for the main run (learner list or machine): **open**.
+5. Replication studies: **open**. Advik suggested studies "that show the best possible results"; choosing by
+   reported performance would be selection on the outcome (and favours the most inflated claims), so it is
+   not used. Proposed rule, blind to reported R²: the studies that can be reproduced *exactly* from their
+   published data (`REPLICATION_DATA.md`: rows 2, 3, 4 and 8), i.e. the scientifically strongest test cases.
+
+Outside the experiment:
+- Licence: the original author grants full flexibility on licensing (Advik, 2026-10-03); a one-line
+  confirmation from his own GitHub account would make the MIT relicensing record complete.
+- Before writing the paper (Advik): the website must work reliably on the v1.0 code (v1.0 has no web
+  interface yet; the live site runs the v0.x prototype), and the index definitions are proof-checked
+  against further independent papers (reverse degree, neighbourhood degree sum).
+- Paper format: follow the structure and style of ChemGraphX (J. Cheminform. 2026) as closely as the
+  target journal allows; SoftwareX word limit still to confirm.
