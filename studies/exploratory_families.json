@@ -1,0 +1,14 @@
+{
+ "schema": 1,
+ "name": "exploratory_ti_families_v1",
+ "cohort": {"source": "pooled", "chembl_release": "ChEMBL_37"},
+ "feature_sets": ["null", "size", "composition", "TI_family"],
+ "targets": [{"provider": "expdata", "names": ["mp_bradley", "logp_opera", "logd74_az", "logs_aqsoldb"]}],
+ "evaluation": {
+  "families": ["ridge", "elasticnet", "pls", "knn", "svr"],
+  "learners": ["selected"],
+  "outer_splits": 5, "seeds": [0, 1, 2, 3, 4], "inner_splits": 3,
+  "split": "random", "reference": "size"
+ },
+ "runtime": {"n_jobs": 14}
+}

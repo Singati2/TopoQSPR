@@ -3,7 +3,9 @@
 Required by `RECOMMENDATIONS.md` and `docs/EXPERIMENT_PLAN.md` §11. The main experiment starts only
 when this report says **GO**. Status as of 2026-10-03, branch `v1.0-dev`.
 
-## Decision: **NO-GO (not yet)**
+## Decision: **GO (2026-10-05)** — plan frozen at tag `plan-freeze-v1`
+
+_Earlier status (2026-10-03): NO-GO pending author decisions; all five are now recorded below._
 
 The software, the index library, the cohort and data layers, the confirmatory protocol and the
 experiment runners are implemented and adversarially verified. The main experiment is blocked only
@@ -104,12 +106,34 @@ Status after Advik's feedback (`docs/ADVIK_RECOMMENDATIONS.md`, 2026-10-03):
 1. Per-disease panel: **decided** — pooled set for modelling, per-disease analyses descriptive (option (a)).
 2. Confirmatory measured targets: **decided** — mp_bradley, logp_opera, logd74_az, logs_aqsoldb. Any later
    change after freezing is a dated amendment.
-3. Practical-significance threshold (0.05 proposed); cohort evidence filter: **open** (no recommendation yet).
-4. Compute plan for the main run (learner list or machine): **open**.
-5. Replication studies: **open**. Advik suggested studies "that show the best possible results"; choosing by
+3. Practical-significance threshold and cohort evidence filter: **decided by the lead author on delegation
+   (2026-10-04)**: ΔR² ≥ 0.05 (Ash et al. 2025: pre-specified practical significance); evidence filter =
+   exclude indications supported only by DailyMed label text (removes label-mining noise such as
+   lisinopril for diabetes; T2D 33 → 26, hypertension 85 → 69), with "none" and "FDA/EMA/ATC only" as
+   Experiment A sensitivity analyses ("FDA/EMA/ATC only" alone is too strict: asthma 8). The pooled
+   modelling set is almost unaffected because a drug needs only one approved indication.
+4. Compute plan: **proposed (lead author, 2026-10-05), from a synthetic-data benchmark** (n = 500,
+   p = 120, random features, n_jobs = 4; per 5-fold outer repeat): ridge 13 s, PLS 5 s, kNN 5 s, SVR 4.5 s,
+   elastic net 10.5 s; extra trees 194 s, gradient boosting 371 s, random forest 438 s, XGBoost 628 s.
+   - Confirmatory learners: ridge, elastic net, PLS, kNN, SVR **plus extra trees** (one tree ensemble is kept
+     because the audit found tree models change whether indices beat size; extra trees is the cheapest).
+   - Confirmatory feature sets: null, size, composition, TI, TI+composition, RDKit 2D; TI-family sets with the
+     fast learners only (exploratory).
+   - Y-randomisation K = 200 and bootstrap B = 200 (the plan's defaults) with ridge as the control learner
+     and the full 5 × 5 repeated nested CV per draw; draws run in parallel (runtime.n_jobs = 14). The
+     benchmark above ran under load 30–50; the machine is now idle (load ≈ 3 on 16 cores).
+   - Two runs: (1) confirmatory, pooled cohort, sets null/size/composition/TI/TI_composition/rdkit2d,
+     learners selected + the six families, protocol stage on; (2) exploratory, TI family sets with the
+     five fast learners, no protocol stage.
+5. Replication studies: **decided by the lead author on delegation (2026-10-04)**: Advik suggested studies "that show the best possible results"; choosing by
    reported performance would be selection on the outcome (and favours the most inflated claims), so it is
-   not used. Proposed rule, blind to reported R²: the studies that can be reproduced *exactly* from their
-   published data (`REPLICATION_DATA.md`: rows 2, 3, 4 and 8), i.e. the scientifically strongest test cases.
+   not used. Rule, blind to reported R²: the studies that can be reproduced *exactly* from their published
+   data (`REPLICATION_DATA.md` rows 2, 3, 4, 8): Kabeer et al. 2026 (antidepressants, n = 25), Vimala &
+   Ravi Sankar 2026 (anticancer, n = 23), Almulla et al. 2026 (antifungal, n = 20), Godlin & Radha 2026
+   (major depressive disorder, n = 21). Note: Kabeer and Almulla share two co-authors (Mufti, Ganati).
+   Self-contradictory printed tables in rows 2 and 4 are reported as findings, and the re-analysis uses
+   values recomputed from the stated definitions. This replaces the earlier date-order rule; changed before
+   freezing and before any re-analysis.
 
 Outside the experiment:
 - Licence: the original author grants full flexibility on licensing (Advik, 2026-10-03); a one-line

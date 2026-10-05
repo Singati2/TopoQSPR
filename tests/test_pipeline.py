@@ -935,3 +935,20 @@ def test_runtime_dependencies_declared_and_locked():
     for m in mods & third:
         assert dist.get(m, m).replace("_", "-") in deps, m
     assert "openpyxl" in (SRC / "topoqspr" / "expdata.py").read_text()
+
+
+def test_ti_composition_set_is_ti_plus_composition():
+    """EXPERIMENT_PLAN §7 secondary comparison ΔR²(TI+comp − comp) needs a combined set."""
+    from topoqspr import pipeline as pl
+    from topoqspr.graph import standardize
+
+    smiles = ["CCO", "c1ccccc1O", "CC(=O)Oc1ccccc1C(=O)O", "CN(C)C(=N)N=C(N)N"]
+    res = [standardize(s) for s in smiles]
+    cfg = pl.resolve_config({"cohort": {"source": "smiles_csv", "path": "x.csv"},
+                             "feature_sets": ["null", "size", "composition", "TI_composition"]})
+    assert cfg["feature_sets"] == ["null", "size", "composition", "TI_composition"]
+    wide, sets, failures = pl._feature_stage(cfg, [f"m{i}" for i in range(len(smiles))],
+                                             [r.mol for r in res], [r.graph for r in res])
+    assert sets["TI_composition"] == [c for c in wide.columns if c.startswith("ti.")] + \
+        [c for c in wide.columns if c.startswith("composition.")]
+    assert len(sets["TI_composition"]) == 102 + 11
