@@ -114,7 +114,7 @@ CONFIG_SCHEMA = 1
 DEFAULT_FEATURE_SETS: tuple[str, ...] = (
     "null", "size", "size_rings", "composition", "TI", "TI_family", "rdkit2d",
 )
-_BASE_SETS = ("null", "size", "size_rings", "composition", "TI", "TI_family", "rdkit2d")
+_BASE_SETS = ("null", "size", "size_rings", "composition", "TI", "TI_family", "TI_composition", "rdkit2d")
 
 #: Result CSVs that a re-run must reproduce byte for byte.
 RESULT_CSVS: tuple[str, ...] = (
@@ -760,7 +760,7 @@ def _feature_stage(cfg, ids, mols, graphs):
     blocks.append(comp.add_prefix("composition."))
     failures += [dict(block="composition", **f) for f in comp.attrs.get("failures", [])]
     sets["composition"] = [f"composition.{c}" for c in ft.COMPOSITION_COLUMNS]
-    if "TI" in fsets or "TI_family" in fsets:
+    if "TI" in fsets or "TI_family" in fsets or "TI_composition" in fsets:
         names = cfg["indices"]["names"]
         ti, tfail = compute_index_table(graphs, idx, names)
         blocks.append(ti.add_prefix("ti."))
@@ -772,6 +772,9 @@ def _feature_stage(cfg, ids, mols, graphs):
             members = [f"ti.{c}" for c in cols if fam_of[c] == fam]
             if members:
                 sets[f"TI_{fam}"] = members
+    if "TI_composition" in fsets:
+        # EXPERIMENT_PLAN §7 secondary: what the indices add on top of element composition
+        sets["TI_composition"] = sets["TI"] + sets["composition"]
     if "rdkit2d" in fsets:
         rd = ft.rdkit2d_features(mols, None, idx)
         blocks.append(rd.add_prefix("rdkit2d."))
