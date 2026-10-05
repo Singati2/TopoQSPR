@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TopoQSPR v1.0 - exploratory web interface</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <h1>TopoQSPR <span class="ver" id="version"></span></h1>
+  <p class="tagline">Disease-anchored QSPR with verified graph-theoretic topological indices:
+    how much do topological indices predict beyond molecular size?</p>
+  <p class="banner" role="note"><strong>Exploratory mode.</strong> <span id="mode-note">This site runs a fast,
+    reduced analysis. Confirmatory analyses use the command-line protocol.</span></p>
+</header>
+
+<main id="main">
+  <nav aria-label="Steps" class="steps">
+    <ol>
+      <li><a href="#step-disease">1. Disease</a></li>
+      <li><a href="#step-cohort">2. Cohort</a></li>
+      <li><a href="#step-run">3. Targets and run</a></li>
+      <li><a href="#step-results">4. Results</a></li>
+      <li><a href="#step-indices">Indices only</a></li>
+    </ol>
+  </nav>
+
+  <section id="step-disease" aria-labelledby="h-disease">
+    <h2 id="h-disease">1. Choose the disease (MeSH headings)</h2>
+    <p>Type a disease name. Suggestions come from the MeSH headings used in ChEMBL drug
+      indications. Drugs are retrieved only for the headings you confirm, never by free text.</p>
+    <form id="heading-form" class="row" autocomplete="off">
+      <label for="heading-q">Disease name</label>
+      <input id="heading-q" name="q" type="search" minlength="2" maxlength="100" required
+             placeholder="e.g. migraine" aria-describedby="heading-help">
+      <button type="submit">Search</button>
+    </form>
+    <p id="heading-help" class="help">At least two characters.</p>
+    <div id="heading-status" role="status" aria-live="polite" class="status"></div>
+    <ul id="heading-results" class="choices" aria-label="Suggested headings"></ul>
+
+    <h3>Selected headings</h3>
+    <ul id="selected-headings" class="chips" aria-live="polite"></ul>
+    <p id="selected-empty" class="help">None selected yet.</p>
+
+    <fieldset>
+      <legend>Cohort rules</legend>
+      <div class="row">
+        <label for="min-phase">Minimum clinical phase for the indication</label>
+        <select id="min-phase">
+          <option value="4" selected>4 (approved)</option>
+          <option value="3">3</option>
+          <option value="2">2</option>
+          <option value="1">1</option>
+          <option value="0.5">0.5 (early phase 1)</option>
+          <option value="none">no phase rule</option>
+        </select>
+      </div>
+      <div class="row">
+        <input id="excl-dailymed" type="checkbox">
+        <label for="excl-dailymed">Exclude indications supported only by DailyMed label text</label>
+      </div>
+      <div class="row">
+        <input id="excl-diag" type="checkbox">
+        <label for="excl-diag">Exclude diagnostic agents and radiopharmaceuticals (ATC V04 / V09)</label>
+      </div>
+      <fieldset class="inner">
+        <legend>Require evidence of type (optional; none ticked = any)</legend>
+        <div id="evidence-types" class="checks"></div>
+      </fieldset>
+    </fieldset>
+    <button id="build-cohort" type="button" disabled>Build cohort preview</button>
+    <div id="cohort-status" role="status" aria-live="polite" class="status"></div>
+  </section>
+
+  <section id="step-cohort" aria-labelledby="h-cohort" hidden>
+    <h2 id="h-cohort">2. Review the cohort manifest</h2>
+    <p>No model has been run. Check which drugs are included and why others were excluded.</p>
+    <dl id="cohort-summary" class="summary"></dl>
+    <p><a id="cohort-download" class="button" href="#" download>Download manifest.csv</a></p>
+    <h3>Counts by reason</h3>
+    <div class="table-wrap"><table id="reason-table"><caption class="sr-only">Manifest rows per reason</caption></table></div>
+    <details open>
+      <summary>Included parents (<span id="n-included">0</span>)</summary>
+      <div class="table-wrap"><table id="included-table"></table></div>
+    </details>
+    <details>
+      <summary>Excluded molecules (<span id="n-excluded">0</span>)</summary>
+      <div class="table-wrap"><table id="excluded-table"></table></div>
+    </details>
+  </section>
+
+  <section id="step-run" aria-labelledby="h-run" hidden>
+    <h2 id="h-run">3. Choose targets and run</h2>
+    <fieldset>
+      <legend>Computed targets (RDKit)</legend>
+      <div id="computed-targets" class="checks"></div>
+      <p class="help">Computed targets are atom-contribution sums; they replicate the genre and
+        support no headline claims. MolWt is a sanity check.</p>
+    </fieldset>
+    <fieldset>
+      <legend>Measured targets (licence-checked sources)</legend>
+      <div id="measured-targets" class="checks"></div>
+      <p class="help">Values are joined on the full InChIKey of the standardised parent; drugs without
+        a measurement are left out of that target (never imputed). Small cohorts may have too few
+        measured values; such targets are reported as not evaluated.</p>
+    </fieldset>
+    <div class="row">
+      <input id="confirm" type="checkbox">
+      <label for="confirm">I have reviewed the cohort manifest above and want to run this cohort.</label>
+    </div>
+    <button id="run-button" type="button" disabled>Run exploratory analysis</button>
+    <div id="run-status" role="status" aria-live="polite" class="status"></div>
+  </section>
+
+  <section id="step-results" aria-labelledby="h-results" hidden>
+    <h2 id="h-results">4. Progress and results</h2>
+    <p class="help">Job link (bookmark to come back): <a id="job-link" href="#"></a></p>
+    <div class="progress-row">
+      <label for="job-progress" id="job-stage">Waiting</label>
+      <progress id="job-progress" max="1" value="0"></progress>
+    </div>
+    <div id="job-status" role="status" aria-live="polite" class="status"></div>
+    <div id="results" hidden>
+      <p class="banner" role="note">Exploratory run: one repeat of 5-fold cross-validation,
+        three fast learners, no Y-randomisation or bootstrap. Confidence intervals over five folds
+        are wide. Rows marked <em>underpowered</em> do not support claims (n below the protocol
+        minimum or outer test folds too small).</p>
+      <dl id="results-summary" class="summary"></dl>
+      <div class="downloads">
+        <a id="dl-zip" class="button" href="#" download>Download all results (zip)</a>
+        <a id="dl-manifest" class="button" href="#" download>manifest.csv</a>
+        <a id="dl-record" class="button" href="#" download>run_record.json</a>
+      </div>
+      <div id="ladder"></div>
+      <p class="help">ΔR² and ΔMAE are paired differences against the molecular-size baseline
+        (heavy-atom and bond count) on identical folds, with 95 % confidence intervals. AD outside =
+        share of test predictions outside the applicability domain.</p>
+    </div>
+  </section>
+
+  <section id="step-indices" aria-labelledby="h-indices">
+    <h2 id="h-indices">Topological indices for your own molecules</h2>
+    <p>Paste SMILES (one per line, optionally followed by a name) or a CSV with a
+      <code>smiles</code> column, or choose a file. The result is a zip with every verified index,
+      and the reason for each undefined value.</p>
+    <label for="indices-text">SMILES list</label>
+    <textarea id="indices-text" rows="6" spellcheck="false" placeholder="CCO ethanol&#10;c1ccccc1 benzene"></textarea>
+    <div class="row">
+      <label for="indices-file">or load a file (.smi, .csv, .txt)</label>
+      <input id="indices-file" type="file" accept=".smi,.csv,.txt,text/plain,text/csv">
+    </div>
+    <button id="indices-button" type="button">Compute indices</button>
+    <div id="indices-status" role="status" aria-live="polite" class="status"></div>
+  </section>
+</main>
+
+<footer class="site">
+  <h2>Citations and licences</h2>
+  <ul>
+    <li>TopoQSPR, MIT licence. Source: github.com/Singati2/TopoQSPR (manuscript in preparation).</li>
+    <li>Drug indications, structures and phases: ChEMBL (EMBL-EBI), licensed
+      <span id="chembl-licence">CC BY-SA 3.0</span>. Zdrazil B. et al., Nucleic Acids Res. 52 (2024)
+      D1180-D1192, doi:10.1093/nar/gkad1004. Release used: <span id="chembl-release">shown with each cohort</span>.</li>
+    <li>Disease vocabulary: Medical Subject Headings (MeSH), U.S. National Library of Medicine.</li>
+    <li>Chemistry: RDKit (BSD licence); ChEMBL structure pipeline (MIT).</li>
+    <li>Measured-target sources and their licences:
+      <ul id="measured-citations"></ul></li>
+  </ul>
+  <p class="help">Downloaded files that contain ChEMBL data must keep the attribution and the
+    CC BY-SA 3.0 licence (see LICENCE-DATA.txt in every results zip).</p>
+</footer>
+</body>
+</html>
