@@ -40,8 +40,8 @@
   </g>
   <g fill="#0b0b0b">
     <text x="591" y="220" text-anchor="middle" font-weight="bold">Outputs</text>
-    <text x="444" y="238" font-size="9.3">· manifest.csv · indices.csv (a reason for every undefined value) · catalog.csv</text>
-    <text x="444" y="253" font-size="9.3">· ΔR², ΔMAE with CIs · BH / BY q · permutation and bootstrap controls</text>
+    <text x="444" y="238" font-size="9.3">· manifest.csv · indices.csv (a reason for every undefined value)</text>
+    <text x="444" y="253" font-size="9.3">· catalog.csv · ΔR², ΔMAE with CIs · BH / BY q · permutation, bootstrap</text>
     <text x="444" y="268" font-size="9.3">· run_record.json: commit, versions, ChEMBL release, hashes, seeds</text>
   </g>
   <line x1="681" y1="98" x2="681" y2="198" stroke="#52514e" stroke-width="1.2" marker-end="url(#a)" fill="none"/>
