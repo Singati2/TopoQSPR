@@ -16,6 +16,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from topoqspr.indices import REGISTRY
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -951,4 +953,4 @@ def test_ti_composition_set_is_ti_plus_composition():
                                              [r.mol for r in res], [r.graph for r in res])
     assert sets["TI_composition"] == [c for c in wide.columns if c.startswith("ti.")] + \
         [c for c in wide.columns if c.startswith("composition.")]
-    assert len(sets["TI_composition"]) == 102 + 11
+    assert len(sets["TI_composition"]) == len(REGISTRY) + 11

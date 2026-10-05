@@ -2,8 +2,9 @@
 
 Usage: python tools/replication_to_spec.py data/replication/<study_key> OUT.json
 
-Reads study.json (verbatim extraction), drugs.csv (resolved structures) and properties.csv,
-and writes the spec that ``topoqspr.experiments.experiment_d`` accepts. Every index label is
+Reads study.json (verbatim extraction), drugs.csv (resolved structures), properties.csv and,
+when present, index_values.csv (the study's printed index values, passed on as
+``reported_index_values`` so the harness checks them against its own), and writes the spec that ``topoqspr.experiments.experiment_d`` accepts. Every index label is
 normalised (``ND1(G)`` -> ``ND_1``, ``ABC^d`` -> ``ABC``, ``ReZ_{1}`` -> ``ReZ1``) and mapped
 through ``map_index_name``; a label that does not map is reported, and the study is refused
 if any *modelled* predictor does not map, so coverage gaps are explicit rather than silent.
@@ -46,11 +47,25 @@ def is_neighbourhood(label: str) -> bool:
 def map_label(label: str) -> tuple[str | None, str]:
     norm = normalise_label(label)
     if is_neighbourhood(label):
-        # Godlin-style X^nd: the neighbourhood-sum version of a degree index
+        # Godlin-style X^nd is the neighbourhood-degree-sum version of a degree index; it maps
+        # to the registry's S_X and to nothing else (falling back to the degree index X would
+        # silently compare the paper's neighbourhood index with a different one).
         name, how = map_index_name("S_" + norm)
-        if name:
-            return name, how
+        return (name, how) if name else (None, f"no neighbourhood-sum index S_{norm} in the registry")
     return map_index_name(norm)
+
+
+def _stat(stats: dict, *keys: str) -> float | None:
+    """A printed statistic by case-insensitive key (papers write R2, r2, R^2 ...); None if absent."""
+    low = {str(k).strip().lower(): v for k, v in stats.items()}
+    for k in keys:
+        v = low.get(k)
+        if v not in (None, ""):
+            try:
+                return float(str(v).strip())
+            except ValueError:
+                return None
+    return None
 
 
 def convert(folder: Path) -> tuple[dict, dict]:
@@ -64,13 +79,11 @@ def convert(folder: Path) -> tuple[dict, dict]:
             continue
         values.setdefault(r["drug_id"], {})[r["property"]] = float(r["value"])
 
-    compounds, skipped = [], []
-    for d in drugs:
-        if d.get("status") != "resolved" or not d.get("isomeric_smiles"):
-            skipped.append(dict(name=d.get("name_verbatim"), reason=d.get("status") or "unresolved"))
-            continue
-        compounds.append(dict(name=d["name_verbatim"].strip(), smiles=d["isomeric_smiles"],
-                              pubchem_cid=d.get("pubchem_cid"), properties=values.get(d["drug_id"], {})))
+    printed: dict[str, dict[str, float]] = {}
+    if (folder / "index_values.csv").exists():
+        for r in csv.DictReader((folder / "index_values.csv").open(encoding="utf-8")):
+            if r.get("value", "") not in ("", None):
+                printed.setdefault(r["drug_id"], {})[r["index_label"]] = float(r["value"])
 
     index_map, unmapped = {}, []
     for i in study["indices"]:
@@ -81,15 +94,40 @@ def convert(folder: Path) -> tuple[dict, dict]:
         else:
             unmapped.append(dict(label=lab, name=i.get("name_verbatim", ""), reason=how))
 
-    reported_fits, unsupported = [], []
+    compounds, skipped = [], []
+    reported_index_values: dict[str, dict[str, float]] = {}
+    for d in drugs:
+        if d.get("status") != "resolved" or not d.get("isomeric_smiles"):
+            skipped.append(dict(name=d.get("name_verbatim"), reason=d.get("status") or "unresolved"))
+            continue
+        compounds.append(dict(name=d["name_verbatim"].strip(), smiles=d["isomeric_smiles"],
+                              pubchem_cid=d.get("pubchem_cid"), properties=values.get(d["drug_id"], {})))
+        if printed.get(d["drug_id"]):
+            # keyed by registry name when mapped, else by the paper's own label (never by the
+            # normalised label: M1^nd would then overwrite the mapped M1^d -> M1 entry)
+            reported_index_values[d["name_verbatim"].strip()] = {
+                index_map.get(lab, lab): v for lab, v in printed[d["drug_id"]].items()}
+
+    reported_fits, unsupported, reported_loocv, reported_other = [], [], [], []
     for m in study["models"]:
         if len(m["predictors"]) != 1:
             unsupported.append(dict(id=m["id"], reason=f"{len(m['predictors'])} predictors"))
             continue
         lab = m["predictors"][0]
         stats = m.get("statistics") or {}
-        r2 = stats.get("R2") if stats.get("R2") not in (None, "") else None
-        rr = stats.get("R") if stats.get("R") not in (None, "") else None
+        fit_type = str(m.get("fit", "in_sample"))
+        if fit_type == "loocv":
+            # A printed LOO statistic is not an in-sample fit: it is kept in the report and set
+            # beside the harness's own LOO Q^2 of the same (property, index, form) by make_expD.
+            reported_loocv.append(dict(id=m["id"], property=m["property"],
+                                       index=index_map.get(lab, normalise_label(lab)), study_label=lab,
+                                       form=m["form"], q2_loo=_stat(stats, "q2_loo", "q2", "q2loo"),
+                                       r2=_stat(stats, "r2", "r^2", "r²"), source=m.get("source", "")))
+            continue
+        if fit_type != "in_sample":
+            reported_other.append(dict(id=m["id"], fit=fit_type, property=m["property"], study_label=lab))
+            continue
+        r2, rr = _stat(stats, "r2", "r^2", "r²"), _stat(stats, "r")
         fit = dict(id=m["id"], property=m["property"], index=index_map.get(lab, normalise_label(lab)),
                    study_label=lab, form=m["form"], source=m.get("source", ""))
         if r2 is not None:
@@ -116,10 +154,13 @@ def convert(folder: Path) -> tuple[dict, dict]:
         indices=sorted(set(index_map.values())),
         model_forms=forms,
         reported_fits=reported_fits,
+        reported_index_values=reported_index_values,
     )
     report = dict(study=study["study_key"], n_compounds=len(compounds), skipped_compounds=skipped,
+                  n_reported_index_values=sum(len(v) for v in reported_index_values.values()),
                   index_map=index_map, unmapped_indices=unmapped, blocking_unmapped_predictors=blocking,
                   unsupported_fits=unsupported, n_reported_fits=len(reported_fits),
+                  reported_loocv=reported_loocv, reported_other_validation=reported_other,
                   n_comparable_fits=sum(1 for f in reported_fits if f.get("reproducible", True)))
     return spec, report
 

@@ -17,7 +17,7 @@ deployed (see Deployment).
    applicability-domain coverage; downloads: results zip with `run_record.json` and data-licence
    notes, manifest CSV.
 4. **Indices for any structure or graph** (`/api/indices`): SMILES lists, SDF, MOL, PDB, adjacency
-   matrix or list; 102 verified indices plus 89 bond-wise entropies; on-page table (`view: true`)
+   matrix or list; 104 verified indices plus 91 bond-wise entropies; on-page table (`view: true`)
    or zip download (with `catalog.csv`). Undefined values carry a reason, never 0.
 5. **Catalogue** (`/api/catalog`): every index and entropy with family, LaTeX formula and primary
    reference.
@@ -41,7 +41,7 @@ TOPOQSPR_WEB_DATA_DIR=./webdata uvicorn topoqspr.web.app:app --port 8000
 | Request | Time |
 |---|---|
 | page load | 0.11 s |
-| one molecule, 102 indices + 89 entropies, on-page table | 0.73–0.82 s |
+| one molecule, 104 indices + 91 entropies, on-page table | 0.73–0.82 s |
 | 50 molecules, same | 7.2 s |
 
 ## Deployment

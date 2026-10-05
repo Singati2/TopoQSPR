@@ -2,6 +2,7 @@
  "study": "kabeer2026_antidepressants",
  "n_compounds": 25,
  "skipped_compounds": [],
+ "n_reported_index_values": 225,
  "index_map": {
   "ND1(G)": "S_RR",
   "ND2(G)": "S_SC",
@@ -40,16 +41,121 @@
   {
    "id": "T10-HAC",
    "reason": "form logarithmic"
+  }
+ ],
+ "n_reported_fits": 12,
+ "reported_loocv": [
+  {
+   "id": "T14-01-BP-linear",
+   "property": "BP",
+   "index": "S_RR",
+   "study_label": "ND1(G)",
+   "form": "linear",
+   "q2_loo": 0.7734,
+   "r2": 0.773,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+  },
+  {
+   "id": "T14-02-MR-linear",
+   "property": "MR",
+   "index": "S_RR",
+   "study_label": "ND1(G)",
+   "form": "linear",
+   "q2_loo": 0.867,
+   "r2": 0.867,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+  },
+  {
+   "id": "T14-03-MW-linear",
+   "property": "MW",
+   "index": "S_SDD",
+   "study_label": "ND5(G)",
+   "form": "linear",
+   "q2_loo": 0.7735,
+   "r2": 0.609,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+  },
+  {
+   "id": "T14-04-HAC-linear",
+   "property": "HAC",
+   "index": "S_SDD",
+   "study_label": "ND5(G)",
+   "form": "linear",
+   "q2_loo": 0.8598,
+   "r2": 0.86,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+  },
+  {
+   "id": "T14-05-CO-linear",
+   "property": "CO",
+   "index": "S_RR",
+   "study_label": "ND1(G)",
+   "form": "linear",
+   "q2_loo": 0.715,
+   "r2": 0.715,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+  },
+  {
+   "id": "T14-06-EV-linear",
+   "property": "EV",
+   "index": "S_RR",
+   "study_label": "ND1(G)",
+   "form": "linear",
+   "q2_loo": 0.7266,
+   "r2": 0.727,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+  },
+  {
+   "id": "T14-07-BP-quadratic",
+   "property": "BP",
+   "index": "S_RR",
+   "study_label": "ND1(G)",
+   "form": "quadratic",
+   "q2_loo": 0.7109,
+   "r2": 0.887,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+  },
+  {
+   "id": "T14-08-MR-quadratic",
+   "property": "MR",
+   "index": "S_RR",
+   "study_label": "ND1(G)",
+   "form": "quadratic",
+   "q2_loo": 0.8006,
+   "r2": 0.878,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
+  },
+  {
+   "id": "T14-09-CO-quadratic",
+   "property": "CO",
+   "index": "S_RR",
+   "study_label": "ND1(G)",
+   "form": "quadratic",
+   "q2_loo": 0.6845,
+   "r2": 0.774,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
   },
   {
    "id": "T14-10-MR-logarithmic",
-   "reason": "form logarithmic"
+   "property": "MR",
+   "index": "S_RR",
+   "study_label": "ND1(G)",
+   "form": "logarithmic",
+   "q2_loo": 0.772,
+   "r2": 0.774,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
   },
   {
    "id": "T14-11-HAC-logarithmic",
-   "reason": "form logarithmic"
+   "property": "HAC",
+   "index": "S_SDD",
+   "study_label": "ND5(G)",
+   "form": "logarithmic",
+   "q2_loo": 0.8182,
+   "r2": 0.818,
+   "source": "Table 14 (leave-one-out cross-validation; property matched to Tables 8-10 by coefficients)"
   }
  ],
- "n_reported_fits": 23,
- "n_comparable_fits": 19
+ "reported_other_validation": [],
+ "n_comparable_fits": 10
 }

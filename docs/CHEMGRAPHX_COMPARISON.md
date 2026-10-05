@@ -25,8 +25,8 @@ structure mapped in `docs/PAPER_FORMAT.md` and applied to `paper/main.tex`.
 | Input: adjacency list / matrix (general graphs) | ✅ | ✅ (validated: symmetric, 0/1, no loops, connected) |
 | Input: SMILES, SDF, batch lists | ❌ | ✅ (batch of 50 molecules in 7 s) |
 | Input: disease → curated drug set (ChEMBL, manifest preview) | ❌ | ✅ (`/api/headings`, `/api/cohort`, manifest review and CSV before any computation) |
-| Degree-, degree-sum-, distance-based indices | ✅ ~97 | ✅ 102 verified (reverse-degree R_k, hybrids, exact Hosoya Z not in ChemGraphX) |
-| Entropy measures per index | ✅ 52 degree + 21 distance | ✅ 89 bond-wise entropies; 1,414 values agree with ChemGraphX's code (max rel. diff 8e-16); distance entropies not implemented |
+| Degree-, degree-sum-, distance-based indices | ✅ ~97 | ✅ 104 verified (reverse-degree R_k, hybrids, exact Hosoya Z not in ChemGraphX) |
+| Entropy measures per index | ✅ 52 degree + 21 distance | ✅ 91 bond-wise entropies; 1,414 values agree with ChemGraphX's code (max rel. diff 8e-16); distance entropies not implemented |
 | Formula and primary reference shown for every index | ❌ | ✅ (`/api/catalog`, 191 entries, searchable) |
 | 2D structure depiction / edge-partition view | partial (graph plot) | ✅ (RDKit SVG depiction; degree edge partition per structure) |
 | Download results (CSV/JSON) | ❌ | ✅ (zip with indices, reasons, catalogue; on-page table) |

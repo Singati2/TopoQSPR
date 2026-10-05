@@ -129,6 +129,13 @@ def test_shared_connectivity_flagged():
 
 # --------------------------------------------------------------------------- unit tests
 
+def test_parse_value_thousands_separator():
+    assert er.parse_value("1,004") == (1004.0, "")
+    assert er.parse_value("12,345.5") == (12345.5, "")
+    assert er.parse_value("1,04")[1] == "unparseable"      # not a thousands group
+    assert er.parse_value("0,5")[1] == "unparseable"       # a decimal comma is not guessed
+
+
 def test_parse_value():
     assert er.parse_value("−1.10") == (-1.1, "")
     assert er.parse_value("− 3.259") == (-3.259, "")
@@ -512,3 +519,32 @@ def test_live_xml_reextraction_matches(key):  # pragma: no cover - network
     assert [{c: x[c] for c in er.PROPERTY_COLUMNS} for x in rows] == er.read_csv(d / "properties.csv")
     if hashlib.sha256(r.content).hexdigest() != s["source"]["xml_sha256"]:
         pytest.xfail("Europe PMC re-rendered the XML; table content still matches")
+
+
+def test_extract_index_values():
+    tables = [{"xml_table_id": "t1", "skip_rows": 1, "label_column": 0,
+               "columns": [{"index": "M1", "column": 2}]}]
+    rows = er.extract_index_values(JATS, tables, _drugs(["A", "B", "C"]))
+    assert [r["index_label"] for r in rows] == ["M1"] * 3
+    assert [(r["value"], r["missing_reason"]) for r in rows] == [("-2.0", ""), ("", "unparseable"), ("", "unparseable")]
+    assert list(rows[0]) == er.INDEX_VALUE_COLUMNS
+    with pytest.raises(ValueError):
+        er.extract_index_values(JATS, tables, _drugs(["A", "X", "C"]))
+
+
+@pytest.mark.parametrize("key", ["almulla2026_antifungal", "kabeer2026_antidepressants", "godlin2026_mdd"])
+def test_printed_index_values_committed_and_hashed(key):
+    d = er.DATA_DIR / key
+    s = er.load_study(d)
+    rows = er.read_csv(d / "index_values.csv")
+    assert list(rows[0]) == er.INDEX_VALUE_COLUMNS
+    assert er.properties_sha256(rows) == s["source"]["index_values_sha256"]
+    symbols = {i["symbol_verbatim"] for i in s["indices"]}
+    assert {r["index_label"] for r in rows} <= symbols
+    drugs = er.read_csv(d / "drugs.csv")
+    assert len(rows) == len(drugs) * sum(len(t["columns"]) for t in s["index_values_tables"])
+    assert all(r["value"] for r in rows)        # every printed cell parsed
+    assert er.validate_study(d, er.PubChemCache(offline=True)) == []
+    p = er._xml_path(s)
+    if p.exists():
+        assert er.extract_index_values(p.read_bytes(), s["index_values_tables"], drugs) == rows

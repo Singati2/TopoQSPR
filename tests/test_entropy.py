@@ -15,7 +15,7 @@ FIX = json.loads((Path(__file__).parent / "fixtures" / "entropy" / "chemgraphx_e
 
 def test_entropies_are_not_in_the_frozen_registry():
     assert not set(ENTROPY_NAMES) & set(INDEX_NAMES)
-    assert len(ENTROPY_NAMES) == 89
+    assert len(ENTROPY_NAMES) == 91
 
 
 def test_regular_graph_entropy_is_ln_m():

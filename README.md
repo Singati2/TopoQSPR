@@ -3,7 +3,7 @@
 Disease-anchored QSPR modelling with graph-theoretic topological indices.
 TopoQSPR turns a disease concept into a reproducible QSPR study: a controlled,
 versioned drug manifest from ChEMBL (confirmed MeSH IDs, clinical-phase rule,
-parent/salt normalisation), 102 topological indices each traced to its primary source
+parent/salt normalisation), 104 topological indices each traced to its primary source
 and unit-tested (`src/topoqspr/`), and leakage-free repeated nested cross-validation
 against null, size, composition and RDKit-descriptor baselines.
 

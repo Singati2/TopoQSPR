@@ -2,6 +2,7 @@
  "study": "almulla2026_antifungal",
  "n_compounds": 20,
  "skipped_compounds": [],
+ "n_reported_index_values": 180,
  "index_map": {
   "ND_1": "S_RR",
   "ND_2": "S_SC",
@@ -34,5 +35,7 @@
  "blocking_unmapped_predictors": [],
  "unsupported_fits": [],
  "n_reported_fits": 9,
+ "reported_loocv": [],
+ "reported_other_validation": [],
  "n_comparable_fits": 9
 }

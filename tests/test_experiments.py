@@ -610,9 +610,13 @@ def test_experiment_d_reported_fits_are_validated_and_listed():
     fits = res.tables["fits"].set_index(["property", "index", "form"])
     assert fits.loc[("BP", "R", "quadratic"), "reported_r2"] == pytest.approx(0.98)
     assert len(res.summary["reported_fits_unmatched"]) == 2
+    # a reported fit in a form the harness cannot reproduce is kept and listed, not refused
+    # (a study is refused only when its *analysed* model_forms are unknown)
+    chk = ex._check_spec(dict(spec, reported_fits=[{"property": "BP", "index": "M1",
+                                                    "form": "Exponential", "r2": 0.9}]))
+    assert chk["reported_fits"][0]["form"] == "exponential" and "exponential" not in chk["model_forms"]
     with pytest.raises(ValueError, match="model form"):
-        ex.experiment_d(dict(spec, reported_fits=[{"property": "BP", "index": "M1",
-                                                   "form": "exponential", "r2": 0.9}]))
+        ex._check_spec(dict(spec, model_forms=["exponential"]))
     res = ex.experiment_d(dict(spec, properties=["MV"]), n_random=5, n_permutations=5, **D_FAST)
     rf = res.tables["reported_fits"].set_index("property")
     assert "not among the analysed properties" in rf.loc["BP"].iloc[0]["reason"]

@@ -32,7 +32,8 @@
     "retrieved": "2026-10-03",
     "xml_sha256": "6780746d338b651f82d2e8e4c116bb1a7fae0ce23ac6eb30c65845359e08d8f8",
     "other_sources": [],
-    "properties_sha256": "5233775b348cd6bc376acf1d5fc70629f36d7003620097184fa4f0829e4983bd"
+    "properties_sha256": "5233775b348cd6bc376acf1d5fc70629f36d7003620097184fa4f0829e4983bd",
+    "index_values_sha256": "145048d764c55e162e4e80d314e9e89f41ca56eaaa7bc5787d3e2029c52372b1"
   },
   "n_reported": 20,
   "n_reported_source": "Abstract: 'twenty antifungal drug molecules'; N = 20 in Tables 6-8",
@@ -237,6 +238,53 @@
     }
   ],
   "index_values_table": "Table 4",
+  "index_values_tables": [
+    {
+      "xml_table_id": "Tab4",
+      "label": "Table 4",
+      "skip_rows": 1,
+      "label_column": 1,
+      "columns": [
+        {
+          "index": "NM_1",
+          "column": 2
+        },
+        {
+          "index": "NM_2",
+          "column": 3
+        },
+        {
+          "index": "NABC",
+          "column": 4
+        },
+        {
+          "index": "NF_1",
+          "column": 5
+        },
+        {
+          "index": "ND_1",
+          "column": 6
+        },
+        {
+          "index": "ND_2",
+          "column": 7
+        },
+        {
+          "index": "ND_3",
+          "column": 8
+        },
+        {
+          "index": "ND_4",
+          "column": 9
+        },
+        {
+          "index": "ND_5",
+          "column": 10
+        }
+      ],
+      "note": "header symbols are tex-math in the XML and read as NM_1, NM_2, NABC, NF_1, ND_1..ND_5"
+    }
+  ],
   "index_computation": "hydrogen-suppressed graphs, multiple bonds drawn as single edges; neighborhood degree = sum of adjacent degrees; edge partitions in Table 2",
   "models": [
     {

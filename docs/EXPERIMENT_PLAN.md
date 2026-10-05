@@ -233,3 +233,14 @@ lock, seeds, run configuration and cohort manifest. Paper numbers come only from
   the 104-index registry applies to Experiment D only. Model forms the harness cannot reproduce
   (logarithmic, ridge, elastic net, RF, XGBoost) are listed with their reported statistics and not
   compared.
+- **2026-10-05 (before any Experiment D re-analysis), printed index values.** Step (i) of
+  Experiment D compares the studies' printed index values with the recomputed ones. The three
+  studies print them (Almulla Table 4, Kabeer Table 4, Godlin Tables 4–5); they are now extracted
+  from the archived XML like the property values (`index_values.csv`, hashed in `study.json`) and
+  passed to the harness. Two converter defects found while doing so were fixed before any
+  re-analysis was read: a neighbourhood label `X^nd` with no `S_X` in the registry fell back to the
+  degree index `X` (Godlin's `M1^nd` would have been compared with `M1`); and a paper's LOO
+  statistics (Kabeer Table 14, Godlin Table 16) were read as in-sample fits. LOO statistics are
+  now kept beside the harness's own LOO Q² and not compared as R². Kabeer's printed thousands
+  separators ("1,004") are parsed. The three runs were repeated from the corrected specs; the
+  earlier outputs were discarded unread except for the index-value check that exposed the defects.

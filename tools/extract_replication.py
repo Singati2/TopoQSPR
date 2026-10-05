@@ -80,6 +80,10 @@ DRUG_OUTPUT_COLUMNS = ["status", "pubchem_cid", "n_cids", "pubchem_title", "isom
 DRUG_COLUMNS = DRUG_INPUT_COLUMNS + DRUG_OUTPUT_COLUMNS
 PROPERTY_COLUMNS = ["drug_id", "row_label_verbatim", "property", "value_verbatim", "value",
                     "missing_reason"]
+# Printed index values (study.json ``index_values_tables``, optional): the same long format,
+# one row per (drug, index label).  Experiment D compares them with the recomputed values.
+INDEX_VALUE_COLUMNS = ["drug_id", "row_label_verbatim", "index_label", "value_verbatim", "value",
+                       "missing_reason"]
 
 RULES = {"as_printed", "typo_corrected", "spelling_variant", "code_mapped", "parent_form",
          "component_by_printed_index", "unresolvable"}
@@ -197,6 +201,7 @@ def read_table(xml: bytes, table_id: str) -> dict:
 _MINUS = str.maketrans({"\u2212": "-", "\u2013": "-", "\u2014": "-", "\u2009": "", "\u00a0": "",
                         "\u202f": "", " ": ""})
 _DASHES = {"-", "\u2013", "\u2014", "\u2212", "N/A", "NA", "n/a"}
+_THOUSANDS = re.compile(r"-?\d{1,3}(,\d{3})+(\.\d+)?")
 
 
 def parse_value(s: str) -> tuple[float, str]:
@@ -207,6 +212,10 @@ def parse_value(s: str) -> tuple[float, str]:
     if raw in _DASHES:
         return math.nan, "dash_in_table"
     t = raw.translate(_MINUS)
+    # A printed thousands separator ("1,004" beside 918 and 454 in Godlin 2026 Table 5) is
+    # accepted only in the unambiguous form d{1,3}(,ddd)+[.d*]; a lone "x,y" stays unparsed.
+    if _THOUSANDS.fullmatch(t):
+        t = t.replace(",", "")
     try:
         return float(t), ""
     except ValueError:
@@ -241,6 +250,34 @@ def extract_properties(xml: bytes, spec: dict, drugs: list[dict]) -> list[dict]:
             out.append({"drug_id": drug["drug_id"], "row_label_verbatim": label,
                         "property": col["property"], "value_verbatim": cell,
                         "value": fmt_float(v), "missing_reason": why})
+    return out
+
+
+def extract_index_values(xml: bytes, tables: list[dict], drugs: list[dict]) -> list[dict]:
+    """Build index_values.csv rows from the JATS tables that print the study's index values.
+
+    tables = [{"xml_table_id": .., "skip_rows": k, "label_column": i,
+               "columns": [{"index": "<symbol_verbatim>", "column": j}, ...]}, ...]
+    Each table must have one body row per drug, in drugs.csv order, with the row label equal
+    to ``row_label_verbatim`` (so a table whose symbols are images in the XML is still tied to
+    the drugs by label, and the column -> symbol assignment is recorded in study.json)."""
+    out = []
+    for spec in tables:
+        tab = read_table(xml, spec["xml_table_id"])
+        body = [r for r in tab["rows"][spec.get("skip_rows", 1):] if any(c.strip() for c in r)]
+        if len(body) != len(drugs):
+            raise ValueError(f"{spec['xml_table_id']}: {len(body)} body rows, {len(drugs)} drugs")
+        for row, drug in zip(body, drugs):
+            label = row[spec["label_column"]]
+            if label != drug["row_label_verbatim"]:
+                raise ValueError(f"{spec['xml_table_id']}: row label {label!r} != drugs.csv "
+                                 f"{drug['row_label_verbatim']!r}")
+            for col in spec["columns"]:
+                cell = row[col["column"]] if col["column"] < len(row) else ""
+                v, why = parse_value(cell)
+                out.append({"drug_id": drug["drug_id"], "row_label_verbatim": label,
+                            "index_label": col["index"], "value_verbatim": cell,
+                            "value": fmt_float(v), "missing_reason": why})
     return out
 
 
@@ -547,6 +584,27 @@ def validate_study(d: Path, cache: PubChemCache | None = None) -> list[str]:
     for k in ("xml_table_id", "label", "label_column", "columns"):
         if k not in pt:
             errs.append(f"property_table.{k} missing")
+    ivt = s.get("index_values_tables")
+    if ivt is not None:
+        symbols = {i.get("symbol_verbatim") for i in s["indices"]}
+        if not isinstance(ivt, list) or not ivt:
+            errs.append("index_values_tables must be a non-empty list")
+        else:
+            for t in ivt:
+                for k in ("xml_table_id", "label_column", "columns"):
+                    if k not in t:
+                        errs.append(f"index_values_tables.{t.get('xml_table_id')}: {k} missing")
+                for c in t.get("columns", []):
+                    if c.get("index") not in symbols:
+                        errs.append(f"index_values_tables: column index {c.get('index')!r} "
+                                    "is not an index symbol")
+        q = d / "index_values.csv"
+        if q.exists():
+            irows = read_csv(q)
+            if list(irows[0].keys()) != INDEX_VALUE_COLUMNS if irows else True:
+                errs.append("index_values.csv columns")
+            if s["source"].get("index_values_sha256") != properties_sha256(irows):
+                errs.append("index_values.csv does not match source.index_values_sha256")
     codes = [p.get("code") for p in s["properties"]]
     if len(set(codes)) != len(codes):
         errs.append("duplicate property codes")
@@ -767,6 +825,22 @@ def cmd_extract(keys: list[str] | None, record: bool = False) -> int:
         if eq_bad:
             print(f"{d.name}: equation_verbatim not found in the XML for {eq_bad}")
             bad += 1
+        if s.get("index_values_tables"):
+            irows = extract_index_values(xml, s["index_values_tables"], drugs)
+            ih = properties_sha256(irows)
+            if record and s["source"].get("index_values_sha256") != ih:
+                s["source"]["index_values_sha256"] = ih
+                dump_study(d, s)
+            if s["source"].get("index_values_sha256") != ih:
+                print(f"{d.name}: extracted index values DIFFER FROM source.index_values_sha256")
+                bad += 1
+            if s["licence"]["data_redistribution"] == "stored":
+                q = d / "index_values.csv"
+                if not q.exists() or read_csv(q) != irows:
+                    write_csv(q, irows, INDEX_VALUE_COLUMNS)
+                    print(f"{d.name}: index_values.csv written ({len(irows)} rows)")
+                else:
+                    print(f"{d.name}: index_values.csv matches the XML")
         if s["licence"]["data_redistribution"] == "withheld":
             q = XML_CACHE / s["study_key"] / "properties.csv"
             write_csv(q, rows, PROPERTY_COLUMNS)

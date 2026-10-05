@@ -467,7 +467,7 @@ def test_indices_formats_entropies_view_and_catalog(data_dir):
         z = c.post("/api/indices", json={"text": "CCO ethanol", "format": "smiles"})
         assert z.status_code == 200 and z.headers["content-type"] == "application/zip"
         cat = c.get("/api/catalog").json()["items"]
-        assert len(cat) == 102 + 89 and all(i["formula_latex"] and i["reference"] for i in cat)
+        assert len(cat) == 104 + 91 and all(i["formula_latex"] and i["reference"] for i in cat)
 
 
 def test_depiction_and_edge_partition(data_dir):

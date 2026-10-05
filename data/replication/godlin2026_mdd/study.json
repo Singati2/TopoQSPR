@@ -29,7 +29,8 @@
     "retrieved": "2026-10-03",
     "xml_sha256": "c784664638efbfdf7b819bb2fbc9114b7ca87bf3e78ca50a5f1673560894e249",
     "other_sources": [],
-    "properties_sha256": "4f63f0be8ca277a8161e36691d8e14bb7d3c736559d92998f7e69a939b53df62"
+    "properties_sha256": "4f63f0be8ca277a8161e36691d8e14bb7d3c736559d92998f7e69a939b53df62",
+    "index_values_sha256": "b9430f7d6391fdef3cbc614b307479543ffa5e8ba6c4aae5455fd9d8eb737957"
   },
   "n_reported": 21,
   "n_reported_source": "Table 6 lists G1-G21; text lists 21 drugs",
@@ -355,6 +356,120 @@
     }
   ],
   "index_values_table": "Tables 4 (degree) and 5 (neighborhood degree); partitions in Tables 1-3",
+  "index_values_tables": [
+    {
+      "xml_table_id": "T4",
+      "label": "Table 4",
+      "skip_rows": 1,
+      "label_column": 0,
+      "columns": [
+        {
+          "index": "ABC^d",
+          "column": 1
+        },
+        {
+          "index": "R^d",
+          "column": 2
+        },
+        {
+          "index": "M1^d",
+          "column": 3
+        },
+        {
+          "index": "M2^d",
+          "column": 4
+        },
+        {
+          "index": "ReZ1^d",
+          "column": 5
+        },
+        {
+          "index": "ReZ2^d",
+          "column": 6
+        },
+        {
+          "index": "SO^d",
+          "column": 7
+        },
+        {
+          "index": "SS^d",
+          "column": 8
+        },
+        {
+          "index": "BMG^d",
+          "column": 9
+        },
+        {
+          "index": "GBM^d",
+          "column": 10
+        },
+        {
+          "index": "GA^d",
+          "column": 11
+        },
+        {
+          "index": "mM2^d",
+          "column": 12
+        }
+      ]
+    },
+    {
+      "xml_table_id": "T5",
+      "label": "Table 5",
+      "skip_rows": 1,
+      "label_column": 0,
+      "columns": [
+        {
+          "index": "ABC^nd",
+          "column": 1
+        },
+        {
+          "index": "R^nd",
+          "column": 2
+        },
+        {
+          "index": "M1^nd",
+          "column": 3
+        },
+        {
+          "index": "M2^nd",
+          "column": 4
+        },
+        {
+          "index": "ReZ1^nd",
+          "column": 5
+        },
+        {
+          "index": "ReZ2^nd",
+          "column": 6
+        },
+        {
+          "index": "SO^nd",
+          "column": 7
+        },
+        {
+          "index": "SS^nd",
+          "column": 8
+        },
+        {
+          "index": "BMG^nd",
+          "column": 9
+        },
+        {
+          "index": "GBM^nd",
+          "column": 10
+        },
+        {
+          "index": "GA^nd",
+          "column": 11
+        },
+        {
+          "index": "mM2^nd",
+          "column": 12
+        }
+      ]
+    }
+  ],
   "index_computation": "edge partitions by (neighborhood) degree; SageMath 9.3",
   "models": [
     {

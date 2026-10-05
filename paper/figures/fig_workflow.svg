@@ -14,7 +14,7 @@
     <text x="71" y="60" font-weight="bold">Disease</text><text x="71" y="76">free text →</text><text x="71" y="90">confirmed MeSH IDs</text>
     <text x="221" y="60" font-weight="bold">Drug manifest</text><text x="221" y="76">release, phase rule,</text><text x="221" y="90">parent/salt, reasons</text>
     <text x="371" y="60" font-weight="bold">Verified graph</text><text x="371" y="76">standardised parent,</text><text x="371" y="90">H-suppressed graph</text>
-    <text x="521" y="60" font-weight="bold">Indices</text><text x="521" y="76">102 verified indices,</text><text x="521" y="90">89 entropies</text>
+    <text x="521" y="60" font-weight="bold">Indices</text><text x="521" y="76">104 verified indices,</text><text x="521" y="90">91 entropies</text>
     <text x="681" y="60" font-weight="bold">Evaluation</text><text x="681" y="76">nested CV,</text><text x="681" y="90">baseline ladder</text>
   </g>
   <g stroke="#52514e" stroke-width="1.2" marker-end="url(#a)" fill="none">
