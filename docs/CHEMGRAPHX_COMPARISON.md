@@ -14,7 +14,17 @@ the paper should follow the ChemGraphX article's structure. Website: done on `ma
 hero, input-format card, cite card, serif/light/blue; side-by-side in `docs/WEB.md`). Paper: section
 structure mapped in `docs/PAPER_FORMAT.md` and applied to `paper/main.tex`.
 
-**Status 2026-10-05:** the TopoQSPR web items marked ✅ are implemented on branch `p3-web` (91 web/input/entropy tests pass) and the entropy and input modules are on `v1.0-dev`. `p3-web` still needs the independent adversarial review (agent usage limit until 2026-10-07) before it is merged and deployed.
+**Status 2026-10-05 (evening):** the web interface is merged on `main` (36 web tests, 93 replication
+tests, full offline suite green); deployment waits for a Render account. Experiments: **A done**
+(`results/expA`), **B done** (main confirmatory run, 4 h 57 min, `paper/results` from
+`tools/make_results.py`: indices beat the size baseline for 1 of 4 endpoints after correction, log P
+ΔR² = +0.15 [0.08, 0.23]; composition beats the indices on all four), **D done** (`results/expD`: three
+2026 studies reproduce, Godlin & Radha to three decimals on all 504 printed index values and 9 fits;
+under nested CV the genre's procedure is at the size baseline in 17 of 28 fits), **C running**
+(optimism chain, four targets), scaffold ladder and exploratory family ladder running, amended SVR
+control stage queued (the frozen ridge control was broken by three out-of-domain glycosides; see
+`docs/EXPERIMENT_PLAN.md` amendments). Independent adversarial review of the website still pending
+(agent usage limit until 2026-10-07).
 
 ## Website
 
@@ -46,10 +56,10 @@ structure mapped in `docs/PAPER_FORMAT.md` and applied to `paper/main.tex`.
 | Scientific contribution | new web index calculator | reproducible disease-anchored QSPR workflow + methodological study |
 | Index validation | comparison with existing tools on example structures | five independent routes incl. closed forms, brute force, Mordred, ChemGraphX 41/41, printed values; errata found in primary sources; independent-literature check |
 | Statistical evaluation | none (descriptor tool) | repeated nested CV, baseline ladder, corrected-t CIs, BH/BY, Y-randomisation, bootstrap, scaffold CV |
-| Experiments on real data | illustrative structures | **A done** (4 diseases: naive query returns 4–16× more structures, Jaccard 0.06–0.28; `results/expA`); B running (pooled 1,821 approved drugs, 4 measured endpoints, frozen plan `plan-freeze-v1`); C and D next |
+| Experiments on real data | illustrative structures | **A, B, D done** (A: 4 diseases, naive query returns 4–16× more structures, Jaccard 0.06–0.28; B: pooled 1,821 approved drugs, 4 measured endpoints, frozen plan `plan-freeze-v1`; D: 3 published studies replicated on their own data); C running |
 | Reproducibility | code on GitHub | tagged release, Zenodo DOI, run records, lock file, Docker, tests, preregistered plan |
 | Related-work comparison table | ✅ | ✅ (more tools, each cell verified) |
-| Figures / tables | 10 / 3 | generated only from result files (`tools/make_results.py`, `make_expA.py`): so far 2 figures + 3 tables; target ≥ 6 figures |
+| Figures / tables | 10 / 3 | generated only from result files (`tools/make_results.py`, `make_expA.py`): so far 4 figures + 7 tables (workflow, homepage, inputs, A, B forest, D) ; C adds one more of each |
 
 The goal is met when every ⏳ is ✅ and verified, and the paper's results come from the frozen,
 tagged analysis.
