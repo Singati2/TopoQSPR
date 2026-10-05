@@ -1,0 +1,14 @@
+{
+ "schema": 1,
+ "name": "main_scaffold_v1",
+ "cohort": {"source": "pooled", "chembl_release": "ChEMBL_37"},
+ "feature_sets": ["null", "size", "composition", "TI", "rdkit2d"],
+ "targets": [{"provider": "expdata", "names": ["mp_bradley", "logp_opera", "logd74_az", "logs_aqsoldb"]}],
+ "evaluation": {
+  "families": ["ridge", "elasticnet", "pls", "knn", "svr", "extratrees"],
+  "learners": ["selected"],
+  "outer_splits": 5, "seeds": [0, 1, 2, 3, 4], "inner_splits": 3,
+  "split": "scaffold", "reference": "size"
+ },
+ "runtime": {"n_jobs": 14}
+}

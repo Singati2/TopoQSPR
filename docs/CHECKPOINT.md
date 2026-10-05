@@ -117,10 +117,12 @@ Status after Advik's feedback (`docs/ADVIK_RECOMMENDATIONS.md`, 2026-10-03):
      because the audit found tree models change whether indices beat size; extra trees is the cheapest).
    - Confirmatory feature sets: null, size, composition, TI, TI+composition, RDKit 2D; TI-family sets with the
      fast learners only (exploratory).
-   - Y-randomisation K = 100 and bootstrap B = 100 with ridge and one outer repeat per draw (cost-aware
-     secondary controls, labelled as such).
-   - Estimated wall time on this shared machine: about one day in the background. Not yet started: the
-     website and paper work resume after the agent usage limit resets (2026-10-07).
+   - Y-randomisation K = 200 and bootstrap B = 200 (the plan's defaults) with ridge as the control learner
+     and the full 5 × 5 repeated nested CV per draw; draws run in parallel (runtime.n_jobs = 14). The
+     benchmark above ran under load 30–50; the machine is now idle (load ≈ 3 on 16 cores).
+   - Two runs: (1) confirmatory, pooled cohort, sets null/size/composition/TI/TI_composition/rdkit2d,
+     learners selected + the six families, protocol stage on; (2) exploratory, TI family sets with the
+     five fast learners, no protocol stage.
 5. Replication studies: **decided by the lead author on delegation (2026-10-04)**: Advik suggested studies "that show the best possible results"; choosing by
    reported performance would be selection on the outcome (and favours the most inflated claims), so it is
    not used. Rule, blind to reported R²: the studies that can be reproduced *exactly* from their published

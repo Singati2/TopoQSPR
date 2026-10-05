@@ -1,11 +1,17 @@
 # TopoQSPR v1.0 — experiment plan
 
-**Status: DRAFT (not frozen).** It will be frozen, with the commit hash recorded below, after
-(1) the October 2026 audit is merged and (2) the pilot run has debugged the pipeline.
-After freezing, any change is logged in the *Amendments* section with date and reason.
-No model performance from the main panel may be looked at before freezing.
+**Status: FROZEN (2026-10-05).** All checkpoint decisions are recorded in `docs/CHECKPOINT.md`
+(decisions 1–2 by Advik, 3–5 by the lead author on delegation from Singati2). The freeze is the git tag
+`plan-freeze-v1`. OSF registration is pending (needs the authors' OSF account); until then the tag is
+the record. Any later change goes in *Amendments* with date and reason. No main-panel or pooled
+measured-target model result had been computed or seen before this freeze.
 
-Frozen at commit: `—`  Date: `—`
+Study configurations (config_sha256 of the study part):
+- `studies/main_confirmatory.json` 63cce0fea1968a8f… (Experiment B, confirmatory family + controls)
+- `studies/main_scaffold.json` 0dbd6bc282481ff6… (Experiment C scaffold step)
+- `studies/exploratory_families.json` 99687e11396d5fee… (exploratory TI-family ladder)
+
+Frozen at tag: `plan-freeze-v1`  Date: 2026-10-05
 
 ## 1. Question
 
