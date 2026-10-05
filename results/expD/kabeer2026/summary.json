@@ -1,0 +1,66 @@
+{
+ "experiment": "D",
+ "index_values_agree": 76,
+ "index_values_checked": 225,
+ "missing_property_values": [],
+ "model_forms": [
+  "linear",
+  "quadratic"
+ ],
+ "n_compounds_not_used": 0,
+ "n_compounds_spec": 25,
+ "n_compounds_used": 25,
+ "n_index_labels": 5,
+ "n_mapped": 5,
+ "properties": [
+  "BP",
+  "CO",
+  "EV",
+  "HAC",
+  "MP",
+  "MR",
+  "MV",
+  "MW"
+ ],
+ "reference": null,
+ "reported_fits": 12,
+ "reported_fits_unmatched": [
+  {
+   "form": "logarithmic",
+   "property": "MR",
+   "reason": "form 'logarithmic' not in model_forms ['linear', 'quadratic'] (add it to compare)",
+   "study_label": "S_RR"
+  },
+  {
+   "form": "logarithmic",
+   "property": "HAC",
+   "reason": "form 'logarithmic' not in model_forms ['linear', 'quadratic'] (add it to compare)",
+   "study_label": "S_SDD"
+  }
+ ],
+ "settings": {
+  "alpha": 0.05,
+  "families": [
+   "ridge",
+   "pls",
+   "linear"
+  ],
+  "inner_splits": 3,
+  "min_n": 50,
+  "min_n_test": 10,
+  "n_permutations": 1000,
+  "n_random": 1000,
+  "outer_splits": 5,
+  "random_seed": 0,
+  "scaffold": true,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ },
+ "study": "kabeer2026_antidepressants",
+ "unmappable": []
+}

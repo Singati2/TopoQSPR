@@ -191,6 +191,8 @@ def macros(studies: list[dict], out: Path) -> None:
         "expDnProperties": len(props),
         "expDminDiff": f"{min(diffs):+.3f}", "expDmaxDiff": f"{max(diffs):+.3f}",
         "expDnInsampleAbove": sum(1 for d in diffs if d > 0),
+        "expDnExactFits": sum(1 for d in diffs if abs(d) <= 0.0015),
+        "expDnCompoundsAllIndicesDiffer": sum(st["compounds_checked"] - st["compounds_agree"] for st in studies),
         "expDmaxLooDrop": f"{max(loo_drop):.2f}",
         "expDnLooDropOverTenth": sum(1 for d in loo_drop if d > 0.1),
         "expDnTIleSize": ti_le_size,

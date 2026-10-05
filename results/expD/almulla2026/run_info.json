@@ -1,0 +1,32 @@
+{
+ "argv": [
+  "exp-d",
+  "--plan-frozen",
+  "--offline",
+  "--n-jobs",
+  "1",
+  "--timestamp",
+  "2026-10-05T22:30:00Z",
+  "--spec",
+  "studies/replication/almulla2026_antifungal.json",
+  "--out",
+  "/home/mpcrlab/topoqspr_runs/expD/almulla2026"
+ ],
+ "code": {
+  "commit": "d353b4683533a0e15d2b82886f4a1caf9036b4c7",
+  "describe": "plan-freeze-v1-30-gd353b46-dirty",
+  "dirty": true,
+  "reason": "",
+  "root": "/home/mpcrlab/moleculens",
+  "source": "git",
+  "untracked": 0
+ },
+ "command": "exp-d",
+ "created_utc": "2026-10-05T22:30:00Z",
+ "spec": {
+  "path": "studies/replication/almulla2026_antifungal.json",
+  "sha256": "514036e818f1883c8cd34b9eca53449be49e2dc9040bd520554c235c834f7ba5"
+ },
+ "topoqspr_version": "1.0.0.dev0",
+ "wall_time_s": 1972.5
+}

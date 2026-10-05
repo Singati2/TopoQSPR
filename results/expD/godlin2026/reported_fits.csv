@@ -1,0 +1,10 @@
+property,study_label,registry_name,form,reported_r2,compared,reason
+MW,ReZ1,ReZ1,quadratic,0.963,True,
+HAC,ReZ1,ReZ1,linear,1.0,True,
+CO,SO,SO,quadratic,0.9362,True,
+BP,ABC,ABC,quadratic,0.9455,True,
+EV,ReZ1,ReZ1,quadratic,0.9352,True,
+FP,ReZ1,ReZ1,quadratic,0.9062,True,
+MR,ReZ1,ReZ1,quadratic,0.9559,True,
+PO,ReZ1,ReZ1,quadratic,0.9564,True,
+MV,mM2,mM2,quadratic,0.9101,True,

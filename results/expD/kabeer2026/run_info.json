@@ -1,0 +1,32 @@
+{
+ "argv": [
+  "exp-d",
+  "--plan-frozen",
+  "--offline",
+  "--n-jobs",
+  "1",
+  "--timestamp",
+  "2026-10-05T22:30:00Z",
+  "--spec",
+  "studies/replication/kabeer2026_antidepressants.json",
+  "--out",
+  "/home/mpcrlab/topoqspr_runs/expD/kabeer2026"
+ ],
+ "code": {
+  "commit": "2c5e1d1f2dc4af2e773797d2a968ff944c5f24a6",
+  "describe": "plan-freeze-v1-32-g2c5e1d1",
+  "dirty": false,
+  "reason": "",
+  "root": "/home/mpcrlab/moleculens",
+  "source": "git",
+  "untracked": 0
+ },
+ "command": "exp-d",
+ "created_utc": "2026-10-05T22:30:00Z",
+ "spec": {
+  "path": "studies/replication/kabeer2026_antidepressants.json",
+  "sha256": "37ea919f79b2c682aaf2c8b4240de1593e4aa4a6c3f557e0c2792daab7241dfb"
+ },
+ "topoqspr_version": "1.0.0.dev0",
+ "wall_time_s": 926.8
+}

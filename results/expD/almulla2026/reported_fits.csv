@@ -1,0 +1,10 @@
+property,study_label,registry_name,form,reported_r2,compared,reason
+MR,S_R,S_R,linear,0.914,True,
+P,S_R,S_R,linear,0.913,True,
+MV,S_R,S_R,linear,0.84,True,
+MR,S_R,S_R,quadratic,0.921,True,
+P,S_R,S_R,quadratic,0.92,True,
+MV,S_R,S_R,quadratic,0.861,True,
+MR,S_R,S_R,cubic,0.922,True,
+P,S_R,S_R,cubic,0.922,True,
+MV,S_R,S_R,cubic,0.88,True,

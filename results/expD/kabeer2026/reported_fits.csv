@@ -1,0 +1,13 @@
+property,study_label,registry_name,form,reported_r2,compared,reason
+BP,S_RR,S_RR,linear,0.773,True,
+MR,S_RR,S_RR,linear,0.867,True,
+MW,S_SDD,S_SDD,linear,0.609,True,
+HAC,S_SDD,S_SDD,linear,0.86,True,
+CO,S_RR,S_RR,linear,0.715,True,
+EV,S_RR,S_RR,linear,0.727,True,
+BP,S_RR,S_RR,quadratic,0.887,True,
+MR,S_RR,S_RR,quadratic,0.878,True,
+CO,S_RR,S_RR,quadratic,0.774,True,
+EV,S_RR,S_RR,quadratic,0.859,True,
+MR,S_RR,S_RR,logarithmic,0.774,False,"form 'logarithmic' not in model_forms ['linear', 'quadratic'] (add it to compare)"
+HAC,S_SDD,S_SDD,logarithmic,0.818,False,"form 'logarithmic' not in model_forms ['linear', 'quadratic'] (add it to compare)"

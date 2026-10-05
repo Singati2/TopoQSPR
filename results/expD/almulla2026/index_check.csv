@@ -1,0 +1,181 @@
+compound,study_label,registry_name,reported,recomputed,diff,rel_diff,agree,reason
+Marbofloxacin,NM_1,,342.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Marbofloxacin,NM_2,,1081.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Marbofloxacin,NABC,,15.3037,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Marbofloxacin,NF_1,,2274.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Marbofloxacin,S_RR,S_RR,168.1315,177.55159401643644,9.420094016436451,0.0560281328390959,False,
+Marbofloxacin,S_SC,S_SC,8.22,8.41071451617146,0.19071451617145918,0.023201279339593574,False,
+Marbofloxacin,S_ReZ3,S_ReZ3,14802.0,15868.0,1066.0,0.07201729496014052,False,
+Marbofloxacin,S_R,S_R,5.1066,5.0458363537292525,-0.060763646270747707,0.011899041685416462,False,
+Marbofloxacin,S_SDD,S_SDD,62.4496,61.92857142857143,-0.5210285714285661,0.008343185087311465,False,
+1-Octacosanol,NM_1,,216.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+1-Octacosanol,NM_2,,420.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+1-Octacosanol,NABC,,17.4021,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+1-Octacosanol,NF_1,,844.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+1-Octacosanol,S_RR,S_RR,107.8272,107.82718271584186,-1.728415814739037e-05,1.6029497332204092e-07,True,
+1-Octacosanol,S_SC,S_SC,10.1356,10.135637511256942,3.751125694151369e-05,3.7009409350717957e-06,True,
+1-Octacosanol,S_ReZ3,S_ReZ3,3300.0,3300.0,0.0,0.0,True,
+1-Octacosanol,S_R,S_R,7.3938,7.393846850117352,4.685011735272582e-05,6.336405820109527e-06,True,
+1-Octacosanol,S_SDD,S_SDD,56.5,56.5,0.0,0.0,True,
+L-threonic acid,NM_1,,76.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+L-threonic acid,NM_2,,178.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+L-threonic acid,NABC,,4.8365,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+L-threonic acid,NF_1,,402.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+L-threonic acid,S_RR,S_RR,36.6954,36.69541016630998,1.0166309984072086e-05,2.770458963268444e-07,True,
+L-threonic acid,S_SC,S_SC,2.6472,2.6471691697248474,-3.083027515282666e-05,1.1646371695688522e-05,True,
+L-threonic acid,S_ReZ3,S_ReZ3,1866.0,1866.0,0.0,0.0,True,
+L-threonic acid,S_R,S_R,1.8513,1.851329666858831,2.9666858831101095e-05,1.6024879182791064e-05,True,
+L-threonic acid,S_SDD,S_SDD,18.6,18.599999999999998,-3.552713678800501e-15,1.9100611176346777e-16,True,
+Menthyl Salicylate,NM_1,,230.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Menthyl Salicylate,NM_2,,639.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Menthyl Salicylate,NABC,,11.7726,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Menthyl Salicylate,NF_1,,1350.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Menthyl Salicylate,S_RR,S_RR,113.2778,113.27782306488821,2.3064888210910794e-05,2.0361349011819433e-07,True,
+Menthyl Salicylate,S_SC,S_SC,6.4512,6.4511721156255275,-2.7884374472542106e-05,4.322354673943159e-06,True,
+Menthyl Salicylate,S_ReZ3,S_ReZ3,7600.0,7600.0,0.0,0.0,True,
+Menthyl Salicylate,S_R,S_R,4.0803,4.080283928369716,-1.607163028438663e-05,3.938835449448969e-06,True,
+Menthyl Salicylate,S_SDD,S_SDD,44.8783,44.87380952380951,-0.004490476190490256,0.00010005896369715999,True,
+Florfenicol,NM_1,,230.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Florfenicol,NM_2,,631.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Florfenicol,NABC,,11.8373,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Florfenicol,NF_1,,1352.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Florfenicol,S_RR,S_RR,112.7555,112.7554909886722,-9.01132780484204e-06,7.991918624672003e-08,True,
+Florfenicol,S_SC,S_SC,6.4489,6.448937114099855,3.7114099854740346e-05,5.755105499347229e-06,True,
+Florfenicol,S_ReZ3,S_ReZ3,7420.0,7420.0,0.0,0.0,True,
+Florfenicol,S_R,S_R,4.1131,4.113111516303262,1.1516303262126826e-05,2.799908405369873e-06,True,
+Florfenicol,S_SDD,S_SDD,45.9357,45.93571428571428,1.4285714286188522e-05,3.1099372135808366e-07,True,
+Emylcamate,NM_1,,88.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Emylcamate,NM_2,,219.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Emylcamate,NABC,,5.403,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Emylcamate,NF_1,,484.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Emylcamate,S_RR,S_RR,42.6679,42.66792336106987,2.336106986433606e-05,5.475092485061617e-07,True,
+Emylcamate,S_SC,S_SC,2.9595,2.9594920922944867,-7.907705513066077e-06,2.6719734796641586e-06,True,
+Emylcamate,S_ReZ3,S_ReZ3,2450.0,2450.0,0.0,0.0,True,
+Emylcamate,S_R,S_R,2.0687,2.0686891189810783,-1.0881018921882202e-05,5.259834157626626e-06,True,
+Emylcamate,S_SDD,S_SDD,20.8381,20.838095238095235,-4.7619047656155544e-06,2.2851914356949792e-07,True,
+Fluindione,NM_1,,238.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluindione,NM_2,,728.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluindione,NABC,,10.8886,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluindione,NF_1,,1534.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluindione,S_RR,S_RR,117.2421,117.2420681996681,-3.180033189664755e-05,2.712364576943568e-07,True,
+Fluindione,S_SC,S_SC,5.9196,5.9195882888634195,-1.1711136580494497e-05,1.9783662038810895e-06,True,
+Fluindione,S_ReZ3,S_ReZ3,9636.0,9636.0,0.0,0.0,True,
+Fluindione,S_R,S_R,3.6164,3.616363448549001,-3.655145099923374e-05,1.0107137208061536e-05,True,
+Fluindione,S_SDD,S_SDD,42.7952,42.7952380952381,3.8095238096502726e-05,8.901754892254909e-07,True,
+Levalbuterol,NM_1,,180.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Levalbuterol,NM_2,,480.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Levalbuterol,NABC,,9.6343,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Levalbuterol,NF_1,,1006.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Levalbuterol,S_RR,S_RR,88.7696,88.7695638630504,-3.6136949603360335e-05,4.070869937834612e-07,True,
+Levalbuterol,S_SC,S_SC,5.2968,5.296774973081458,-2.5026918542003784e-05,4.7249128798527005e-06,True,
+Levalbuterol,S_ReZ3,S_ReZ3,5394.0,5394.0,0.0,0.0,True,
+Levalbuterol,S_R,S_R,3.4013,3.4013015352731486,1.5352731486117932e-06,4.5137834022632326e-07,True,
+Levalbuterol,S_SDD,S_SDD,36.3143,36.314285714285724,-1.4285714279083095e-05,3.9339087574545273e-07,True,
+Arbutin,NM_1,,224.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Arbutin,NM_2,,632.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Arbutin,NABC,,11.1582,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Arbutin,NF_1,,1334.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Arbutin,S_RR,S_RR,110.1373,110.13731342327719,1.3423277195556693e-05,1.2187766719863927e-07,True,
+Arbutin,S_SC,S_SC,6.0697,6.069700473490648,4.7349064757895576e-07,7.800890448934145e-08,True,
+Arbutin,S_ReZ3,S_ReZ3,7580.0,7580.0,0.0,0.0,True,
+Arbutin,S_R,S_R,3.8215,3.8215418472046503,4.184720465039149e-05,1.095046569420162e-05,True,
+Arbutin,S_SDD,S_SDD,43.5119,43.51190476190476,4.761904762062841e-06,1.094391364675604e-07,True,
+Amiloxate,NM_1,,170.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Amiloxate,NM_2,,406.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Amiloxate,NABC,,10.5498,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Amiloxate,NF_1,,834.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Amiloxate,S_RR,S_RR,84.3311,84.33112892705252,2.892705251156258e-05,3.430176116706953e-07,True,
+Amiloxate,S_SC,S_SC,5.9227,5.922653946065436,-4.6053934563694554e-05,7.775834427489921e-06,True,
+Amiloxate,S_ReZ3,S_ReZ3,4016.0,4016.0,0.0,0.0,True,
+Amiloxate,S_R,S_R,3.9769,3.9769180171872076,1.8017187207508556e-05,4.530460209587506e-06,True,
+Amiloxate,S_SDD,S_SDD,37.4167,37.41666666666666,-3.333333334154531e-05,8.908678034552837e-07,True,
+Fluconazole,NM_1,,270.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluconazole,NM_2,,780.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluconazole,NABC,,13.2539,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluconazole,NF_1,,1628.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluconazole,S_RR,S_RR,133.5172,133.51721545707466,1.5457074653113523e-05,1.1576841525371655e-07,True,
+Fluconazole,S_SC,S_SC,7.2838,7.283783094974075,-1.6905025924884853e-05,2.320907483028756e-06,True,
+Fluconazole,S_ReZ3,S_ReZ3,9660.0,9660.0,0.0,0.0,True,
+Fluconazole,S_R,S_R,4.5235,4.523515666303481,1.5666303480266208e-05,3.4633145750560867e-06,True,
+Fluconazole,S_SDD,S_SDD,50.2528,50.25277777777776,-2.222222224190773e-05,4.4220863796460553e-07,True,
+Terbinafine,NM_1,,221.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Terbinafine,NM_2,,595.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Terbinafine,NABC,,11.8403,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Terbinafine,NF_1,,1231.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Terbinafine,S_RR,S_RR,109.5515,118.02366653701297,8.472166537012967,0.07733501172519744,False,
+Terbinafine,S_SC,S_SC,6.5666,7.253481829732955,0.6868818297329549,0.10460235582081363,False,
+Terbinafine,S_ReZ3,S_ReZ3,6792.0,7100.0,308.0,0.04534746760895171,False,
+Terbinafine,S_R,S_R,4.1795,4.653096816369081,0.47359681636908135,0.113314228106013,False,
+Terbinafine,S_SDD,S_SDD,43.4774,47.527380952380945,4.049980952380942,0.09315140630260645,False,
+Clotrimazole,NM_1,,328.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Clotrimazole,NM_2,,1039.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Clotrimazole,NABC,,15.4504,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Clotrimazole,NF_1,,2232.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Clotrimazole,S_RR,S_RR,161.2871,161.28714074384843,4.074384841601386e-05,2.5261690746509705e-07,True,
+Clotrimazole,S_SC,S_SC,8.5014,8.501430691958609,3.069195860838647e-05,3.61022403467505e-06,True,
+Clotrimazole,S_ReZ3,S_ReZ3,15288.0,15288.0,0.0,0.0,True,
+Clotrimazole,S_R,S_R,5.3434,5.343379350981692,-2.0649018307672407e-05,3.864396883570836e-06,True,
+Clotrimazole,S_SDD,S_SDD,59.3889,59.38888888888888,-1.1111111120953865e-05,1.870907041712149e-07,True,
+Miconazole,NM_1,,291.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Miconazole,NM_2,,790.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Miconazole,NABC,,15.0764,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Miconazole,NF_1,,1631.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Miconazole,S_RR,S_RR,144.191,145.53021634713392,1.3392163471339131,0.009287794294608631,False,
+Miconazole,S_SC,S_SC,8.3012,8.270738947074705,-0.030461052925295107,0.0036694758499126764,False,
+Miconazole,S_ReZ3,S_ReZ3,8922.0,9302.0,380.0,0.04259134723156243,False,
+Miconazole,S_R,S_R,5.1972,5.167093963148866,-0.030106036851133666,0.005792741639947216,False,
+Miconazole,S_SDD,S_SDD,56.2952,56.48333333333333,0.18813333333332594,0.0033419071845081985,False,
+Voriconazole,NM_1,,338.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Voriconazole,NM_2,,1052.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Voriconazole,NABC,,15.2759,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Voriconazole,NF_1,,2282.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Voriconazole,S_RR,S_RR,165.4146,154.26739804351865,-11.147201956481354,0.0673894683811547,False,
+Voriconazole,S_SC,S_SC,8.2751,8.09235711463883,-0.18274288536117034,0.022083465500256232,False,
+Voriconazole,S_ReZ3,S_ReZ3,14662.0,12296.0,-2366.0,0.16136952666757604,False,
+Voriconazole,S_R,S_R,5.0785,5.013643984678065,-0.06485601532193463,0.012770703026865143,False,
+Voriconazole,S_SDD,S_SDD,61.1079,58.267857142857125,-2.840042857142876,0.04647587066717849,False,
+Tavaborole,NM_1,,136.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Tavaborole,NM_2,,389.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Tavaborole,NABC,,6.6011,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Tavaborole,NF_1,,812.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Tavaborole,S_RR,S_RR,67.203,67.20296898909766,-3.101090234736148e-05,4.614511606232085e-07,True,
+Tavaborole,S_SC,S_SC,3.6074,3.607428173612276,2.8173612276027882e-05,7.809949624668149e-06,True,
+Tavaborole,S_ReZ3,S_ReZ3,4690.0,4690.0,0.0,0.0,True,
+Tavaborole,S_R,S_R,2.2185,2.2184657939826207,-3.4206017379467824e-05,1.541853386498437e-05,True,
+Tavaborole,S_SDD,S_SDD,25.2976,25.297619047619044,1.904761904469865e-05,7.529417432759887e-07,True,
+Butenafine,NM_1,,290.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Butenafine,NM_2,,816.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Butenafine,NABC,,14.3448,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Butenafine,NF_1,,1702.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Butenafine,S_RR,S_RR,143.4648,143.46484670919972,4.670919972227239e-05,3.25579513039243e-07,True,
+Butenafine,S_SC,S_SC,7.8754,7.875384275151582,-1.5724848418052773e-05,1.9967047284014492e-06,True,
+Butenafine,S_ReZ3,S_ReZ3,9658.0,9658.0,0.0,0.0,True,
+Butenafine,S_R,S_R,4.8593,4.85929828748405,-1.7125159503805776e-06,3.524202972404621e-07,True,
+Butenafine,S_SDD,S_SDD,54.2607,54.26071428571428,1.4285714279083095e-05,2.632792109037129e-07,True,
+Econazole,NM_1,,278.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Econazole,NM_2,,752.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Econazole,NABC,,14.5368,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Econazole,NF_1,,1548.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Econazole,S_RR,S_RR,137.9291,137.92912654551085,2.6545510849018683e-05,1.92457652873967e-07,True,
+Econazole,S_SC,S_SC,8.0295,8.02950833303352,8.333033520102617e-06,1.0378022940535048e-06,True,
+Econazole,S_ReZ3,S_ReZ3,8482.0,8482.0,0.0,0.0,True,
+Econazole,S_R,S_R,5.0375,5.037508355903296,8.355903296397571e-06,1.6587401084660192e-06,True,
+Econazole,S_SDD,S_SDD,53.7976,53.797619047619044,1.9047619041145936e-05,3.54060758122034e-07,True,
+Oxiconazole,NM_1,,302.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Oxiconazole,NM_2,,823.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Oxiconazole,NABC,,15.659,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Oxiconazole,NF_1,,1708.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Oxiconazole,S_RR,S_RR,149.4745,149.4744882571331,-1.1742866917074934e-05,7.856100483410169e-08,True,
+Oxiconazole,S_SC,S_SC,8.6212,8.621177847724532,-2.215227546820131e-05,2.5695118392104707e-06,True,
+Oxiconazole,S_ReZ3,S_ReZ3,9412.0,9412.0,0.0,0.0,True,
+Oxiconazole,S_R,S_R,5.4143,5.414307558648824,7.55864882417967e-06,1.3960528275455129e-06,True,
+Oxiconazole,S_SDD,S_SDD,58.5833,58.58333333333333,3.333333332733446e-05,5.68990366321707e-07,True,
+Sertaconazole,NM_1,,340.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Sertaconazole,NM_2,,978.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Sertaconazole,NABC,,16.4861,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Sertaconazole,NF_1,,2036.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Sertaconazole,S_RR,S_RR,168.1814,168.1813928570147,-7.142985282371228e-06,4.2471909987497e-08,True,
+Sertaconazole,S_SC,S_SC,9.0318,9.031759552308644,-4.044769135624904e-05,4.478364374349414e-06,True,
+Sertaconazole,S_ReZ3,S_ReZ3,11890.0,11890.0,0.0,0.0,True,
+Sertaconazole,S_R,S_R,5.5543,5.554334606543361,3.460654336162605e-05,6.230585917510047e-06,True,
+Sertaconazole,S_SDD,S_SDD,62.844,62.844047619047615,4.761904761352298e-05,7.577341928190914e-07,True,

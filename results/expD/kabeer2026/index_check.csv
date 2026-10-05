@@ -1,0 +1,226 @@
+compound,study_label,registry_name,reported,recomputed,diff,rel_diff,agree,reason
+Fluoxetine,NM1(G),,242.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluoxetine,NABC(G),,12.9971,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluoxetine,NM2(G),,652.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluoxetine,NF*(G),,1358.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluoxetine,S_RR,S_RR,119.7877,119.7876827483778,-1.725162219656795e-05,1.4401831069941196e-07,True,
+Fluoxetine,S_SC,S_SC,7.2377,7.237719685477393,1.9685477393061035e-05,2.7198526317837204e-06,True,
+Fluoxetine,S_ReZ3,S_ReZ3,7426.0,7426.0,0.0,0.0,True,
+Fluoxetine,S_R,S_R,4.6767,4.676749671311774,4.9671311773913374e-05,1.062101733570966e-05,True,
+Fluoxetine,S_SDD,S_SDD,47.8667,47.86666666666667,-3.3333333334439885e-05,6.963783451635455e-07,True,
+Sertraline,NM1(G),,255.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Sertraline,NABC(G),,12.0878,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Sertraline,NM2(G),,758.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Sertraline,NF*(G),,1589.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Sertraline,S_RR,S_RR,125.7606,125.2799043788779,-0.48069562112209496,0.0038223069953713246,False,
+Sertraline,S_SC,S_SC,6.5998,6.611111945903705,0.011311945903704768,0.001713983136413947,False,
+Sertraline,S_ReZ3,S_ReZ3,9650.0,9536.0,-114.0,0.011813471502590673,False,
+Sertraline,S_R,S_R,4.0987,4.111029205348445,0.012329205348445171,0.003008077036242021,False,
+Sertraline,S_SDD,S_SDD,46.9417,46.917857142857144,-0.023842857142852836,0.0005079248758109066,True,
+Escitalopram,NM1(G),,280.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Escitalopram,NABC(G),,13.82,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Escitalopram,NM2(G),,818.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Escitalopram,NF*(G),,1686.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Escitalopram,S_RR,S_RR,138.8775,147.9407229956724,9.06322299567239,0.06526055693450984,False,
+Escitalopram,S_SC,S_SC,7.6359,7.892794144721622,0.2568941447216213,0.033642942511245735,False,
+Escitalopram,S_ReZ3,S_ReZ3,10256.0,12232.0,1976.0,0.19266770670826833,False,
+Escitalopram,S_R,S_R,4.777,4.9664123408861185,0.18941234088611836,0.039650898238668277,False,
+Escitalopram,S_SDD,S_SDD,51.754,55.03492063492063,3.2809206349206335,0.06339453249836986,False,
+Paroxetine,NM1(G),,300.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Paroxetine,NABC(G),,14.8642,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Paroxetine,NM2(G),,845.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Paroxetine,NF*(G),,1740.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Paroxetine,S_RR,S_RR,148.9005,148.90046236384674,-3.763615325169667e-05,2.527604222396612e-07,True,
+Paroxetine,S_SC,S_SC,8.1886,8.188589694166915,-1.0305833084700566e-05,1.2585586162104105e-06,True,
+Paroxetine,S_ReZ3,S_ReZ3,9932.0,9932.0,0.0,0.0,True,
+Paroxetine,S_R,S_R,5.0402,5.0401926934438555,-7.306556144115461e-06,1.449655994626297e-06,True,
+Paroxetine,S_SDD,S_SDD,55.6179,55.617857142857126,-4.285714287277642e-05,7.70563844963158e-07,True,
+Citalopram,NM1(G),,285.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Citalopram,NABC(G),,13.9152,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Citalopram,NM2(G),,858.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Citalopram,NF*(G),,1823.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Citalopram,S_RR,S_RR,140.2641,147.9407229956724,7.676622995672375,0.0547297775815221,False,
+Citalopram,S_SC,S_SC,7.6423,7.892794144721622,0.250494144721622,0.03277732419842482,False,
+Citalopram,S_ReZ3,S_ReZ3,11552.0,12232.0,680.0,0.05886426592797784,False,
+Citalopram,S_R,S_R,4.8527,4.9664123408861185,0.11371234088611892,0.023432798418636828,False,
+Citalopram,S_SDD,S_SDD,53.4683,55.03492063492063,1.566620634920632,0.02929998961853345,False,
+Venlafaxine,NM1(G),,230.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Venlafaxine,NABC(G),,11.8056,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Venlafaxine,NM2(G),,657.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Venlafaxine,NF*(G),,1384.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Venlafaxine,S_RR,S_RR,113.4234,113.42342425941497,2.425941497108397e-05,2.1388368688545723e-07,True,
+Venlafaxine,S_SC,S_SC,6.523,6.5229557053182035,-4.429468179623086e-05,6.79053837133694e-06,True,
+Venlafaxine,S_ReZ3,S_ReZ3,8202.0,8202.0,0.0,0.0,True,
+Venlafaxine,S_R,S_R,4.196,4.195984195519047,-1.580448095239717e-05,3.7665588542414612e-06,True,
+Venlafaxine,S_SDD,S_SDD,44.5393,44.53928571428571,-1.4285714286188522e-05,3.207440235070718e-07,True,
+Duloxetine,NM1(G),,246.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Duloxetine,NABC(G),,12.9322,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Duloxetine,NM2(G),,685.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Duloxetine,NF*(G),,1416.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Duloxetine,S_RR,S_RR,121.9677,121.96768800576395,-1.1994236047030427e-05,9.833944599291802e-08,True,
+Duloxetine,S_SC,S_SC,7.2134,7.213378306342534,-2.169365746595986e-05,3.007410855624235e-06,True,
+Duloxetine,S_ReZ3,S_ReZ3,8128.0,8128.0,0.0,0.0,True,
+Duloxetine,S_R,S_R,4.6532,4.6531950826849195,-4.917315080454898e-06,1.0567598814697194e-06,True,
+Duloxetine,S_SDD,S_SDD,47.594,47.594047619047615,4.761904761352298e-05,1.0005262767055298e-06,True,
+Desvenlafaxine,NM1(G),,217.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Desvenlafaxine,NABC(G),,11.2544,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Desvenlafaxine,NM2(G),,617.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Desvenlafaxine,NF*(G),,1297.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Desvenlafaxine,S_RR,S_RR,107.1499,108.61454984520653,1.464649845206523,0.013669166702036335,False,
+Desvenlafaxine,S_SC,S_SC,6.2401,6.181465882308925,-0.05863411769107518,0.009396342637309528,False,
+Desvenlafaxine,S_ReZ3,S_ReZ3,7698.0,7874.0,176.0,0.02286308131982333,False,
+Desvenlafaxine,S_R,S_R,4.009,3.931357177770893,-0.07764282222910746,0.019367129515866163,False,
+Desvenlafaxine,S_SDD,S_SDD,41.9893,42.07261904761904,0.08331904761904241,0.001984292370176269,False,
+Fluvoxamine,NM1(G),,271.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluvoxamine,NABC(G),,19.8085,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluvoxamine,NM2(G),,640.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluvoxamine,NF*(G),,1357.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Fluvoxamine,S_RR,S_RR,133.5052,107.71002608588759,-25.79517391411241,0.19321475054239393,False,
+Fluvoxamine,S_SC,S_SC,11.6432,7.202745023978378,-4.4404549760216225,0.38137754019699244,False,
+Fluvoxamine,S_ReZ3,S_ReZ3,6924.0,6270.0,-654.0,0.09445407279029462,False,
+Fluvoxamine,S_R,S_R,8.9344,4.882978761267306,-4.051421238732694,0.4534631579885269,False,
+Fluvoxamine,S_SDD,S_SDD,67.9964,46.09047619047619,-21.905923809523806,0.3221629940632711,False,
+Vilazodone,NM1(G),,406.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Vilazodone,NABC(G),,19.7242,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Vilazodone,NM2(G),,1158.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Vilazodone,NF*(G),,2386.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Vilazodone,S_RR,S_RR,201.4052,209.3505425286481,7.945342528648098,0.039449540173978115,False,
+Vilazodone,S_SC,S_SC,10.8344,11.108020543177847,0.2736205431778469,0.02525479428282571,False,
+Vilazodone,S_ReZ3,S_ReZ3,13750.0,14798.0,1048.0,0.07621818181818182,False,
+Vilazodone,S_R,S_R,6.6292,6.812663174034374,0.18346317403437418,0.027675009659442192,False,
+Vilazodone,S_SDD,S_SDD,74.4571,76.72380952380952,2.2667095238095243,0.030443161549530192,False,
+Bupropion,NM1(G),,170.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Bupropion,NABC(G),,9.0439,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Bupropion,NM2(G),,454.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Bupropion,NF*(G),,954.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Bupropion,S_RR,S_RR,83.8105,83.81048673975491,-1.326024509751278e-05,1.5821699068151102e-07,True,
+Bupropion,S_SC,S_SC,4.9642,4.964182072644607,-1.7927355393076994e-05,3.6113281884446625e-06,True,
+Bupropion,S_ReZ3,S_ReZ3,5136.0,5136.0,0.0,0.0,True,
+Bupropion,S_R,S_R,3.1566,3.1565561095984456,-4.3890401554502745e-05,1.3904327933378555e-05,True,
+Bupropion,S_SDD,S_SDD,34.1119,34.11190476190476,4.761904762062841e-06,1.3959658541631633e-07,True,
+Mirtazapine,NM1(G),,272.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Mirtazapine,NABC(G),,12.4353,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Mirtazapine,NM2(G),,833.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Mirtazapine,NF*(G),,1718.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Mirtazapine,S_RR,S_RR,134.9009,134.90089244265388,-7.557346123121533e-06,5.6021465558210014e-08,True,
+Mirtazapine,S_SC,S_SC,6.8257,6.825720162884038,2.0162884037944195e-05,2.95396575266188e-06,True,
+Mirtazapine,S_ReZ3,S_ReZ3,10842.0,10842.0,0.0,0.0,True,
+Mirtazapine,S_R,S_R,4.1428,4.1428091266328115,9.126632811273794e-06,2.2030107201105033e-06,True,
+Mirtazapine,S_SDD,S_SDD,47.5702,47.570238095238096,3.8095238096502726e-05,8.008214827035146e-07,True,
+Trazodone,NM1(G),,324.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Trazodone,NABC(G),,15.9853,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Trazodone,NM2(G),,918.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Trazodone,NF*(G),,1900.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Trazodone,S_RR,S_RR,160.5111,160.51108294952152,-1.7050478476221542e-05,1.0622616427288544e-07,True,
+Trazodone,S_SC,S_SC,8.7818,8.781759552308648,-4.0447691352696324e-05,4.605854306941211e-06,True,
+Trazodone,S_ReZ3,S_ReZ3,10918.0,10918.0,0.0,0.0,True,
+Trazodone,S_R,S_R,5.4175,5.417508025073173,8.025073172213126e-06,1.481324074243309e-06,True,
+Trazodone,S_SDD,S_SDD,60.3655,60.36547619047619,-2.3809523810314204e-05,3.944227051927708e-07,True,
+Nefazodone,NM1(G),,372.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Nefazodone,NABC(G),,20.4531,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Nefazodone,NM2(G),,978.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Nefazodone,NF*(G),,2028.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Nefazodone,S_RR,S_RR,184.2277,192.0908815484514,7.863181548451394,0.042681863522431175,False,
+Nefazodone,S_SC,S_SC,11.374,11.12759814374869,-0.2464018562513104,0.021663606141314434,False,
+Nefazodone,S_ReZ3,S_ReZ3,10812.0,12332.0,1520.0,0.14058453570107288,False,
+Nefazodone,S_R,S_R,7.3499,7.0359489542304825,-0.3139510457695174,0.042715009152439816,False,
+Nefazodone,S_SDD,S_SDD,74.9929,75.27261904761902,0.279719047619011,0.0037299404026115935,False,
+Vortioxetine,NM1(G),,250.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Vortioxetine,NABC(G),,12.8272,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Vortioxetine,NM2(G),,695.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Vortioxetine,NF*(G),,1438.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Vortioxetine,S_RR,S_RR,123.8791,123.87911952343126,1.952343126276901e-05,1.5760068698246122e-07,True,
+Vortioxetine,S_SC,S_SC,7.084,7.084020950570046,2.0950570046807115e-05,2.9574491878609705e-06,True,
+Vortioxetine,S_ReZ3,S_ReZ3,8166.0,8166.0,0.0,0.0,True,
+Vortioxetine,S_R,S_R,4.452,4.451977772234248,-2.2227765751559048e-05,4.9927596027760665e-06,True,
+Vortioxetine,S_SDD,S_SDD,47.7893,47.78928571428571,-1.4285714286188522e-05,2.9893123117912424e-07,True,
+Nortriptyline,NM1(G),,290.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Nortriptyline,NABC(G),,19.3949,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Nortriptyline,NM2(G),,751.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Nortriptyline,NF*(G),,1564.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Nortriptyline,S_RR,S_RR,143.3738,118.87888577342333,-24.494914226576654,0.17084651607599613,False,
+Nortriptyline,S_SC,S_SC,11.344,6.871881285183929,-4.47211871481607,0.3942276723215859,False,
+Nortriptyline,S_ReZ3,S_ReZ3,8916.0,8616.0,-300.0,0.033647375504710635,False,
+Nortriptyline,S_R,S_R,8.5152,4.4326837085290665,-4.082516291470934,0.47943868511261434,False,
+Nortriptyline,S_SDD,S_SDD,67.3345,45.667857142857144,-21.66664285714286,0.32177624927998066,False,
+Imipramine,NM1(G),,252.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Imipramine,NABC(G),,12.833,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Imipramine,NM2(G),,721.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Imipramine,NF*(G),,1496.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Imipramine,S_RR,S_RR,124.8378,124.83776955577709,-3.0444222915093633e-05,2.438702293303281e-07,True,
+Imipramine,S_SC,S_SC,7.1157,7.115745438766591,4.5438766590244484e-05,6.385705775994559e-06,True,
+Imipramine,S_ReZ3,S_ReZ3,8902.0,8902.0,0.0,0.0,True,
+Imipramine,S_R,S_R,4.5103,4.510324148159975,2.4148159974757277e-05,5.354003054066753e-06,True,
+Imipramine,S_SDD,S_SDD,47.6845,47.68452380952381,2.3809523810314204e-05,4.993136933450955e-07,True,
+Clomipramine,NM1(G),,266.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Clomipramine,NABC(G),,13.3246,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Clomipramine,NM2(G),,768.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Clomipramine,NF*(G),,1588.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Clomipramine,S_RR,S_RR,131.8474,131.84735447697577,-4.5523024226667985e-05,3.452705493370972e-07,True,
+Clomipramine,S_SC,S_SC,7.373,7.372956792511174,-4.320748882591374e-05,5.8602317680609985e-06,True,
+Clomipramine,S_ReZ3,S_ReZ3,9516.0,9516.0,0.0,0.0,True,
+Clomipramine,S_R,S_R,4.6401,4.640107312531221,7.31253122054909e-06,1.5759425918728237e-06,True,
+Clomipramine,S_SDD,S_SDD,49.7429,49.74285714285715,-4.285714285146014e-05,8.615730657332029e-07,True,
+Desipramine,NM1(G),,228.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Desipramine,NABC(G),,12.5312,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Desipramine,NM2(G),,607.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Desipramine,NF*(G),,1278.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Desipramine,S_RR,S_RR,112.6362,118.87888577342333,6.242685773423332,0.05542344089576293,False,
+Desipramine,S_SC,S_SC,6.9959,6.871881285183929,-0.12401871481607074,0.017727342417140145,False,
+Desipramine,S_ReZ3,S_ReZ3,6918.0,8616.0,1698.0,0.24544666088464875,False,
+Desipramine,S_R,S_R,4.5762,4.4326837085290665,-0.1435162914709336,0.0313614552403596,False,
+Desipramine,S_SDD,S_SDD,45.9893,45.667857142857144,-0.3214428571428556,0.006989514020497281,False,
+Phenelzine,NM1(G),,88.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Phenelzine,NABC(G),,5.9953,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Phenelzine,NM2(G),,200.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Phenelzine,NF*(G),,408.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Phenelzine,S_RR,S_RR,43.7617,43.76167594807466,-2.405192533672107e-05,5.496113116428537e-07,True,
+Phenelzine,S_SC,S_SC,3.4368,3.436818883429024,1.888342902400808e-05,5.494480046557286e-06,True,
+Phenelzine,S_ReZ3,S_ReZ3,1900.0,1900.0,0.0,0.0,True,
+Phenelzine,S_R,S_R,2.4155,2.415466375813779,-3.362418622110397e-05,1.3920176452537349e-05,True,
+Phenelzine,S_SDD,S_SDD,20.5,20.5,0.0,0.0,True,
+Isocarboxazid,NM1(G),,182.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Isocarboxazid,NABC(G),,10.2753,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Isocarboxazid,NM2(G),,464.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Isocarboxazid,NF*(G),,956.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Isocarboxazid,S_RR,S_RR,90.2679,90.26785690849866,-4.309150133963158e-05,4.773734776108847e-07,True,
+Isocarboxazid,S_SC,S_SC,5.7107,5.710714424189024,1.4424189023642953e-05,2.5258180299513113e-06,True,
+Isocarboxazid,S_ReZ3,S_ReZ3,4920.0,4920.0,0.0,0.0,True,
+Isocarboxazid,S_R,S_R,3.6788,3.6788368211877573,3.682118775749643e-05,1.0009021354109067e-05,True,
+Isocarboxazid,S_SDD,S_SDD,37.2952,37.29523809523809,3.80952380893973e-05,1.0214515028582042e-06,True,
+Amoxapine,NM1(G),,286.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Amoxapine,NABC(G),,13.6492,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Amoxapine,NM2(G),,845.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Amoxapine,NF*(G),,1732.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Amoxapine,S_RR,S_RR,142.0844,142.08440975962583,9.759625839933506e-06,6.868893305622226e-08,True,
+Amoxapine,S_SC,S_SC,7.5251,7.525121244861372,2.1244861371449986e-05,2.823199873948517e-06,True,
+Amoxapine,S_ReZ3,S_ReZ3,10526.0,10526.0,0.0,0.0,True,
+Amoxapine,S_R,S_R,4.6171,4.617058090561306,-4.190943869364361e-05,9.077004763519008e-06,True,
+Amoxapine,S_SDD,S_SDD,51.3452,51.3452380952381,3.809523810360815e-05,7.419435137774934e-07,True,
+Mianserin,NM1(G),,272.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Mianserin,NABC(G),,12.4353,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Mianserin,NM2(G),,833.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Mianserin,NF*(G),,1718.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Mianserin,S_RR,S_RR,134.9009,134.9008924426539,-7.557346094699824e-06,5.6021465347524173e-08,True,
+Mianserin,S_SC,S_SC,6.8257,6.825720162884038,2.0162884037944195e-05,2.95396575266188e-06,True,
+Mianserin,S_ReZ3,S_ReZ3,10842.0,10842.0,0.0,0.0,True,
+Mianserin,S_R,S_R,4.1428,4.1428091266328115,9.126632811273794e-06,2.2030107201105033e-06,True,
+Mianserin,S_SDD,S_SDD,47.5702,47.570238095238096,3.8095238096502726e-05,8.008214827035146e-07,True,
+Reboxetine,NM1(G),,287.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Reboxetine,NABC(G),,14.5444,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Reboxetine,NM2(G),,830.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Reboxetine,NF*(G),,1745.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Reboxetine,S_RR,S_RR,141.6936,129.9434207764645,-11.750179223535497,0.08292667575342497,False,
+Reboxetine,S_SC,S_SC,8.0658,7.917530242655077,-0.14826975734492276,0.018382523413043066,False,
+Reboxetine,S_ReZ3,S_ReZ3,10472.0,8394.0,-2078.0,0.19843391902215432,False,
+Reboxetine,S_R,S_R,5.1767,5.150063225359888,-0.026636774640111938,0.005145512515716951,False,
+Reboxetine,S_SDD,S_SDD,54.6607,51.67619047619046,-2.9845095238095354,0.054600645871888495,False,
+Tianeptine,NM1(G),,354.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Tianeptine,NABC(G),,17.1925,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Tianeptine,NM2(G),,1065.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Tianeptine,NF*(G),,2246.0,,,,False,"not recomputed (unmapped, unresolved compound or undefined index)"
+Tianeptine,S_RR,S_RR,174.469,174.46903316925727,3.316925727858688e-05,1.9011547769854176e-07,True,
+Tianeptine,S_SC,S_SC,9.4594,9.45941497889388,1.4978893879913358e-05,1.5834930206898277e-06,True,
+Tianeptine,S_ReZ3,S_ReZ3,14148.0,14148.0,0.0,0.0,True,
+Tianeptine,S_R,S_R,5.9731,5.97307542526409,-2.45747359093329e-05,4.1142348042612554e-06,True,
+Tianeptine,S_SDD,S_SDD,65.8528,65.85277777777777,-2.2222222227696875e-05,3.3745295914064207e-07,True,

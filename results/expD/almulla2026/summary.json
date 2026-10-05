@@ -1,0 +1,55 @@
+{
+ "experiment": "D",
+ "index_values_agree": 80,
+ "index_values_checked": 180,
+ "missing_property_values": [],
+ "model_forms": [
+  "cubic",
+  "linear",
+  "quadratic"
+ ],
+ "n_compounds_not_used": 0,
+ "n_compounds_spec": 20,
+ "n_compounds_used": 20,
+ "n_index_labels": 5,
+ "n_mapped": 5,
+ "properties": [
+  "BP",
+  "D",
+  "EOV",
+  "FP",
+  "IOR",
+  "MR",
+  "MV",
+  "P",
+  "ST"
+ ],
+ "reference": null,
+ "reported_fits": 9,
+ "reported_fits_unmatched": [],
+ "settings": {
+  "alpha": 0.05,
+  "families": [
+   "ridge",
+   "pls",
+   "linear"
+  ],
+  "inner_splits": 3,
+  "min_n": 50,
+  "min_n_test": 10,
+  "n_permutations": 1000,
+  "n_random": 1000,
+  "outer_splits": 5,
+  "random_seed": 0,
+  "scaffold": true,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ },
+ "study": "almulla2026_antifungal",
+ "unmappable": []
+}
