@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: topoqspr
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-lock.txt && pip install -e ".[web]"
+    startCommand: uvicorn topoqspr.web.app:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: TOPOQSPR_WEB_DATA_DIR
+        value: /var/data/topoqspr

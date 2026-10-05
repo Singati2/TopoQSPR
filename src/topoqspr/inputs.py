@@ -37,6 +37,8 @@ class InputRecord:
     graph: Optional[MolGraph] = None
     smiles: Optional[str] = None
     reason: Optional[str] = None
+    inchikey: Optional[str] = None
+    input_text: Optional[str] = None
 
 
 def _molecule(label: str, mol) -> InputRecord:
@@ -46,8 +48,11 @@ def _molecule(label: str, mol) -> InputRecord:
     res = standardize(smi)
     graph = getattr(res, "graph", None)
     if graph is None:
-        return InputRecord(label, "molecule", smiles=smi, reason=str(getattr(res, "code", res)))
-    return InputRecord(label, "molecule", graph=graph, smiles=getattr(res, "canonical_smiles", smi))
+        rej = getattr(res, "rejection", None)
+        return InputRecord(label, "molecule", smiles=smi,
+                           reason=str(getattr(rej, "code", None) or getattr(res, "code", None) or res))
+    return InputRecord(label, "molecule", graph=graph, smiles=getattr(res, "canonical_smiles", smi),
+                       inchikey=getattr(res, "inchikey", None))
 
 
 def _graph(label: str, n: int, edges: Iterable[tuple[int, int]]) -> InputRecord:
@@ -140,8 +145,10 @@ def parse_input(text: str, fmt: str, label: str = "input") -> list[InputRecord]:
         out = []
         for i, line in enumerate(l for l in text.splitlines() if l.strip()):
             parts = line.split()
-            out.append(_molecule(parts[1] if len(parts) > 1 else f"{label}_{i + 1}",
-                                 Chem.MolFromSmiles(parts[0])))
+            rec = _molecule(parts[1] if len(parts) > 1 else f"{label}_{i + 1}",
+                            Chem.MolFromSmiles(parts[0]))
+            rec.input_text = parts[0]
+            out.append(rec)
         records = out
     elif fmt in ("sdf", "mol"):
         blocks = [b for b in re.split(r"^\$\$\$\$\s*$", text, flags=re.M) if b.strip()]
