@@ -1,12 +1,19 @@
+# TopoQSPR v1.0 web interface (replaces the v0.x prototype; the old config is render-v0-legacy.yaml).
 services:
   - type: web
-    name: moleculens
+    name: topoqspr
     runtime: python
-    region: oregon
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn website:app --host 0.0.0.0 --port $PORT --workers 1
+    buildCommand: pip install -r requirements-lock.txt && pip install -e ".[web]"
+    startCommand: uvicorn topoqspr.web.app:app --host 0.0.0.0 --port $PORT --workers 1
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
         value: "3.12.0"
+      # Free plan: no persistent disk, so jobs survive app restarts but not redeploys.
+      # On a paid plan, attach a disk and point this at it (e.g. /var/data/topoqspr).
+      - key: TOPOQSPR_WEB_DATA_DIR
+        value: /tmp/topoqspr-web
+      # Render terminates TLS in a proxy; take the client IP from X-Forwarded-For for rate limits.
+      - key: TOPOQSPR_WEB_TRUST_PROXY
+        value: "1"

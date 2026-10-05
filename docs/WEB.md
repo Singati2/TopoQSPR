@@ -46,7 +46,7 @@ TOPOQSPR_WEB_DATA_DIR=./webdata uvicorn topoqspr.web.app:app --port 8000
 
 ## Deployment
 
-`render-v1.yaml` starts `uvicorn topoqspr.web.app:app`. Deploying replaces the v0.x site and needs
+`render.yaml` (Render blueprint) and `Procfile` start `uvicorn topoqspr.web.app:app`. Deploying replaces the v0.x site and needs
 the Render account that hosts moleculens.onrender.com.
 
 ## Screenshots (2026-10-05, local, light theme)
