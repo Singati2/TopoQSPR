@@ -1,0 +1,50 @@
+{
+ "alpha": 0.05,
+ "controlled_in_naive_share": 1.0,
+ "counts": {
+  "controlled": {
+   "connectivity_groups": 1,
+   "distinct_parent_chembl_ids": 35,
+   "manifest_included": 35,
+   "rejected": {},
+   "standardised_ok": 35
+  },
+  "naive": {
+   "connectivity_groups": 3,
+   "distinct_parent_chembl_ids": 570,
+   "manifest_included": 624,
+   "rejected": {
+    "disallowed_element": 6,
+    "duplicate_inchikey": 53,
+    "mixture": 1,
+    "no_carbon": 5
+   },
+   "standardised_ok": 559
+  }
+ },
+ "experiment": "A",
+ "intersection_standardised": 35,
+ "jaccard": {
+  "parent_chembl_id": 0.06140350877192982,
+  "standardised_parent_inchikey": 0.0626118067978533,
+  "structures_used": 0.052715654952076675
+ },
+ "ks_note": "KS p-values compare overlapping, non-independent samples; descriptive only",
+ "mesh_ids": {
+  "controlled": [
+   "D001943"
+  ],
+  "naive": [
+   "D001943",
+   "D018567",
+   "D058922",
+   "D064726"
+  ]
+ },
+ "mode": "counts_only",
+ "model": false,
+ "quarantine": "",
+ "settings": {},
+ "targets": [],
+ "top_k": 10
+}

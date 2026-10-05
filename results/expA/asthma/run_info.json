@@ -1,0 +1,43 @@
+{
+ "argv": [
+  "exp-a",
+  "--plan-frozen",
+  "--counts-only",
+  "--release",
+  "ChEMBL_37",
+  "--n-jobs",
+  "1",
+  "--timestamp",
+  "2026-10-05T19:20:00Z",
+  "--mesh",
+  "D001249",
+  "--naive-text",
+  "asthma",
+  "--out",
+  "/home/mpcrlab/topoqspr_runs/expA/asthma"
+ ],
+ "code": {
+  "commit": "2e56cfdc5da04f7274fa81a73edfe8967b41ec1d",
+  "describe": "plan-freeze-v1-23-g2e56cfd",
+  "dirty": false,
+  "reason": "",
+  "root": "/home/mpcrlab/moleculens",
+  "source": "git",
+  "untracked": 0
+ },
+ "cohort": {
+  "disease_label": "Asthma",
+  "mesh_ids": [
+   "D001249"
+  ],
+  "naive_text": "asthma",
+  "release": "ChEMBL_37",
+  "release_date": "2026-05-01",
+  "source": "chembl"
+ },
+ "command": "exp-a",
+ "created_utc": "2026-10-05T19:20:00Z",
+ "data_licence": "CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/); ChEMBL, EMBL-EBI",
+ "topoqspr_version": "1.0.0.dev0",
+ "wall_time_s": 38.4
+}
