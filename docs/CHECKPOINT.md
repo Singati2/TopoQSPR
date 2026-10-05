@@ -110,7 +110,17 @@ Status after Advik's feedback (`docs/ADVIK_RECOMMENDATIONS.md`, 2026-10-03):
    lisinopril for diabetes; T2D 33 → 26, hypertension 85 → 69), with "none" and "FDA/EMA/ATC only" as
    Experiment A sensitivity analyses ("FDA/EMA/ATC only" alone is too strict: asthma 8). The pooled
    modelling set is almost unaffected because a drug needs only one approved indication.
-4. Compute plan for the main run (learner list or machine): **open**.
+4. Compute plan: **proposed (lead author, 2026-10-05), from a synthetic-data benchmark** (n = 500,
+   p = 120, random features, n_jobs = 4; per 5-fold outer repeat): ridge 13 s, PLS 5 s, kNN 5 s, SVR 4.5 s,
+   elastic net 10.5 s; extra trees 194 s, gradient boosting 371 s, random forest 438 s, XGBoost 628 s.
+   - Confirmatory learners: ridge, elastic net, PLS, kNN, SVR **plus extra trees** (one tree ensemble is kept
+     because the audit found tree models change whether indices beat size; extra trees is the cheapest).
+   - Confirmatory feature sets: null, size, composition, TI, TI+composition, RDKit 2D; TI-family sets with the
+     fast learners only (exploratory).
+   - Y-randomisation K = 100 and bootstrap B = 100 with ridge and one outer repeat per draw (cost-aware
+     secondary controls, labelled as such).
+   - Estimated wall time on this shared machine: about one day in the background. Not yet started: the
+     website and paper work resume after the agent usage limit resets (2026-10-07).
 5. Replication studies: **decided by the lead author on delegation (2026-10-04)**: Advik suggested studies "that show the best possible results"; choosing by
    reported performance would be selection on the outcome (and favours the most inflated claims), so it is
    not used. Rule, blind to reported R²: the studies that can be reproduced *exactly* from their published
