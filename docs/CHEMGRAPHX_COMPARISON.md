@@ -9,6 +9,11 @@ Every "ChemGraphX" cell below was checked in its source code or against its live
 
 Legend: ✅ has it · ❌ does not · ⏳ TopoQSPR work in progress (target).
 
+**Similarity requirement (Advik, 2026-10-05):** the website should look and work like ChemGraphX and
+the paper should follow the ChemGraphX article's structure. Website: done on `main` (three-tab shell,
+hero, input-format card, cite card, serif/light/blue; side-by-side in `docs/WEB.md`). Paper: section
+structure mapped in `docs/PAPER_FORMAT.md` and applied to `paper/main.tex`.
+
 **Status 2026-10-05:** the TopoQSPR web items marked ✅ are implemented on branch `p3-web` (91 web/input/entropy tests pass) and the entropy and input modules are on `v1.0-dev`. `p3-web` still needs the independent adversarial review (agent usage limit until 2026-10-07) before it is merged and deployed.
 
 ## Website

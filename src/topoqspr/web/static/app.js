@@ -397,6 +397,7 @@
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 10000);
+      showTime(resp.headers.get("X-Time-Taken"));
       setStatus("indices-status", resp.headers.get("X-Molecules-OK") + " of " + resp.headers.get("X-Molecules") +
         " structures accepted; " + resp.headers.get("X-Undefined-Values") + " undefined values (reasons in the zip).", "ok");
     } catch (e) {
@@ -444,6 +445,7 @@
       const resp = await postJSON("/api/indices", indicesPayload(true));
       state.indexView = await resp.json();
       renderIndexView();
+      showTime(state.indexView.time_taken_s);
       setStatus("indices-status", "Done.", "ok");
     } catch (e) {
       setStatus("indices-status", e.message, "error");
@@ -469,6 +471,30 @@
     } catch (e) { /* the catalogue is optional; the rest of the page works without it */ }
   }
 
+  // ------------------------------------------------------------------ tabs and format buttons
+  function showTab(name) {
+    for (const page of document.querySelectorAll(".page")) page.hidden = page.id !== "page-" + name;
+    for (const b of document.querySelectorAll("nav.tabs .tab")) {
+      if (b.dataset.tab === name) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function pickFormat(fmt) {
+    $("indices-format").value = fmt;
+    for (const b of document.querySelectorAll(".fmt")) b.setAttribute("aria-pressed", String(b.dataset.format === fmt));
+    const ph = { smiles: "CCO ethanol\nc1ccccc1 benzene", sdf: "paste an SDF block or load a file",
+                 mol: "paste a MOL block or load a file", pdb: "paste a PDB block or load a file",
+                 adjacency_matrix: "A = [[0,1,1],[1,0,1],[1,1,0]]", adjacency_list: '{"1": [2, 3], "2": [1, 3], "3": [1, 2]}' };
+    $("indices-text").placeholder = ph[fmt] || "";
+  }
+
+  function showTime(seconds) {
+    let t = $("indices-time");
+    if (!t) { t = el("p", { id: "indices-time", className: "time" }); $("indices-status").after(t); }
+    t.textContent = seconds === null || seconds === undefined ? "" : "Time taken: " + Number(seconds).toFixed(2) + " seconds";
+  }
+
   // ------------------------------------------------------------------ init
   function routeHash() {
     const m = /^#job=([0-9a-f-]{36})$/.exec(location.hash);
@@ -485,6 +511,9 @@
     $("indices-file").addEventListener("change", loadFile);
     $("indices-button").addEventListener("click", computeIndices);
     $("indices-view-button").addEventListener("click", viewIndices);
+    for (const b of document.querySelectorAll("nav.tabs .tab")) b.addEventListener("click", () => showTab(b.dataset.tab));
+    for (const b of document.querySelectorAll(".fmt")) b.addEventListener("click", () => pickFormat(b.dataset.format));
+    $("indices-format").addEventListener("change", () => pickFormat($("indices-format").value));
     $("indices-filter").addEventListener("input", renderIndexView);
     $("catalog-filter").addEventListener("input", renderCatalog);
     loadCatalog();

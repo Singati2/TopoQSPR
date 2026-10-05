@@ -828,6 +828,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
         limit(request, "indices", settings.rate_indices_per_min, 60.0,
               "index calculations per minute")
+        t_start = time.perf_counter()
         from ..entropy import index_entropies
         from ..inputs import parse_input
 
@@ -889,7 +890,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 columns=list(out.columns),
                 rows=[[cell(v) for v in r] for r in out.itertuples(index=False)],
                 failures=fail.to_dict(orient="records"),
-                n=len(rows), n_ok=len(ok_ids)))
+                n=len(rows), n_ok=len(ok_ids),
+                time_taken_s=round(time.perf_counter() - t_start, 3)))
         buf = io.BytesIO()
         with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
             def add(name: str, data: str) -> None:
@@ -910,7 +912,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return Response(buf.getvalue(), media_type="application/zip",
                         headers={"Content-Disposition": 'attachment; filename="topoqspr-indices.zip"',
                                  "X-Molecules": str(len(rows)), "X-Molecules-OK": str(n_ok),
-                                 "X-Undefined-Values": str(len(failures))})
+                                 "X-Undefined-Values": str(len(failures)),
+                                 "X-Time-Taken": f"{time.perf_counter() - t_start:.3f}"})
 
     @app.get("/api/depict")
     def depict(smiles: str = Query(min_length=1, max_length=2000)):

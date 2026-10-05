@@ -49,6 +49,20 @@ TOPOQSPR_WEB_DATA_DIR=./webdata uvicorn topoqspr.web.app:app --port 8000
 `render.yaml` (Render blueprint) and `Procfile` start `uvicorn topoqspr.web.app:app`. Deploying replaces the v0.x site and needs
 the Render account that hosts moleculens.onrender.com.
 
+## Design: follows ChemGraphX (Advik, 2026-10-05)
+
+At the co-authors' request the page follows the layout and visual language of ChemGraphX
+(chemgraphx.vercel.app): a blue header bar with Home / Instructions / Contact tabs, a logo-and-name
+hero with a blue tagline and one descriptive paragraph, a white rounded "Choose input format" card
+with pill buttons and a dropdown, white cards for every further section, a "How to Cite" card, a
+footer, and serif typography on a light grey page. Everything TopoQSPR adds (SMILES and SDF input,
+entropies, structure depictions, the disease-anchored study, downloads, the index catalogue, run
+records) sits inside that frame. Light is the default; dark applies only with `data-theme="dark"`.
+
+| TopoQSPR (restyled) | ChemGraphX (reference, 2026-10-05) |
+|---|---|
+| ![](screenshots/10_home_chemgraphx_style.png) | ![](screenshots/reference_chemgraphx_home.png) |
+
 ## Screenshots (2026-10-05, local, light theme)
 
 Taken by `tools/web_screenshots.mjs` (headless Chrome over the DevTools protocol), on the quarantined

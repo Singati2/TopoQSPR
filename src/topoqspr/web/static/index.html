@@ -3,32 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TopoQSPR v1.0 - exploratory web interface</title>
+<title>TopoQSPR</title>
 <link rel="stylesheet" href="/static/style.css">
 <script src="/static/app.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site">
-  <h1>TopoQSPR <span class="ver" id="version"></span></h1>
-  <p class="tagline">Disease-anchored QSPR with verified graph-theoretic topological indices:
-    how much do topological indices predict beyond molecular size?</p>
-  <p class="banner" role="note"><strong>Exploratory mode.</strong> <span id="mode-note">This site runs a fast,
-    reduced analysis. Confirmatory analyses use the command-line protocol.</span></p>
+<header class="bar">
+  <h1 class="brand">TopoQSPR</h1>
+  <nav class="tabs" aria-label="Pages">
+    <button type="button" class="tab" data-tab="home" aria-current="page">Home</button>
+    <button type="button" class="tab" data-tab="instructions">Instructions</button>
+    <button type="button" class="tab" data-tab="contact">Contact</button>
+  </nav>
 </header>
 
 <main id="main">
-  <nav aria-label="Steps" class="steps">
-    <ol>
-      <li><a href="#step-disease">1. Disease</a></li>
-      <li><a href="#step-cohort">2. Cohort</a></li>
-      <li><a href="#step-run">3. Targets and run</a></li>
-      <li><a href="#step-results">4. Results</a></li>
-      <li><a href="#step-indices">Indices only</a></li>
-      <li><a href="#catalog">Index catalogue</a></li>
-    </ol>
-  </nav>
+<div id="page-home" class="page">
+  <div class="hero">
+    <img src="/static/logo.svg" alt="" width="150" height="110">
+    <div>
+      <p class="title">TopoQSPR <span class="ver" id="version"></span></p>
+      <p class="subtitle">An Open-Source Web Tool for Disease-Anchored QSPR with Verified Topological Indices</p>
+    </div>
+  </div>
+  <p class="lead"><strong>TopoQSPR</strong> is an open-source, web-based tool that computes 102 verified
+    degree-, reverse-degree-, neighbourhood-degree-sum-, distance- and matching-based topological indices
+    and 89 bond-wise entropy measures for molecular and general graphs, and turns a disease name into a
+    reproducible QSPR study: a controlled drug set from ChEMBL, reviewed before any computation, evaluated
+    against molecular-size and composition baselines with leakage-free cross-validation. It supports six
+    input methods, four tailored for chemistry and two for general graph analysis.</p>
+  <p class="banner" role="note"><strong>Exploratory mode.</strong> <span id="mode-note">This site runs a fast,
+    reduced analysis. Confirmatory analyses use the command-line protocol.</span></p>
 
+  <section id="step-indices" class="card" aria-labelledby="h-indices">
+    <h2 id="h-indices" class="card-title">Choose input format:</h2>
+    <div class="format-buttons" role="group" aria-label="Input format">
+      <button type="button" class="fmt" data-format="mol">MOL file</button>
+      <button type="button" class="fmt" data-format="sdf">SDF file</button>
+      <button type="button" class="fmt" data-format="pdb">PDB file</button>
+      <button type="button" class="fmt" data-format="smiles" aria-pressed="true">SMILES</button>
+      <button type="button" class="fmt" data-format="adjacency_list">Adjacency list</button>
+      <button type="button" class="fmt" data-format="adjacency_matrix">Adjacency matrix</button>
+    </div>
+    <div class="row">
+      <label for="indices-format">Input format</label>
+      <select id="indices-format">
+        <option value="smiles">SMILES list (one per line, optional name)</option>
+        <option value="sdf">SDF (one or more records)</option>
+        <option value="mol">MOL file</option>
+        <option value="pdb">PDB file</option>
+        <option value="adjacency_matrix">Adjacency matrix (graph)</option>
+        <option value="adjacency_list">Adjacency list (graph)</option>
+      </select>
+      <input id="indices-entropies" type="checkbox" checked> <label for="indices-entropies">include bond-wise entropies</label>
+    </div>
+    <label for="indices-text">Structures</label>
+    <textarea id="indices-text" rows="6" spellcheck="false" placeholder="CCO ethanol&#10;c1ccccc1 benzene"></textarea>
+    <div class="row">
+      <label for="indices-file">or load a file (.smi, .csv, .txt, .sdf, .mol, .pdb)</label>
+      <input id="indices-file" type="file" accept=".smi,.csv,.txt,.sdf,.mol,.pdb,text/plain,text/csv">
+    </div>
+    <button id="indices-view-button" type="button">Show indices</button>
+    <button id="indices-button" type="button">Download all (zip)</button>
+    <div id="indices-status" role="status" aria-live="polite" class="status"></div>
+    <div class="row"><label for="indices-filter">Filter rows</label>
+      <input id="indices-filter" type="search" placeholder="e.g. Zagreb, R2_, ENT_"></div>
+    <div class="scroll"><table id="indices-table"></table></div>
+    <p class="help">Molecules are standardised exactly as in the study (parent structure, hydrogen-suppressed graph);
+      adjacency input is treated as an abstract graph. Every undefined value is reported with its reason, never as 0.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-disease">
+    <h2 class="card-title">Disease-anchored QSPR study</h2>
+    <p class="help">A full study in four steps: choose the disease, review the drug manifest, choose targets, run.</p>
   <section id="step-disease" aria-labelledby="h-disease">
     <h2 id="h-disease">1. Choose the disease (MeSH headings)</h2>
     <p>Type a disease name. Suggestions come from the MeSH headings used in ChEMBL drug
@@ -76,7 +124,6 @@
     <button id="build-cohort" type="button" disabled>Build cohort preview</button>
     <div id="cohort-status" role="status" aria-live="polite" class="status"></div>
   </section>
-
   <section id="step-cohort" aria-labelledby="h-cohort" hidden>
     <h2 id="h-cohort">2. Review the cohort manifest</h2>
     <p>No model has been run. Check which drugs are included and why others were excluded.</p>
@@ -93,7 +140,6 @@
       <div class="table-wrap"><table id="excluded-table"></table></div>
     </details>
   </section>
-
   <section id="step-run" aria-labelledby="h-run" hidden>
     <h2 id="h-run">3. Choose targets and run</h2>
     <fieldset>
@@ -116,7 +162,6 @@
     <button id="run-button" type="button" disabled>Run exploratory analysis</button>
     <div id="run-status" role="status" aria-live="polite" class="status"></div>
   </section>
-
   <section id="step-results" aria-labelledby="h-results" hidden>
     <h2 id="h-results">4. Progress and results</h2>
     <p class="help">Job link (bookmark to come back): <a id="job-link" href="#"></a></p>
@@ -142,49 +187,73 @@
         share of test predictions outside the applicability domain.</p>
     </div>
   </section>
-
-  <section id="step-indices" aria-labelledby="h-indices">
-    <h2 id="h-indices">Topological indices for your own molecules or graphs</h2>
-    <p>Paste or load structures in any supported format. Molecules are standardised exactly as in
-      the study (parent structure, hydrogen-suppressed graph); adjacency input is treated as an
-      abstract graph. Every undefined value is reported with its reason, never as 0.</p>
-    <div class="row">
-      <label for="indices-format">Input format</label>
-      <select id="indices-format">
-        <option value="smiles">SMILES list (one per line, optional name)</option>
-        <option value="sdf">SDF (one or more records)</option>
-        <option value="mol">MOL file</option>
-        <option value="pdb">PDB file</option>
-        <option value="adjacency_matrix">Adjacency matrix (graph)</option>
-        <option value="adjacency_list">Adjacency list (graph)</option>
-      </select>
-      <input id="indices-entropies" type="checkbox" checked> <label for="indices-entropies">include bond-wise entropies</label>
-    </div>
-    <label for="indices-text">Structures</label>
-    <textarea id="indices-text" rows="6" spellcheck="false" placeholder="CCO ethanol&#10;c1ccccc1 benzene"></textarea>
-    <div class="row">
-      <label for="indices-file">or load a file (.smi, .csv, .txt, .sdf, .mol, .pdb)</label>
-      <input id="indices-file" type="file" accept=".smi,.csv,.txt,.sdf,.mol,.pdb,text/plain,text/csv">
-    </div>
-    <button id="indices-view-button" type="button">Show indices</button>
-    <button id="indices-button" type="button">Download all (zip)</button>
-    <div id="indices-status" role="status" aria-live="polite" class="status"></div>
-    <div class="row"><label for="indices-filter">Filter rows</label>
-      <input id="indices-filter" type="search" placeholder="e.g. Zagreb, R2_, ENT_"></div>
-    <div class="scroll"><table id="indices-table"></table></div>
   </section>
 
-  <section id="catalog" aria-labelledby="h-catalog">
-    <h2 id="h-catalog">Index catalogue: formulas and primary references</h2>
+  <section id="catalog" class="card" aria-labelledby="h-catalog">
+    <h2 id="h-catalog" class="card-title">Index catalogue: formulas and primary references</h2>
     <p>Every index and entropy with its family, formula and the primary source it was verified
       against (details and tests: <code>docs/INDEX_VERIFICATION.md</code>).</p>
     <div class="row"><label for="catalog-filter">Search</label>
       <input id="catalog-filter" type="search" placeholder="name, family or reference"></div>
     <div class="scroll"><table id="catalog-table"></table></div>
   </section>
+
+  <section class="card cite" aria-labelledby="h-cite">
+    <h3 id="h-cite">How to Cite:</h3>
+    <p id="cite-text">TopoQSPR: a provenance-tracked workflow for disease-anchored QSPR with verified
+      graph-theoretic topological indices. Manuscript in preparation (2026). Source: github.com/Singati2/TopoQSPR.</p>
+  </section>
+</div>
+
+<div id="page-instructions" class="page" hidden>
+  <section class="card">
+    <h2 class="card-title">Detailed Instructions</h2>
+    <p>TopoQSPR is a web-based computational tool that calculates verified topological indices and bond-wise
+      entropies for chemical and general graphs, and runs disease-anchored QSPR studies with explicit baselines.</p>
+    <h3>1. Input files</h3>
+    <ul>
+      <li><b>SMILES</b>: one structure per line, optionally followed by a name; or a CSV with a <code>smiles</code> column.</li>
+      <li><b>Molecular Data File (.mol) and SDF</b>: chemical graphs; multi-record SDF files are supported.</li>
+      <li><b>Protein Data Bank (.pdb)</b>: structures from the RCSB PDB; hydrogens are suppressed.</li>
+      <li><b>Adjacency matrix</b>: a square 0/1 matrix, as JSON (<code>A = [[0,1],[1,0]]</code>) or whitespace rows.</li>
+      <li><b>Adjacency list</b>: JSON (<code>{"1": [2, 3], ...}</code>) or lines <code>1: 2 3</code>.</li>
+    </ul>
+    <h3>2. Work flow with TopoQSPR</h3>
+    <ul>
+      <li><b>Indices only</b>: choose a format, paste or load structures, then <em>Show indices</em> (on-page table
+        with structure depictions and edge partitions) or <em>Download all</em> (zip with every value, every reason
+        for an undefined value, and the index catalogue).</li>
+      <li><b>Disease-anchored study</b>: search a MeSH heading; build and review the drug manifest (every exclusion
+        with its reason) before anything is computed; choose computed or measured targets; run. Results show the
+        baseline ladder (null, size, composition, indices, RDKit 2D) with paired ΔR² and ΔMAE, confidence
+        intervals and applicability-domain coverage, plus a downloadable run record.</li>
+      <li><b>Index catalogue</b>: formula and primary reference for every index and entropy.</li>
+    </ul>
+    <h3>3. References</h3>
+    <ol>
+      <li>K. Jacob, J. Clement, M. Arockiaraj, A. Jindal, ChemGraphX: an open-source web tool for computing
+        topological indices and entropy measures, <i>J. Cheminform.</i> <b>18</b> (2026) 39.</li>
+      <li>B. Zdrazil et al., The ChEMBL Database in 2023, <i>Nucleic Acids Res.</i> <b>52</b> (2024) D1180.</li>
+      <li>RDKit: Open-source cheminformatics, https://www.rdkit.org.</li>
+      <li>Full definitions, sources and verification: <code>docs/INDEX_VERIFICATION.md</code> in the repository.</li>
+    </ol>
+  </section>
+</div>
+
+<div id="page-contact" class="page" hidden>
+  <section class="card">
+    <h2 class="card-title">Contact Information</h2>
+    <p class="help">Authors and contact addresses are added at submission.</p>
+    <div class="contacts">
+      <p><b>Ganesh Shiwakoti</b><br>github.com/Singati2/TopoQSPR</p>
+    </div>
+  </section>
+</div>
 </main>
 
 <footer class="site">
+  <details class="licences"><summary>Citations and licences</summary>
+
   <h2>Citations and licences</h2>
   <ul>
     <li>TopoQSPR, MIT licence. Source: github.com/Singati2/TopoQSPR (manuscript in preparation).</li>
@@ -198,6 +267,9 @@
   </ul>
   <p class="help">Downloaded files that contain ChEMBL data must keep the attribution and the
     CC BY-SA 3.0 licence (see LICENCE-DATA.txt in every results zip).</p>
+
+  </details>
+  <p class="copy">&copy; 2026 TopoQSPR v1.0.</p>
 </footer>
 </body>
 </html>

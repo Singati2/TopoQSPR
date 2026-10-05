@@ -481,3 +481,19 @@ def test_depiction_and_edge_partition(data_dir):
         v = c.post("/api/indices", json={"text": "CCO ethanol", "view": True}).json()
         row = dict(zip(v["columns"], v["rows"][0]))
         assert row["edge_partition"] == "(1,2)x2"
+
+
+def test_chemgraphx_like_shell_and_time_taken(data_dir):
+    """Layout follows ChemGraphX: Home/Instructions/Contact tabs, input-format buttons, a cite card,
+    and a time-taken value with every indices result."""
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    assert all(f'data-tab="{t}"' in html for t in ("home", "instructions", "contact"))
+    assert html.count('class="fmt"') == 6 and "How to Cite" in html
+    assert "<title>TopoQSPR</title>" in html
+    app = create_app(_settings(data_dir / "shell"))
+    with TestClient(app) as c:
+        assert c.get("/static/logo.svg").status_code == 200
+        v = c.post("/api/indices", json={"text": "CCO", "view": True}).json()
+        assert isinstance(v["time_taken_s"], float) and v["time_taken_s"] > 0
+        z = c.post("/api/indices", json={"text": "CCO"})
+        assert float(z.headers["x-time-taken"]) > 0
