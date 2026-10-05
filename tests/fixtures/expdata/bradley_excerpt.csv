@@ -1,0 +1,32 @@
+key,name,smiles,mpC,csid,link,source,donotuse,donotusebecause
+1,"2-(2,4-dinitrobenzyl)pyridine",c1ccnc(c1)Cc2ccc(cc2[N+](=O)[O-])[N+](=O)[O-],92.0,64018,http://www.alfa.com/en/GP100W.pgm?DSSTK=B24192,Alfa Aesar,,
+2,2-(1-piperidinyl)aniline,c1ccc(c(c1)N)N2CCCCC2,46.0,403764,http://www.alfa.com/en/GP100W.pgm?DSSTK=A13073,Alfa Aesar,,
+3,2-(1-piperazinyl)pyrimidine,c1cnc(nc1)N2CCNCC2,33.0,80080,http://www.alfa.com/en/GP100W.pgm?DSSTK=L15884,Alfa Aesar,,
+4,2-(1-piperazinyl)phenol,c1ccc(c(c1)N2CCNCC2)O,125.0,63701,http://www.alfa.com/en/GP100W.pgm?DSSTK=B20252,Alfa Aesar,,
+5,2-(1-cyclohexenyl)ethylamine,C1CCC(=CC1)CCN,-55.0,69388,http://www.alfa.com/en/GP100W.pgm?DSSTK=L08261,Alfa Aesar,,
+6,2-(1-boc-4-piperidinyloxy)-n-methylacetamide,CC(C)(C)OC(=O)N1CCC(CC1)OCC(=O)NC,95.0,25027436,http://www.alfa.com/en/GP100W.pgm?DSSTK=H32990,Alfa Aesar,,
+7,2-(1-boc-4-piperidinyloxy)-n-cyclopropylacetamide,CC(C)(C)OC(=O)N1CCC(CC1)OCC(=O)NC2CC2,86.0,25027435,http://www.alfa.com/en/GP100W.pgm?DSSTK=H32069,Alfa Aesar,,
+8,"2-(1-boc-4-piperidinyloxy)-n,n-dimethylacetamide",CC(C)(C)OC(=O)N1CCC(CC1)OCC(=O)N(C)C,58.0,25027429,http://www.alfa.com/en/GP100W.pgm?DSSTK=H32708,Alfa Aesar,,
+9,1-trimethylsilyl-1-propyne,CC#C[Si](C)(C)C,-69.0,72592,http://www.alfa.com/en/GP100W.pgm?DSSTK=B24875,Alfa Aesar,,
+10,1-tetralone,c1ccc2c(c1)CCCC2=O,7.0,10273,http://www.alfa.com/en/GP100W.pgm?DSSTK=A13303,Alfa Aesar,,
+78,1-pentene,CCCC=C,-138.0,7713,http://www.alfa.com/en/GP100W.pgm?DSSTK=A16723,Alfa Aesar,x,clearly out of range JCB
+1298,"2,3-dihydroxybenzoic acid",c1cc(c(c(c1)O)O)C(=O)O,206.0,18,http://www.alfa.com/en/GP100W.pgm?DSSTK=A10144,Alfa Aesar,,
+1607,"2,5-dichlorophenol",c1cc(c(cc1Cl)O)Cl,57.0,65,http://www.alfa.com/en/GP100W.pgm?DSSTK=B24787,Alfa Aesar,,
+2766,2-iodoacetamide,C(C(=O)N)I,-94.0,3596,http://www.alfa.com/en/GP100W.pgm?DSSTK=A14715,Alfa Aesar,x,sign inversion JCB
+2788,2-ketoglutaric acid,C(CC(=O)O)C(=O)C(=O)O,115.0,50,http://www.alfa.com/en/GP100W.pgm?DSSTK=A10256,Alfa Aesar,,
+3872,3-cyanopyridine,c1cc(cnc1)C#N,50.0,78,http://www.alfa.com/en/GP100W.pgm?DSSTK=A14850,Alfa Aesar,,
+4171,3-pentanol,CCC(CC)O,-8.0,10947,http://www.alfa.com/en/GP100W.pgm?DSSTK=L06065,Alfa Aesar,x,out of range and 1- and 2-pentanol much closer to lower values JCB
+4956,4-chlorobenzeneseleninic acid,c1cc(ccc1Cl)[Se](=O)O,185.0,4256138,http://www.alfa.com/en/GP100W.pgm?DSSTK=B21186,Alfa Aesar,x,metal - AL
+13098,17-hydroxyandrostan-3-one,O=C1CCC2(C)C(CCC3C4CCC(O)C4(C)CCC32)C1,121.0,14,http://dx.doi.org/10.1021/ci0500132,Karthikeyan M.; Glen R.C.; Bender A. General melting point prediction based on a diverse compound dataset and artificial neural networks. J. Chem. Inf. Model.; 2005; 45(3); 581-4680,,
+13169,dl-1-amino-2-propanol,CC(O)CN,-2.0,3,http://www.amazon.com/dp/B003XEQTLE,Aldrich Chemical Company; Aldrich Catalog-Handbook of Fine Chemicals; Milwaukee; WI; 1984.,,
+14090,"2,5-dichlorophenol",Clc1ccc(Cl)c(O)c1,57.0,65,http://www.amazon.com/dp/B003XEQTLE,Aldrich Chemical Company; Aldrich Catalog-Handbook of Fine Chemicals; Milwaukee; WI; 1984.,,
+14999,1-Aminopropan-2-ol,CC(O)CN,-2.0,3,http://msds.chem.ox.ac.uk/,academic website,,
+16000,Nicotinonitrile,N#Cc1cccnc1,50.0,78,http://msds.chem.ox.ac.uk/,academic website,,
+16902,Dihydrotestosterone,O=C3CC4CCC2C(CCC1(C)C2CCC1O)C4(C)CC3,181.0,14,http://www.drugbank.ca/drugs/DB02901,DrugBank,,
+16945,"2,3-Dihydroxy-Benzoic Acid",Oc1c(cccc1O)C(=O)O,204.0,18,http://www.drugbank.ca/drugs/DB01672,DrugBank,,
+22517,3-cyanopyridine,N#Cc1cccnc1,51.0,78,http://www.srcinc.com/what-we-do/product.aspx?id=133,PHYSPROP,,
+22519,"2,5-dichlorophenol",Clc1ccc(Cl)c(O)c1,59.0,65,http://www.srcinc.com/what-we-do/product.aspx?id=133,PHYSPROP,,
+22521,"pentanedioic acid, 2-oxo-",OC(=O)C(=O)CCC(=O)O,115.5,50,http://www.srcinc.com/what-we-do/product.aspx?id=133,PHYSPROP,,
+22525,"2,3-dihydroxybenzoic acid",Oc1c(cccc1O)C(=O)O,204.0,18,http://www.srcinc.com/what-we-do/product.aspx?id=133,PHYSPROP,,
+22526,"androstan-3-one, 17-hydroxy-, (5alpha,17beta)-",O=C3CC4CCC2C(CCC1(C)C2CCC1O)C4(C)CC3,181.0,14,http://www.srcinc.com/what-we-do/product.aspx?id=133,PHYSPROP,,
+27536,2-oxopentanedioic acid,O=C(O)C(=O)CCC(=O)O,115.5,50,http://chemspider.com/50,EPISuite-ChemSpider,,

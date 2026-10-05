@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use TopoQSPR, please cite it as below (the software paper is in preparation)."
+title: "TopoQSPR: disease-anchored QSPR with verified graph-theoretic topological indices"
+type: software
+authors:
+  - name: "The TopoQSPR authors"
+license: MIT
+repository-code: "https://github.com/Singati2/TopoQSPR"
+version: "1.0.0.dev0"
+keywords:
+  - topological indices
+  - QSPR
+  - chemical graph theory
+  - ChEMBL
+  - reproducibility

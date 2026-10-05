@@ -1,0 +1,36 @@
+# Exact runtime dependencies of the topoqspr v1.0 package (src/topoqspr).
+#
+# Generated 2026-10-03 from the project venv (Python 3.10.12, Linux x86_64): the
+# distributions that src/topoqspr imports (rdkit, chembl_structure_pipeline, numpy,
+# pandas, scipy, scikit-learn, xgboost, requests, joblib, openpyxl) plus their runtime
+# requirements, with the installed versions. openpyxl (+ et_xmlfile) is needed by
+# expdata to read the Bradley melting-point workbook (target mp_bradley). Install with
+#     pip install -r requirements-lock.txt && pip install --no-deps .
+# Notes:
+# * xgboost is pinned as xgboost-cpu (same `xgboost` module, no CUDA wheels); install
+#   the package with --no-deps so pip does not add the GPU `xgboost` distribution.
+# * setuptools (required by chembl_structure_pipeline) is a build tool and is not
+#   pinned; the venv's 59.6.0 predates Python 3.12.
+# * The legacy v0.x app (main.py, website.py) uses requirements.txt instead.
+certifi==2026.7.22
+charset-normalizer==3.5.2
+chembl_structure_pipeline==1.2.4
+cloudpickle==3.1.2
+et_xmlfile==2.0.0
+idna==3.20
+joblib==1.6.0
+numpy==2.2.6
+openpyxl==3.1.5
+pandas==2.3.3
+pillow==12.3.0
+python-dateutil==2.9.0.post0
+pytz==2026.4
+rdkit==2026.3.6
+requests==2.34.2
+scikit-learn==1.7.2
+scipy==1.15.3
+six==1.17.0
+threadpoolctl==3.7.0
+tzdata==2026.4
+urllib3==2.8.0
+xgboost-cpu==3.2.0

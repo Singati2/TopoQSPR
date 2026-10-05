@@ -1,0 +1,981 @@
+{
+  "schema_version": 1,
+  "study_key": "ali2026_stiff_person",
+  "shortlist_row": 5,
+  "status": "proposed",
+  "citation": {
+    "authors": [
+      "Ali, Jabbar",
+      "Ali, Yasir",
+      "Malik, Maher Ali",
+      "Shang, Yilun"
+    ],
+    "title": "Graph‐Theoretical Approach for Predicting Physicochemical Properties of Stiff‐Person Syndrome Drugs",
+    "journal": "ChemistryOpen",
+    "year": 2026,
+    "volume": "15",
+    "article_number": "e70239",
+    "doi": "10.1002/open.70239",
+    "pmcid": "PMC13243891",
+    "pmid": "42252848",
+    "first_publication_date": "2026-06-01"
+  },
+  "licence": {
+    "spdx": "CC-BY-4.0",
+    "statement_verbatim": "© 2026 The Author(s). ChemistryOpen published by Wiley‐VCH GmbHThis is an open access article under the terms of the http://creativecommons.org/licenses/by/4.0/ License, which permits use, distribution and reproduction in any medium, provided the original work is properly cited.",
+    "data_redistribution": "stored",
+    "note": ""
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13243891/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "17d95a76fb45c3cf0ffc2b4a6b88b9c9bc93d3969e86dea7b34762732554da04",
+    "other_sources": [],
+    "properties_sha256": "c319a771c1b55f9e8a06be0a7fc0e90add09fd1b6f2732da2dab6c6908bfb4f1"
+  },
+  "n_reported": 10,
+  "n_reported_source": "Tables 3-4 list 10 drugs",
+  "drug_list_source": "Table 4 (property table); Table 3 adds compound IDs and formulas",
+  "property_table": {
+    "xml_table_id": "open70239-tbl-0004",
+    "skip_rows": 1,
+    "label_column": 1,
+    "columns": [
+      {
+        "property": "MW",
+        "column": 2
+      },
+      {
+        "property": "MP",
+        "column": 3
+      },
+      {
+        "property": "Density",
+        "column": 4
+      },
+      {
+        "property": "MV",
+        "column": 5
+      },
+      {
+        "property": "logP",
+        "column": 6
+      }
+    ],
+    "label": "TABLE 4",
+    "caption_verbatim": "Physicochemical properties of drugs.",
+    "header_rows_verbatim": [
+      [
+        "Sr. No.",
+        "Drugs",
+        "M.W",
+        "M.P",
+        "Density",
+        "M.V",
+        "logP"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "MW",
+      "name_verbatim": "M.W",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'Structural and physicochemical data for these drugs were obtained from PubChem [31], and ChemSpider [35]'",
+      "source_label": "mixed",
+      "source_evidence": "compared with PubChem MolecularWeight (automated_checks): only 3/10 printed values are the PubChem average MW, 3 are the monoisotopic mass and diazepam 278.07 is neither, so the column mixes sources",
+      "pubchem_field": "MolecularWeight"
+    },
+    {
+      "code": "MP",
+      "name_verbatim": "M.P",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'obtained from PubChem [31], and ChemSpider [35]'",
+      "source_label": "measured_or_predicted_unclear",
+      "source_evidence": "source per value not itemised"
+    },
+    {
+      "code": "Density",
+      "name_verbatim": "Density",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'obtained from PubChem [31], and ChemSpider [35]'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key. Gabapentin 2.60 is implausible."
+    },
+    {
+      "code": "MV",
+      "name_verbatim": "M.V",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'obtained from PubChem [31], and ChemSpider [35]'",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "logP",
+      "name_verbatim": "logP",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'obtained from PubChem [31], and ChemSpider [35]'",
+      "source_label": "measured_or_predicted_unclear",
+      "source_evidence": "compared with PubChem XLogP3 (automated_checks); source per value not itemised",
+      "pubchem_field": "XLogP"
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "M1",
+      "name_verbatim": "First Zagreb [23]",
+      "formula_verbatim": "$M_{1}=∑_{uv∈E(G)}(d_{u}+d_{v})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "M2",
+      "name_verbatim": "Second Zagreb [23]",
+      "formula_verbatim": "$M_{2}=∑_{uv∈E(G)}d_{u}d_{v}$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "mM2",
+      "name_verbatim": "Modified Second Zagreb [23]",
+      "formula_verbatim": "[IMG OPEN-15-e70239-e033.jpg] (formula printed only as an image)",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "AZI",
+      "name_verbatim": "Augmented Zagreb [27]",
+      "formula_verbatim": "$AZI=∑_{uv∈E(G)} ((d_{u}d_{v})/(d_{u}+d_{v}))^{3}$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ReZG1",
+      "name_verbatim": "Redefined First Zagreb [24]",
+      "formula_verbatim": "$ReZG_{1}=∑_{uv∈E(G)}(d_{u}+d_{v})/(d_{u}d_{v})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ReZG2",
+      "name_verbatim": "Redefined Second Zagreb [25]",
+      "formula_verbatim": "$ReZG_{2}=∑_{uv∈E(G)}(d_{u}d_{v})/(d_{u}+d_{v})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "ReZG3",
+      "name_verbatim": "Redefined Third Zagreb [25]",
+      "formula_verbatim": "$ReZG_{3}=∑_{uv∈E(G)}(d_{u}d_{v})(d_{u}+d_{v})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "HZ",
+      "name_verbatim": "Hyper Zagreb [33]",
+      "formula_verbatim": "$HZ=∑_{uv∈E(G)}(d_{u}+d_{v})^{2}$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "F",
+      "name_verbatim": "Forgotten Index [25]",
+      "formula_verbatim": "$F=∑_{uv∈E(G)}(d_{u}^{2}+d_{v}^{2})$",
+      "family": "degree",
+      "source": "Table 1"
+    },
+    {
+      "symbol_verbatim": "SDD",
+      "name_verbatim": "Symmetric Division Degree [34]",
+      "formula_verbatim": "$SDD=∑_{uv∈E(G)}((d_{u})/(d_{v})+(d_{v})/(d_{u}))$",
+      "family": "degree",
+      "source": "Table 1"
+    }
+  ],
+  "index_values_table": "Table 3 (the mM2 column header is an image)",
+  "index_computation": "M-polynomials computed in MATLAB; indices derived from them",
+  "models": [
+    {
+      "id": "T5-01-M1-linear",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": "$MW=2.2268 M_{1}(G)+57.0287$",
+      "statistics": {
+        "R2": "0.9795",
+        "RMSE": "12.51",
+        "SE": "13.19",
+        "F": "189.54",
+        "R": "0.9595",
+        "p": "0.0001"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-02-M2-linear",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": "$MW=1.70970 M_{2}(G)+76.6606$",
+      "statistics": {
+        "R2": "0.9439",
+        "RMSE": "14.73",
+        "SE": "15.52",
+        "F": "134.61",
+        "R": "0.9715",
+        "p": "0.002"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-03-mM2-linear",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "mM2"
+      ],
+      "equation_verbatim": "[IMG OPEN-15-e70239-e025.jpg]",
+      "statistics": {
+        "R2": "0.9515",
+        "RMSE": "13.69",
+        "SE": "14.43",
+        "F": "157.09",
+        "R": "0.9754",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 5",
+      "note": "the equation is printed only as an image"
+    },
+    {
+      "id": "T5-04-ReZG2-linear",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "ReZG2"
+      ],
+      "equation_verbatim": "$MW=8.98 ReZG_{2}(G)+65.28$",
+      "statistics": {
+        "R2": "0.9531",
+        "RMSE": "13.46",
+        "SE": "14.19",
+        "F": "162.79",
+        "R": "0.9763",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-05-SDD-linear",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "SDD"
+      ],
+      "equation_verbatim": "$MW=0.85485 SDD(G)+76.6606$",
+      "statistics": {
+        "R2": "0.9439",
+        "RMSE": "14.73",
+        "SE": "15.52",
+        "F": "134.61",
+        "R": "0.9715",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-06-M1-quadratic",
+      "property": "MW",
+      "form": "quadratic",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": "$MW=0.01350 M_{1}^{2}(G)+0.2184 M_{1}(G)+121.492$",
+      "statistics": {
+        "R2": "0.9754",
+        "RMSE": "9.75",
+        "SE": "10.28",
+        "F": "138.82",
+        "R": "0.9876",
+        "p": "0.0009"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-07-M2-quadratic",
+      "property": "MW",
+      "form": "quadratic",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": "$MW=0.009799 M_{2}^{2}(G)+0.05812 M_{2}(G)+133.771$",
+      "statistics": {
+        "R2": "0.9663",
+        "RMSE": "11.40",
+        "SE": "12.02",
+        "F": "100.62",
+        "R": "0.9830",
+        "p": "0.0005"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-08-mM2-quadratic",
+      "property": "MW",
+      "form": "quadratic",
+      "predictors": [
+        "mM2"
+      ],
+      "equation_verbatim": "[IMG OPEN-15-e70239-e021.jpg]",
+      "statistics": {
+        "R2": "0.9526",
+        "RMSE": "13.54",
+        "SE": "14.27",
+        "F": "70.36",
+        "R": "0.9760",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 5",
+      "note": "the equation is printed only as an image"
+    },
+    {
+      "id": "T5-09-ReZG2-quadratic",
+      "property": "MW",
+      "form": "quadratic",
+      "predictors": [
+        "ReZG2"
+      ],
+      "equation_verbatim": "$MW=0.2615 ReZG_{2}^{2}−0.11532 ReZG_{2}+132.21$",
+      "statistics": {
+        "R2": "0.9726",
+        "RMSE": "10.29",
+        "SE": "10.85",
+        "F": "124.24",
+        "R": "0.9862",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T5-10-SDD-quadratic",
+      "property": "MW",
+      "form": "quadratic",
+      "predictors": [
+        "SDD"
+      ],
+      "equation_verbatim": "$MW=0.002449 SDD^{2}(G)+0.02906 SDD(G)+133.771$",
+      "statistics": {
+        "R2": "0.9663",
+        "RMSE": "11.40",
+        "SE": "12.02",
+        "F": "100.62",
+        "R": "0.9830",
+        "p": "0.00007"
+      },
+      "fit": "in_sample",
+      "source": "Table 5"
+    },
+    {
+      "id": "T6-01-M1-exponential",
+      "property": "MW",
+      "form": "exponential",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": "$MW=99.9528 e^{0.010239M_{1}(G)}$",
+      "statistics": {
+        "R2": "0.9751",
+        "RMSE": "9.81",
+        "SE": "10.34",
+        "F": "137.76",
+        "R": "0.9875",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "T6-02-M2-exponential",
+      "property": "MW",
+      "form": "exponential",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": "$MW=108.1037 e^{0.0079873M_{2}(G)}$",
+      "statistics": {
+        "R2": "0.9646",
+        "RMSE": "11.70",
+        "SE": "12.33",
+        "F": "96.41",
+        "R": "0.9821",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "T6-03-mM2-exponential",
+      "property": "MW",
+      "form": "exponential",
+      "predictors": [
+        "mM2"
+      ],
+      "equation_verbatim": "$MW=68.1802 e^{0.33246 m M_{2}(G)}$",
+      "statistics": {
+        "R2": "0.9392",
+        "RMSE": "15.33",
+        "SE": "16.16",
+        "F": "53.04",
+        "R": "0.9691",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "T6-04-ReZG1-exponential",
+      "property": "MW",
+      "form": "exponential",
+      "predictors": [
+        "ReZG1"
+      ],
+      "equation_verbatim": "$MW=80.2462 e^{0.06508 ReZG_{1}(G)}$",
+      "statistics": {
+        "R2": "0.9694",
+        "RMSE": "10.87",
+        "SE": "11.46",
+        "F": "109.36",
+        "R": "0.9846",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "T6-05-F-exponential",
+      "property": "MW",
+      "form": "exponential",
+      "predictors": [
+        "F"
+      ],
+      "equation_verbatim": "$MW=103.2316 e^{0.0038535F(G)}$",
+      "statistics": {
+        "R2": "0.9665",
+        "RMSE": "11.39",
+        "SE": "12.06",
+        "F": "101.42",
+        "R": "0.9831",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "T6-06-M1-power",
+      "property": "MW",
+      "form": "power",
+      "predictors": [
+        "M1"
+      ],
+      "equation_verbatim": "$MW=9.4552 M_{1}(G)^{0.73595}$",
+      "statistics": {
+        "R2": "0.9471",
+        "RMSE": "14.31",
+        "SE": "15.07",
+        "F": "65.54",
+        "R": "0.9732",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "T6-07-M2-power",
+      "property": "MW",
+      "form": "power",
+      "predictors": [
+        "M2"
+      ],
+      "equation_verbatim": "$MW=13.7474 M_{2}(G)^{0.63078}$",
+      "statistics": {
+        "R2": "0.9194",
+        "RMSE": "17.65",
+        "SE": "18.60",
+        "F": "42.42",
+        "R": "0.9589",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "T6-08-mM2-power",
+      "property": "MW",
+      "form": "power",
+      "predictors": [
+        "mM2"
+      ],
+      "equation_verbatim": "[IMG OPEN-15-e70239-e054.jpg]",
+      "statistics": {
+        "R2": "0.9502",
+        "RMSE": "13.87",
+        "SE": "14.62",
+        "F": "66.17",
+        "R": "0.9748",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6",
+      "note": "predictor inferred from the row order (M1, M2, mM2, ReZG1, F); the equation is an image; the equation is printed only as an image"
+    },
+    {
+      "id": "T6-09-ReZG1-power",
+      "property": "MW",
+      "form": "power",
+      "predictors": [
+        "ReZG1"
+      ],
+      "equation_verbatim": "$MW=14.0392 ReZG_{1}(G)^{1.0166}$",
+      "statistics": {
+        "R2": "0.9734",
+        "RMSE": "10.14",
+        "SE": "10.69",
+        "F": "128.84",
+        "R": "0.9866",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    },
+    {
+      "id": "T6-10-F-power",
+      "property": "MW",
+      "form": "power",
+      "predictors": [
+        "F"
+      ],
+      "equation_verbatim": "$MW=5.7262 F(G)^{0.70086}$",
+      "statistics": {
+        "R2": "0.9289",
+        "RMSE": "16.58",
+        "SE": "17.46",
+        "F": "48.70",
+        "R": "0.9638",
+        "p": "0.001"
+      },
+      "fit": "in_sample",
+      "source": "Table 6"
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "leave-one-out cross-validation",
+      "detail": "Table 7 gives R2 and Q2 for MW 0.9754/0.7794, Log P 0.5601/0.3001, Density 0.5312/0.4989, MP 0.5995/0.3068, MV 0.5883/0.1002; which model each row refers to is not stated (the MW R2 equals the quadratic M1 model of Table 5)",
+      "source": "Table 7"
+    },
+    {
+      "what": "acceptance criterion",
+      "detail": "Q2 >= 0.5 stated as the criterion",
+      "source": "text"
+    },
+    {
+      "what": "gradient boosting",
+      "detail": "a gradient-boosting model is described (abstract, introduction); its settings and results are not tabulated in a machine-readable form",
+      "source": "text"
+    }
+  ],
+  "reported_tables": [
+    {
+      "xml_table_id": "open70239-tbl-0005",
+      "label": "TABLE 5",
+      "caption": "Linear and quadratic regression models statistics.",
+      "rows": [
+        [
+          "Regression Equation",
+          "R 2",
+          "RMSE",
+          "SE",
+          "F‐Stat",
+          "R",
+          "p‐Value"
+        ],
+        [
+          "$MW=2.2268 M_{1}(G)+57.0287$",
+          "0.9795",
+          "12.51",
+          "13.19",
+          "189.54",
+          "0.9595",
+          "0.0001"
+        ],
+        [
+          "$MW=1.70970 M_{2}(G)+76.6606$",
+          "0.9439",
+          "14.73",
+          "15.52",
+          "134.61",
+          "0.9715",
+          "0.002"
+        ],
+        [
+          "[IMG OPEN-15-e70239-e025.jpg]",
+          "0.9515",
+          "13.69",
+          "14.43",
+          "157.09",
+          "0.9754",
+          "0.001"
+        ],
+        [
+          "$MW=8.98 ReZG_{2}(G)+65.28$",
+          "0.9531",
+          "13.46",
+          "14.19",
+          "162.79",
+          "0.9763",
+          "0.001"
+        ],
+        [
+          "$MW=0.85485 SDD(G)+76.6606$",
+          "0.9439",
+          "14.73",
+          "15.52",
+          "134.61",
+          "0.9715",
+          "0.001"
+        ],
+        [
+          "$MW=0.01350 M_{1}^{2}(G)+0.2184 M_{1}(G)+121.492$",
+          "0.9754",
+          "9.75",
+          "10.28",
+          "138.82",
+          "0.9876",
+          "0.0009"
+        ],
+        [
+          "$MW=0.009799 M_{2}^{2}(G)+0.05812 M_{2}(G)+133.771$",
+          "0.9663",
+          "11.40",
+          "12.02",
+          "100.62",
+          "0.9830",
+          "0.0005"
+        ],
+        [
+          "[IMG OPEN-15-e70239-e021.jpg]",
+          "0.9526",
+          "13.54",
+          "14.27",
+          "70.36",
+          "0.9760",
+          "0.001"
+        ],
+        [
+          "$MW=0.2615 ReZG_{2}^{2}−0.11532 ReZG_{2}+132.21$",
+          "0.9726",
+          "10.29",
+          "10.85",
+          "124.24",
+          "0.9862",
+          "0.001"
+        ],
+        [
+          "$MW=0.002449 SDD^{2}(G)+0.02906 SDD(G)+133.771$",
+          "0.9663",
+          "11.40",
+          "12.02",
+          "100.62",
+          "0.9830",
+          "0.00007"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "open70239-tbl-0006",
+      "label": "TABLE 6",
+      "caption": "Calculations between physicochemical properties and topological indices using exponential and power regression models.",
+      "rows": [
+        [
+          "Regression Equation",
+          "R 2",
+          "RMSE",
+          "SE",
+          "F‐Stat",
+          "R",
+          "p‐Value"
+        ],
+        [
+          "$MW=99.9528 e^{0.010239M_{1}(G)}$",
+          "0.9751",
+          "9.81",
+          "10.34",
+          "137.76",
+          "0.9875",
+          "0.001"
+        ],
+        [
+          "$MW=108.1037 e^{0.0079873M_{2}(G)}$",
+          "0.9646",
+          "11.70",
+          "12.33",
+          "96.41",
+          "0.9821",
+          "0.001"
+        ],
+        [
+          "$MW=68.1802 e^{0.33246 m M_{2}(G)}$",
+          "0.9392",
+          "15.33",
+          "16.16",
+          "53.04",
+          "0.9691",
+          "0.001"
+        ],
+        [
+          "$MW=80.2462 e^{0.06508 ReZG_{1}(G)}$",
+          "0.9694",
+          "10.87",
+          "11.46",
+          "109.36",
+          "0.9846",
+          "0.001"
+        ],
+        [
+          "$MW=103.2316 e^{0.0038535F(G)}$",
+          "0.9665",
+          "11.39",
+          "12.06",
+          "101.42",
+          "0.9831",
+          "0.001"
+        ],
+        [
+          "$MW=9.4552 M_{1}(G)^{0.73595}$",
+          "0.9471",
+          "14.31",
+          "15.07",
+          "65.54",
+          "0.9732",
+          "0.001"
+        ],
+        [
+          "$MW=13.7474 M_{2}(G)^{0.63078}$",
+          "0.9194",
+          "17.65",
+          "18.60",
+          "42.42",
+          "0.9589",
+          "0.001"
+        ],
+        [
+          "[IMG OPEN-15-e70239-e054.jpg]",
+          "0.9502",
+          "13.87",
+          "14.62",
+          "66.17",
+          "0.9748",
+          "0.001"
+        ],
+        [
+          "$MW=14.0392 ReZG_{1}(G)^{1.0166}$",
+          "0.9734",
+          "10.14",
+          "10.69",
+          "128.84",
+          "0.9866",
+          "0.001"
+        ],
+        [
+          "$MW=5.7262 F(G)^{0.70086}$",
+          "0.9289",
+          "16.58",
+          "17.46",
+          "48.70",
+          "0.9638",
+          "0.001"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "open70239-tbl-0007",
+      "label": "TABLE 7",
+      "caption": "Statistical validation.",
+      "rows": [
+        [
+          "Endpoint",
+          "R 2 (Goodness of Fit)",
+          "Q 2 (Robustness)"
+        ],
+        [
+          "MW",
+          "0.9754",
+          "0.7794"
+        ],
+        [
+          "Log P",
+          "0.5601",
+          "0.3001"
+        ],
+        [
+          "Density",
+          "0.5312",
+          "0.4989"
+        ],
+        [
+          "MP",
+          "0.5995",
+          "0.3068"
+        ],
+        [
+          "MV",
+          "0.5883",
+          "0.1002"
+        ]
+      ]
+    }
+  ],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "ok",
+      "detail": "10 drugs."
+    },
+    {
+      "check": "M.W column",
+      "result": "issue",
+      "detail": "Only clonazepam, lorazepam and gabapentin match the PubChem average MW. Metronidazole, carbamazepine and ketamine equal the monoisotopic mass, and pregabalin (159.12) and tizanidine (253.01) are within 0.01 of it. Valproate 143.10 is near the anion monoisotopic mass. Diazepam 278.07 matches neither (MW 284.74, monoisotopic 284.07)."
+    },
+    {
+      "check": "SDD column",
+      "result": "issue",
+      "detail": "The printed SDD value equals 2 x M2 for all ten drugs, so it is not the symmetric division degree index. Consequently Table 5 gives identical statistics for M2 and SDD."
+    },
+    {
+      "check": "R vs R2",
+      "result": "issue",
+      "detail": "Table 5 row 1: R2 = 0.9795 but R = 0.9595 (the square of that R is 0.921)."
+    },
+    {
+      "check": "AZI formula",
+      "result": "issue",
+      "detail": "The AZI formula in Table 1 omits the -2 in the denominator."
+    },
+    {
+      "check": "logP",
+      "result": "info",
+      "detail": "logP matches PubChem XLogP3 for 4/10 drugs (diazepam 2.82 vs XLogP3 3.0 does not); the source is mixed."
+    },
+    {
+      "check": "density",
+      "result": "issue",
+      "detail": "Gabapentin density 2.60 g/cm3 is implausible (the others range from 0.95 to 1.48)."
+    },
+    {
+      "check": "MP source",
+      "result": "info",
+      "detail": "PubChem experimental MP (checked 2026-10-03): clonazepam 239.5 vs '238-240'; diazepam 135 vs '125-126'/'132 °C'. Origin unclear."
+    },
+    {
+      "check": "equations",
+      "result": "info",
+      "detail": "Only MW has printed equations; Table 7 gives R2/Q2 for the other properties without identifying the model."
+    }
+  ],
+  "resolution_issues": [
+    "Valproate: rule parent_form (see drugs.csv note). The printed compound ID 389 is ornithine in PubChem; the other nine printed IDs equal the PubChem CIDs (pregabalin printed '5 486 971').",
+    "All ten printed formulas equal the PubChem formulas once valproate is read as valproic acid."
+  ],
+  "reproducibility": {
+    "verdict": "approximate",
+    "reasons": [
+      "names with PubChem compound IDs and formulas, property values and index values are printed",
+      "only MW has printed equations (Tables 5-6); for the other four properties only R2/Q2 of an unidentified model are given (Table 7)",
+      "exponential and power fits were done with MATLAB curve fitting (nonlinear least squares assumed; not stated)",
+      "the printed SDD column equals 2 x M2 for every drug (a computation error), and the modified second Zagreb formula and two equations are images"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 10,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 10
+    },
+    "duplicate_structures": [],
+    "shared_connectivity_groups": [],
+    "formula_checked": 10,
+    "formula_mismatch": [],
+    "cid_checked": 10,
+    "cid_mismatch": [
+      "09"
+    ],
+    "properties": {
+      "MW": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "MolecularWeight",
+        "pubchem_compared": 10,
+        "pubchem_match": 3,
+        "pubchem_mismatch": [
+          "01",
+          "04",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10"
+        ],
+        "mismatch_equal_to_exact_mass": [
+          "07",
+          "08",
+          "10"
+        ]
+      },
+      "MP": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": []
+      },
+      "Density": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": []
+      },
+      "MV": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": []
+      },
+      "logP": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "XLogP",
+        "pubchem_compared": 10,
+        "pubchem_match": 4,
+        "pubchem_mismatch": [
+          "01",
+          "03",
+          "04",
+          "06",
+          "09",
+          "10"
+        ]
+      }
+    },
+    "identical_property_rows": []
+  }
+}

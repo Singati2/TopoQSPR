@@ -1,0 +1,1572 @@
+{
+  "schema_version": 1,
+  "study_key": "pavithra2026_skin_cancer",
+  "shortlist_row": 6,
+  "status": "reserve",
+  "citation": {
+    "authors": [
+      "Pavithra, R.",
+      "Ravi Sankar, J."
+    ],
+    "title": "Chromatic hyper Zagreb topological descriptors and QSPR analysis of certain skin cancer drugs",
+    "journal": "Frontiers in Chemistry",
+    "year": 2026,
+    "volume": "14",
+    "article_number": "1848388",
+    "doi": "10.3389/fchem.2026.1848388",
+    "pmcid": "PMC13260617",
+    "pmid": "42292661",
+    "first_publication_date": "2026-05-29"
+  },
+  "licence": {
+    "spdx": "CC-BY-4.0",
+    "statement_verbatim": "Copyright © 2026 Pavithra and Ravi Sankar.2026Pavithra and Ravi Sankarhttps://creativecommons.org/licenses/by/4.0/This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY). The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms.",
+    "data_redistribution": "stored",
+    "note": ""
+  },
+  "source": {
+    "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13260617/fullTextXML",
+    "retrieved": "2026-10-03",
+    "xml_sha256": "d12d7843aa5edcef4841140927ea41d7b57eab5f218805a730b5332178030209",
+    "other_sources": [],
+    "properties_sha256": "c9da47719a7689ca501caceed451530e5429a684654d41117d638385dcab1a96"
+  },
+  "n_reported": 10,
+  "n_reported_source": "Text: 'Ten skin cancer drugs were selected'; N = 10 in Tables 5-8",
+  "drug_list_source": "Table 1 (property table)",
+  "property_table": {
+    "xml_table_id": "T1",
+    "skip_rows": 1,
+    "label_column": 0,
+    "columns": [
+      {
+        "property": "MW",
+        "column": 1
+      },
+      {
+        "property": "MR",
+        "column": 2
+      },
+      {
+        "property": "P",
+        "column": 3
+      },
+      {
+        "property": "C",
+        "column": 4
+      },
+      {
+        "property": "PSA",
+        "column": 5
+      },
+      {
+        "property": "MV",
+        "column": 6
+      },
+      {
+        "property": "ST",
+        "column": 7
+      },
+      {
+        "property": "logP",
+        "column": 8
+      }
+    ],
+    "label": "TABLE 1",
+    "caption_verbatim": "Skin cancer drugs with their physicochemical properties.",
+    "header_rows_verbatim": [
+      [
+        "Drug",
+        "Molecular weight (MW)",
+        "Molar refractivity (MR)",
+        "Polarizability (P)",
+        "Complexity (C)",
+        "Polar surface area (PSA)",
+        "Molar volume (MV)",
+        "Surface tension (ST)",
+        "log P"
+      ]
+    ]
+  },
+  "properties": [
+    {
+      "code": "MW",
+      "name_verbatim": "Molecular weight (MW)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "'the PubChem ... and ChemSpider databases ... were used to gather information on their physicochemical properties'",
+      "source_label": "mixed",
+      "source_evidence": "compared with PubChem MolecularWeight (automated_checks): 7/10 equal PubChem; diclofenac is the sodium salt and nicotinamide (122.2) and methotrexate (454.5) are not PubChem's rounding, so the column is mostly but not only PubChem",
+      "pubchem_field": "MolecularWeight"
+    },
+    {
+      "code": "MR",
+      "name_verbatim": "Molar refractivity (MR)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "PubChem and ChemSpider",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "P",
+      "name_verbatim": "Polarizability (P)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "PubChem and ChemSpider",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "C",
+      "name_verbatim": "Complexity (C)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "PubChem and ChemSpider",
+      "source_label": "computed_pubchem",
+      "source_evidence": "compared with PubChem Complexity",
+      "pubchem_field": "Complexity"
+    },
+    {
+      "code": "PSA",
+      "name_verbatim": "Polar surface area (PSA)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "PubChem and ChemSpider",
+      "source_label": "computed_pubchem",
+      "source_evidence": "compared with PubChem TPSA",
+      "pubchem_field": "TPSA"
+    },
+    {
+      "code": "MV",
+      "name_verbatim": "Molar volume (MV)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "PubChem and ChemSpider",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "ST",
+      "name_verbatim": "Surface tension (ST)",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "PubChem and ChemSpider",
+      "source_label": "predicted_acd_chemspider",
+      "source_evidence": "Values follow the ACD/Labs PhysChem (Percepta) set that ChemSpider displays (boiling point at 760 mmHg, flash point, enthalpy of vaporization, molar refractivity, polarizability, molar volume, surface tension, density, index of refraction). Not checked against ChemSpider directly: its API needs a key."
+    },
+    {
+      "code": "logP",
+      "name_verbatim": "log P",
+      "unit_verbatim": null,
+      "source_stated_verbatim": "PubChem and ChemSpider",
+      "source_label": "measured_or_predicted_unclear",
+      "source_evidence": "compared with PubChem XLogP3 (automated_checks)",
+      "pubchem_field": "XLogP"
+    }
+  ],
+  "indices": [
+    {
+      "symbol_verbatim": "M1Φm(G)",
+      "name_verbatim": "Chromatic modified first Zagreb index",
+      "formula_verbatim": "$M1Φm(G)=∑_{v∈V(G)}[(1)/(c(v)^{2})]=∑_{j=1}^{l}[(1)/(θ(c_{j})j^{2})]$",
+      "family": "chromatic (proper vertex colouring)",
+      "source": "Equations (1)-(4)"
+    },
+    {
+      "symbol_verbatim": "M2Φm(G)",
+      "name_verbatim": "Chromatic modified second Zagreb index",
+      "formula_verbatim": "$M2Φm(G)=∑_{uv∈E(G)}[(1)/(c(u)c(v))]=∑_{1≤t,s≤χ(G)}^{t<s}[(1)/(tsη_{ts})]$",
+      "family": "chromatic (proper vertex colouring)",
+      "source": "Equations (1)-(4)"
+    },
+    {
+      "symbol_verbatim": "HM1Φ(G)",
+      "name_verbatim": "Chromatic first hyper Zagreb index",
+      "formula_verbatim": "$HM_{1}^{Φ}(G)=∑_{uv∈E(G)}[c(u)+c(v)]^{2}=∑_{1≤t,s≤χ(G)}^{t<s}η_{ts}[t+s]^{2}$",
+      "family": "chromatic (proper vertex colouring)",
+      "source": "Equations (1)-(4)"
+    },
+    {
+      "symbol_verbatim": "HM2Φ(G)",
+      "name_verbatim": "Chromatic second hyper Zagreb index",
+      "formula_verbatim": "$HM_{2}^{Φ}(G)=∑_{uv∈E(G)}[c(u)c(v)]^{2}=∑_{1≤t,s≤χ(G)}^{t<s}η_{ts}[ts]^{2}$",
+      "family": "chromatic (proper vertex colouring)",
+      "source": "Equations (1)-(4)"
+    }
+  ],
+  "index_values_table": "Table 2 (second column header is printed as 'M1Φm(G)' again; it is M2Φm(G) per Table 3)",
+  "index_computation": "proper vertex colourings drawn in Figure 2 (image); colour classes and colour-pair edge counts are not tabulated",
+  "models": [
+    {
+      "id": "T5-MW",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "M1Φm(G)"
+      ],
+      "equation_verbatim": "$497.35−1145.54[M1Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "497.35",
+        "B": "−1145.54",
+        "R2": "0.543",
+        "F": "9.512",
+        "p": "0.015",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T5-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "M1Φm(G)"
+      ],
+      "equation_verbatim": "$135.87−307.19[M1Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "135.87",
+        "B": "−307.19",
+        "R2": "0.5646",
+        "F": "10.37",
+        "p": "0.012",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T5-P",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "M1Φm(G)"
+      ],
+      "equation_verbatim": "$53.83−121.53[M1Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "53.83",
+        "B": "−121.53",
+        "R2": "0.563",
+        "F": "10.31",
+        "p": "0.012",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T5-C",
+      "property": "C",
+      "form": "linear",
+      "predictors": [
+        "M1Φm(G)"
+      ],
+      "equation_verbatim": "$718.40−1644.75[M1Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "718.40",
+        "B": "−1644.75",
+        "R2": "0.257",
+        "F": "2.77",
+        "p": "0.134",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T5-PSA",
+      "property": "PSA",
+      "form": "linear",
+      "predictors": [
+        "M1Φm(G)"
+      ],
+      "equation_verbatim": "$99.99−156.20[M1Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "99.99",
+        "B": "−156.20",
+        "R2": "0.051",
+        "F": "0.437",
+        "p": "0.526",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T5-MV",
+      "property": "MV",
+      "form": "linear",
+      "predictors": [
+        "M1Φm(G)"
+      ],
+      "equation_verbatim": "$397.03−965.37[M1Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "397.03",
+        "B": "−965.37",
+        "R2": "0.661",
+        "F": "15.60",
+        "p": "0.004",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T5-ST",
+      "property": "ST",
+      "form": "linear",
+      "predictors": [
+        "M1Φm(G)"
+      ],
+      "equation_verbatim": "$59.37−13.38[M1Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "59.37",
+        "B": "−13.38",
+        "R2": "0.0028",
+        "F": "0.022",
+        "p": "0.883",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T5-logP",
+      "property": "logP",
+      "form": "linear",
+      "predictors": [
+        "M1Φm(G)"
+      ],
+      "equation_verbatim": "$4.794−13.39[M1Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "4.794",
+        "B": "−13.39",
+        "R2": "0.136",
+        "F": "1.260",
+        "p": "0.294",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 5 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T6-MW",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "M2Φm(G)"
+      ],
+      "equation_verbatim": "$351.21−114.90[M2Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "351.21",
+        "B": "−114.90",
+        "R2": "0.033",
+        "F": "0.279",
+        "p": "0.611",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T6-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "M2Φm(G)"
+      ],
+      "equation_verbatim": "$96.29−27.11[M2Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "96.29",
+        "B": "−27.11",
+        "R2": "0.0271",
+        "F": "0.223",
+        "p": "0.6493",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T6-P",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "M2Φm(G)"
+      ],
+      "equation_verbatim": "$38.164−10.63[M2Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "38.164",
+        "B": "−10.63",
+        "R2": "0.026",
+        "F": "0.218",
+        "p": "0.652",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T6-C",
+      "property": "C",
+      "form": "linear",
+      "predictors": [
+        "M2Φm(G)"
+      ],
+      "equation_verbatim": "$489.11+17.70[M2Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "489.11",
+        "B": "17.70",
+        "R2": "0.0001",
+        "F": "0.0014",
+        "p": "0.97",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T6-PSA",
+      "property": "PSA",
+      "form": "linear",
+      "predictors": [
+        "M2Φm(G)"
+      ],
+      "equation_verbatim": "$79.98−14.86[M2Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "79.98",
+        "B": "−14.86",
+        "R2": "0.0028",
+        "F": "0.0232",
+        "p": "0.882",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T6-MV",
+      "property": "MV",
+      "form": "linear",
+      "predictors": [
+        "M2Φm(G)"
+      ],
+      "equation_verbatim": "$278.37−138.99[M2Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "278.37",
+        "B": "−138.99",
+        "R2": "0.084",
+        "F": "0.738",
+        "p": "0.415",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T6-ST",
+      "property": "ST",
+      "form": "linear",
+      "predictors": [
+        "M2Φm(G)"
+      ],
+      "equation_verbatim": "$56.24+11.94[M2Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "56.24",
+        "B": "11.94",
+        "R2": "0.014",
+        "F": "0.114",
+        "p": "0.7443",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T6-logP",
+      "property": "logP",
+      "form": "linear",
+      "predictors": [
+        "M2Φm(G)"
+      ],
+      "equation_verbatim": "$3.109−1.57[M2Φm(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "3.109",
+        "B": "−1.57",
+        "R2": "0.0115",
+        "F": "0.093",
+        "p": "0.767",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 6 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T7-MW",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "HM1Φ(G)"
+      ],
+      "equation_verbatim": "$44.79+1.229[HM_{1}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "44.79",
+        "B": "1.229",
+        "R2": "0.916",
+        "F": "87.54",
+        "p": "0.00001",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T7-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "HM1Φ(G)"
+      ],
+      "equation_verbatim": "$16.47+0.3214[HM_{1}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "16.47",
+        "B": "0.3214",
+        "R2": "0.9057",
+        "F": "76.86",
+        "p": "0.00002",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T7-P",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "HM1Φ(G)"
+      ],
+      "equation_verbatim": "$6.54+0.127[HM_{1}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "6.54",
+        "B": "0.127",
+        "R2": "0.906",
+        "F": "77.203",
+        "p": "0.00002",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T7-C",
+      "property": "C",
+      "form": "linear",
+      "predictors": [
+        "HM1Φ(G)"
+      ],
+      "equation_verbatim": "$−92.73+2.439[HM_{1}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "−92.73",
+        "B": "2.439",
+        "R2": "0.829",
+        "F": "39.04",
+        "p": "0.0002",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T7-PSA",
+      "property": "PSA",
+      "form": "linear",
+      "predictors": [
+        "HM1Φ(G)"
+      ],
+      "equation_verbatim": "$17.55+0.254[HM_{1}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "17.55",
+        "B": "0.254",
+        "R2": "0.201",
+        "F": "2.016",
+        "p": "0.193",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T7-MV",
+      "property": "MV",
+      "form": "linear",
+      "predictors": [
+        "HM1Φ(G)"
+      ],
+      "equation_verbatim": "$62.24+0.841[HM_{1}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "62.24",
+        "B": "0.841",
+        "R2": "0.735",
+        "F": "22.22",
+        "p": "0.0015",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T7-ST",
+      "property": "ST",
+      "form": "linear",
+      "predictors": [
+        "HM1Φ(G)"
+      ],
+      "equation_verbatim": "$36.23+0.0889[HM_{1}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "36.23",
+        "B": "0.0889",
+        "R2": "0.185",
+        "F": "1.817",
+        "p": "0.214",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T7-logP",
+      "property": "logP",
+      "form": "linear",
+      "predictors": [
+        "HM1Φ(G)"
+      ],
+      "equation_verbatim": "$2.405+0.002[HM_{1}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "2.405",
+        "B": "0.002",
+        "R2": "0.0055",
+        "F": "0.044",
+        "p": "0.837",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 7 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T8-MW",
+      "property": "MW",
+      "form": "linear",
+      "predictors": [
+        "HM2Φ(G)"
+      ],
+      "equation_verbatim": "$87.77+2.244[HM_{2}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "87.77",
+        "B": "2.2244",
+        "R2": "0.738",
+        "F": "22.55",
+        "p": "0.001",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T8-MR",
+      "property": "MR",
+      "form": "linear",
+      "predictors": [
+        "HM2Φ(G)"
+      ],
+      "equation_verbatim": "$27.53+0.588[HM_{2}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "27.53",
+        "B": "0.588",
+        "R2": "0.733",
+        "F": "22.03",
+        "p": "0.001",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T8-P",
+      "property": "P",
+      "form": "linear",
+      "predictors": [
+        "HM2Φ(G)"
+      ],
+      "equation_verbatim": "$10.918+0.233[HM_{2}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "10.918",
+        "B": "0.233",
+        "R2": "0.734",
+        "F": "22.14",
+        "p": "0.001",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T8-C",
+      "property": "C",
+      "form": "linear",
+      "predictors": [
+        "HM2Φ(G)"
+      ],
+      "equation_verbatim": "$−47.84+4.815[HM_{2}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "−47.84",
+        "B": "4.815",
+        "R2": "0.781",
+        "F": "28.59",
+        "p": "0.0006",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T8-PSA",
+      "property": "PSA",
+      "form": "linear",
+      "predictors": [
+        "HM2Φ(G)"
+      ],
+      "equation_verbatim": "$25.177+0.475[HM_{2}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "25.177",
+        "B": "0.475",
+        "R2": "0.170",
+        "F": "1.640",
+        "p": "0.236",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T8-MV",
+      "property": "MV",
+      "form": "linear",
+      "predictors": [
+        "HM2Φ(G)"
+      ],
+      "equation_verbatim": "$100.54+1.456[HM_{2}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "100.54",
+        "B": "1.456",
+        "R2": "0.532",
+        "F": "9.12",
+        "p": "0.016",
+        "Indicator": "Significant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T8-ST",
+      "property": "ST",
+      "form": "linear",
+      "predictors": [
+        "HM2Φ(G)"
+      ],
+      "equation_verbatim": "$35.91+0.193[HM_{2}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "35.91",
+        "B": "0.193",
+        "R2": "0.210",
+        "F": "2.135",
+        "p": "0.182",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (statistics); Table 3 (equation)"
+    },
+    {
+      "id": "T8-logP",
+      "property": "logP",
+      "form": "linear",
+      "predictors": [
+        "HM2Φ(G)"
+      ],
+      "equation_verbatim": "$2.744+0.0017[HM_{2}^{Φ}(G)]$",
+      "statistics": {
+        "N": "10",
+        "A": "2.744",
+        "B": "0.0017",
+        "R2": "0.0008",
+        "F": "0.006",
+        "p": "0.936",
+        "Indicator": "Insignificant"
+      },
+      "fit": "in_sample",
+      "source": "Table 8 (statistics); Table 3 (equation)"
+    }
+  ],
+  "validation_reported": [
+    {
+      "what": "none",
+      "detail": "in-sample linear regression only (SPSS and Excel); standard error of estimate in Table 9; observed vs predicted in Tables 10-17",
+      "source": "Tables 5-17"
+    }
+  ],
+  "reported_tables": [
+    {
+      "xml_table_id": "T3",
+      "label": "TABLE 3",
+      "caption": "Regression models of physicochemical properties with chromatic topological indices.",
+      "rows": [
+        [
+          "Properties",
+          "$M1Φm(G)$",
+          "$M2Φm(G)$",
+          "$HM_{1}^{Φ}(G)$",
+          "$HM_{2}^{Φ}(G)$"
+        ],
+        [
+          "MW",
+          "$497.35−1145.54[M1Φm(G)]$",
+          "$351.21−114.90[M2Φm(G)]$",
+          "$44.79+1.229[HM_{1}^{Φ}(G)]$",
+          "$87.77+2.244[HM_{2}^{Φ}(G)]$"
+        ],
+        [
+          "MR",
+          "$135.87−307.19[M1Φm(G)]$",
+          "$96.29−27.11[M2Φm(G)]$",
+          "$16.47+0.3214[HM_{1}^{Φ}(G)]$",
+          "$27.53+0.588[HM_{2}^{Φ}(G)]$"
+        ],
+        [
+          "P",
+          "$53.83−121.53[M1Φm(G)]$",
+          "$38.164−10.63[M2Φm(G)]$",
+          "$6.54+0.127[HM_{1}^{Φ}(G)]$",
+          "$10.918+0.233[HM_{2}^{Φ}(G)]$"
+        ],
+        [
+          "C",
+          "$718.40−1644.75[M1Φm(G)]$",
+          "$489.11+17.70[M2Φm(G)]$",
+          "$−92.73+2.439[HM_{1}^{Φ}(G)]$",
+          "$−47.84+4.815[HM_{2}^{Φ}(G)]$"
+        ],
+        [
+          "PSA",
+          "$99.99−156.20[M1Φm(G)]$",
+          "$79.98−14.86[M2Φm(G)]$",
+          "$17.55+0.254[HM_{1}^{Φ}(G)]$",
+          "$25.177+0.475[HM_{2}^{Φ}(G)]$"
+        ],
+        [
+          "MV",
+          "$397.03−965.37[M1Φm(G)]$",
+          "$278.37−138.99[M2Φm(G)]$",
+          "$62.24+0.841[HM_{1}^{Φ}(G)]$",
+          "$100.54+1.456[HM_{2}^{Φ}(G)]$"
+        ],
+        [
+          "ST",
+          "$59.37−13.38[M1Φm(G)]$",
+          "$56.24+11.94[M2Φm(G)]$",
+          "$36.23+0.0889[HM_{1}^{Φ}(G)]$",
+          "$35.91+0.193[HM_{2}^{Φ}(G)]$"
+        ],
+        [
+          "$log⁡P$",
+          "$4.794−13.39[M1Φm(G)]$",
+          "$3.109−1.57[M2Φm(G)]$",
+          "$2.405+0.002[HM_{1}^{Φ}(G)]$",
+          "$2.744+0.0017[HM_{2}^{Φ}(G)]$"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T4",
+      "label": "TABLE 4",
+      "caption": "Correlation coefficient of physicochemical properties.",
+      "rows": [
+        [
+          "Index",
+          "Molecular weight (MW)",
+          "Molar refractivity (MR)",
+          "Polarizability (P)",
+          "Complexity (C)",
+          "Polar surface area (PSA)",
+          "Molar volume (MV)",
+          "Surface tension (ST)",
+          "log P"
+        ],
+        [
+          "$M1Φm(G)$",
+          "0.737",
+          "0.751",
+          "0.750",
+          "0.507",
+          "0.227",
+          "0.813",
+          "0.053",
+          "0.368"
+        ],
+        [
+          "$M2Φm(G)$",
+          "0.183",
+          "0.164",
+          "0.163",
+          "0.013",
+          "0.053",
+          "0.290",
+          "0.118",
+          "0.107"
+        ],
+        [
+          "$HM_{1}^{Φ}(G)$",
+          "0.957",
+          "0.951",
+          "0.951",
+          "0.911",
+          "0.448",
+          "0.857",
+          "0.430",
+          "0.074"
+        ],
+        [
+          "$HM_{2}^{Φ}(G)$",
+          "0.859",
+          "0.856",
+          "0.857",
+          "0.883",
+          "0.412",
+          "0.729",
+          "0.459",
+          "0.028"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T5",
+      "label": "TABLE 5",
+      "caption": "Statistical parameters of the linear QSPR model using $M1Φm(G)$.",
+      "rows": [
+        [
+          "Properties",
+          "N",
+          "A",
+          "B",
+          "$R^{2}$",
+          "F",
+          "p",
+          "Indicator"
+        ],
+        [
+          "MW",
+          "10",
+          "497.35",
+          "−1145.54",
+          "0.543",
+          "9.512",
+          "0.015",
+          "Significant"
+        ],
+        [
+          "MR",
+          "10",
+          "135.87",
+          "−307.19",
+          "0.5646",
+          "10.37",
+          "0.012",
+          "Significant"
+        ],
+        [
+          "P",
+          "10",
+          "53.83",
+          "−121.53",
+          "0.563",
+          "10.31",
+          "0.012",
+          "Significant"
+        ],
+        [
+          "C",
+          "10",
+          "718.40",
+          "−1644.75",
+          "0.257",
+          "2.77",
+          "0.134",
+          "Insignificant"
+        ],
+        [
+          "PS",
+          "10",
+          "99.99",
+          "−156.20",
+          "0.051",
+          "0.437",
+          "0.526",
+          "Insignificant"
+        ],
+        [
+          "MV",
+          "10",
+          "397.03",
+          "−965.37",
+          "0.661",
+          "15.60",
+          "0.004",
+          "Significant"
+        ],
+        [
+          "ST",
+          "10",
+          "59.37",
+          "−13.38",
+          "0.0028",
+          "0.022",
+          "0.883",
+          "Insignificant"
+        ],
+        [
+          "log P",
+          "10",
+          "4.794",
+          "−13.39",
+          "0.136",
+          "1.260",
+          "0.294",
+          "Insignificant"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T6",
+      "label": "TABLE 6",
+      "caption": "Statistical parameters of the linear QSPR model using $M2Φm(G)$.",
+      "rows": [
+        [
+          "Properties",
+          "N",
+          "A",
+          "B",
+          "$R^{2}$",
+          "F",
+          "p",
+          "Indicator"
+        ],
+        [
+          "MW",
+          "10",
+          "351.21",
+          "−114.90",
+          "0.033",
+          "0.279",
+          "0.611",
+          "Insignificant"
+        ],
+        [
+          "MR",
+          "10",
+          "96.29",
+          "−27.11",
+          "0.0271",
+          "0.223",
+          "0.6493",
+          "Insignificant"
+        ],
+        [
+          "P",
+          "10",
+          "38.164",
+          "−10.63",
+          "0.026",
+          "0.218",
+          "0.652",
+          "Insignificant"
+        ],
+        [
+          "C",
+          "10",
+          "489.11",
+          "17.70",
+          "0.0001",
+          "0.0014",
+          "0.97",
+          "Insignificant"
+        ],
+        [
+          "PS",
+          "10",
+          "79.98",
+          "−14.86",
+          "0.0028",
+          "0.0232",
+          "0.882",
+          "Insignificant"
+        ],
+        [
+          "MV",
+          "10",
+          "278.37",
+          "−138.99",
+          "0.084",
+          "0.738",
+          "0.415",
+          "Insignificant"
+        ],
+        [
+          "ST",
+          "10",
+          "56.24",
+          "11.94",
+          "0.014",
+          "0.114",
+          "0.7443",
+          "Insignificant"
+        ],
+        [
+          "log P",
+          "10",
+          "3.109",
+          "−1.57",
+          "0.0115",
+          "0.093",
+          "0.767",
+          "Insignificant"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T7",
+      "label": "TABLE 7",
+      "caption": "Statistical parameters of the linear QSPR model using $HM_{1}^{Φ}(G)$.",
+      "rows": [
+        [
+          "Properties",
+          "N",
+          "A",
+          "B",
+          "$R^{2}$",
+          "F",
+          "p",
+          "Indicator"
+        ],
+        [
+          "MW",
+          "10",
+          "44.79",
+          "1.229",
+          "0.916",
+          "87.54",
+          "0.00001",
+          "Significant"
+        ],
+        [
+          "MR",
+          "10",
+          "16.47",
+          "0.3214",
+          "0.9057",
+          "76.86",
+          "0.00002",
+          "Significant"
+        ],
+        [
+          "P",
+          "10",
+          "6.54",
+          "0.127",
+          "0.906",
+          "77.203",
+          "0.00002",
+          "Significant"
+        ],
+        [
+          "C",
+          "10",
+          "−92.73",
+          "2.439",
+          "0.829",
+          "39.04",
+          "0.0002",
+          "Significant"
+        ],
+        [
+          "PS",
+          "10",
+          "17.55",
+          "0.254",
+          "0.201",
+          "2.016",
+          "0.193",
+          "Insignificant"
+        ],
+        [
+          "MV",
+          "10",
+          "62.24",
+          "0.841",
+          "0.735",
+          "22.22",
+          "0.0015",
+          "Significant"
+        ],
+        [
+          "ST",
+          "10",
+          "36.23",
+          "0.0889",
+          "0.185",
+          "1.817",
+          "0.214",
+          "Insignificant"
+        ],
+        [
+          "log P",
+          "10",
+          "2.405",
+          "0.002",
+          "0.0055",
+          "0.044",
+          "0.837",
+          "Insignificant"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T8",
+      "label": "TABLE 8",
+      "caption": "Statistical parameters of the linear QSPR model using $HM_{2}^{Φ}(G)$.",
+      "rows": [
+        [
+          "Properties",
+          "N",
+          "A",
+          "B",
+          "$R^{2}$",
+          "F",
+          "p",
+          "Indicator"
+        ],
+        [
+          "MW",
+          "10",
+          "87.77",
+          "2.2244",
+          "0.738",
+          "22.55",
+          "0.001",
+          "Significant"
+        ],
+        [
+          "MR",
+          "10",
+          "27.53",
+          "0.588",
+          "0.733",
+          "22.03",
+          "0.001",
+          "Significant"
+        ],
+        [
+          "P",
+          "10",
+          "10.918",
+          "0.233",
+          "0.734",
+          "22.14",
+          "0.001",
+          "Significant"
+        ],
+        [
+          "C",
+          "10",
+          "−47.84",
+          "4.815",
+          "0.781",
+          "28.59",
+          "0.0006",
+          "Significant"
+        ],
+        [
+          "PS",
+          "10",
+          "25.177",
+          "0.475",
+          "0.170",
+          "1.640",
+          "0.236",
+          "Insignificant"
+        ],
+        [
+          "MV",
+          "10",
+          "100.54",
+          "1.456",
+          "0.532",
+          "9.12",
+          "0.016",
+          "Significant"
+        ],
+        [
+          "ST",
+          "10",
+          "35.91",
+          "0.193",
+          "0.210",
+          "2.135",
+          "0.182",
+          "Insignificant"
+        ],
+        [
+          "log P",
+          "10",
+          "2.744",
+          "0.0017",
+          "0.0008",
+          "0.006",
+          "0.936",
+          "Insignificant"
+        ]
+      ]
+    },
+    {
+      "xml_table_id": "T9",
+      "label": "TABLE 9",
+      "caption": "Standard estimate error for physicochemical properties of the drugs.",
+      "rows": [
+        [
+          "Drug",
+          "Molecular Weight (MW)",
+          "Molar Refractivity (MR)",
+          "Polarizability (P)",
+          "Complexity (C)",
+          "Polar surface Area (PSA)",
+          "Molar Volume (MV)",
+          "Surface Tension (ST)",
+          "log P"
+        ],
+        [
+          "$M1Φm(G)$",
+          "80.87",
+          "20.76",
+          "8.242",
+          "214.97",
+          "51.41",
+          "53.21",
+          "19.23",
+          "2.59"
+        ],
+        [
+          "$M2Φm(G)$",
+          "117.62",
+          "31.04",
+          "12.30",
+          "249.47",
+          "52.72",
+          "87.45",
+          "19.12",
+          "2.779"
+        ],
+        [
+          "$HM_{1}^{Φ}(G)$",
+          "34.62",
+          "9.66",
+          "3.82",
+          "102.88",
+          "47.18",
+          "47.02",
+          "17.39",
+          "2.787"
+        ],
+        [
+          "$HM_{2}^{Φ}(G)$",
+          "61.23",
+          "16.24",
+          "6.423",
+          "116.65",
+          "48.09",
+          "62.48",
+          "17.11",
+          "2.794"
+        ]
+      ]
+    }
+  ],
+  "consistency": [
+    {
+      "check": "n",
+      "result": "ok",
+      "detail": "10 drugs, N = 10."
+    },
+    {
+      "check": "PubChem MW/complexity",
+      "result": "issue",
+      "detail": "Diclofenac MW 318.1 and complexity 310 are those of diclofenac sodium (free acid: 296.1, 304); nicotinamide MW is printed 122.2 (PubChem 122.12) and methotrexate 454.5 (PubChem 454.4). The other 7 MW values match."
+    },
+    {
+      "check": "PSA",
+      "result": "ok",
+      "detail": "PSA matches PubChem TPSA for 9/10 drugs (printed as integers); nicotinamide is printed 57 (PubChem TPSA 56.0)."
+    },
+    {
+      "check": "logP",
+      "result": "issue",
+      "detail": "logP matches PubChem XLogP3 for none of the 10 drugs; source unknown."
+    },
+    {
+      "check": "Table 2 header",
+      "result": "issue",
+      "detail": "The second index column is headed 'M1Φm(G)' again; by Table 3 it is M2Φm(G)."
+    },
+    {
+      "check": "chromatic hyper Zagreb values",
+      "result": "info",
+      "detail": "For 8 of 10 drugs HM1/HM2 = 9/4, i.e. every edge joins colours 1 and 2 (a proper 2-colouring), so HM1 and HM2 are 9 and 4 times the number of edges: size counts."
+    },
+    {
+      "check": "identical index rows",
+      "result": "info",
+      "detail": "Tirbanibulin and methotrexate have identical values for all four indices."
+    },
+    {
+      "check": "Table 8 vs Table 3",
+      "result": "issue",
+      "detail": "MW slope 2.2244 (Table 8) vs 2.244 (Table 3)."
+    }
+  ],
+  "resolution_issues": [
+    "Alitretinoin resolves to CID 449171 ('9-Cis-Retinoic Acid')."
+  ],
+  "reproducibility": {
+    "verdict": "approximate",
+    "reasons": [
+      "names and property values are printed; index values are printed",
+      "the indices depend on a chosen proper colouring that is shown only in a figure; a different valid colouring gives different values, so recomputed indices may not match",
+      "with the printed index values the single-index OLS fits are fully specified",
+      "caveat: Table 8 prints B = 2.2244 for MW where Table 3 has 2.244"
+    ]
+  },
+  "automated_checks": {
+    "n_drugs_listed": 10,
+    "n_matches_reported": true,
+    "resolution_status_counts": {
+      "resolved": 10
+    },
+    "duplicate_structures": [],
+    "shared_connectivity_groups": [],
+    "formula_checked": 0,
+    "formula_mismatch": [],
+    "cid_checked": 0,
+    "cid_mismatch": [],
+    "properties": {
+      "MW": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "MolecularWeight",
+        "pubchem_compared": 10,
+        "pubchem_match": 7,
+        "pubchem_mismatch": [
+          "03",
+          "05",
+          "06"
+        ],
+        "mismatch_equal_to_exact_mass": []
+      },
+      "MR": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": []
+      },
+      "P": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": []
+      },
+      "C": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "Complexity",
+        "pubchem_compared": 10,
+        "pubchem_match": 9,
+        "pubchem_mismatch": [
+          "06"
+        ]
+      },
+      "PSA": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "TPSA",
+        "pubchem_compared": 10,
+        "pubchem_match": 9,
+        "pubchem_mismatch": [
+          "05"
+        ]
+      },
+      "MV": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": []
+      },
+      "ST": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": []
+      },
+      "logP": {
+        "n_values": 10,
+        "n_missing": 0,
+        "missing": [],
+        "pubchem_field": "XLogP",
+        "pubchem_compared": 10,
+        "pubchem_match": 0,
+        "pubchem_mismatch": [
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10"
+        ]
+      }
+    },
+    "identical_property_rows": []
+  }
+}
