@@ -173,20 +173,29 @@ def forest(conf: pd.DataFrame, out: Path) -> None:
         hollow = _flag(r.get("underpowered")) or not _flag(r.get("in_family", True))
         if math.isfinite(lo) and math.isfinite(hi):
             ax.plot([lo, hi], [i + 0.12, i + 0.12], color=SERIES, lw=2, solid_capstyle="round", zorder=2)
-        if math.isfinite(blo) and math.isfinite(bhi):
+        # the bootstrap bar is drawn only when it is an interval of ΔR², not an artefact of
+        # extrapolation (|bound| > 1 means resamples exploded; Table controls says how many)
+        if math.isfinite(blo) and math.isfinite(bhi) and abs(blo) <= 1 and abs(bhi) <= 1:
             ax.plot([blo, bhi], [i - 0.12, i - 0.12], color=INK_2, lw=1.2, solid_capstyle="round", zorder=2)
+        elif math.isfinite(blo) or math.isfinite(bhi):
+            ax.text(thr + 0.01, i - 0.22, "bootstrap: exploded", fontsize=5.5, color=INK_2, va="center")
         if math.isfinite(m):
             ax.scatter([m], [i + 0.12], s=30, zorder=4, color="white" if hollow else SERIES,
                        edgecolors=SERIES, linewidths=1.5)
     ax.set_yticks(range(len(rows)), [f"{TARGET.get(r['target'], r['target']).replace('$', '')}: {r['comparison']}"
                                       for _, r in rows[::-1]])
+    finite = [float(r[k]) for _, r in rows for k in ("d_r2_ci_low", "d_r2_ci_high") if pd.notna(r[k])]
+    if finite:
+        lo_x, hi_x = min(finite + [0.0, thr]), max(finite + [0.0, thr])
+        pad = 0.08 * (hi_x - lo_x or 1.0)
+        ax.set_xlim(lo_x - pad, hi_x + 2.2 * pad)
     ax.axvline(0, color=INK_2, lw=0.8)
     ax.axvline(thr, color=INK_2, lw=0.8, ls=(0, (3, 3)))
     ax.text(thr, len(rows) - 0.45, f" {thr:+.2f} practical threshold", fontsize=6.5, color=INK_2, va="bottom")
     ax.set_xlabel("ΔR² of topological indices over the size baseline")
     ax.grid(axis="x", color=GRID, lw=0.5)
-    fig.text(0, -0.08, "Blue: corrected repeated k-fold t 95 % CI (upper bar). Grey: whole-procedure\n"
-             "paired bootstrap 95 % CI (lower bar). Hollow: underpowered or outside the family.",
+    fig.text(0, -0.08, "Blue: corrected repeated k-fold t 95 % CI (upper bar). Grey: whole-procedure paired\n"
+             "bootstrap 95 % CI (lower bar), omitted where resamples exploded. Hollow: underpowered or outside the family.",
              fontsize=6.5, color=INK_2, va="top")
     for ext in ("pdf", "png"):
         fig.savefig(out / f"fig_confirmatory.{ext}")
@@ -381,6 +390,65 @@ def scaffold_table(res: Path, learner: str, out: Path) -> dict:
     return macros
 
 
+FAMILY = {"TI_degree": "degree", "TI_reverse_degree": "reverse degree", "TI_neighbourhood_degree_sum": "neighbourhood degree sum",
+          "TI_distance": "distance", "TI_matching": "matching (Hosoya $Z$)", "TI_entropy": "degree entropy"}
+
+
+def families_table(res: Path, learner: str, out: Path) -> dict:
+    """Exploratory TI-family ladder (frozen studies/exploratory_families.json): pooled and in-domain
+    R² per family, and the paired gain over size on identical folds."""
+    summary = _read(res / "summary.csv")
+    ad = _read(res / "ad_summary.csv") if (res / "ad_summary.csv").exists() else None
+    rec = json.loads((res / "run_record.json").read_text())
+    sizes = (rec.get("counts") or {}).get("feature_set_sizes") or {}
+    targets = list(dict.fromkeys(summary["target"]))
+    sets = [x for x in ["size", "composition"] + list(FAMILY) if x in set(summary["set"])]
+    head = " & ".join(["Feature set", "$p$"] + [f"\\multicolumn{{2}}{{c}}{{{TARGET.get(t, _tex(t))}}}" for t in targets]) + " \\\\"
+    sub = " & ".join(["", ""] + ["$R^2$ & $\\Delta R^2$ [95\\% CI]"] * len(targets)) + " \\\\"
+    lines, macros = [], {}
+    best_gain = {}
+    for x in sets:
+        cells = [FAMILY.get(x, LABEL.get(x, _tex(x))), str(sizes.get(x, "--"))]
+        for t in targets:
+            r = summary[(summary["target"] == t) & (summary["learner"] == learner) & (summary["set"] == x)]
+            if r.empty:
+                cells += ["--", "--"]
+                continue
+            cells.append(_r2cell(r.iloc[0]["r2_pooled_mean"]))
+            if x == "size" or pd.isna(r.iloc[0]["d_r2_mean"]):
+                cells.append("--")
+            else:
+                d, lo, hi = (float(r.iloc[0][k]) for k in ("d_r2_mean", "d_r2_ci_low", "d_r2_ci_high"))
+                cells.append(f"{d:+.2f} [{_r2cell(lo, 2)}, {_f(hi, 2)}]")
+                if x in FAMILY and (t not in best_gain or d > best_gain[t][1]):
+                    best_gain[t] = (x, d, lo)
+        lines.append(" & ".join(cells) + " \\\\")
+    for t, (x, d, lo) in best_gain.items():
+        key = "".join(ch for ch in t.title() if ch.isalpha())
+        macros[f"famBest{key}"] = FAMILY[x].replace("$", "")
+        macros[f"famBestGain{key}"] = f"{d:+.2f}"
+    macros["famNBestCIexcludesZero"] = sum(1 for _, (_, d, lo) in best_gain.items() if lo > 0)
+    macros["famNTargets"] = len(targets)
+    tex = r"""\begin{table}[t]
+\centering\footnotesize
+\caption{Exploratory ladder of the index families (frozen \texttt{studies/exploratory\_families.json}; fast learners ridge, PLS, $k$NN and SVR, chosen inside each outer training fold; $5\times5$ repeated nested CV). $p$: number of features. Pooled $R^2$ on all molecules and the paired gain over the two-feature size baseline on identical folds with the corrected repeated $k$-fold $t$ interval; not part of the confirmatory family, so no multiplicity correction applies and no row is a test. Values below $-1$ mark extrapolation on out-of-domain molecules. Generated by \texttt{tools/make\_results.py}.}
+\label{tab:families}
+\resizebox{\linewidth}{!}{%%
+\begin{tabular}{lr%s}
+\toprule
+%s
+%s
+\midrule
+%s
+\bottomrule
+\end{tabular}}
+\end{table}
+""" % ("rr" * len(targets), head, sub, "\n".join(lines))
+    (out / "tab_families.tex").write_text(tex)
+    (out / "families_macros.tex").write_text("".join(f"\\newcommand{{\\{k}}}{{{_tex(v)}}}\n" for k, v in macros.items()))
+    return macros
+
+
 def provenance(rec: dict, out: Path) -> None:
     code = rec.get("code") or {}
     ch = rec.get("chembl") or {}
@@ -408,6 +476,7 @@ def main() -> None:
     ap.add_argument("results")
     ap.add_argument("out")
     ap.add_argument("--learner", default="selected")
+    ap.add_argument("--families-run", default=None, help="results dir of the exploratory TI-family run (tab_families.tex)")
     ap.add_argument("--scaffold-run", default=None, help="results dir of the scaffold-split run (tab_ladder_scaffold.tex)")
     ap.add_argument("--extra-controls", nargs="*", default=[],
                     help="further run dirs whose protocol stage (permutation/bootstrap) is added to the controls table")
@@ -427,6 +496,8 @@ def main() -> None:
     result_macros(conf, info, ctrl, out)
     if a.scaffold_run:
         print(scaffold_table(Path(a.scaffold_run), a.learner, out))
+    if a.families_run:
+        print(families_table(Path(a.families_run), a.learner, out))
     print("results written to", out)
 
 

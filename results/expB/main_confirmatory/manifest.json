@@ -1,0 +1,35 @@
+{
+ "chembl_release": "ChEMBL_37",
+ "chembl_release_date": "2026-05-01",
+ "counts": {
+  "by_reason": {
+   "collapsed_to_parent": 788,
+   "included": 1821,
+   "metal_containing": 17,
+   "mixture": 9,
+   "no_carbon": 36,
+   "no_smiles": 75,
+   "not_small_molecule": 580,
+   "unsupported_element": 1
+  },
+  "included": 1821,
+  "manifest_rows": 3327,
+  "parents": 2539
+ },
+ "created_utc": "2026-10-05T16:50:25Z",
+ "data_licence": "CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/); ChEMBL, EMBL-EBI",
+ "disease_label": "pooled approved (any MeSH heading)",
+ "indication_rows": 8683,
+ "kind": "pooled",
+ "manifest_sha256": "82c573793cdb5b06382399122b029059a48ba5ad564f4a9b6b5bc62576793a5b",
+ "n_mesh_ids": 1070,
+ "parameters": {
+  "dedup": "standard_inchi_key, lowest parent ChEMBL ID kept",
+  "drug_indication_filter": {
+   "max_phase_for_ind": 4
+  },
+  "min_phase": 4.0,
+  "molecule_type": "Small molecule"
+ },
+ "topoqspr_version": "1.0.0.dev0"
+}

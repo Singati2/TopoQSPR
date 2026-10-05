@@ -1,0 +1,453 @@
+{
+ "base_dir": "/home/mpcrlab/moleculens/studies",
+ "baselines": {
+  "allow_custom_baselines": false,
+  "mandatory": [
+   "null",
+   "size",
+   "composition"
+  ],
+  "mandatory_reference": "size",
+  "missing": [],
+  "reference": "size",
+  "rule": "enforced by resolve_config"
+ },
+ "chembl": {
+  "data_licence": "CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/); ChEMBL, EMBL-EBI",
+  "offline": true,
+  "release": "ChEMBL_37",
+  "release_date": "2026-05-01",
+  "source": "ChEMBL REST API via topoqspr.chembl.ChemblClient"
+ },
+ "code": {
+  "commit": "2c5e1d1f2dc4af2e773797d2a968ff944c5f24a6",
+  "describe": "plan-freeze-v1-32-g2c5e1d1",
+  "dirty": false,
+  "reason": "",
+  "root": "/home/mpcrlab/moleculens",
+  "source": "git",
+  "untracked": 0
+ },
+ "config": {
+  "cohort": {
+   "chembl_release": "ChEMBL_37",
+   "source": "pooled"
+  },
+  "evaluation": {
+   "ad": "knn",
+   "alpha": 0.05,
+   "families": [
+    "ridge",
+    "elasticnet",
+    "pls",
+    "knn",
+    "svr",
+    "extratrees"
+   ],
+   "inner_splits": 3,
+   "learners": [
+    "selected"
+   ],
+   "min_n": 50,
+   "min_n_test": 10,
+   "outer_splits": 5,
+   "random_state": 0,
+   "reference": "size",
+   "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "split": "scaffold"
+  },
+  "feature_sets": [
+   "null",
+   "size",
+   "composition",
+   "TI",
+   "rdkit2d"
+  ],
+  "indices": {
+   "names": null
+  },
+  "name": "main_scaffold_v1",
+  "output": {
+   "features_format": "csv"
+  },
+  "runtime": {
+   "chembl_cache_dir": null,
+   "expdata_cache_dir": null,
+   "n_jobs": 14,
+   "offline": true
+  },
+  "schema": 1,
+  "standardize": {
+   "min_heavy_atoms": 3
+  },
+  "targets": [
+   {
+    "names": [
+     "mp_bradley",
+     "logp_opera",
+     "logd74_az",
+     "logs_aqsoldb"
+    ],
+    "options": {},
+    "provider": "expdata"
+   }
+  ]
+ },
+ "config_sha256": "0dbd6bc282481ff6e94f13cbd5f23e5cbd139bcb65707d272f1cbd3d3ecf5666",
+ "counts": {
+  "candidates": 1821,
+  "connectivity_groups": {
+   "groups": 33,
+   "molecules": 67,
+   "rule": "standardised parents sharing the InChIKey first block (stereoisomers, racemate/enantiomer, isotopologues): all kept, always in the same CV fold"
+  },
+  "feature_failures": 5428,
+  "feature_set_sizes": {
+   "TI": 104,
+   "composition": 11,
+   "null": 0,
+   "size": 2
+  },
+  "rejected": {},
+  "skipped_targets": {},
+  "standardised": 1821,
+  "targets": {
+   "logd74_az": 369,
+   "logp_opera": 505,
+   "logs_aqsoldb": 351,
+   "mp_bradley": 711
+  }
+ },
+ "created_utc": "2026-10-05T21:47:18Z",
+ "environment": {
+  "env": {
+   "MKL_NUM_THREADS": "1",
+   "OMP_NUM_THREADS": "1",
+   "OMP_PROC_BIND": null,
+   "OPENBLAS_NUM_THREADS": "1",
+   "PYTHONHASHSEED": "0"
+  },
+  "executable": "/home/mpcrlab/.venvs/topoqspr/bin/python3",
+  "implementation": "CPython",
+  "machine": "x86_64",
+  "packages": {
+   "annotated-doc": "0.0.5",
+   "annotated-types": "0.8.0",
+   "anyio": "4.15.1",
+   "attrs": "26.1.0",
+   "cattrs": "26.2.1",
+   "certifi": "2026.7.22",
+   "charset-normalizer": "3.5.2",
+   "chembl-webresource-client": "0.10.9",
+   "chembl_structure_pipeline": "1.2.4",
+   "click": "8.5.0",
+   "cloudpickle": "3.1.2",
+   "contourpy": "1.3.2",
+   "cycler": "0.12.1",
+   "easydict": "1.13",
+   "et_xmlfile": "2.0.0",
+   "exceptiongroup": "1.3.1",
+   "fastapi": "0.142.2",
+   "fonttools": "4.65.0",
+   "h11": "0.16.0",
+   "httpcore": "1.0.9",
+   "httpx": "0.28.1",
+   "idna": "3.20",
+   "iniconfig": "2.3.0",
+   "joblib": "1.6.0",
+   "kiwisolver": "1.5.1",
+   "llvmlite": "0.50.0",
+   "matplotlib": "3.10.9",
+   "mordredcommunity": "2.0.7",
+   "networkx": "3.4.2",
+   "numba": "0.68.0",
+   "numpy": "2.2.6",
+   "nvidia-nccl-cu12": "2.32.3",
+   "openpyxl": "3.1.5",
+   "opentelemetry-api": "1.45.0",
+   "packaging": "26.3",
+   "pandas": "2.3.3",
+   "pillow": "12.3.0",
+   "pip": "26.2.1",
+   "platformdirs": "4.12.2",
+   "pluggy": "1.6.0",
+   "pydantic": "2.13.5",
+   "pydantic_core": "2.46.5",
+   "pygments": "2.21.0",
+   "pyparsing": "3.3.3",
+   "pytest": "9.1.1",
+   "python-dateutil": "2.9.0.post0",
+   "pytz": "2026.4",
+   "rapidfuzz": "3.14.5",
+   "rdkit": "2026.3.6",
+   "requests": "2.34.2",
+   "requests-cache": "1.3.3",
+   "scikit-learn": "1.7.2",
+   "scipy": "1.15.3",
+   "setuptools": "59.6.0",
+   "shap": "0.49.1",
+   "six": "1.17.0",
+   "slicer": "0.0.8",
+   "starlette": "1.7.0",
+   "threadpoolctl": "3.7.0",
+   "tomli": "2.4.1",
+   "topoqspr": "1.0.0.dev0",
+   "tqdm": "4.70.1",
+   "typing-inspection": "0.4.4",
+   "typing_extensions": "4.16.0",
+   "tzdata": "2026.4",
+   "url-normalize": "3.0.1",
+   "urllib3": "2.8.0",
+   "uvicorn": "0.54.0",
+   "xgboost": "3.2.0",
+   "xgboost-cpu": "3.2.0"
+  },
+  "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "python_version": "3.10.12",
+  "system": "Linux"
+ },
+ "inputs": {},
+ "manifest_sha256": "82c573793cdb5b06382399122b029059a48ba5ad564f4a9b6b5bc62576793a5b",
+ "outputs": {
+  "ad.csv": {
+   "bytes": 61163,
+   "sha256": "ad375f96aecbdeb932a6a7ee8f64887bc452bb028e8fb976aab53a0922d498b8"
+  },
+  "ad_summary.csv": {
+   "bytes": 4001,
+   "sha256": "3ddd479c4ab3cae77a7f66e9755d450b8b56cdccf3458b06fb40fb691fd6a79b"
+  },
+  "failures.csv": {
+   "bytes": 604347,
+   "sha256": "7bef17a830ec145c74e6ead0970cde471c07458c0e95fb7b74896cdb8fc2848a"
+  },
+  "features.csv": {
+   "bytes": 6239972,
+   "sha256": "2a46947015b6a4002e2da471a80f9ae35b76e58d0132972ac4ecfeb5d4b39ef5"
+  },
+  "folds.csv": {
+   "bytes": 99577,
+   "sha256": "453dd1aa9d34beccf96e923801705fff4ce3ba3e55429d2ee761b3b100e7562a"
+  },
+  "inner.csv": {
+   "bytes": 294271,
+   "sha256": "94dab112fc45eca8cb39c13409b76f791f5b49083abc2258c9765a54df0af317"
+  },
+  "manifest.csv": {
+   "bytes": 686889,
+   "sha256": "82c573793cdb5b06382399122b029059a48ba5ad564f4a9b6b5bc62576793a5b"
+  },
+  "manifest.json": {
+   "bytes": 956,
+   "sha256": "0c876371f808ebecbf9f6c9643b43d11479d673b146d1c4902feaa30f349babe"
+  },
+  "molecules.csv": {
+   "bytes": 296085,
+   "sha256": "1dd8e419946f898627a6315d60e113c44cf805f33c2c8c72f00bcb51243ec6f6"
+  },
+  "paired.csv": {
+   "bytes": 44242,
+   "sha256": "dd9f93875174f515e166039403b297efd097fe0b356295d49591f1d4cb08a9e5"
+  },
+  "predictions.csv": {
+   "bytes": 3562557,
+   "sha256": "7ade659d5a5f8c280db675fa4cfabffc0939fe6e948106bf4c946530ca5b2361"
+  },
+  "study.json": {
+   "bytes": 30851,
+   "sha256": "ec8d3eb32cf8a27ea40f4a1dcb12003873314efd46e9d4fb77b7b997d415d1be"
+  },
+  "summary.csv": {
+   "bytes": 6669,
+   "sha256": "d3ce22af7412f65214e4a82f05019deaca704c27a0813791a86e4084df08a53c"
+  },
+  "targets.csv": {
+   "bytes": 38939,
+   "sha256": "0a0dc4c593689e15f9d1197fdedb58296e1cca483fb75c56666f2960c4910fc3"
+  }
+ },
+ "protocol": null,
+ "result_csvs": [
+  "manifest.csv",
+  "molecules.csv",
+  "features.csv",
+  "targets.csv",
+  "failures.csv",
+  "folds.csv",
+  "predictions.csv",
+  "paired.csv",
+  "inner.csv",
+  "summary.csv",
+  "ad.csv",
+  "ad_summary.csv"
+ ],
+ "schema": 1,
+ "seeds": {
+  "estimator_random_state": 0,
+  "inner_seed_rule": "1000 * outer_seed + fold",
+  "outer_seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "outer_splitter": "balanced_group_kfold (Bemis-Murcko scaffolds; connectivity groups merged)"
+ },
+ "target_providers": [
+  {
+   "chembl_release": null,
+   "drop_disagreeing": true,
+   "keep_salt_forms": false,
+   "matching": "full standard InChIKey of the standardised parent (topoqspr.graph.standardize); no first-block fallback",
+   "processing_version": "4",
+   "provider": "expdata",
+   "targets": [
+    {
+     "chembl_assay": null,
+     "citation": "Bradley J-C, Williams A, Lang A. figshare dataset (2014)",
+     "doi": "10.6084/m9.figshare.1031637.v2",
+     "endpoint": "melting point",
+     "licence": "CC0",
+     "n_dropped_disagreeing": 22,
+     "n_matched_full_key": 733,
+     "n_parents_in_source": 19799,
+     "n_values": 711,
+     "processing_fingerprint": "ac427bc7f1c40798bf14340bd68ac5b5a5e150dfa691156001c16d67c6612967",
+     "raw_sha256": "e8a66818609bbad6b9a67844cd98cf5d18098724b9f5fd8e0413aaf97775aa12",
+     "redistribution": true,
+     "source": "bradley",
+     "target": "mp_bradley",
+     "target_class": 3,
+     "title": "Jean-Claude Bradley Open Melting Point Dataset",
+     "unit": "degC",
+     "url": "https://ndownloader.figshare.com/files/1503990",
+     "version": "figshare article 1031637 v2 (2014-05-20), file BradleyMeltingPointDataset.xlsx"
+    },
+    {
+     "chembl_assay": null,
+     "citation": "Mansouri K et al. J. Cheminform. 10 (2018) 10; Mansouri K et al. SAR QSAR Environ. Res. 27 (2016) 911-937",
+     "doi": "10.1186/s13321-018-0263-1",
+     "endpoint": "octanol/water partition coefficient (PHYSPROP)",
+     "licence": "MIT (repository LICENSE)",
+     "n_dropped_disagreeing": 5,
+     "n_matched_full_key": 510,
+     "n_parents_in_source": 13860,
+     "n_values": 505,
+     "processing_fingerprint": "ac427bc7f1c40798bf14340bd68ac5b5a5e150dfa691156001c16d67c6612967",
+     "raw_sha256": "9dc5d6387201df0f66e9472b034aeaa09ef7a47f705b9b5f50d7c9af8a1aadc3",
+     "redistribution": true,
+     "source": "opera",
+     "target": "logp_opera",
+     "target_class": 3,
+     "title": "OPERA curated PHYSPROP training/test sets (QSAR-ready)",
+     "unit": "log10",
+     "url": "https://github.com/kmansouri/OPERA/raw/22f4db60e38548f03921c44aecc84eb1b792e955/OPERA_Data.zip",
+     "version": "github.com/kmansouri/OPERA commit 22f4db60e385 (v2.9.5, 2026-08-20), OPERA_Data.zip"
+    },
+    {
+     "chembl_assay": "CHEMBL3301363",
+     "citation": "Wenlock M, Tomkinson N. ChEMBL deposited dataset CHEMBL3301361 (ChEMBL 20, 2015)",
+     "doi": "10.6019/CHEMBL3301361",
+     "endpoint": "octanol/water distribution coefficient, pH 7.4",
+     "licence": "CC BY-SA 3.0 (ChEMBL)",
+     "n_dropped_disagreeing": 0,
+     "n_matched_full_key": 369,
+     "n_parents_in_source": 4190,
+     "n_values": 369,
+     "processing_fingerprint": "ac427bc7f1c40798bf14340bd68ac5b5a5e150dfa691156001c16d67c6612967",
+     "raw_sha256": "ChEMBL_37:71e5e47c44b7578912be28d75120dff49e498c5fea0fed5c38e2c4661a0af33a",
+     "redistribution": true,
+     "source": "az_logd",
+     "target": "logd74_az",
+     "target_class": 3,
+     "title": "AstraZeneca deposited dataset: octanol/water logD7.4 (shake flask)",
+     "unit": "log10",
+     "url": null,
+     "version": "ChEMBL assay CHEMBL3301363 (records pinned per ChEMBL release)"
+    },
+    {
+     "chembl_assay": null,
+     "citation": "Sorkun MC, Khetan A, Er S. Sci. Data 6 (2019) 143",
+     "doi": "10.1038/s41597-019-0151-1",
+     "endpoint": "aqueous solubility (intrinsic/water, ~25 degC)",
+     "licence": "CC0 1.0",
+     "n_dropped_disagreeing": 44,
+     "n_matched_full_key": 395,
+     "n_parents_in_source": 8739,
+     "n_values": 351,
+     "processing_fingerprint": "ac427bc7f1c40798bf14340bd68ac5b5a5e150dfa691156001c16d67c6612967",
+     "raw_sha256": "7c47e021d03a5720f53cfddb7aef90c8911ea276a36306c839798733d8630332",
+     "redistribution": true,
+     "source": "aqsoldb",
+     "target": "logs_aqsoldb",
+     "target_class": 3,
+     "title": "AqSolDB: curated reference set of aqueous solubility",
+     "unit": "log10(mol/L)",
+     "url": "https://dataverse.harvard.edu/api/access/datafile/3407241?format=original",
+     "version": "Harvard Dataverse doi:10.7910/DVN/OVHAW8 V1 (2019-07-18), file curated-solubility-dataset (original CSV, id 3407241)"
+    }
+   ]
+  }
+ ],
+ "targets": [
+  {
+   "description": "melting point; Bradley 'mpC'; rows marked donotuse are excluded; licence CC0",
+   "name": "mp_bradley",
+   "rdkit2d_exclusion": null,
+   "source": "expdata:bradley",
+   "target_class": 3,
+   "target_class_label": "external experimental (headline analysis)",
+   "units": "degC"
+  },
+  {
+   "description": "octanol/water partition coefficient (PHYSPROP); OPERA LogP_QR.sdf 'LogP'; licence MIT (repository LICENSE)",
+   "name": "logp_opera",
+   "rdkit2d_exclusion": null,
+   "source": "expdata:opera",
+   "target_class": 3,
+   "target_class_label": "external experimental (headline analysis)",
+   "units": "log10"
+  },
+  {
+   "description": "octanol/water distribution coefficient, pH 7.4; ChEMBL standard_value (LogD7.4); licence CC BY-SA 3.0 (ChEMBL)",
+   "name": "logd74_az",
+   "rdkit2d_exclusion": null,
+   "source": "expdata:az_logd",
+   "target_class": 3,
+   "target_class_label": "external experimental (headline analysis)",
+   "units": "log10"
+  },
+  {
+   "description": "aqueous solubility (intrinsic/water, ~25 degC); AqSolDB 'Solubility' (LogS); licence CC0 1.0",
+   "name": "logs_aqsoldb",
+   "rdkit2d_exclusion": null,
+   "source": "expdata:aqsoldb",
+   "target_class": 3,
+   "target_class_label": "external experimental (headline analysis)",
+   "units": "log10(mol/L)"
+  }
+ ],
+ "timings_s": {
+  "cohort": 4.837,
+  "evaluate": 3094.757,
+  "evaluate:logd74_az:selected": 603.29,
+  "evaluate:logp_opera:selected": 783.187,
+  "evaluate:logs_aqsoldb:selected": 639.969,
+  "evaluate:mp_bradley:selected": 1067.767,
+  "features": 89.846,
+  "protocol": 1.553,
+  "protocol:ad": 1.553,
+  "standardize": 33.772,
+  "targets": 68.062,
+  "write": 7.8
+ },
+ "topoqspr_version": "1.0.0.dev0"
+}
