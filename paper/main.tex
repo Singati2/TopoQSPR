@@ -28,7 +28,9 @@
 \affiliation[c]{organization={TBD}}
 
 \begin{abstract}
-Quantitative structure--property relationship (QSPR) studies based on graph-theoretic topological indices are widely published, but each study usually hand-assembles a small drug set, computes a few indices with ad-hoc scripts, and reports in-sample regression fits. As a result the studies are hard to reproduce and hard to compare. \ml{}~v1.0 is an open-source Python package and command-line workflow that turns a disease concept into a fully specified QSPR study. It resolves the disease to a controlled MeSH heading, assembles an approved-drug set from ChEMBL with an explicit clinical-phase threshold and salt and parent normalisation, and writes a versioned drug manifest. It then computes 102 degree-, reverse-degree-, neighbourhood-degree-sum-, distance- and matching-based topological indices, each traced to its primary source, unit-tested, and verified against closed forms, independent implementations and published values where available. Finally it evaluates ten regressor families under repeated nested cross-validation, always alongside null, molecular-size and element-composition baselines. Every run exports its inputs, database release and settings so that it can be re-executed exactly. \todo{One sentence on the multi-disease validation result.}
+Quantitative structure--property relationship (QSPR) studies based on graph-theoretic topological indices are widely published, but each study usually hand-assembles a small drug set, computes a few indices with ad-hoc scripts, and reports in-sample regression fits. As a result the studies are hard to reproduce and hard to compare. \ml{}~v1.0 is an open-source Python package and command-line workflow that turns a disease concept into a fully specified QSPR study. It resolves the disease to a controlled MeSH heading, assembles an approved-drug set from ChEMBL with an explicit clinical-phase threshold and salt and parent normalisation, and writes a versioned drug manifest. It then computes 102 degree-, reverse-degree-, neighbourhood-degree-sum-, distance- and matching-based topological indices, each traced to its primary source, unit-tested, and verified against closed forms, independent implementations and published values where available. Finally it evaluates ten regressor families under repeated nested cross-validation, always alongside null, molecular-size and element-composition baselines. Every run exports its inputs, database release and settings so that it can be re-executed exactly. \todo{One sentence on the main result of Experiments B--D.}
+
+\textbf{Scientific contribution.} \ml{} makes the drug set of a disease-specific QSPR study an explicit, versioned and regenerable object, provides 102 topological indices and 89 bond-wise entropies each verified against independent sources, and evaluates them against size and composition baselines with leakage-free, preregistered statistics, so that what topological indices add beyond molecular size can be measured rather than assumed.
 \end{abstract}
 
 \begin{keyword}
@@ -37,28 +39,9 @@ topological indices \sep QSPR \sep chemical graph theory \sep ChEMBL \sep reprod
 \end{frontmatter}
 
 %% ---------------------------------------------------------------
-\section*{Code metadata}
-\begin{table}[h]
-\small
-\begin{tabularx}{\linewidth}{lXX}
-\toprule
-Nr. & Code metadata description & Metadata \\
-\midrule
-C1 & Current code version & v1.0.0 \todo{tag release} \\
-C2 & Permanent link to code/repository & \url{https://github.com/Singati2/TopoQSPR} \todo{repository is private; make it public (or give the archive DOI) and re-check before submission} \\
-C3 & Permanent link to reproducible capsule & \todo{Zenodo DOI / Code Ocean} \\
-C4 & Legal code license & MIT \\
-C5 & Code versioning system used & git \\
-C6 & Software code languages, tools and services used & Python $\ge$3.10, RDKit \cite{rdkit}, ChEMBL Structure Pipeline \cite{bento2020open}, scikit-learn \cite{pedregosa2011}, XGBoost \cite{chen2016xgboost}, SciPy, pandas (exact versions in \texttt{requirements-lock.txt}); ChEMBL web services \\
-C7 & Compilation requirements, operating environments and dependencies & Tested on Linux (CI: Ubuntu, Python 3.12); exact dependency versions in \texttt{requirements-lock.txt}; Dockerfile in the repository \\
-C8 & Link to developer documentation & \todo{docs URL} \\
-C9 & Support email & \todo{} \\
-\bottomrule
-\end{tabularx}
-\end{table}
 
 %% ---------------------------------------------------------------
-\section{Motivation and significance}
+\section{Introduction}
 
 Topological indices are graph invariants of the hydrogen-suppressed molecular graph \cite{todeschini2009}. They have been used as structural descriptors since Wiener's path-number study of paraffin boiling points \cite{wiener1947}. Degree-based families, including the Zagreb \cite{gutman1972}, Randi\'c \cite{randic1975}, atom-bond connectivity \cite{estrada1998} and Sombor \cite{gutman2021sombor} indices and their many recent variants, are now frequently correlated with physicochemical properties of drugs used for a particular disease \cite{almulla2026antifungal}, increasingly together with machine-learning regressors. Recent examples apply random forests and XGBoost to degree-, degree-sum- and reverse-degree-based indices of 50 antidiabetic drugs, with heavy-atom count and molecular weight among the targets \cite{pandian2026antidiabetic}, or compare linear, ridge, random-forest and XGBoost models on 18 drugs for bipolar disorder \cite{colakoglu2026bipolar}. The genre is growing fast: Europe PMC records 12 such drug QSPR papers in 2020, 7 in 2021, 16 in 2022, 40 in 2023, 62 in 2024 and 113 in 2025, of which 7, 2, 5, 13, 18 and 59, respectively, also mention machine learning (a text match, so it counts mentions rather than use; query in \texttt{tools/genre\_counts.py}). We screened the 60 most recent open-access candidates against fixed eligibility criteria. In the 19 eligible disease- or drug-class-specific studies (median 20 drugs, range 10--50) the modelled ``physicochemical properties'' are predominantly values predicted by ACD/Labs (via ChemSpider) or computed by PubChem, ChemDraw or SwissADME, and none uses a measured endpoint as its main target. Such values are sometimes described as measurements: one recent study calls its boiling points, flash points and polarizabilities ``experimentally determined'' but names no data source other than ChemSpider, from which its structures were taken \cite{mufti2026classes}. Within chemical graph theory, index quality is traditionally judged on isomer sets such as the octanes, where molecular size is held fixed \cite{gutman2013testing,furtula2013structure}; drug QSPR studies drop that control. Most such studies share three weaknesses, long recognised as common QSPR pitfalls \cite{topliss1979chance,golbraikh2002beware,dearden2009,tropsha2010best,cherkasov2014qsar}.
 
@@ -68,30 +51,10 @@ Topological indices are graph invariants of the hydrogen-suppressed molecular gr
 
 \paragraph{Predictive claims are optimistic} Models are often fitted and scored on the same handful of molecules, with hyperparameters tuned on the evaluation folds. Screening dozens of indices against 10--50 drugs also invites chance correlations \cite{topliss1979chance}, and a high in-sample or leave-one-out $R^2$ does not establish predictive power \cite{golbraikh2002beware,alexander2015beware}. Nor are the models compared with the simplest alternative. That many topological indices are dominated by molecular size has been known for decades \cite{basak1987topological,rucker1999topological}, and degree- and distance-based indices of the hydrogen-suppressed graph are blind to element type and bond order (hexane, 1-pentanol, pentylamine and 1,4-butanediol share every such index), a limitation that valence-weighted indices were introduced to address \cite{kier1976molecular}. Yet the size and composition of the molecules are rarely used as baselines in the current literature, so it is unknown how much predictive information the reported indices add beyond them. Recent work in the genre shows both problems: on 18 drugs, random forests and XGBoost deteriorated under leave-one-out cross-validation, and the authors attribute the strong results for molecular weight and heavy-atom count to the close relation of these targets to molecular size \cite{colakoglu2026bipolar}. Current guidance for comparing machine-learning methods on small molecules asks for repeated cross-validation, paired comparisons and practically meaningful effect sizes \cite{ash2025protocols}, and a recent re-test of a small-set graph-index model on five MoleculeNet benchmarks obtained an average $R^2$ of 0.24 \cite{niane2026graph}.
 
-Existing software covers parts of this workflow (Table~\ref{tab:tools}). General descriptor calculators such as PaDEL \cite{yap2011padel}, alvaDesc \cite{mauri2020alvadesc} and Mordred \cite{moriwaki2018mordred} compute many classical indices, and PyTIE \cite{jeyaraj2025pytie} computes degree-based indices and entropies; ChemGraphX \cite{jacob2026chemgraphx} computes degree-, degree-sum-, hybrid- and distance-based indices and graph entropies from structure files; DOPtools \cite{byadi2025doptools} and QSPRpred \cite{vandenmaagdenberg2024qsprpred} automate descriptor calculation and reproducible model building; RANQSAR \cite{thakur2026ranqsar} packages a seeded, reproducible QSAR workflow with $y$-randomisation and applicability-domain analysis in a desktop application; and browser tools now offer no-code QSAR with ChEMBL access \cite{masud2026browser}. None of these defines \emph{which} molecules constitute a disease-specific drug set, and none evaluates index-based models against size and composition baselines by default. \ml{} is complementary. It does not compete on the number of indices. Instead it turns disease-specific topological QSPR into a reproducible and statistically defensible experiment. Its index values agree with ChemGraphX on all 41 indices the two tools share, 40 directly and one (the edge Wiener index) after a documented convention offset (43 test graphs, maximum relative difference $1.3\times10^{-15}$; \texttt{docs/CHEMGRAPHX\_CROSSCHECK.md}, \todo{Supplementary~S1}).
-
-ChEMBL itself notes that indication data require controlled MeSH/EFO mapping, handling of drug forms and phase information \cite{hunter2025chembl}. \ml{} addresses the three weaknesses above in a single scripted workflow. Version~1.0 is a Python package with a command-line interface; porting the web interface of the v0.x prototype onto it is future work.
+ChEMBL itself notes that indication data require controlled MeSH/EFO mapping, handling of drug forms and phase information \cite{hunter2025chembl}. \ml{} addresses the three weaknesses above in a single scripted workflow (Section~\ref{sec:tool}); Section~\ref{sec:comparison} compares it with existing software and Section~\ref{sec:validation} reports its validation.
 
 
-\begin{table}[t]
-\centering\small
-\caption{Related software. \checkmark: provided; --: not provided. Compiled from each tool's publication and documentation (October 2026). Every cell was checked against the tool's paper or documentation on 2026-10-03. \todo{The RANQSAR row is based on its abstract only; check every cell against its full text and documentation.} \textsuperscript{a}Removed in DOPtools 1.3.7 (June 2025).}
-\label{tab:tools}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{lcccccc}
-\toprule
-Tool & Topological indices & SMILES input & QSPR models & Disease $\to$ drug set & Size/composition baselines & Run provenance \\
-\midrule
-Mordred \cite{moriwaki2018mordred} & partial & \checkmark & -- & -- & -- & -- \\
-ChemGraphX \cite{jacob2026chemgraphx} & \checkmark & -- & -- & -- & -- & -- \\
-DOPtools \cite{byadi2025doptools} & via Mordred\textsuperscript{a} & \checkmark & \checkmark & -- & -- & partial (JSON config) \\
-QSPRpred \cite{vandenmaagdenberg2024qsprpred} & via plug-ins & \checkmark & \checkmark & -- & -- & \checkmark \\
-RANQSAR \cite{thakur2026ranqsar} & -- & \checkmark & \checkmark & -- & -- & partial (seeded runs) \\
-QSAR in the Browser \cite{masud2026browser} & -- & \checkmark & \checkmark & target-based & -- & partial (JSON session) \\
-\ml{}~v1.0 (Python/CLI) & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
-\bottomrule
-\end{tabular}}
-\end{table}
+
 
 \begin{table}[t]
 \centering\small
@@ -112,13 +75,13 @@ breast cancer &   0 &   0 & (controlled term is ``Breast Neoplasms'') \\
 \end{table}
 
 %% ---------------------------------------------------------------
-\section{Software description}
+\section{\ml}\label{sec:tool}
 \todo{All features below are implemented on branch v1.0-dev and covered by the offline test suite; the web interface is not yet ported. Re-check every statement against the tagged v1.0.0 release.}
 
-\subsection{Architecture}
+\subsection{Description}
 \ml{} is a Python package with a command-line interface (\texttt{topoqspr headings}, \texttt{cohort}, \texttt{indices}, \texttt{run}, \texttt{rerun}) and a Python API (\texttt{run\_study}) \todo{Fig.~1: architecture diagram; the v0.x web interface is to be ported onto the v1.0 package}. A study is specified by one JSON configuration and runs in stages, each writing an artefact: (i) disease resolution, (ii) drug-set curation (the manifest), (iii) structure standardisation and index computation, (iv) targets and feature sets, (v) model evaluation, and (vi) reporting. Every run writes a run record containing the git commit and whether the working tree was modified, the \ml{} version, the Python version and the versions of all installed packages, the ChEMBL release, the full configuration and its SHA-256 hash, the SHA-256 hashes of the manifest and of every input and output file, the random seeds, the platform and the environment variables that can change numerical results (hash seed and BLAS/OpenMP thread counts). \texttt{topoqspr rerun} re-executes a study from its run record and, with the cached ChEMBL release, reproduces the result tables byte for byte.
 
-\subsection{Disease resolution and drug-set curation}
+\subsection{Input: diseases, drug sets, structures and graphs}
 The free-text input is matched (\texttt{topoqspr headings}) against the MeSH headings that occur in ChEMBL's \texttt{drug\_indication} table \cite{zdrazil2024chembl,hunter2025chembl}. The user then confirms one or more headings, and their MeSH \cite{lipscomb2000medical} descriptor identifiers rather than the typed string are used in all later steps (EFO \cite{malone2010modeling} identifiers are recorded where ChEMBL provides them). Following established curation practice \cite{fourches2010trust}, the drug set is defined by explicit rules (defaults in brackets; \todo{evidence-source default to be fixed before freezing}):
 \begin{enumerate}
   \item indication-specific maximum phase $\geq$ a user-chosen threshold (default: 4, approved);
@@ -129,7 +92,9 @@ The free-text input is matched (\texttt{topoqspr headings}) against the MeSH hea
 Stereoisomers (for example a racemate and its eutomer) are kept as separate drugs but share an identical hydrogen-suppressed graph, so all cross-validation folds are grouped by the InChIKey connectivity block to keep them on the same side of every split \cite{kapoor2023leakage}.
 The resulting \emph{drug manifest} is written as a separate artefact (\texttt{topoqspr cohort}), so it can be inspected before any index or model is computed. It lists the ChEMBL ID, preferred name, phase and the reason each candidate was included or excluded. Ordering is deterministic, so a given release and set of settings always produce the same set.
 
-\subsection{Topological indices}
+Besides disease cohorts, \ml{} accepts single structures or batches as SMILES, SDF, MOL or PDB, which go through the same standardisation, and abstract graphs as adjacency matrices or lists (validated as simple, symmetric and connected), for which the graph-theoretic indices are computed without any chemistry-specific step.
+
+\subsection{Topological indices and entropies}
 For a molecular graph $G=(V,E)$ (the hydrogen-suppressed graph of the standardised parent structure) with vertex degrees $d(v)$ and maximum degree $\Delta$, the package implements 102 indices in six families (Table~\ref{tab:indices}; definitions, sources and tests in \texttt{docs/INDEX\_VERIFICATION.md}, \todo{Supplementary~S1}):
 degree-based edge sums $\sum_{uv\in E} f(d(u),d(v))$, including the 12 descriptors of Arockiaraj et al.\ \cite{arockiaraj2023hybrid} (the bi- and tri-Zagreb indices $BM$ and $TM$ and ten hybrid geometric-harmonic-Zagreb descriptors);
 reverse-degree indices, which use Kulli's reverse degree $c(v)=\Delta-d(v)+1$ \cite{kulli2018} and its generalisation $M_kR(d)=\Delta-d+k$ for $k\le d$ and $(\Delta-d+k)\bmod\Delta$ for $k>d$ \cite{arockiaraj2023ijqc,kalaam2024}, restricted to $1\le k\le\Delta$ so that the map is a permutation of $\{1,\dots,\Delta\}$;
@@ -139,6 +104,8 @@ the Hosoya index $Z$ \cite{hosoya1971}, computed exactly by dynamic programming 
 and the degree-based graph entropy.
 Depending on the index, values are verified against up to six independent references: (i) closed forms on paths, cycles, stars and complete graphs (e.g.\ $W(P_n)=(n^3-n)/6$, $Z(P_n)=F_{n+1}$, $Z(C_n)=L_n$); (ii) brute-force enumeration of matchings on random graphs; (iii) shortest paths and line graphs from the networkx library for the distance-based indices; (iv) the Mordred descriptor calculator \cite{moriwaki2018mordred} for the six indices it shares, on approved drugs; (v) ChemGraphX \cite{jacob2026chemgraphx} for the 41 indices it shares, on approved drugs, polycyclic aromatic hydrocarbons and closed-form graphs; and (vi) values printed in the primary papers \cite{arockiaraj2023ijqc,arockiaraj2023hybrid,godlin2026,arockiaraj2025lung}. Not every index has every kind of check. The last check also exposed three printed values in one source that contradict its own definitions (\todo{Supplementary~S1}).
 An index that is undefined for a molecule (e.g.\ a division by zero) is returned as missing with a reason, never as zero.
+
+For every edge-additive index $T=\sum_{uv\in E}w(uv)$ \ml{} also reports the bond-wise entropy $-\sum_{uv}(w(uv)/T)\ln(w(uv)/T)$, the definition used by ChemGraphX \cite{jacob2026chemgraphx}; the 89 entropies are an opt-in output of the index calculator and are not part of the frozen study's feature sets.
 
 \begin{table}[t]
 \centering\small
@@ -173,7 +140,39 @@ Each target property is modelled with ten regressor families (ordinary least squ
 \end{itemize}
 
 %% ---------------------------------------------------------------
-\section{Illustrative examples}
+\subsection{Work flow}
+A study is run from the command line (\texttt{topoqspr headings}, \texttt{cohort}, \texttt{run}, \texttt{rerun}) or from the web interface built on the same package, which follows the order of this section: search MeSH headings, review the full drug manifest with the reason for every exclusion, confirm, and run an exploratory analysis whose results (the baseline ladder with confidence intervals) and run record can be downloaded \todo{Fig.~2: web work flow screenshots after deployment}. The web interface also computes indices and entropies for uploaded structures and graphs, shows each index's formula and primary reference, and depicts the standardised structure. Confirmatory analyses use the command line with the frozen configuration.
+
+\section{Comparative analysis}\label{sec:comparison}
+Existing software covers parts of this workflow (Table~\ref{tab:tools}). General descriptor calculators such as PaDEL \cite{yap2011padel}, alvaDesc \cite{mauri2020alvadesc} and Mordred \cite{moriwaki2018mordred} compute many classical indices, and PyTIE \cite{jeyaraj2025pytie} computes degree-based indices and entropies; ChemGraphX \cite{jacob2026chemgraphx} computes degree-, degree-sum-, hybrid- and distance-based indices and graph entropies from structure files; DOPtools \cite{byadi2025doptools} and QSPRpred \cite{vandenmaagdenberg2024qsprpred} automate descriptor calculation and reproducible model building; RANQSAR \cite{thakur2026ranqsar} packages a seeded, reproducible QSAR workflow with $y$-randomisation and applicability-domain analysis in a desktop application; and browser tools now offer no-code QSAR with ChEMBL access \cite{masud2026browser}. None of these defines \emph{which} molecules constitute a disease-specific drug set, and none evaluates index-based models against size and composition baselines by default. \ml{} is complementary. It does not compete on the number of indices. Instead it turns disease-specific topological QSPR into a reproducible and statistically defensible experiment. Its index values agree with ChemGraphX on all 41 indices the two tools share, 40 directly and one (the edge Wiener index) after a documented convention offset (43 test graphs, maximum relative difference $1.3\times10^{-15}$; \texttt{docs/CHEMGRAPHX\_CROSSCHECK.md}, \todo{Supplementary~S1}).
+
+\begin{table}[t]
+\centering\small
+\caption{Related software. \checkmark: provided; --: not provided. Compiled from each tool's publication and documentation (October 2026). Every cell was checked against the tool's paper or documentation on 2026-10-03. \todo{The RANQSAR row is based on its abstract only; check every cell against its full text and documentation.} \textsuperscript{a}Removed in DOPtools 1.3.7 (June 2025).}
+\label{tab:tools}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+Tool & Topological indices & SMILES input & QSPR models & Disease $\to$ drug set & Size/composition baselines & Run provenance \\
+\midrule
+Mordred \cite{moriwaki2018mordred} & partial & \checkmark & -- & -- & -- & -- \\
+ChemGraphX \cite{jacob2026chemgraphx} & \checkmark & -- & -- & -- & -- & -- \\
+DOPtools \cite{byadi2025doptools} & via Mordred\textsuperscript{a} & \checkmark & \checkmark & -- & -- & partial (JSON config) \\
+QSPRpred \cite{vandenmaagdenberg2024qsprpred} & via plug-ins & \checkmark & \checkmark & -- & -- & \checkmark \\
+RANQSAR \cite{thakur2026ranqsar} & -- & \checkmark & \checkmark & -- & -- & partial (seeded runs) \\
+QSAR in the Browser \cite{masud2026browser} & -- & \checkmark & \checkmark & target-based & -- & partial (JSON session) \\
+\ml{}~v1.0 (Python/CLI) & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\section{Validation and impact}\label{sec:validation}
+\subsection{Index verification}
+Each of the 102 indices is checked against up to six independent references: closed forms on paths, cycles, stars and complete graphs; brute-force enumeration of matchings for $Z$; networkx for distance indices; Mordred for the six indices it shares; ChemGraphX for 41 shared indices (all agree, 1{,}763 comparisons); and values printed in the primary papers, which reproduced 21 values of the original $R_k$ paper \cite{arockiaraj2023ijqc} and 50 of 51 values of the hybrid-descriptor paper \cite{arockiaraj2023hybrid} and exposed three printed values that contradict their own definitions. The 89 entropies agree with ChemGraphX's implementation on all 1{,}414 shared values (maximum relative difference $8\times10^{-16}$). \todo{Independent literature check of reverse-degree and neighbourhood-sum values from other groups: in progress (7 papers, 174 of 199 comparisons agree; remaining 25 being classified).}
+
+\subsection{Experiments}
+\todo{Experiments A--D from the frozen plan (tag plan-freeze-v1): cohort sensitivity, size and composition confounding on measured endpoints (pooled approved drugs), evaluation optimism (training, ordinary, nested, scaffold CV), replication of four published studies.}
+
 \todo{Run v1.0 on a fixed panel of 8--12 diseases whose approved-drug cohort exceeds a pre-set minimum size (e.g.\ type~2 diabetes mellitus, hypertension, asthma, breast neoplasms, epilepsy; Alzheimer disease has only 13 approved drugs and is likely too small) with phase~4 drugs, ChEMBL~37. Report per disease: manifest size; best nested-CV $R^2$ per target; $\Delta R^2_{\text{size}}$.}
 
 \todo{Fig.~2: example command-line session and report (disease resolution $\to$ manifest $\to$ results); web screenshots only once the interface is ported.}
@@ -182,15 +181,37 @@ Each target property is modelled with ten regressor families (ordinary least squ
 
 \todo{Replication: re-analyse 3--5 published disease-specific topological-index QSPR studies (chosen with all co-authors) using their own drug lists and property values. Report the published in-sample $R^2$, the nested-CV $R^2$ and the size-baseline $R^2$, with confidence intervals, since $n\approx 20$ makes every estimate noisy.}
 
-%% ---------------------------------------------------------------
-\section{Impact}
+\subsection{Impact}
 \todo{Who uses it (chemical graph theory groups, teaching), what becomes possible (multi-disease comparisons; reproducible supplementary material for index papers), usage statistics if available.}
 
 %% ---------------------------------------------------------------
-\section{Conclusions}
+\section{Concluding remarks}
 \todo{Write after the frozen experiments. Limitation to state: learned representations such as CheMeleon \cite{burns2026deep} were deliberately not added as baselines; the study asks what topological indices add beyond size and composition, not which representation is best.}
 
-\paragraph{Limitations and future work} \ml{}~v1.0 has no web interface and computes no feature attributions. The v0.x prototype had both (attribution with SHAP \cite{lundberg2017}); porting the web interface and adding fold-internal attribution, computed only for models refitted inside each outer training fold, are planned.
+\paragraph{Limitations and future work} \ml{}~v1.0 computes no feature attributions; the v0.x prototype used SHAP \cite{lundberg2017}, and fold-internal attribution, computed only for models refitted inside each outer training fold, is planned. Distance-based entropies, which ChemGraphX provides, are not yet implemented.
+
+\section*{Availability and requirements}
+\textbf{Project name:} \ml. \textbf{Project home page:} \todo{public repository URL and web address at submission}. \textbf{Operating systems:} platform independent (tested on Linux; Docker image provided). \textbf{Programming language:} Python ($\ge$3.10). \textbf{Other requirements:} RDKit, ChEMBL Structure Pipeline, scikit-learn, XGBoost, SciPy, pandas (exact versions in \texttt{requirements-lock.txt}); FastAPI for the web interface. \textbf{Licence:} MIT (code); ChEMBL-derived data CC~BY-SA~3.0. \textbf{Restrictions to use by non-academics:} none.
+
+\section*{Code metadata}
+\begin{table}[h]
+\small
+\begin{tabularx}{\linewidth}{lXX}
+\toprule
+Nr. & Code metadata description & Metadata \\
+\midrule
+C1 & Current code version & v1.0.0 \todo{tag release} \\
+C2 & Permanent link to code/repository & \url{https://github.com/Singati2/TopoQSPR} \todo{repository is private; make it public (or give the archive DOI) and re-check before submission} \\
+C3 & Permanent link to reproducible capsule & \todo{Zenodo DOI / Code Ocean} \\
+C4 & Legal code license & MIT \\
+C5 & Code versioning system used & git \\
+C6 & Software code languages, tools and services used & Python $\ge$3.10, RDKit \cite{rdkit}, ChEMBL Structure Pipeline \cite{bento2020open}, scikit-learn \cite{pedregosa2011}, XGBoost \cite{chen2016xgboost}, SciPy, pandas (exact versions in \texttt{requirements-lock.txt}); ChEMBL web services \\
+C7 & Compilation requirements, operating environments and dependencies & Tested on Linux (CI: Ubuntu, Python 3.12); exact dependency versions in \texttt{requirements-lock.txt}; Dockerfile in the repository \\
+C8 & Link to developer documentation & \todo{docs URL} \\
+C9 & Support email & \todo{} \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \section*{CRediT authorship contribution statement}
 \todo{to be agreed by all authors (Conceptualization, Software, Validation, Writing, Supervision, \dots)}
