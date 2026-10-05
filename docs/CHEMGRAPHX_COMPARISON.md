@@ -9,7 +9,7 @@ Every "ChemGraphX" cell below was checked in its source code or against its live
 
 Legend: ✅ has it · ❌ does not · ⏳ TopoQSPR work in progress (target).
 
-**Status 2026-10-05:** the TopoQSPR web items marked ✅ are implemented on branch `p3-web` (44 web/input tests pass) and the entropy and input modules are on `v1.0-dev`. `p3-web` still needs the independent adversarial review (agent usage limit until 2026-10-07) before it is merged and deployed.
+**Status 2026-10-05:** the TopoQSPR web items marked ✅ are implemented on branch `p3-web` (91 web/input/entropy tests pass) and the entropy and input modules are on `v1.0-dev`. `p3-web` still needs the independent adversarial review (agent usage limit until 2026-10-07) before it is merged and deployed.
 
 ## Website
 
@@ -19,19 +19,19 @@ Legend: ✅ has it · ❌ does not · ⏳ TopoQSPR work in progress (target).
 | Input: .pdb file | ✅ | ✅ |
 | Input: adjacency list / matrix (general graphs) | ✅ | ✅ (validated: symmetric, 0/1, no loops, connected) |
 | Input: SMILES, SDF, batch lists | ❌ | ✅ (batch of 50 molecules in 7 s) |
-| Input: disease → curated drug set (ChEMBL, manifest preview) | ❌ | ⏳ (Phase 3) |
+| Input: disease → curated drug set (ChEMBL, manifest preview) | ❌ | ✅ (`/api/headings`, `/api/cohort`, manifest review and CSV before any computation) |
 | Degree-, degree-sum-, distance-based indices | ✅ ~97 | ✅ 102 verified (reverse-degree R_k, hybrids, exact Hosoya Z not in ChemGraphX) |
 | Entropy measures per index | ✅ 52 degree + 21 distance | ✅ 89 bond-wise entropies; 1,414 values agree with ChemGraphX's code (max rel. diff 8e-16); distance entropies not implemented |
 | Formula and primary reference shown for every index | ❌ | ✅ (`/api/catalog`, 191 entries, searchable) |
-| 2D structure depiction / edge-partition view | partial (graph plot) | ⏳ |
+| 2D structure depiction / edge-partition view | partial (graph plot) | ✅ (RDKit SVG depiction; degree edge partition per structure) |
 | Download results (CSV/JSON) | ❌ | ✅ (zip with indices, reasons, catalogue; on-page table) |
-| QSPR modelling with baselines and confidence intervals | ❌ | ⏳ (Phase 3, fast web mode) |
-| Run record / provenance download | ❌ | ⏳ |
+| QSPR modelling with baselines and confidence intervals | ❌ | ✅ (exploratory web mode: ladder null/size/composition/TI/RDKit 2D, ΔR² and ΔMAE with 95 % CI; confirmatory protocol via CLI) |
+| Run record / provenance download | ❌ | ✅ (`run_record.json` and results zip per job) |
 | Undefined values reported with a reason | partial ("indeterminate", inf) | ✅ (NaN + reason) |
 | Output rendering without innerHTML injection risk | ❌ (chart via innerHTML) | ✅ (no innerHTML; textContent only) |
 | Persistent jobs, rate limits, health endpoint | n/a | ✅ (SQLite jobs, per-IP limits, caps, /health) |
-| Automated test suite / CI | ❌ (none found) | ✅ 786 offline tests, CI |
-| Accessibility (labels, keyboard, contrast) | to assess | ⏳ |
+| Automated test suite / CI | ❌ (none found) | ✅ ~880 offline tests incl. 35 web tests, CI |
+| Accessibility (labels, keyboard, contrast) | not assessed | partial ✅ (every input labelled, live-region status, lang/viewport; tested); contrast audit pending |
 | Response for one molecule | 3.4 s cold / 0.6 s warm, one of three views (live, 2026-10-04) | 0.73–0.82 s for all 191 values, on a fully loaded machine (local, 2026-10-05) |
 
 ## Paper
