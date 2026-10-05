@@ -16,3 +16,5 @@ paper/*.pdf
 build/
 .claude/
 src/topoqspr/_build_info.py
+paper/results/*
+!paper/results/.gitkeep
