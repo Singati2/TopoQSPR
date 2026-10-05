@@ -343,6 +343,12 @@
       }
       const headers = ["Feature set", "n", "p", "R² (fold mean)", "R² (pooled)", "MAE", "ΔR² vs size", "95% CI", "p (ΔR²)",
                        "ΔMAE vs size", "95% CI", "Folds valid/failed", "Underpowered", "AD outside", "Note"];
+      // a note every row shares (e.g. the underpowered reason) is stated once above the table
+      const notesOf = (r) => [r.reason, r.underpowered_reason, r.ad_reason].filter(Boolean)
+        .join("; ").split("; ").filter(Boolean);
+      const all = t.rows.map(notesOf);
+      const shared = all.length ? all[0].filter((n) => all.every((ns) => ns.indexOf(n) >= 0)) : [];
+      const rowNote = (r, sh) => notesOf(r).filter((n) => sh.indexOf(n) < 0).join("; ");
       const rows = t.rows.map((r) => [
         r.set + (r.is_reference ? " (reference)" : ""), fmt(r.n, 0), fmt(r.p, 0), fmt(r.r2_fold_mean), fmt(r.r2_pooled_mean),
         fmt(r.mae_fold_mean), r.is_reference ? "-" : fmt(r.d_r2_mean), r.is_reference ? "-" : fmtCI(r.d_r2_ci_low, r.d_r2_ci_high),
@@ -350,10 +356,11 @@
         r.is_reference ? "-" : fmtCI(r.d_mae_ci_low, r.d_mae_ci_high),
         fmt(r.n_valid_folds, 0) + "/" + fmt(r.n_failed_folds, 0), r.underpowered ? "yes" : "no",
         r.ad_share_outside === null ? "n/a" : Math.round(r.ad_share_outside * 100) + "%",
-        [r.reason, r.underpowered_reason, r.ad_reason].filter(Boolean).join("; ")]);
+        rowNote(r, shared)]);
+      if (shared.length) sec.appendChild(el("p", { className: "status", text: "Applies to every row: " + shared.join("; ") }));
       const tbl = el("table");
       table(tbl, headers, rows, "Baseline ladder for " + t.name + " (learner " + t.learner + ")");
-      sec.appendChild(el("div", { className: "table-wrap" }, [tbl]));
+      sec.appendChild(el("div", { className: "scroll" }, [tbl]));
       box.appendChild(sec);
     }
     $("results").hidden = false;
@@ -412,7 +419,9 @@
       if (q && META_COLS.indexOf(col) < 0 && col.toLowerCase().indexOf(q) < 0) return;
       rows.push([col].concat(v.rows.map((r) => {
         const x = r[ci];
-        return typeof x === "number" ? (Number.isInteger(x) ? String(x) : x.toPrecision(8)) : (x === null ? "undefined" : x);
+        if (typeof x === "number") return Number.isInteger(x) ? String(x) : x.toPrecision(8);
+        // "undefined" is reserved for an index that could not be computed; empty text fields stay blank
+        return x === null ? (META_COLS.indexOf(col) >= 0 ? "" : "undefined") : x;
       })));
     });
     const si = v.columns.indexOf("smiles");

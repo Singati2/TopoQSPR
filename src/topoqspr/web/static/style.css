@@ -106,3 +106,5 @@ footer.site h2 { font-size: 1.05rem; }
 
 .scroll { overflow-x: auto; max-height: 32rem; overflow-y: auto; margin-top: .5rem; }
 .scroll table { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+#catalog-table td:nth-child(3) { white-space: normal; word-break: break-word; max-width: 34rem; font-family: ui-monospace, monospace; font-size: .85em; }
