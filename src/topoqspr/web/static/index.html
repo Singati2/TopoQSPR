@@ -25,6 +25,7 @@
       <li><a href="#step-run">3. Targets and run</a></li>
       <li><a href="#step-results">4. Results</a></li>
       <li><a href="#step-indices">Indices only</a></li>
+      <li><a href="#catalog">Index catalogue</a></li>
     </ol>
   </nav>
 
@@ -143,18 +144,43 @@
   </section>
 
   <section id="step-indices" aria-labelledby="h-indices">
-    <h2 id="h-indices">Topological indices for your own molecules</h2>
-    <p>Paste SMILES (one per line, optionally followed by a name) or a CSV with a
-      <code>smiles</code> column, or choose a file. The result is a zip with every verified index,
-      and the reason for each undefined value.</p>
-    <label for="indices-text">SMILES list</label>
+    <h2 id="h-indices">Topological indices for your own molecules or graphs</h2>
+    <p>Paste or load structures in any supported format. Molecules are standardised exactly as in
+      the study (parent structure, hydrogen-suppressed graph); adjacency input is treated as an
+      abstract graph. Every undefined value is reported with its reason, never as 0.</p>
+    <div class="row">
+      <label for="indices-format">Input format</label>
+      <select id="indices-format">
+        <option value="smiles">SMILES list (one per line, optional name)</option>
+        <option value="sdf">SDF (one or more records)</option>
+        <option value="mol">MOL file</option>
+        <option value="pdb">PDB file</option>
+        <option value="adjacency_matrix">Adjacency matrix (graph)</option>
+        <option value="adjacency_list">Adjacency list (graph)</option>
+      </select>
+      <label><input id="indices-entropies" type="checkbox" checked> include bond-wise entropies</label>
+    </div>
+    <label for="indices-text">Structures</label>
     <textarea id="indices-text" rows="6" spellcheck="false" placeholder="CCO ethanol&#10;c1ccccc1 benzene"></textarea>
     <div class="row">
-      <label for="indices-file">or load a file (.smi, .csv, .txt)</label>
-      <input id="indices-file" type="file" accept=".smi,.csv,.txt,text/plain,text/csv">
+      <label for="indices-file">or load a file (.smi, .csv, .txt, .sdf, .mol, .pdb)</label>
+      <input id="indices-file" type="file" accept=".smi,.csv,.txt,.sdf,.mol,.pdb,text/plain,text/csv">
     </div>
-    <button id="indices-button" type="button">Compute indices</button>
+    <button id="indices-view-button" type="button">Show indices</button>
+    <button id="indices-button" type="button">Download all (zip)</button>
     <div id="indices-status" role="status" aria-live="polite" class="status"></div>
+    <div class="row"><label for="indices-filter">Filter rows</label>
+      <input id="indices-filter" type="search" placeholder="e.g. Zagreb, R2_, ENT_"></div>
+    <div class="scroll"><table id="indices-table"></table></div>
+  </section>
+
+  <section id="catalog" aria-labelledby="h-catalog">
+    <h2 id="h-catalog">Index catalogue: formulas and primary references</h2>
+    <p>Every index and entropy with its family, formula and the primary source it was verified
+      against (details and tests: <code>docs/INDEX_VERIFICATION.md</code>).</p>
+    <div class="row"><label for="catalog-filter">Search</label>
+      <input id="catalog-filter" type="search" placeholder="name, family or reference"></div>
+    <div class="scroll"><table id="catalog-table"></table></div>
   </section>
 </main>
 

@@ -307,9 +307,27 @@ class IndicesRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     text: str = Field(min_length=1, max_length=200_000)
+    format: Literal["smiles", "sdf", "mol", "pdb", "adjacency_matrix", "adjacency_list"] = "smiles"
+    entropies: bool = True
+    view: bool = False  # True: JSON for the on-page table instead of the ZIP download
 
 
 # --------------------------------------------------------------------------- helpers
+def _catalog_frame():
+    import pandas as pd
+
+    from ..entropy import ENTROPY_NAMES
+    from ..indices import REGISTRY
+
+    rows = [dict(name=s.name, family=s.family, formula_latex=s.latex, reference=s.ref,
+                 description=s.description or "") for s in REGISTRY]
+    rows += [dict(name=e, family="entropy", reference="jacob2026chemgraphx",
+                  formula_latex=r"-\sum_{uv} \frac{w_{uv}}{T}\ln\frac{w_{uv}}{T},\ T=" + e[4:],
+                  description=f"Shannon entropy of the edge contributions of {e[4:]}")
+             for e in ENTROPY_NAMES]
+    return pd.DataFrame(rows)
+
+
 def _client_ip(request: Request, settings: Settings) -> str:
     if settings.trust_proxy:
         xff = request.headers.get("x-forwarded-for", "")
@@ -799,34 +817,67 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
         limit(request, "indices", settings.rate_indices_per_min, 60.0,
               "index calculations per minute")
+        from ..entropy import index_entropies
+        from ..inputs import parse_input
+
         try:
-            pairs = parse_smiles_text(req.text, settings.max_indices_molecules,
-                                      settings.max_smiles_length)
+            if req.format == "smiles":
+                pairs = parse_smiles_text(req.text, settings.max_indices_molecules,
+                                          settings.max_smiles_length)
+                text = "\n".join(f"{smi} {rid}" for rid, smi in pairs)
+            else:
+                text = req.text
+            records = parse_input(text, req.format, label="input")
+            if len(records) > settings.max_indices_molecules:
+                raise ValueError(f"more than {settings.max_indices_molecules} structures")
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from None
         if not indices_sem.acquire(timeout=30):
             raise HTTPException(503, "the server is busy; try again in a moment")
         try:
-            rows, graphs, ok_ids = [], [], []
+            rows, graphs, ok_ids, ent_rows, ent_fail = [], [], [], {}, []
             with rdBase.BlockLogs():
-                for rid, smi in pairs:
-                    res = standardize(smi)
-                    rows.append(dict(id=rid, input_smiles=smi,
-                                     status="ok" if res.ok else "rejected",
-                                     reason="" if res.ok else res.rejection.code,
-                                     smiles=res.canonical_smiles or "",
-                                     inchikey=res.inchikey or ""))
-                    if res.ok:
-                        graphs.append(res.graph)
+                for i, rec in enumerate(records):
+                    rid = rec.label if rec.label not in ok_ids else f"{rec.label}_{i + 1}"
+                    ok = rec.graph is not None
+                    rows.append(dict(id=rid, input_smiles=rec.input_text or "",
+                                     status="ok" if ok else "rejected",
+                                     reason="" if ok else (rec.reason or "rejected"),
+                                     smiles=rec.smiles if ok and rec.smiles else "",
+                                     inchikey=rec.inchikey or "", kind=rec.kind,
+                                     n_vertices=rec.graph.n if ok else "",
+                                     n_edges=len(rec.graph.edges) if ok else ""))
+                    if ok:
+                        graphs.append(rec.graph)
                         ok_ids.append(rid)
+                        if req.entropies:
+                            ev, ew = index_entropies(rec.graph)
+                            ent_rows[rid] = ev
+                            ent_fail += [dict(row=rid, feature=k, reason=v) for k, v in ew.items()]
                 vals, failures = compute_index_table(graphs, ok_ids, exact=True)
         finally:
             indices_sem.release()
         meta_df = pd.DataFrame(rows).set_index("id")
-        out = meta_df.join(vals.astype(object).reindex(meta_df.index)).reset_index()
+        out = meta_df.join(vals.astype(object).reindex(meta_df.index))
+        if req.entropies and ent_rows:
+            out = out.join(pd.DataFrame.from_dict(ent_rows, orient="index").astype(object))
+        out = out.reset_index()
+        failures = list(failures) + ent_fail
         fail = pd.DataFrame([dict(row=r["id"], feature="*", reason=f"rejected: {r['reason']}")
                              for r in rows if r["status"] != "ok"] + failures,
                             columns=["row", "feature", "reason"])
+        if req.view:
+            def cell(x):
+                try:
+                    f = float(x)
+                except (TypeError, ValueError):
+                    return None if x in ("", None) else str(x)
+                return f if math.isfinite(f) else None
+            return JSONResponse(dict(
+                columns=list(out.columns),
+                rows=[[cell(v) for v in r] for r in out.itertuples(index=False)],
+                failures=fail.to_dict(orient="records"),
+                n=len(rows), n_ok=len(ok_ids)))
         buf = io.BytesIO()
         with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
             def add(name: str, data: str) -> None:
@@ -835,6 +886,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 info.external_attr = 0o644 << 16
                 zf.writestr(info, data.encode("utf-8"))
             add("indices.csv", out.to_csv(index=False, lineterminator="\n"))
+            add("catalog.csv", _catalog_frame().to_csv(index=False, lineterminator="\n"))
             add("indices.failures.csv", fail.to_csv(index=False, lineterminator="\n"))
             add("README.txt",
                 "TopoQSPR topological indices (v" + __version__ + ")\n\n"
@@ -845,8 +897,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         n_ok = len(ok_ids)
         return Response(buf.getvalue(), media_type="application/zip",
                         headers={"Content-Disposition": 'attachment; filename="topoqspr-indices.zip"',
-                                 "X-Molecules": str(len(pairs)), "X-Molecules-OK": str(n_ok),
+                                 "X-Molecules": str(len(rows)), "X-Molecules-OK": str(n_ok),
                                  "X-Undefined-Values": str(len(failures))})
+
+    @app.get("/api/catalog")
+    def catalog():
+        """Every index and entropy: name, family, formula (LaTeX), primary reference key."""
+        return JSONResponse(dict(items=_catalog_frame().to_dict(orient="records")))
 
     # ---------------------------------------------------------------- front-end
     @app.get("/", include_in_schema=False)

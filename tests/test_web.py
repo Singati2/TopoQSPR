@@ -445,3 +445,26 @@ def test_text_cells_never_leak_nan():
     assert _text(float("nan")) is None and _text("") is None and _text(None) is None
     assert _text(" small n ") == "small n"
     _json.dumps({"r": _text(float("nan"))}, allow_nan=False)
+
+
+def test_indices_formats_entropies_view_and_catalog(data_dir):
+    """ChemGraphX parity and beyond: file/graph formats, entropies, on-page view, formula catalogue."""
+    from rdkit import Chem
+    app = create_app(_settings(data_dir / "fmt"))
+    with TestClient(app) as c:
+        r = c.post("/api/indices", json={"text": "A = [[0,1,0,1],[1,0,1,0],[0,1,0,1],[1,0,1,0]]",
+                                         "format": "adjacency_matrix", "view": True})
+        assert r.status_code == 200, r.text
+        v = r.json()
+        row = dict(zip(v["columns"], v["rows"][0]))
+        assert row["kind"] == "graph" and row["M1"] == 16
+        assert abs(row["ENT_M1"] - 1.3862943611198906) < 1e-12  # ln 4 on the 4-cycle
+        mb = Chem.MolToMolBlock(Chem.MolFromSmiles("c1ccccc1O"))
+        r = c.post("/api/indices", json={"text": mb, "format": "mol", "view": True})
+        assert dict(zip(r.json()["columns"], r.json()["rows"][0]))["M1"] == 30
+        bad = c.post("/api/indices", json={"text": "0 1\n1 1", "format": "adjacency_matrix", "view": True}).json()
+        assert bad["n_ok"] == 0 and "self-loops" in bad["failures"][0]["reason"]
+        z = c.post("/api/indices", json={"text": "CCO ethanol", "format": "smiles"})
+        assert z.status_code == 200 and z.headers["content-type"] == "application/zip"
+        cat = c.get("/api/catalog").json()["items"]
+        assert len(cat) == 102 + 89 and all(i["formula_latex"] and i["reference"] for i in cat)

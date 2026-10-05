@@ -371,13 +371,18 @@
     setStatus("indices-status", "Loaded " + f.name + ".");
   }
 
+  function indicesPayload(view) {
+    return { text: $("indices-text").value, format: $("indices-format").value,
+             entropies: $("indices-entropies").checked, view: view };
+  }
+
   async function computeIndices() {
     const text = $("indices-text").value;
-    if (!text.trim()) { setStatus("indices-status", "Paste SMILES or choose a file first.", "error"); return; }
+    if (!text.trim()) { setStatus("indices-status", "Paste structures or choose a file first.", "error"); return; }
     $("indices-button").disabled = true;
     setStatus("indices-status", "Computing...");
     try {
-      const resp = await postJSON("/api/indices", { text: text });
+      const resp = await postJSON("/api/indices", indicesPayload(false));
       const blob = await resp.blob();
       const url = URL.createObjectURL(blob);
       const a = el("a", { href: url, download: "topoqspr-indices.zip" });
@@ -386,12 +391,66 @@
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 10000);
       setStatus("indices-status", resp.headers.get("X-Molecules-OK") + " of " + resp.headers.get("X-Molecules") +
-        " molecules standardised; " + resp.headers.get("X-Undefined-Values") + " undefined index values (reasons in the zip).", "ok");
+        " structures accepted; " + resp.headers.get("X-Undefined-Values") + " undefined values (reasons in the zip).", "ok");
     } catch (e) {
       setStatus("indices-status", e.message, "error");
     } finally {
       $("indices-button").disabled = false;
     }
+  }
+
+  const META_COLS = ["id", "input_smiles", "status", "reason", "smiles", "inchikey", "kind", "n_vertices", "n_edges"];
+
+  function renderIndexView() {
+    const v = state.indexView;
+    if (!v) return;
+    const ids = v.rows.map((r) => r[0]);
+    const q = $("indices-filter").value.trim().toLowerCase();
+    const rows = [];
+    v.columns.forEach((col, ci) => {
+      if (ci === 0) return;
+      if (q && META_COLS.indexOf(col) < 0 && col.toLowerCase().indexOf(q) < 0) return;
+      rows.push([col].concat(v.rows.map((r) => {
+        const x = r[ci];
+        return typeof x === "number" ? (Number.isInteger(x) ? String(x) : x.toPrecision(8)) : (x === null ? "undefined" : x);
+      })));
+    });
+    table($("indices-table"), ["index"].concat(ids), rows,
+      v.n_ok + " of " + v.n + " structures accepted; " + v.failures.length + " undefined values or rejections");
+  }
+
+  async function viewIndices() {
+    const text = $("indices-text").value;
+    if (!text.trim()) { setStatus("indices-status", "Paste structures or choose a file first.", "error"); return; }
+    $("indices-view-button").disabled = true;
+    setStatus("indices-status", "Computing...");
+    try {
+      const resp = await postJSON("/api/indices", indicesPayload(true));
+      state.indexView = await resp.json();
+      renderIndexView();
+      setStatus("indices-status", "Done.", "ok");
+    } catch (e) {
+      setStatus("indices-status", e.message, "error");
+    } finally {
+      $("indices-view-button").disabled = false;
+    }
+  }
+
+  function renderCatalog() {
+    const items = state.catalog || [];
+    const q = $("catalog-filter").value.trim().toLowerCase();
+    const rows = items.filter((i) => !q || (i.name + " " + i.family + " " + i.reference).toLowerCase().indexOf(q) >= 0)
+      .map((i) => [i.name, i.family, i.formula_latex, i.reference]);
+    table($("catalog-table"), ["index", "family", "formula (LaTeX)", "primary reference"], rows,
+      rows.length + " of " + items.length + " entries");
+  }
+
+  async function loadCatalog() {
+    try {
+      const resp = await api("/api/catalog");
+      state.catalog = (await resp.json()).items;
+      renderCatalog();
+    } catch (e) { /* the catalogue is optional; the rest of the page works without it */ }
   }
 
   // ------------------------------------------------------------------ init
@@ -409,6 +468,10 @@
     $("measured-targets").addEventListener("change", updateRunButton);
     $("indices-file").addEventListener("change", loadFile);
     $("indices-button").addEventListener("click", computeIndices);
+    $("indices-view-button").addEventListener("click", viewIndices);
+    $("indices-filter").addEventListener("input", renderIndexView);
+    $("catalog-filter").addEventListener("input", renderCatalog);
+    loadCatalog();
     window.addEventListener("hashchange", routeHash);
     renderSelected();
     try {

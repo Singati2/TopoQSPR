@@ -103,3 +103,6 @@ footer.site h2 { font-size: 1.05rem; }
   dl.summary { grid-template-columns: 1fr; }
   dl.summary dd { margin-bottom: 6px; }
 }
+
+.scroll { overflow-x: auto; max-height: 32rem; overflow-y: auto; margin-top: .5rem; }
+.scroll table { font-variant-numeric: tabular-nums; white-space: nowrap; }

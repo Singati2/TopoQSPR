@@ -24,7 +24,7 @@ dependencies = [
 
 [project.optional-dependencies]
 web = ["fastapi>=0.110", "uvicorn>=0.29"]
-test = ["pytest>=8", "networkx>=3.2", "mordredcommunity>=2.0"]
+test = ["pytest>=8", "httpx>=0.27", "networkx>=3.2", "mordredcommunity>=2.0"]
 # kept for existing install commands; openpyxl is now a core dependency
 expdata = ["openpyxl>=3.1"]
 
