@@ -3,7 +3,9 @@
 Required by `RECOMMENDATIONS.md` and `docs/EXPERIMENT_PLAN.md` §11. The main experiment starts only
 when this report says **GO**. Status as of 2026-10-03, branch `v1.0-dev`.
 
-## Decision: **NO-GO (not yet)**
+## Decision: **GO (2026-10-05)** — plan frozen at tag `plan-freeze-v1`
+
+_Earlier status (2026-10-03): NO-GO pending author decisions; all five are now recorded below._
 
 The software, the index library, the cohort and data layers, the confirmatory protocol and the
 experiment runners are implemented and adversarially verified. The main experiment is blocked only
