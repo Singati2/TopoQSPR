@@ -41,10 +41,10 @@ Legend: ✅ has it · ❌ does not · ⏳ TopoQSPR work in progress (target).
 | Scientific contribution | new web index calculator | reproducible disease-anchored QSPR workflow + methodological study |
 | Index validation | comparison with existing tools on example structures | five independent routes incl. closed forms, brute force, Mordred, ChemGraphX 41/41, printed values; errata found in primary sources; independent-literature check |
 | Statistical evaluation | none (descriptor tool) | repeated nested CV, baseline ladder, corrected-t CIs, BH/BY, Y-randomisation, bootstrap, scaffold CV |
-| Experiments on real data | illustrative structures | cohort sensitivity (A), size/composition confounding (B), evaluation optimism (C), replication of four published studies (D) |
+| Experiments on real data | illustrative structures | **A done** (4 diseases: naive query returns 4–16× more structures, Jaccard 0.06–0.28; `results/expA`); B running (pooled 1,821 approved drugs, 4 measured endpoints, frozen plan `plan-freeze-v1`); C and D next |
 | Reproducibility | code on GitHub | tagged release, Zenodo DOI, run records, lock file, Docker, tests, preregistered plan |
 | Related-work comparison table | ✅ | ✅ (more tools, each cell verified) |
-| Figures / tables | 10 / 3 | target ≥ 6 informative figures from result files |
+| Figures / tables | 10 / 3 | generated only from result files (`tools/make_results.py`, `make_expA.py`): so far 2 figures + 3 tables; target ≥ 6 figures |
 
 The goal is met when every ⏳ is ✅ and verified, and the paper's results come from the frozen,
 tagged analysis.
