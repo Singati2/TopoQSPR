@@ -288,6 +288,98 @@ def result_macros(conf, info: dict, ctrl: list[dict], out: Path) -> None:
     (out / "results_macros.tex").write_text("".join(f"\\newcommand{{\\{k}}}{{{_tex(v)}}}\n" for k, v in m.items()))
 
 
+def _scaffold_stats(res: Path, target: str) -> dict:
+    """Scaffold-group counts per target (the plan asks for the number of groups and the largest
+    group's share), recomputed with the pipeline's own grouping (evaluate.scaffold_groups on the
+    standardised SMILES, connectivity groups merged) on the molecules that have the target."""
+    try:
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+        from rdkit import Chem
+        from topoqspr import evaluate as ev
+    except Exception:  # noqa: BLE001 - optional (RDKit)
+        return {}
+    mols_tab = _read(res / "molecules.csv")
+    tg = _read(res / "targets.csv")
+    ok = tg[target].notna() if target in tg else pd.Series(False, index=tg.index)
+    ids = set(tg.loc[ok, "id"])
+    sub = mols_tab[mols_tab["id"].isin(ids) & mols_tab["smiles"].notna()]
+    mols = [Chem.MolFromSmiles(x) for x in sub["smiles"]]
+    if not mols or any(m is None for m in mols):
+        return {}
+    scaf = ev.scaffold_groups(mols)
+    conn = [g if isinstance(g, str) and g else i for g, i in zip(sub["connectivity_group"], sub["id"])]
+    pos = {i: k for k, i in enumerate(sub["id"])}
+    groups = pd.Series([scaf[pos[g]] if g in pos else scaf[k] for k, g in enumerate(conn)])
+    counts = groups.value_counts()
+    return dict(n=int(len(groups)), groups=int(len(counts)), largest=int(counts.iloc[0]),
+                largest_share=float(counts.iloc[0] / len(groups)),
+                singletons=int((counts == 1).sum()))
+
+
+def scaffold_table(res: Path, learner: str, out: Path) -> dict:
+    """Ladder under scaffold-grouped outer folds, with the paired TI - size gain per target."""
+    summary = _read(res / "summary.csv")
+    ad = _read(res / "ad_summary.csv") if (res / "ad_summary.csv").exists() else None
+    targets = list(dict.fromkeys(summary["target"]))
+    sets = [x for x in LADDER if x in set(summary["set"])]
+    head = " & ".join(["Feature set"] + [f"\\multicolumn{{2}}{{c}}{{{TARGET.get(t, _tex(t))}}}" for t in targets]) + " \\\\"
+    sub = " & ".join([""] + ["all & in-dom."] * len(targets)) + " \\\\"
+    lines, macros = [], {}
+    for x in sets:
+        cells = []
+        for t in targets:
+            r = summary[(summary["target"] == t) & (summary["learner"] == learner) & (summary["set"] == x)]
+            a = ad[(ad["target"] == t) & (ad["learner"] == learner) & (ad["set"] == x)] if ad is not None else pd.DataFrame()
+            if r.empty:
+                cells += ["--", "--"]
+                continue
+            indom = float(a.iloc[0]["r2_in_domain_pooled_mean"]) if len(a) and pd.notna(a.iloc[0]["r2_in_domain_pooled_mean"]) else math.nan
+            cells += [_r2cell(r.iloc[0]["r2_pooled_mean"]), _r2cell(indom)]
+        lines.append(" & ".join([LABEL.get(x, _tex(x))] + cells) + " \\\\")
+    drow, grow = ["$\\Delta R^2$ (TI $-$ size)"], ["scaffold groups"]
+    for t in targets:
+        r = summary[(summary["target"] == t) & (summary["learner"] == learner) & (summary["set"] == "TI")]
+        if r.empty or pd.isna(r.iloc[0]["d_r2_mean"]):
+            drow.append("\\multicolumn{2}{c}{--}")
+        else:
+            d, lo, hi, pv = (float(r.iloc[0][k]) for k in ("d_r2_mean", "d_r2_ci_low", "d_r2_ci_high", "d_r2_p"))
+            ptxt = _p(pv).replace("$", "")
+            drow.append(f"\\multicolumn{{2}}{{c}}{{{d:+.2f} [{lo:+.2f}, {hi:+.2f}], $p{'' if ptxt.startswith('<') else '='}{ptxt}$}}")
+            key = "".join(ch for ch in t.title() if ch.isalpha())
+            macros[f"scafdR{key}"] = f"{d:+.2f}"
+            macros[f"scafci{key}"] = f"[{lo:+.2f}, {hi:+.2f}]"
+            macros[f"scafp{key}"] = _p(pv).replace("$", "")
+            macros.setdefault("scafNCIexcludesZero", 0)
+            macros["scafNCIexcludesZero"] += int(lo > 0)
+        st = _scaffold_stats(res, t)
+        grow.append(f"\\multicolumn{{2}}{{c}}{{{st['groups']} (largest {100 * st['largest_share']:.1f}\\%)}}" if st else "\\multicolumn{2}{c}{--}")
+        if st:
+            macros[f"scafGroups{key}"] = st["groups"]
+            macros[f"scafLargestShare{key}"] = f"{100 * st['largest_share']:.1f}"
+    macros["scafNTargets"] = len(targets)
+    tex = r"""\begin{table}[t]
+\centering\footnotesize
+\caption{Baseline ladder under scaffold-grouped outer folds (frozen \texttt{studies/main\_scaffold.json}; Bemis--Murcko scaffolds, acyclic molecules as singletons, stereoisomers merged into their scaffold's group; learner \texttt{selected}; $5\times5$ repeated nested CV). Pooled $R^2$ on all molecules and inside the applicability domain; the last rows give the paired gain of the topological indices over the size baseline on identical scaffold folds with the corrected repeated $k$-fold $t$ interval, and the number of scaffold groups with the largest group's share of the molecules. Generated by \texttt{tools/make\_results.py}.}
+\label{tab:ladderScaffold}
+\begin{tabular}{l%s}
+\toprule
+%s
+%s
+\midrule
+%s
+\midrule
+%s
+%s
+\bottomrule
+\end{tabular}
+\end{table}
+""" % ("rr" * len(targets), head, sub, "\n".join(lines), " & ".join(drow) + " \\\\", " & ".join(grow) + " \\\\")
+    (out / "tab_ladder_scaffold.tex").write_text(tex)
+    (out / "scaffold_macros.tex").write_text("".join(f"\\newcommand{{\\{k}}}{{{_tex(v)}}}\n" for k, v in macros.items()))
+    return macros
+
+
 def provenance(rec: dict, out: Path) -> None:
     code = rec.get("code") or {}
     ch = rec.get("chembl") or {}
@@ -315,6 +407,7 @@ def main() -> None:
     ap.add_argument("results")
     ap.add_argument("out")
     ap.add_argument("--learner", default="selected")
+    ap.add_argument("--scaffold-run", default=None, help="results dir of the scaffold-split run (tab_ladder_scaffold.tex)")
     ap.add_argument("--extra-controls", nargs="*", default=[],
                     help="further run dirs whose protocol stage (permutation/bootstrap) is added to the controls table")
     a = ap.parse_args()
@@ -331,6 +424,8 @@ def main() -> None:
     ctrl = controls_table(res, [Path(x) for x in a.extra_controls], out)
     provenance(json.loads((res / "run_record.json").read_text()), out)
     result_macros(conf, info, ctrl, out)
+    if a.scaffold_run:
+        print(scaffold_table(Path(a.scaffold_run), a.learner, out))
     print("results written to", out)
 
 
