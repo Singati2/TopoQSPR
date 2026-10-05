@@ -92,7 +92,14 @@ The free-text input is matched (\texttt{topoqspr headings}) against the MeSH hea
 Stereoisomers (for example a racemate and its eutomer) are kept as separate drugs but share an identical hydrogen-suppressed graph, so all cross-validation folds are grouped by the InChIKey connectivity block to keep them on the same side of every split \cite{kapoor2023leakage}.
 The resulting \emph{drug manifest} is written as a separate artefact (\texttt{topoqspr cohort}), so it can be inspected before any index or model is computed. It lists the ChEMBL ID, preferred name, phase and the reason each candidate was included or excluded. Ordering is deterministic, so a given release and set of settings always produce the same set.
 
-Besides disease cohorts, \ml{} accepts single structures or batches as SMILES, SDF, MOL or PDB, which go through the same standardisation, and abstract graphs as adjacency matrices or lists (validated as simple, symmetric and connected), for which the graph-theoretic indices are computed without any chemistry-specific step.
+Besides disease cohorts, \ml{} accepts single structures or batches as SMILES, SDF, MOL or PDB, which go through the same standardisation, and abstract graphs as adjacency matrices or lists (validated as simple, symmetric and connected), for which the graph-theoretic indices are computed without any chemistry-specific step (Figure~\ref{fig:inputs}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_inputs.pdf}
+\caption{The six input routes with a minimal example of each, as parsed by \ml{}: molecular formats are standardised and give the same hydrogen-suppressed graph (phenol: $n=7$, $m=7$, $M_1=30$, $W=42$); adjacency input is treated as an abstract graph (the 4-cycle); invalid input is rejected with a stated reason. Generated from the parser's own output.}
+\label{fig:inputs}
+\end{figure}
 
 \subsection{Topological indices and entropies}
 For a molecular graph $G=(V,E)$ (the hydrogen-suppressed graph of the standardised parent structure) with vertex degrees $d(v)$ and maximum degree $\Delta$, the package implements 102 indices in six families (Table~\ref{tab:indices}; definitions, sources and tests in \texttt{docs/INDEX\_VERIFICATION.md}, \todo{Supplementary~S1}):
@@ -141,7 +148,21 @@ Each target property is modelled with ten regressor families (ordinary least squ
 
 %% ---------------------------------------------------------------
 \subsection{Work flow}
-A study is run from the command line (\texttt{topoqspr headings}, \texttt{cohort}, \texttt{run}, \texttt{rerun}) or from the web interface built on the same package, which follows the order of this section: search MeSH headings, review the full drug manifest with the reason for every exclusion, confirm, and run an exploratory analysis whose results (the baseline ladder with confidence intervals) and run record can be downloaded \todo{Fig.~2: web work flow screenshots after deployment}. The web interface also computes indices and entropies for uploaded structures and graphs, shows each index's formula and primary reference, and depicts the standardised structure. Confirmatory analyses use the command line with the frozen configuration.
+A study is run from the command line (\texttt{topoqspr headings}, \texttt{cohort}, \texttt{run}, \texttt{rerun}) or from the web interface built on the same package, which follows the order of this section: search MeSH headings, review the full drug manifest with the reason for every exclusion, confirm, and run an exploratory analysis whose results (the baseline ladder with confidence intervals) and run record can be downloaded \todo{replace the homepage screenshot with the deployed site's once deployed}. The web interface also computes indices and entropies for uploaded structures and graphs, shows each index's formula and primary reference, and depicts the standardised structure. Confirmatory analyses use the command line with the frozen configuration. Figure~\ref{fig:workflow} summarises the work flow and Figure~\ref{fig:homepage} shows the web page.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_workflow.pdf}
+\caption{Work flow of \ml{}. A disease is resolved to confirmed MeSH identifiers; the drug manifest is reviewed by the user before any computation; standardised structures (from the manifest or from uploaded structures and graphs) yield the hydrogen-suppressed graph, the verified indices and entropies, and the evaluation against the baseline ladder; every run writes its outputs with a run record.}
+\label{fig:workflow}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_homepage.png}
+\caption{Homepage of the \ml{} web interface: input-format selection and the index calculator, followed by the disease-anchored study, the index catalogue and the citation card.}
+\label{fig:homepage}
+\end{figure}
 
 \section{Comparative analysis}\label{sec:comparison}
 Existing software covers parts of this workflow (Table~\ref{tab:tools}). General descriptor calculators such as PaDEL \cite{yap2011padel}, alvaDesc \cite{mauri2020alvadesc} and Mordred \cite{moriwaki2018mordred} compute many classical indices, and PyTIE \cite{jeyaraj2025pytie} computes degree-based indices and entropies; ChemGraphX \cite{jacob2026chemgraphx} computes degree-, degree-sum-, hybrid- and distance-based indices and graph entropies from structure files; DOPtools \cite{byadi2025doptools} and QSPRpred \cite{vandenmaagdenberg2024qsprpred} automate descriptor calculation and reproducible model building; RANQSAR \cite{thakur2026ranqsar} packages a seeded, reproducible QSAR workflow with $y$-randomisation and applicability-domain analysis in a desktop application; and browser tools now offer no-code QSAR with ChEMBL access \cite{masud2026browser}. None of these defines \emph{which} molecules constitute a disease-specific drug set, and none evaluates index-based models against size and composition baselines by default. \ml{} is complementary. It does not compete on the number of indices. Instead it turns disease-specific topological QSPR into a reproducible and statistically defensible experiment. Its index values agree with ChemGraphX on all 41 indices the two tools share, 40 directly and one (the edge Wiener index) after a documented convention offset (43 test graphs, maximum relative difference $1.3\times10^{-15}$; \texttt{docs/CHEMGRAPHX\_CROSSCHECK.md}, \todo{Supplementary~S1}).

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="300" viewBox="0 0 760 300" font-family="Helvetica, Arial, sans-serif" font-size="11">
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#52514e"/></marker>
+  </defs>
+  <!-- row 1: disease-anchored study -->
+  <g stroke="#2a78d6" stroke-width="1.4" fill="#eef4fc">
+    <rect x="12" y="40" width="118" height="58" rx="8"/>
+    <rect x="162" y="40" width="118" height="58" rx="8"/>
+    <rect x="312" y="40" width="118" height="58" rx="8"/>
+    <rect x="462" y="40" width="118" height="58" rx="8"/>
+    <rect x="612" y="40" width="138" height="58" rx="8"/>
+  </g>
+  <g fill="#0b0b0b" text-anchor="middle">
+    <text x="71" y="60" font-weight="bold">Disease</text><text x="71" y="76">free text →</text><text x="71" y="90">confirmed MeSH IDs</text>
+    <text x="221" y="60" font-weight="bold">Drug manifest</text><text x="221" y="76">release, phase rule,</text><text x="221" y="90">parent/salt, reasons</text>
+    <text x="371" y="60" font-weight="bold">Verified graph</text><text x="371" y="76">standardised parent,</text><text x="371" y="90">H-suppressed graph</text>
+    <text x="521" y="60" font-weight="bold">Indices</text><text x="521" y="76">102 verified indices,</text><text x="521" y="90">89 entropies</text>
+    <text x="681" y="60" font-weight="bold">Evaluation</text><text x="681" y="76">nested CV,</text><text x="681" y="90">baseline ladder</text>
+  </g>
+  <g stroke="#52514e" stroke-width="1.2" marker-end="url(#a)" fill="none">
+    <line x1="130" y1="69" x2="160" y2="69"/><line x1="280" y1="69" x2="310" y2="69"/>
+    <line x1="430" y1="69" x2="460" y2="69"/><line x1="580" y1="69" x2="610" y2="69"/>
+  </g>
+  <!-- user confirmation gate -->
+  <g>
+    <rect x="186" y="8" width="70" height="16" rx="3" fill="#fff6df" stroke="#52514e" stroke-width="1"/>
+    <text x="221" y="20" text-anchor="middle" font-size="9" fill="#0b0b0b">user confirms</text>
+    <line x1="221" y1="24" x2="221" y2="38" stroke="#52514e" stroke-width="1" marker-end="url(#a)"/>
+  </g>
+  <!-- row 2: other inputs feeding the graph stage -->
+  <g stroke="#52514e" stroke-width="1" fill="#f7f7f5" stroke-dasharray="3,2">
+    <rect x="212" y="130" width="238" height="40" rx="8"/>
+  </g>
+  <text x="331" y="147" text-anchor="middle" fill="#0b0b0b">Structures and graphs</text>
+  <text x="331" y="161" text-anchor="middle" fill="#52514e" font-size="10">SMILES · SDF · MOL · PDB · adjacency matrix / list</text>
+  <line x1="371" y1="130" x2="371" y2="100" stroke="#52514e" stroke-width="1.2" marker-end="url(#a)" fill="none"/>
+  <!-- row 3: outputs -->
+  <g stroke="#1baf7a" stroke-width="1.4" fill="#ecf8f3">
+    <rect x="432" y="200" width="318" height="84" rx="8"/>
+  </g>
+  <g fill="#0b0b0b">
+    <text x="591" y="220" text-anchor="middle" font-weight="bold">Outputs</text>
+    <text x="444" y="238" font-size="9.3">· manifest.csv · indices.csv (a reason for every undefined value) · catalog.csv</text>
+    <text x="444" y="253" font-size="9.3">· ΔR², ΔMAE with CIs · BH / BY q · permutation and bootstrap controls</text>
+    <text x="444" y="268" font-size="9.3">· run_record.json: commit, versions, ChEMBL release, hashes, seeds</text>
+  </g>
+  <line x1="681" y1="98" x2="681" y2="198" stroke="#52514e" stroke-width="1.2" marker-end="url(#a)" fill="none"/>
+  <line x1="521" y1="98" x2="521" y2="198" stroke="#52514e" stroke-width="1.2" marker-end="url(#a)" fill="none"/>
+  <!-- interfaces -->
+  <g fill="#52514e" font-size="10">
+    <text x="12" y="236">Interfaces: command line (topoqspr headings · cohort · indices · run · rerun)</text>
+    <text x="12" y="252">and the web page (same package; exploratory mode, downloads, index catalogue).</text>
+    <text x="12" y="280">Confirmatory runs use the frozen configuration from the command line.</text>
+  </g>
+</svg>
