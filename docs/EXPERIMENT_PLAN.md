@@ -244,3 +244,20 @@ lock, seeds, run configuration and cohort manifest. Paper numbers come only from
   now kept beside the harness's own LOO Q² and not compared as R². Kabeer's printed thousands
   separators ("1,004") are parsed. The three runs were repeated from the corrected specs; the
   earlier outputs were discarded unread except for the index-value check that exposed the defects.
+- **2026-10-05 (after the confirmatory run; before any amended control was computed), control learner.**
+  The frozen protocol stage (CHECKPOINT decision 4, a budget choice) ran the Y-randomisation and the
+  whole-procedure bootstrap with ridge as the control learner, while the confirmatory comparison
+  uses the `selected` learner. The run shows that ridge on the TI set is dominated by three cardiac
+  glycosides (digoxin, digitoxin, acetyldigitoxin; 54–69 heavy atoms) that the pre-specified kNN
+  applicability domain flags as outside the domain in every fold: a linear model extrapolates on
+  them to predictions of −1 000 log units, so the pooled R² of ridge-TI is −1.27 (melting point)
+  and −651 (solubility) although its in-domain R² is ordinary. Consequences: the permutation
+  control declares TI "uninformative" for two targets for a reason unrelated to information, and
+  50–79 % of bootstrap resamples explode, so the percentile interval is meaningless. The ridge
+  results are reported unchanged as the frozen control, with this explanation. The confirmatory
+  statistics themselves (learner `selected`, corrected t, BH/BY) are unaffected and are not re-run.
+  Amended sensitivity: the protocol stage is repeated with SVR (RBF; bounded predictions; the
+  family `selected` chooses most often for both TI and size) as the control learner, K = B = 200,
+  seeds and everything else identical (`studies/main_confirmatory_protocol_svr.json`). Running the
+  controls with the `selected` learner itself is out of reach (one nested CV of the six families
+  takes 18 min on this machine; 1 600 draws per stage). Both control runs are reported.

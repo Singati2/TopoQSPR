@@ -1,0 +1,81 @@
+{
+ "schema": 1,
+ "name": "main_confirmatory_v1_protocol_svr",
+ "cohort": {
+  "source": "pooled",
+  "chembl_release": "ChEMBL_37"
+ },
+ "feature_sets": [
+  "null",
+  "size",
+  "composition",
+  "TI",
+  "TI_composition",
+  "rdkit2d"
+ ],
+ "targets": [
+  {
+   "provider": "expdata",
+   "names": [
+    "mp_bradley",
+    "logp_opera",
+    "logd74_az",
+    "logs_aqsoldb"
+   ]
+  }
+ ],
+ "evaluation": {
+  "families": [
+   "ridge",
+   "elasticnet",
+   "pls",
+   "knn",
+   "svr",
+   "extratrees"
+  ],
+  "learners": [
+   "selected",
+   "ridge",
+   "elasticnet",
+   "pls",
+   "knn",
+   "svr",
+   "extratrees"
+  ],
+  "outer_splits": 5,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "inner_splits": 3,
+  "split": "random",
+  "reference": "size"
+ },
+ "protocol": {
+  "family": "auto",
+  "learner": "selected",
+  "practical_threshold": 0.05,
+  "q": 0.05,
+  "permutation": {
+   "enabled": true,
+   "n_permutations": 200,
+   "seed": 0,
+   "learner": "svr",
+   "quantile": 0.95
+  },
+  "bootstrap": {
+   "enabled": true,
+   "n_boot": 200,
+   "seed": 0,
+   "families": [
+    "svr"
+   ]
+  }
+ },
+ "runtime": {
+  "n_jobs": 14
+ }
+}
