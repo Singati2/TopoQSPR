@@ -468,3 +468,16 @@ def test_indices_formats_entropies_view_and_catalog(data_dir):
         assert z.status_code == 200 and z.headers["content-type"] == "application/zip"
         cat = c.get("/api/catalog").json()["items"]
         assert len(cat) == 102 + 89 and all(i["formula_latex"] and i["reference"] for i in cat)
+
+
+def test_depiction_and_edge_partition(data_dir):
+    app = create_app(_settings(data_dir / "dep"))
+    with TestClient(app) as c:
+        r = c.get("/api/depict", params={"smiles": "CC(=O)Oc1ccccc1C(=O)O.[Na+]"})
+        assert r.status_code == 200 and r.headers["content-type"].startswith("image/svg+xml")
+        assert "<svg" in r.text and "<script" not in r.text.lower()
+        assert "default-src 'none'" in r.headers["content-security-policy"]
+        assert c.get("/api/depict", params={"smiles": "[Na+].[Cl-]"}).status_code == 422
+        v = c.post("/api/indices", json={"text": "CCO ethanol", "view": True}).json()
+        row = dict(zip(v["columns"], v["rows"][0]))
+        assert row["edge_partition"] == "(1,2)x2"

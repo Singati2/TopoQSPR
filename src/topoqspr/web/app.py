@@ -313,6 +313,17 @@ class IndicesRequest(BaseModel):
 
 
 # --------------------------------------------------------------------------- helpers
+def _edge_partition(graph) -> str:
+    """Degree edge partition, e.g. '(1,2)x1; (2,2)x4' (ChemGraphX's 'Graph Information')."""
+    from collections import Counter
+    deg = [0] * graph.n
+    for u, v in graph.edges:
+        deg[u] += 1
+        deg[v] += 1
+    c = Counter(tuple(sorted((deg[u], deg[v]))) for u, v in graph.edges)
+    return "; ".join(f"({a},{b})x{k}" for (a, b), k in sorted(c.items()))
+
+
 def _catalog_frame():
     import pandas as pd
 
@@ -846,7 +857,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                                      smiles=rec.smiles if ok and rec.smiles else "",
                                      inchikey=rec.inchikey or "", kind=rec.kind,
                                      n_vertices=rec.graph.n if ok else "",
-                                     n_edges=len(rec.graph.edges) if ok else ""))
+                                     n_edges=len(rec.graph.edges) if ok else "",
+                                     edge_partition=_edge_partition(rec.graph) if ok else ""))
                     if ok:
                         graphs.append(rec.graph)
                         ok_ids.append(rid)
@@ -899,6 +911,25 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                         headers={"Content-Disposition": 'attachment; filename="topoqspr-indices.zip"',
                                  "X-Molecules": str(len(rows)), "X-Molecules-OK": str(n_ok),
                                  "X-Undefined-Values": str(len(failures))})
+
+    @app.get("/api/depict")
+    def depict(smiles: str = Query(min_length=1, max_length=2000)):
+        """2D depiction (SVG) of a standardised parent structure; shown via <img>, so no script runs."""
+        from rdkit import Chem
+        from rdkit.Chem.Draw import rdMolDraw2D
+
+        from ..graph import standardize
+
+        res = standardize(smiles)
+        if not res.ok:
+            raise HTTPException(422, f"structure rejected: {res.rejection.code}")
+        mol = Chem.MolFromSmiles(res.canonical_smiles)
+        d = rdMolDraw2D.MolDraw2DSVG(300, 220)
+        d.DrawMolecule(mol)
+        d.FinishDrawing()
+        return Response(d.GetDrawingText(), media_type="image/svg+xml",
+                        headers={"Cache-Control": "public, max-age=86400",
+                                 "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'"})
 
     @app.get("/api/catalog")
     def catalog():

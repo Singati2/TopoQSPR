@@ -399,7 +399,7 @@
     }
   }
 
-  const META_COLS = ["id", "input_smiles", "status", "reason", "smiles", "inchikey", "kind", "n_vertices", "n_edges"];
+  const META_COLS = ["id", "input_smiles", "status", "reason", "smiles", "inchikey", "kind", "n_vertices", "n_edges", "edge_partition"];
 
   function renderIndexView() {
     const v = state.indexView;
@@ -415,6 +415,13 @@
         return typeof x === "number" ? (Number.isInteger(x) ? String(x) : x.toPrecision(8)) : (x === null ? "undefined" : x);
       })));
     });
+    const si = v.columns.indexOf("smiles");
+    if (si >= 0 && v.rows.length <= 20) {
+      rows.unshift(["structure"].concat(v.rows.map((r) => r[si]
+        ? el("img", { src: "/api/depict?smiles=" + encodeURIComponent(r[si]), alt: "2D structure of " + r[0],
+                      width: "150", height: "110", loading: "lazy" })
+        : "")));
+    }
     table($("indices-table"), ["index"].concat(ids), rows,
       v.n_ok + " of " + v.n + " structures accepted; " + v.failures.length + " undefined values or rejections");
   }
