@@ -1,0 +1,275 @@
+{
+ "study": "vimala2026_anticancer",
+ "n_compounds": 23,
+ "skipped_compounds": [],
+ "index_map": {},
+ "unmapped_indices": [
+  {
+   "label": "ECI",
+   "name": "Eccentric connectivity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "AECI",
+   "name": "Augmented eccentric connectivity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "TEI",
+   "name": "Total eccentricity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "IEI",
+   "name": "Inverse eccentricity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "AEI",
+   "name": "Average eccentricity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "EDS",
+   "name": "Eccentric distance sum index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "CEI",
+   "name": "Connective eccentricity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "EHI",
+   "name": "Eccentric-based harmonic index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "EM_{1}",
+   "name": "First Zagreb eccentricity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "EM_{2}",
+   "name": "Second Zagreb eccentricity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "EGA",
+   "name": "Geometric Arithmetic eccentricity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "EABC",
+   "name": "ABC eccentricity index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "MECI",
+   "name": "Modified eccentric connectivity index",
+   "reason": "no registry index with this name"
+  }
+ ],
+ "blocking_unmapped_predictors": [
+  "AECI",
+  "EABC",
+  "EGA",
+  "MECI"
+ ],
+ "unsupported_fits": [
+  {
+   "id": "T5-BP",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T5-MP",
+   "reason": "predictor EABC unmapped"
+  },
+  {
+   "id": "T5-E",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T5-FP",
+   "reason": "predictor MECI unmapped"
+  },
+  {
+   "id": "T5-MR",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T5-P",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T5-ST",
+   "reason": "predictor AECI unmapped"
+  },
+  {
+   "id": "T5-MV",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T6-BP",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T6-MP",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T6-E",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T6-FP",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T6-MR",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T6-P",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T6-ST",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T6-MV",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T7-BP",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T7-MP",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T7-E",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T7-FP",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T7-MR",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T7-P",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T7-ST",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T7-MV",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T8-BP-linear",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T8-BP-ridge",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T8-BP-elastic_net",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T8-MP-linear",
+   "reason": "predictor EABC unmapped"
+  },
+  {
+   "id": "T8-MP-ridge",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T8-MP-elastic_net",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T8-E-linear",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T8-E-ridge",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T8-E-elastic_net",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T8-FP-linear",
+   "reason": "predictor MECI unmapped"
+  },
+  {
+   "id": "T8-FP-ridge",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T8-FP-elastic_net",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T8-MR-linear",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T8-MR-ridge",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T8-MR-elastic_net",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T8-P-linear",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T8-P-ridge",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T8-P-elastic_net",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T8-ST-linear",
+   "reason": "predictor AECI unmapped"
+  },
+  {
+   "id": "T8-ST-ridge",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T8-ST-elastic_net",
+   "reason": "form elastic_net"
+  },
+  {
+   "id": "T8-MV-linear",
+   "reason": "predictor EGA unmapped"
+  },
+  {
+   "id": "T8-MV-ridge",
+   "reason": "form ridge"
+  },
+  {
+   "id": "T8-MV-elastic_net",
+   "reason": "form elastic_net"
+  }
+ ],
+ "n_reported_fits": 48,
+ "n_comparable_fits": 0
+}

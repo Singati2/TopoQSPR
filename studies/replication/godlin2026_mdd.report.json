@@ -1,0 +1,45 @@
+{
+ "study": "godlin2026_mdd",
+ "n_compounds": 21,
+ "skipped_compounds": [],
+ "index_map": {
+  "ABC^d": "ABC",
+  "R^d": "R",
+  "M1^d": "M1",
+  "M2^d": "M2",
+  "ReZ1^d": "ReZ1",
+  "ReZ2^d": "ISI",
+  "SO^d": "SO",
+  "BMG^d": "BMG",
+  "GBM^d": "GBM",
+  "GA^d": "GA",
+  "mM2^d": "mM2",
+  "ABC^nd": "S_ABC",
+  "R^nd": "S_R",
+  "M1^nd": "M1",
+  "M2^nd": "M2",
+  "ReZ1^nd": "ReZ1",
+  "ReZ2^nd": "ISI",
+  "SO^nd": "SO",
+  "BMG^nd": "BMG",
+  "GBM^nd": "S_GBM",
+  "GA^nd": "S_GA",
+  "mM2^nd": "mM2"
+ },
+ "unmapped_indices": [
+  {
+   "label": "SS^d",
+   "name": "Shilpa-Shanmukha (degree based)",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "SS^nd",
+   "name": "Shilpa-Shanmukha (neighborhood degree based)",
+   "reason": "no registry index with this name"
+  }
+ ],
+ "blocking_unmapped_predictors": [],
+ "unsupported_fits": [],
+ "n_reported_fits": 27,
+ "n_comparable_fits": 27
+}

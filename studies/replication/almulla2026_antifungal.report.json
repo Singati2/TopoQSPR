@@ -1,0 +1,38 @@
+{
+ "study": "almulla2026_antifungal",
+ "n_compounds": 20,
+ "skipped_compounds": [],
+ "index_map": {
+  "ND_1": "S_RR",
+  "ND_2": "S_SC",
+  "ND_3": "S_ReZ3",
+  "ND_4": "S_R",
+  "ND_5": "S_SDD"
+ },
+ "unmapped_indices": [
+  {
+   "label": "NM_1",
+   "name": "First neighbourhood Zagreb26",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "NM_2",
+   "name": "Second Neighbourhood Zagreb26",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "NABC",
+   "name": "Neighbourhood atom bond connectivity27",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "NF_1",
+   "name": "Neighbourhood forgotten",
+   "reason": "no registry index with this name"
+  }
+ ],
+ "blocking_unmapped_predictors": [],
+ "unsupported_fits": [],
+ "n_reported_fits": 9,
+ "n_comparable_fits": 9
+}

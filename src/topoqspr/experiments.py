@@ -1076,7 +1076,9 @@ def _check_spec(spec: Mapping) -> dict:
         if not isinstance(r, Mapping) or "property" not in r or "index" not in r:
             raise ValueError(f"a reported fit needs 'property' and 'index': {r!r}")
         prop = str(r["property"]).strip()
-        fits.append(dict(r, property=prop, form=_form(r.get("form", "linear"))))
+        # A reported fit may use a form the harness cannot reproduce (logarithmic, ridge, ...):
+        # keep it, normalised, so it is listed as "not compared" rather than refusing the study.
+        fits.append(dict(r, property=prop, form=str(r.get("form", "linear")).strip().lower()))
     out["reported_fits"] = fits
     return out
 

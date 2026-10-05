@@ -239,6 +239,7 @@ def test_cycle_closed_forms_for_every_degree_index(n):
         "ISI": n, "SDD": 2 * n, "sigma": 0, "ABS": n / r2, "ReZ3": 16 * n, "AG": n,
         "HG": n / 4, "GBM": n / 4, "BMG": 4 * n, "BMH": 16 * n, "TMH": 24 * n,
         "BM": 8 * n, "TM": 12 * n, "GH": 4 * n, "GTM": n / 6, "HBM": n / 16, "HTM": n / 24, "TMG": 6 * n,
+        "ReZ1": n * 1.0, "mM2": n / 4,
     }
     degree_names = {s.name for s in REGISTRY if s.family == "degree"}
     assert set(expected) == degree_names
@@ -929,3 +930,16 @@ def test_bi_and_tri_zagreb_identities(smiles):
     v, _ = compute_indices(standardize(smiles).graph)
     assert v["BM"] == v["M1"] + v["M2"]
     assert v["TM"] == v["F"] + v["M2"]
+
+
+def test_rez1_and_mm2_closed_forms():
+    """ReZ1 = sum (d_u+d_v)/(d_u d_v) (Ranjini 2013); mM2 = sum 1/(d_u d_v) (modified second Zagreb).
+    Regular graphs: every edge contributes 2d/d^2 = 2/d and 1/d^2."""
+    from topoqspr.graph import MolGraph
+    from topoqspr.indices import compute_indices
+    for n in (4, 6, 9):
+        v, _ = compute_indices(MolGraph.from_edges(n, [(i, (i + 1) % n) for i in range(n)]))
+        assert v["ReZ1"] == pytest.approx(n * 1.0) and v["mM2"] == pytest.approx(n / 4)
+    star = MolGraph.from_edges(5, [(0, i) for i in range(1, 5)])  # centre degree 4, leaves 1
+    v, _ = compute_indices(star)
+    assert v["ReZ1"] == pytest.approx(4 * 5 / 4) and v["mM2"] == pytest.approx(4 * 1 / 4)

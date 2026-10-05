@@ -1,7 +1,7 @@
 # Topological index verification (TopoQSPR v1)
 
 This file is the provenance record for every index in
-`src/topoqspr/indices.py` (`REGISTRY`, 102 indices) and for every one of the
+`src/topoqspr/indices.py` (`REGISTRY`, 104 indices) and for every one of the
 135 index names of v0.x (`config.py:TOPO_INDICES`). Bibliography keys refer to
 `docs/index_refs.bib`. Test names refer to `tests/test_indices.py` (and
 `tests/test_graph.py` for standardisation). The tests
@@ -62,11 +62,11 @@ if a registry index or a legacy name is missing from this file.
   Z, ...) are returned as Python `int`. Hosoya Z is exact whenever it is
   returned; above the frontier-width cap it is NaN with a reason.
 * **Invariance and determinism.** `test_invariance_under_atom_renumbering`
-  (random RDKit atom orders, 5 drugs, all 102 indices),
+  (random RDKit atom orders, 5 drugs, all 104 indices),
   `test_invariance_under_graph_relabelling`,
   `test_values_are_in_registry_order_and_deterministic`.
 * **No duplicates.** `test_no_two_indices_are_identical_on_the_drug_panel`
-  checks every pair of the 102 indices on 24 approved drugs.
+  checks every pair of the 104 indices on 24 approved drugs.
 * **Edge-function notation.** Edge-additive indices are
   `sum_{uv in E} phi(x_u, x_v)` with x = d (degree family), S (neighbourhood
   degree sum, `S_u = sum_{w ~ u} d_w`) or `M_kR(d)` (modified reverse degree).
@@ -130,6 +130,8 @@ accessible), implementation matches it, and the listed tests pass.
 | `BMG` | $\sum_{uv \in E(G)} \frac{d_u + d_v + d_u d_v}{\sqrt{d_u d_v}}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index`, `test_registry_reproduces_godlin_2026`, `test_hydrochlorothiazide_matches_godlin_2026` | verified against the paper's Table 2 (primary read 2026-10-03) |
 | `BMH` | $\sum_{uv \in E(G)} \frac{(d_u + d_v + d_u d_v)(d_u + d_v)}{2}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index` | verified; verified against the paper's Table 2 (primary read 2026-10-03) |
 | `TMH` | $\sum_{uv \in E(G)} \frac{(d_u^2 + d_v^2 + d_u d_v)(d_u + d_v)}{2}$ | arockiaraj2023sar | `_deg_func` + `PHI` | `test_cycle_closed_forms_for_every_degree_index` | verified; verified against the paper's Table 2 (primary read 2026-10-03) |
+| `ReZ1` | $\sum_{uv \in E(G)} \frac{d_u + d_v}{d_u d_v}$ | ranjini2013 | `_deg_func` + `PHI` | `test_rez1_and_mm2_closed_forms`, `test_cycle_closed_forms_for_every_degree_index` | verified (added 2026-10-05 for Experiment D: Godlin & Radha 2026 model with it) |
+| `mM2` | $\sum_{uv \in E(G)} \frac{1}{d_u d_v}$ | milicevic2004 | `_deg_func` + `PHI` | `test_rez1_and_mm2_closed_forms`, `test_cycle_closed_forms_for_every_degree_index` | verified (added 2026-10-05 for Experiment D) |
 | `BM` | $\sum_{uv \in E(G)} d_u + d_v + d_u d_v$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
 | `TM` | $\sum_{uv \in E(G)} d_u^2 + d_v^2 + d_u d_v$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |
 | `GH` | $\sum_{uv \in E(G)} \frac{\sqrt{d_u d_v}\,(d_u + d_v)}{2}$ | arockiaraj2023sar (p. 571-572) | `_deg_func` + `PHI` | `test_hybrid_indices_match_arockiaraj_2023_sar_qsar`, `test_hybrid_indices_full_pipeline_on_benzenoids` | verified against the paper's Table 2 |

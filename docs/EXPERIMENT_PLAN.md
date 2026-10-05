@@ -220,4 +220,16 @@ lock, seeds, run configuration and cohort manifest. Paper numbers come only from
 
 ## Amendments
 
-_None yet._
+- **2026-10-05 (before any Experiment D re-analysis), replication set.** The four studies selected
+  on 2026-10-04 were chosen for exact reproducibility of their *data*; one of them, Vimala & Ravi
+  Sankar 2026 (shortlist row 3), models only *eccentricity-based* indices (ECI, AECI, EABC, EGA,
+  MECI), a family TopoQSPR does not implement, so none of its 48 fits can be recomputed. It is
+  replaced by the next shortlist study whose modelled indices TopoQSPR implements, in date order,
+  under the same rule; if none qualifies, Experiment D runs on three studies. The converter
+  `tools/replication_to_spec.py` refuses any study with an unmapped modelled predictor, so this
+  check is mechanical. Two degree indices used by Godlin & Radha 2026 (ReZ1, mM2) were added to the
+  registry with closed-form tests; this adds indices to the `TI` feature set used by Experiments B
+  and C? No: those runs were launched from tag `plan-freeze-v1` (102 indices) and are unaffected;
+  the 104-index registry applies to Experiment D only. Model forms the harness cannot reproduce
+  (logarithmic, ridge, elastic net, RF, XGBoost) are listed with their reported statistics and not
+  compared.

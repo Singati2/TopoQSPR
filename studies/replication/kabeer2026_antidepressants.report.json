@@ -1,0 +1,55 @@
+{
+ "study": "kabeer2026_antidepressants",
+ "n_compounds": 25,
+ "skipped_compounds": [],
+ "index_map": {
+  "ND1(G)": "S_RR",
+  "ND2(G)": "S_SC",
+  "ND3(G)": "S_ReZ3",
+  "ND4(G)": "S_R",
+  "ND5(G)": "S_SDD"
+ },
+ "unmapped_indices": [
+  {
+   "label": "NM1(G)",
+   "name": "First Zagreb Index (neighborhood version)",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "NM2(G)",
+   "name": "Second Zagreb Index (neighborhood version)",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "NABC(G)",
+   "name": "Neighborhood Atom Bond Connectivity Index",
+   "reason": "no registry index with this name"
+  },
+  {
+   "label": "NF*(G)",
+   "name": "Neighborhood Forgotten Index",
+   "reason": "no registry index with this name"
+  }
+ ],
+ "blocking_unmapped_predictors": [],
+ "unsupported_fits": [
+  {
+   "id": "T10-MR",
+   "reason": "form logarithmic"
+  },
+  {
+   "id": "T10-HAC",
+   "reason": "form logarithmic"
+  },
+  {
+   "id": "T14-10-MR-logarithmic",
+   "reason": "form logarithmic"
+  },
+  {
+   "id": "T14-11-HAC-logarithmic",
+   "reason": "form logarithmic"
+  }
+ ],
+ "n_reported_fits": 23,
+ "n_comparable_fits": 19
+}

@@ -1,0 +1,593 @@
+{
+ "name": "godlin2026_mdd",
+ "reference": null,
+ "notes": "converted by tools/replication_to_spec.py from data/replication/godlin2026_mdd; licence {'spdx': 'CC-BY-4.0', 'statement_verbatim': 'Copyright \u00a9 2026 Godlin and Radha.This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY). The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms.', 'data_redistribution': 'stored', 'note': ''}",
+ "compounds": [
+  {
+   "name": "Trazodone",
+   "smiles": "C1CN(CCN1CCCN2C(=O)N3C=CC=CC3=N2)C4=CC(=CC=C4)Cl",
+   "pubchem_cid": "5533",
+   "properties": {
+    "MW": 371.9,
+    "HAC": 26.0,
+    "CO": 611.0,
+    "BP": 528.5,
+    "EV": 80.3,
+    "FP": 273.4,
+    "MR": 104.2,
+    "PO": 41.3,
+    "MV": 278.8
+   }
+  },
+  {
+   "name": "Bupropion",
+   "smiles": "CC(C(=O)C1=CC(=CC=C1)Cl)NC(C)(C)C",
+   "pubchem_cid": "444",
+   "properties": {
+    "MW": 239.74,
+    "HAC": 16.0,
+    "CO": 247.0,
+    "BP": 334.8,
+    "EV": 57.8,
+    "FP": 156.3,
+    "MR": 67.9,
+    "PO": 26.9,
+    "MV": 224.7
+   }
+  },
+  {
+   "name": "Vortioxetine",
+   "smiles": "CC1=CC(=C(C=C1)SC2=CC=CC=C2N3CCNCC3)C",
+   "pubchem_cid": "9966051",
+   "properties": {
+    "MW": 298.4,
+    "HAC": 21.0,
+    "CO": 316.0,
+    "BP": 424.8,
+    "EV": 67.9,
+    "FP": 210.7,
+    "MR": 92.7,
+    "PO": 36.8,
+    "MV": 256.5
+   }
+  },
+  {
+   "name": "Sertraline",
+   "smiles": "CN[C@H]1CC[C@H](C2=CC=CC=C12)C3=CC(=C(C=C3)Cl)Cl",
+   "pubchem_cid": "68617",
+   "properties": {
+    "MW": 306.2,
+    "HAC": 20.0,
+    "CO": 322.0,
+    "BP": 416.3,
+    "EV": 67.0,
+    "FP": 205.6,
+    "MR": 85.8,
+    "PO": 34.0,
+    "MV": 243.9
+   }
+  },
+  {
+   "name": "Aripiprazole",
+   "smiles": "C1CC(=O)NC2=C1C=CC(=C2)OCCCCN3CCN(CC3)C4=C(C(=CC=C4)Cl)Cl",
+   "pubchem_cid": "60795",
+   "properties": {
+    "MW": 448.4,
+    "HAC": 30.0,
+    "CO": 559.0,
+    "BP": 646.2,
+    "EV": 95.3,
+    "FP": 344.6,
+    "MR": 120.3,
+    "PO": 47.7,
+    "MV": 355.0
+   }
+  },
+  {
+   "name": "Desvenlafaxine",
+   "smiles": "CN(C)CC(C1=CC=C(C=C1)O)C2(CCCCC2)O",
+   "pubchem_cid": "125017",
+   "properties": {
+    "MW": 263.37,
+    "HAC": 19.0,
+    "CO": 266.0,
+    "BP": 403.8,
+    "EV": 69.1,
+    "FP": 193.2,
+    "MR": 77.8,
+    "PO": 30.9,
+    "MV": 236.1
+   }
+  },
+  {
+   "name": "Citalopram",
+   "smiles": "CN(C)CCCC1(C2=C(CO1)C=C(C=C2)C#N)C3=CC=C(C=C3)F",
+   "pubchem_cid": "2771",
+   "properties": {
+    "MW": 324.4,
+    "HAC": 24.0,
+    "CO": 466.0,
+    "BP": 428.3,
+    "EV": 68.3,
+    "FP": 212.8,
+    "MR": 92.1,
+    "PO": 36.5,
+    "MV": 272.6
+   }
+  },
+  {
+   "name": "Fluoxetine",
+   "smiles": "CNCCC(C1=CC=CC=C1)OC2=CC=C(C=C2)C(F)(F)F",
+   "pubchem_cid": "3386",
+   "properties": {
+    "MW": 309.33,
+    "HAC": 22.0,
+    "CO": 308.0,
+    "BP": 395.1,
+    "EV": 64.5,
+    "FP": 192.8,
+    "MR": 79.9,
+    "PO": 31.7,
+    "MV": 266.7
+   }
+  },
+  {
+   "name": "Cariprazine",
+   "smiles": "CN(C)C(=O)NC1CCC(CC1)CCN2CCN(CC2)C3=C(C(=CC=C3)Cl)Cl",
+   "pubchem_cid": "11154555",
+   "properties": {
+    "MW": 427.4,
+    "HAC": 28.0,
+    "CO": 491.0,
+    "BP": 600.1,
+    "EV": 89.3,
+    "FP": 316.7,
+    "MR": 117.2,
+    "PO": 46.4,
+    "MV": 344.5
+   }
+  },
+  {
+   "name": "Dextromethorphan",
+   "smiles": "CN1CC[C@@]23CCCC[C@@H]2[C@@H]1CC4=C3C=C(C=C4)OC",
+   "pubchem_cid": "5360696",
+   "properties": {
+    "MW": 271.4,
+    "HAC": 20.0,
+    "CO": 370.0,
+    "BP": 394.9,
+    "EV": 64.5,
+    "FP": 116.2,
+    "MR": 81.8,
+    "PO": 32.4,
+    "MV": 243.8
+   }
+  },
+  {
+   "name": "Olanzapine",
+   "smiles": "CC1=CC2=C(S1)NC3=CC=CC=C3N=C2N4CCN(CC4)C",
+   "pubchem_cid": "135398745",
+   "properties": {
+    "MW": 312.4,
+    "HAC": 22.0,
+    "CO": 432.0,
+    "BP": 476.0,
+    "EV": 74.0,
+    "FP": 241.7,
+    "MR": 92.2,
+    "PO": 36.5,
+    "MV": 236.0
+   }
+  },
+  {
+   "name": "Tranylcypromine",
+   "smiles": "C1C(C1N)C2=CC=CC=C2",
+   "pubchem_cid": "5530",
+   "properties": {
+    "MW": 133.19,
+    "HAC": 10.0,
+    "CO": 116.0,
+    "BP": 218.3,
+    "EV": 45.5,
+    "FP": 90.8,
+    "MR": 41.8,
+    "PO": 16.6,
+    "MV": 125.0
+   }
+  },
+  {
+   "name": "Brexpiprazole",
+   "smiles": "C1CN(CCN1CCCCOC2=CC3=C(C=C2)C=CC(=O)N3)C4=C5C=CSC5=CC=C4",
+   "pubchem_cid": "11978813",
+   "properties": {
+    "MW": 433.6,
+    "HAC": 31.0,
+    "CO": 636.0,
+    "BP": 675.2,
+    "EV": 99.1,
+    "FP": 362.1,
+    "MR": 126.3,
+    "PO": 50.1,
+    "MV": 348.0
+   }
+  },
+  {
+   "name": "Mirtazapine",
+   "smiles": "CN1CCN2C(C1)C3=CC=CC=C3CC4=C2N=CC=C4",
+   "pubchem_cid": "4205",
+   "properties": {
+    "MW": 265.35,
+    "HAC": 20.0,
+    "CO": 345.0,
+    "BP": 432.4,
+    "EV": 68.8,
+    "FP": 215.3,
+    "MR": 80.7,
+    "PO": 32.0,
+    "MV": 216.6
+   }
+  },
+  {
+   "name": "Venlafaxine",
+   "smiles": "CN(C)CC(C1=CC=C(C=C1)OC)C2(CCCCC2)O",
+   "pubchem_cid": "5656",
+   "properties": {
+    "MW": 277.4,
+    "HAC": 20.0,
+    "CO": 279.0,
+    "BP": 397.6,
+    "EV": 68.3,
+    "FP": 194.2,
+    "MR": 82.6,
+    "PO": 32.8,
+    "MV": 261.7
+   }
+  },
+  {
+   "name": "Gepirone",
+   "smiles": "CC1(CC(=O)N(C(=O)C1)CCCCN2CCN(CC2)C3=NC=CC=N3)C",
+   "pubchem_cid": "55191",
+   "properties": {
+    "MW": 359.5,
+    "HAC": 26.0,
+    "CO": 476.0,
+    "BP": 562.3,
+    "EV": 84.5,
+    "FP": 293.8,
+    "MR": 99.0,
+    "PO": 39.3,
+    "MV": 314.7
+   }
+  },
+  {
+   "name": "Vilazodone",
+   "smiles": "C1CN(CCN1CCCCC2=CNC3=C2C=C(C=C3)C#N)C4=CC5=C(C=C4)OC(=C5)C(=O)N",
+   "pubchem_cid": "6918314",
+   "properties": {
+    "MW": 441.5,
+    "HAC": 33.0,
+    "CO": 729.0,
+    "BP": 745.1,
+    "EV": 108.6,
+    "FP": 404.4,
+    "MR": 128.7,
+    "PO": 51.0,
+    "MV": 328.8
+   }
+  },
+  {
+   "name": "Escitalopram",
+   "smiles": "CN(C)CCC[C@@]1(C2=C(CO1)C=C(C=C2)C#N)C3=CC=C(C=C3)F",
+   "pubchem_cid": "146570",
+   "properties": {
+    "MW": 324.4,
+    "HAC": 24.0,
+    "CO": 466.0,
+    "BP": 428.3,
+    "EV": 68.3,
+    "FP": 212.8,
+    "MR": 92.1,
+    "PO": 36.5,
+    "MV": 272.6
+   }
+  },
+  {
+   "name": "Paroxetine",
+   "smiles": "C1CNC[C@H]([C@@H]1C2=CC=C(C=C2)F)COC3=CC4=C(C=C3)OCO4",
+   "pubchem_cid": "43815",
+   "properties": {
+    "MW": 329.4,
+    "HAC": 24.0,
+    "CO": 402.0,
+    "BP": 451.7,
+    "EV": 71.1,
+    "FP": 227.0,
+    "MR": 87.9,
+    "PO": 34.9,
+    "MV": 271.5
+   }
+  },
+  {
+   "name": "Maprotiline",
+   "smiles": "CNCCCC12CCC(C3=CC=CC=C31)C4=CC=CC=C24",
+   "pubchem_cid": "4011",
+   "properties": {
+    "MW": 277.4,
+    "HAC": 21.0,
+    "CO": 339.0,
+    "BP": 399.6,
+    "EV": 65.0,
+    "FP": 187.7,
+    "MR": 87.8,
+    "PO": 34.8,
+    "MV": 256.7
+   }
+  },
+  {
+   "name": "Levomilnacipran",
+   "smiles": "CCN(CC)C(=O)[C@]1(C[C@H]1CN)C2=CC=CC=C2",
+   "pubchem_cid": "6917779",
+   "properties": {
+    "MW": 246.35,
+    "HAC": 18.0,
+    "CO": 295.0,
+    "BP": 393.0,
+    "EV": 64.3,
+    "FP": 191.5,
+    "MR": 73.2,
+    "PO": 29.0,
+    "MV": 228.6
+   }
+  }
+ ],
+ "properties": [
+  "BP",
+  "CO",
+  "EV",
+  "FP",
+  "HAC",
+  "MR",
+  "MV",
+  "MW",
+  "PO"
+ ],
+ "indices": [
+  "ABC",
+  "BMG",
+  "GA",
+  "GBM",
+  "ISI",
+  "M1",
+  "M2",
+  "R",
+  "ReZ1",
+  "SO",
+  "S_ABC",
+  "S_GA",
+  "S_GBM",
+  "S_R",
+  "mM2"
+ ],
+ "model_forms": [
+  "linear",
+  "quadratic"
+ ],
+ "reported_fits": [
+  {
+   "id": "T13-MW",
+   "property": "MW",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 13"
+  },
+  {
+   "id": "T13-HAC",
+   "property": "HAC",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "linear",
+   "source": "Table 13"
+  },
+  {
+   "id": "T13-CO",
+   "property": "CO",
+   "index": "SO",
+   "study_label": "SO^d",
+   "form": "quadratic",
+   "source": "Table 13"
+  },
+  {
+   "id": "T13-BP",
+   "property": "BP",
+   "index": "ABC",
+   "study_label": "ABC^d",
+   "form": "quadratic",
+   "source": "Table 13"
+  },
+  {
+   "id": "T13-EV",
+   "property": "EV",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 13"
+  },
+  {
+   "id": "T13-FP",
+   "property": "FP",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 13"
+  },
+  {
+   "id": "T13-MR",
+   "property": "MR",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 13"
+  },
+  {
+   "id": "T13-PO",
+   "property": "PO",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 13"
+  },
+  {
+   "id": "T13-MV",
+   "property": "MV",
+   "index": "mM2",
+   "study_label": "mM2^d",
+   "form": "quadratic",
+   "source": "Table 13"
+  },
+  {
+   "id": "T16-MW",
+   "property": "MW",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 16"
+  },
+  {
+   "id": "T16-HAC",
+   "property": "HAC",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "linear",
+   "source": "Table 16"
+  },
+  {
+   "id": "T16-CO",
+   "property": "CO",
+   "index": "SO",
+   "study_label": "SO^d",
+   "form": "quadratic",
+   "source": "Table 16"
+  },
+  {
+   "id": "T16-BP",
+   "property": "BP",
+   "index": "ABC",
+   "study_label": "ABC^d",
+   "form": "quadratic",
+   "source": "Table 16"
+  },
+  {
+   "id": "T16-EV",
+   "property": "EV",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 16"
+  },
+  {
+   "id": "T16-FP",
+   "property": "FP",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 16"
+  },
+  {
+   "id": "T16-MR",
+   "property": "MR",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 16"
+  },
+  {
+   "id": "T16-PO",
+   "property": "PO",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 16"
+  },
+  {
+   "id": "T16-MV",
+   "property": "MV",
+   "index": "mM2",
+   "study_label": "mM2^d",
+   "form": "quadratic",
+   "source": "Table 16"
+  },
+  {
+   "id": "T17-MW",
+   "property": "MW",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 17"
+  },
+  {
+   "id": "T17-HAC",
+   "property": "HAC",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "linear",
+   "source": "Table 17"
+  },
+  {
+   "id": "T17-CO",
+   "property": "CO",
+   "index": "SO",
+   "study_label": "SO^d",
+   "form": "quadratic",
+   "source": "Table 17"
+  },
+  {
+   "id": "T17-BP",
+   "property": "BP",
+   "index": "ABC",
+   "study_label": "ABC^d",
+   "form": "quadratic",
+   "source": "Table 17"
+  },
+  {
+   "id": "T17-EV",
+   "property": "EV",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 17"
+  },
+  {
+   "id": "T17-FP",
+   "property": "FP",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 17"
+  },
+  {
+   "id": "T17-MR",
+   "property": "MR",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 17"
+  },
+  {
+   "id": "T17-PO",
+   "property": "PO",
+   "index": "ReZ1",
+   "study_label": "ReZ1^d",
+   "form": "quadratic",
+   "source": "Table 17"
+  },
+  {
+   "id": "T17-MV",
+   "property": "MV",
+   "index": "mM2",
+   "study_label": "mM2^d",
+   "form": "quadratic",
+   "source": "Table 17"
+  }
+ ]
+}
