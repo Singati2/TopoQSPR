@@ -32,7 +32,7 @@ Legend: ✅ has it · ❌ does not · ⏳ TopoQSPR work in progress (target).
 | Persistent jobs, rate limits, health endpoint | n/a | ✅ (SQLite jobs, per-IP limits, caps, /health) |
 | Automated test suite / CI | ❌ (none found) | ✅ ~880 offline tests incl. 35 web tests, CI |
 | Accessibility (labels, keyboard, contrast) | not assessed | partial ✅ (every input labelled, live-region status, lang/viewport; tested); contrast audit pending |
-| Response for one molecule | 3.4 s cold / 0.6 s warm, one of three views (live, 2026-10-04) | 0.73–0.82 s for all 191 values, on a fully loaded machine (local, 2026-10-05) |
+| Response for one molecule | 3.4 s cold / 0.6 s warm, one of three views (live AWS Lambda, 2026-10-04) | 0.73–0.82 s for all 191 values (local, machine under full load, 2026-10-05); **not comparable until TopoQSPR is deployed**: Render free tier sleeps after 15 min idle, so its cold start will be slower than Lambda's |
 
 ## Paper
 
