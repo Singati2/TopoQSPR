@@ -427,6 +427,15 @@ def _num(x: Any) -> float | None:
     return v if math.isfinite(v) else None
 
 
+def _text(x: Any) -> str | None:
+    """A text cell or None. pandas reads an empty cell as NaN even with dtype=str, and NaN is
+    truthy, so ``x or None`` would leak a NaN into the JSON (which allow_nan=False rejects)."""
+    if x is None or (isinstance(x, float) and not math.isfinite(x)):
+        return None
+    s = str(x).strip()
+    return s or None
+
+
 def _flag(x: Any) -> bool | None:
     if isinstance(x, bool):
         return x
@@ -472,7 +481,7 @@ def build_ladder(results_dir: str | os.PathLike, learner: str = "selected") -> d
                 a = ad[(ad["target"] == name) & (ad["learner"] == learner) & (ad["set"] == set_name)]
                 if not a.empty:
                     cov = _num(a.iloc[0].get("share_outside_pooled"))
-                    ad_reason = a.iloc[0].get("reason") or None
+                    ad_reason = _text(a.iloc[0].get("reason"))
             is_ref = set_name == r.get("reference")
             rows.append(dict(
                 set=set_name, n=_num(r.get("n")), p=_num(r.get("p")),
@@ -489,8 +498,8 @@ def build_ladder(results_dir: str | os.PathLike, learner: str = "selected") -> d
                 n_valid_folds=_num(r.get("n_valid_folds")),
                 n_failed_folds=_num(r.get("n_failed_folds")),
                 underpowered=_flag(r.get("underpowered")),
-                underpowered_reason=r.get("underpowered_reason") or None,
-                reason=r.get("reason") or None,
+                underpowered_reason=_text(r.get("underpowered_reason")),
+                reason=_text(r.get("reason")),
                 is_reference=bool(is_ref),
                 ad_share_outside=cov, ad_reason=ad_reason,
             ))

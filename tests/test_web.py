@@ -436,3 +436,12 @@ def test_cors_restricted_to_configured_origin(tmp_path):
     with TestClient(create_app(_settings(tmp_path / "b"))) as c:  # default: same origin only
         r = c.get("/api/meta", headers={"origin": origin})
         assert "access-control-allow-origin" not in r.headers
+
+
+def test_text_cells_never_leak_nan():
+    """Regression: an empty 'reason' cell read by pandas is NaN; it must become None, not NaN."""
+    import json as _json
+    from topoqspr.web.jobs import _text
+    assert _text(float("nan")) is None and _text("") is None and _text(None) is None
+    assert _text(" small n ") == "small n"
+    _json.dumps({"r": _text(float("nan"))}, allow_nan=False)
