@@ -78,3 +78,15 @@ pilot disease (Migraine Disorders) only.
 | Indices for drugs (structures, edge partitions) | ![](screenshots/03_indices_drugs_filtered_M1.png) |
 | Indices for a graph (adjacency matrix) with entropies | ![](screenshots/04_indices_adjacency_C6_entropies.png) |
 | Index catalogue (formulas, primary references) | ![](screenshots/05_catalogue_reverse_degree.png) |
+
+## End-to-end check (2026-10-06, local server, commit of this date)
+
+Driven through the HTTP API and through the page in headless Chrome (`shoot.mjs`, screenshots
+02–09 refreshed): MeSH search (`migraine` → 6 headings) → cohort (Migraine Disorders, 33 included of
+152 manifest rows, every exclusion with its reason, manifest CSV) → confirm → exploratory run
+(MolLogP + melting point, 33 molecules, 98 s) → results page with the baseline ladder, CIs,
+underpowered flags, and the three downloads (results zip with 17 files, manifest.csv,
+run_record.json). Indices: SMILES batch with rejected rows reported, MOL block, adjacency matrix
+and list (JSON, `1: 2 3`, or one edge per line) at 0.06–0.15 s per request; malformed inputs come
+back as `rejected` with the reason (asymmetric matrix, unparsable line). Catalogue (195 entries),
+depiction (SVG), `/health`. Web tests: 36 pass.
