@@ -301,7 +301,7 @@ def result_macros(conf, info: dict, ctrl: list[dict], out: Path) -> None:
         runs = list(dict.fromkeys(r["run"] for r in ctrl))
         if len(runs) > 1:   # the amended control run (second block of the table)
             alt = [r for r in ctrl if r["run"] == runs[1] and r["set"] == "TI"]
-            m["ctrlAltLearner"] = alt[0]["learner"] if alt else "?"
+            m["ctrlAltLearner"] = {"svr": "SVR", "knn": "$k$NN", "pls": "PLS"}.get(alt[0]["learner"], alt[0]["learner"]) if alt else "?"
             m["ctrlAltPTI"] = alt[0]["p_ti"] if alt else "?"
             m["ctrlAltNUninformative"] = sum(r["uninformative"] for r in alt)
             m["ctrlAltMaxExploded"] = max((r["boot_exploded"] for r in alt), default=0)

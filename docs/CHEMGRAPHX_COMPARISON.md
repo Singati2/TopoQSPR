@@ -14,17 +14,14 @@ the paper should follow the ChemGraphX article's structure. Website: done on `ma
 hero, input-format card, cite card, serif/light/blue; side-by-side in `docs/WEB.md`). Paper: section
 structure mapped in `docs/PAPER_FORMAT.md` and applied to `paper/main.tex`.
 
-**Status 2026-10-05 (evening):** the web interface is merged on `main` (36 web tests, 93 replication
-tests, full offline suite green); deployment waits for a Render account. Experiments: **A done**
-(`results/expA`), **B done** (main confirmatory run, 4 h 57 min, `paper/results` from
-`tools/make_results.py`: indices beat the size baseline for 1 of 4 endpoints after correction, log P
-ΔR² = +0.15 [0.08, 0.23]; composition beats the indices on all four), **D done** (`results/expD`: three
-2026 studies reproduce, Godlin & Radha to three decimals on all 504 printed index values and 9 fits;
-under nested CV the genre's procedure is at the size baseline in 17 of 28 fits), **C running**
-(optimism chain, four targets), scaffold ladder and exploratory family ladder running, amended SVR
-control stage queued (the frozen ridge control was broken by three out-of-domain glycosides; see
-`docs/EXPERIMENT_PLAN.md` amendments). Independent adversarial review of the website still pending
-(agent usage limit until 2026-10-07).
+**Status 2026-10-06:** every experiment is run from the frozen plan and written into the paper from
+generated files: A (`results/expA`), B (confirmatory, scaffold ladder, index-family ladder, frozen
+ridge controls and the amended SVR controls, `results/expB`), C (`results/expC`), D (`results/expD`).
+Supplement (S1 index table from the registry, S2 OECD mapping, S3 checklist) compiles. Independent
+literature value check finished (199 cases, 7 papers; `docs/LITERATURE_VALUE_CHECK.md`). Full offline
+suite green (1 101 tests). Open: author items in the paper (URLs, DOIs, CRediT, funding, AI wording),
+website adversarial review (agent limit until 2026-10-07) and Render deployment (needs an account),
+purge of `related_papers/` before the repository goes public.
 
 ## Website
 
