@@ -1,0 +1,21 @@
+{
+ "source": "Ravi, Chidambaram. QSPR analysis of physico-chemical and pharmacological properties of medications for Parkinson's treatment utilizing neighborhood degree-based topological descriptors. Sci. Rep. 15 (2025) 16941",
+ "doi": "10.1038/s41598-025-00898-3",
+ "pmcid": "PMC12081861",
+ "convention": "open neighbourhood degree sum (= S_v) and closed version S_v + d_v (closed not implemented)",
+ "procyclidine_open_partition_table_2": {
+  "(4,4)": 5,
+  "(4,5)": 6,
+  "(4,9)": 1,
+  "(5,6)": 4,
+  "(5,8)": 4,
+  "(6,9)": 1,
+  "(8,9)": 2
+ },
+ "procyclidine": {
+  "pubchem_cid": 4919,
+  "smiles": "C1CCC(CC1)C(CCN2CCCC2)(C3=CC=CC=C3)O",
+  "formula": "C19H29NO"
+ },
+ "structure_note": "SMILES are PubChem connectivity SMILES (PUG REST, retrieved 2026-10-03), looked up by the name printed in the paper; the paper itself prints only structure drawings."
+}

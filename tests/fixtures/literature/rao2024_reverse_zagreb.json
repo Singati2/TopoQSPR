@@ -1,0 +1,415 @@
+{
+ "source": "Rao, Chen, Ahmad, Ahmad. Reverse Zagreb indices and their application in the evaluation of physiochemical properties of anticancer/antibacterial drugs. ACS Omega 9 (2024) 31056-31080",
+ "doi": "10.1021/acsomega.4c04409",
+ "pmcid": "PMC11256078",
+ "convention": "c_u = Delta - d_u + 1 (Kulli 2018); CM1 = sum (c_u + c_v), CM2 = sum c_u c_v, HCM1 = sum (c_u + c_v)^2, HCM2 = sum (c_u c_v)^2; HM1 = sum (d_u + d_v)^2, HM2 = sum (d_u d_v)^2",
+ "columns": {
+  "M1": "M1",
+  "M2": "M2",
+  "HM1": "HM",
+  "HM2": "sum (d_u d_v)^2 (not registered; PHI['HCM2'] on degrees)",
+  "CM1": "R1_M1",
+  "CM2": "R1_M2",
+  "HCM1": "R1_HM",
+  "HCM2": "HCM2"
+ },
+ "structure_note": "SMILES are PubChem connectivity SMILES (PUG REST, retrieved 2026-10-03), looked up by the name printed in the paper; the paper itself prints only structure drawings. Names not found in PubChem have no SMILES and are checked only for internal consistency.",
+ "compounds_table_3": [
+  {
+   "name": "Convolutamine A",
+   "values": {
+    "M1": 90,
+    "M2": 102,
+    "HM1": 440,
+    "HM2": 650,
+    "CM1": 62,
+    "CM2": 46,
+    "HCM1": 216,
+    "HCM2": 138
+   },
+   "pubchem_cid": 10479343,
+   "smiles": "CC(CN(C)CCC1=C(C(=C(C=C1Br)Br)OC)Br)O",
+   "formula": "C13H18Br3NO2"
+  },
+  {
+   "name": "Convolutamine B",
+   "values": {
+    "M1": 84,
+    "M2": 94,
+    "HM1": 404,
+    "HM2": 576,
+    "CM1": 60,
+    "CM2": 46,
+    "HCM1": 212,
+    "HCM2": 144
+   },
+   "pubchem_cid": 10362410,
+   "smiles": "CC(CN(C)CCC1=C(C=CC(=C1Br)OC)Br)O",
+   "formula": "C13H19Br2NO2"
+  },
+  {
+   "name": "Convolutamine C",
+   "values": {
+    "M1": 84,
+    "M2": 95,
+    "HM1": 406,
+    "HM2": 601,
+    "CM1": 60,
+    "CM2": 47,
+    "HCM1": 214,
+    "HCM2": 153
+   }
+  },
+  {
+   "name": "Convolutamine D",
+   "values": {
+    "M1": 96,
+    "M2": 112,
+    "HM1": 474,
+    "HM2": 720,
+    "CM1": 64,
+    "CM2": 48,
+    "HCM1": 218,
+    "HCM2": 144
+   },
+   "pubchem_cid": 9981555,
+   "smiles": "CC1CN(CO1)CCC2=C(C(=C(C=C2Br)Br)OC)Br",
+   "formula": "C13H16Br3NO2"
+  },
+  {
+   "name": "Convolutamine E",
+   "values": {
+    "M1": 114,
+    "M2": 132,
+    "HM1": 580,
+    "HM2": 864,
+    "CM1": 116,
+    "CM2": 137,
+    "HCM1": 600,
+    "HCM2": 919
+   }
+  },
+  {
+   "name": "Convolutamine G",
+   "values": {
+    "M1": 64,
+    "M2": 73,
+    "HM1": 306,
+    "HM2": 461,
+    "CM1": 48,
+    "CM2": 41,
+    "HCM1": 178,
+    "HCM2": 157
+   }
+  },
+  {
+   "name": "Convolutamine H",
+   "values": {
+    "M1": 80,
+    "M2": 95,
+    "HM1": 398,
+    "HM2": 665,
+    "CM1": 56,
+    "CM2": 47,
+    "HCM1": 206,
+    "HCM2": 185
+   },
+   "pubchem_cid": 11812063,
+   "smiles": "CNCCC1=C(C(=C(C(=C1Br)Br)Br)OC)OC",
+   "formula": "C11H14Br3NO2"
+  },
+  {
+   "name": "Convolutamine I",
+   "values": {
+    "M1": 92,
+    "M2": 103,
+    "HM1": 438,
+    "HM2": 633,
+    "CM1": 68,
+    "CM2": 55,
+    "HCM1": 246,
+    "HCM2": 185
+   },
+   "pubchem_cid": 54764321,
+   "smiles": "CN(C)CCCNCCC1=C(C(=C(C=C1Br)Br)OC)Br",
+   "formula": "C14H21Br3N2O"
+  },
+  {
+   "name": "Amathamide A",
+   "values": {
+    "M1": 104,
+    "M2": 120,
+    "HM1": 506,
+    "HM2": 752,
+    "CM1": 72,
+    "CM2": 56,
+    "HCM1": 250,
+    "HCM2": 176
+   },
+   "pubchem_cid": 11258600,
+   "smiles": "CN1CCCC1C(=O)NC=CC2=CC(=C(C=C2Br)Br)OC",
+   "formula": "C15H18Br2N2O2"
+  },
+  {
+   "name": "Amathamide C",
+   "values": {
+    "M1": 117,
+    "M2": 139,
+    "HM1": 589,
+    "HM2": 945,
+    "CM1": 75,
+    "CM2": 55,
+    "HCM1": 253,
+    "HCM2": 161
+   }
+  },
+  {
+   "name": "Amathamide D",
+   "values": {
+    "M1": 110,
+    "M2": 129,
+    "HM1": 544,
+    "HM2": 851,
+    "CM1": 74,
+    "CM2": 57,
+    "HCM1": 256,
+    "HCM2": 179
+   },
+   "pubchem_cid": 163111430,
+   "smiles": "CN1CCCC1C(=O)NCCC2=C(C(=C(C=C2Br)Br)OC)Br",
+   "formula": "C15H19Br3N2O2"
+  },
+  {
+   "name": "Amathamide E",
+   "values": {
+    "M1": 110,
+    "M2": 129,
+    "HM1": 544,
+    "HM2": 851,
+    "CM1": 74,
+    "CM2": 57,
+    "HCM1": 256,
+    "HCM2": 179
+   }
+  },
+  {
+   "name": "Amathamide G",
+   "values": {
+    "M1": 126,
+    "M2": 151,
+    "HM1": 636,
+    "HM2": 1055,
+    "CM1": 82,
+    "CM2": 63,
+    "HCM1": 284,
+    "HCM2": 207
+   }
+  },
+  {
+   "name": "Amathamide H",
+   "values": {
+    "M1": 116,
+    "M2": 137,
+    "HM1": 580,
+    "HM2": 925,
+    "CM1": 76,
+    "CM2": 57,
+    "HCM1": 260,
+    "HCM2": 173
+   }
+  },
+  {
+   "name": "Amathaspiramide A",
+   "values": {
+    "M1": 128,
+    "M2": 162,
+    "HM1": 686,
+    "HM2": 1288,
+    "CM1": 122,
+    "CM2": 147,
+    "HCM1": 626,
+    "HCM2": 1023
+   },
+   "pubchem_cid": 11797699,
+   "smiles": "CN1CCCC12C(C(N(C2=O)C)O)C3=CC(=C(C=C3Br)Br)OC",
+   "formula": "C16H20Br2N2O3"
+  },
+  {
+   "name": "Amathaspiramide B",
+   "values": {
+    "M1": 134,
+    "M2": 170,
+    "HM1": 722,
+    "HM2": 1362,
+    "CM1": 126,
+    "CM2": 150,
+    "HCM1": 642,
+    "HCM2": 1022
+   },
+   "pubchem_cid": 10671715,
+   "smiles": "CN1C(C(C2(C1=O)CCC(=O)N2C)C3=CC(=C(C=C3Br)Br)OC)O",
+   "formula": "C16H18Br2N2O4"
+  },
+  {
+   "name": "Amathaspiramide C",
+   "values": {
+    "M1": 122,
+    "M2": 153,
+    "HM1": 648,
+    "HM2": 1179,
+    "CM1": 118,
+    "CM2": 143,
+    "HCM1": 608,
+    "HCM2": 1009
+   },
+   "pubchem_cid": 10694112,
+   "smiles": "CN1C(C(C2(C1=O)CCCN2)C3=CC(=C(C=C3Br)Br)OC)O",
+   "formula": "C15H18Br2N2O3"
+  },
+  {
+   "name": "Amathaspiramide D",
+   "values": {
+    "M1": 123,
+    "M2": 154,
+    "HM1": 657,
+    "HM2": 1192,
+    "CM1": 117,
+    "CM2": 139,
+    "HCM1": 597,
+    "HCM2": 947
+   }
+  },
+  {
+   "name": "Amathaspiramide E",
+   "values": {
+    "M1": 122,
+    "M2": 153,
+    "HM1": 648,
+    "HM2": 1179,
+    "CM1": 118,
+    "CM2": 143,
+    "HCM1": 608,
+    "HCM2": 1009
+   },
+   "pubchem_cid": 10477892,
+   "smiles": "CN1C(C(C2(C1=O)CCC=N2)C3=CC(=C(C=C3Br)Br)OC)O",
+   "formula": "C15H16Br2N2O3"
+  },
+  {
+   "name": "Amathaspiramide F",
+   "values": {
+    "M1": 122,
+    "M2": 153,
+    "HM1": 648,
+    "HM2": 1179,
+    "CM1": 118,
+    "CM2": 143,
+    "HCM1": 608,
+    "HCM2": 1009
+   },
+   "pubchem_cid": 10836565,
+   "smiles": "CN1C(C(C2(C1=O)CCCN2)C3=CC(=C(C=C3Br)Br)OC)O",
+   "formula": "C15H18Br2N2O3"
+  },
+  {
+   "name": "Lanthelliformisamine A",
+   "values": {
+    "M1": 122,
+    "M2": 131,
+    "HM1": 546,
+    "HM2": 693,
+    "CM1": 102,
+    "CM2": 91,
+    "HCM1": 386,
+    "HCM2": 341
+   }
+  },
+  {
+   "name": "Lanthelliformisamine B",
+   "values": {
+    "M1": 106,
+    "M2": 115,
+    "HM1": 482,
+    "HM2": 629,
+    "CM1": 86,
+    "CM2": 75,
+    "HCM1": 322,
+    "HCM2": 277
+   }
+  },
+  {
+   "name": "Lanthelliformisamine C",
+   "values": {
+    "M1": 188,
+    "M2": 205,
+    "HM1": 862,
+    "HM2": 1121,
+    "CM1": 148,
+    "CM2": 125,
+    "HCM1": 542,
+    "HCM2": 433
+   }
+  },
+  {
+   "name": "Ceratinamide A",
+   "values": {
+    "M1": 182,
+    "M2": 214,
+    "HM1": 906,
+    "HM2": 1424,
+    "CM1": 198,
+    "CM2": 254,
+    "HCM1": 1066,
+    "HCM2": 1924
+   }
+  },
+  {
+   "name": "Ceratinamide B",
+   "values": {
+    "M1": 242,
+    "M2": 275,
+    "HM1": 1164,
+    "HM2": 1699,
+    "CM1": 278,
+    "CM2": 365,
+    "HCM1": 1524,
+    "HCM2": 2809
+   },
+   "pubchem_cid": 21597410,
+   "smiles": "CC(C)CCCCCCCCCCCC(=O)NCCC1=CC(=C(C(=C1)Br)OCCCNC(=O)C2=NOC3(C2O)CC(=C(C(=CO3)Br)OC)Br)Br",
+   "formula": "C36H51Br4N3O7"
+  },
+  {
+   "name": "Synoxazolidinone A",
+   "values": {
+    "M1": 124,
+    "M2": 142,
+    "HM1": 606,
+    "HM2": 882,
+    "CM1": 84,
+    "CM2": 62,
+    "HCM1": 286,
+    "HCM2": 178
+   },
+   "pubchem_cid": 49845925,
+   "smiles": "COC1=C(C=C(C=C1Br)C=C2C(=O)NC(O2)C(CCN=C(N)N)Cl)Br",
+   "formula": "C15H17Br2ClN4O3"
+  },
+  {
+   "name": "Synoxazolidinone B",
+   "values": {
+    "M1": 118,
+    "M2": 134,
+    "HM1": 570,
+    "HM2": 808,
+    "CM1": 82,
+    "CM2": 62,
+    "HCM1": 282,
+    "HCM2": 184
+   },
+   "pubchem_cid": 49845926,
+   "smiles": "COC1=C(C=C(C=C1Br)C=C2C(=O)NC(O2)CCCN=C(N)N)Br",
+   "formula": "C15H18Br2N4O3"
+  }
+ ]
+}

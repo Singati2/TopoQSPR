@@ -1,0 +1,204 @@
+{
+ "source": "Albadrani, Ali, El-Garaihy, Abd El-Hafez. Prediction of exchange-correlation energy of graphene sheets from reverse degree-based molecular descriptors with applications. Materials 15 (2022) 2889",
+ "doi": "10.3390/ma15082889",
+ "pmcid": "PMC9028513",
+ "convention": "reverse degree R_u = Delta(G) - Phi_u + 1 (Kulli); edge sums; RG_ISI(p,q) = sum [R_u R_v]^p [R_u + R_v]^q",
+ "columns": {
+  "M1": "(0,1) RM1 = R1_M1",
+  "M2": "(1,0) RM2 = R1_M2",
+  "R": "(-1/2,0) RR = R1_R",
+  "SC": "(0,-1/2) RSCI (not registered for R_k)",
+  "H": "2*(0,-1) RH (not registered for R_k)",
+  "HM": "(0,2) RHZ = R1_HM",
+  "GA": "2*(1/2,-1) RGA = R1_GA",
+  "AG": "(1/2)*(-1/2,1) RAG = R1_AG",
+  "ISI": "(1,-1) RISI = R1_ISI",
+  "ReZ1": "(-1,1) RReZG1 = R1_ReZ1",
+  "ReZ3": "(1,1) RReZG3 = R1_ReZ3"
+ },
+ "structure_note": "Table 2 of the paper (structures) is an image. Sheets with an unambiguous name are given SMILES (C6 benzene ... C32 ovalene); for the others the reverse-degree edge partition is solved from the printed RM1, RM2 and m = n + rings - 1, and the remaining nine columns are checked against it.",
+ "rows_table_3": [
+  {
+   "sheet": "C6",
+   "rings": 1,
+   "values": {
+    "M1": 12,
+    "M2": 6,
+    "R": 6,
+    "SC": 4.2426,
+    "H": 6,
+    "HM": 24,
+    "GA": 6,
+    "AG": 6,
+    "ISI": 3,
+    "ReZ1": 12,
+    "ReZ3": 12
+   },
+   "name": "benzene",
+   "smiles": "c1ccccc1"
+  },
+  {
+   "sheet": "C10",
+   "rings": 2,
+   "values": {
+    "M1": 38,
+    "M2": 33,
+    "R": 6.8284,
+    "SC": 6.0165,
+    "H": 6.6667,
+    "HM": 136,
+    "GA": 10.771,
+    "AG": 11.243,
+    "ISI": 9.1667,
+    "ReZ1": 14,
+    "ReZ3": 122
+   },
+   "name": "naphthalene",
+   "smiles": "c1ccc2ccccc2c1"
+  },
+  {
+   "sheet": "C13",
+   "rings": 3,
+   "values": {
+    "M1": 48,
+    "M2": 39,
+    "R": 10.243,
+    "SC": 8.5855,
+    "H": 10,
+    "HM": 162,
+    "GA": 14.657,
+    "AG": 15.364,
+    "ISI": 11.5,
+    "ReZ1": 21,
+    "ReZ3": 138
+   },
+   "name": "phenalene (1H-phenalene graph)",
+   "smiles": "C1C=Cc2cccc3cccc1c23"
+  },
+  {
+   "sheet": "C16",
+   "rings": 4,
+   "values": {
+    "M1": 58,
+    "M2": 45,
+    "R": 13.657,
+    "SC": 11.154,
+    "H": 13.333,
+    "HM": 188,
+    "GA": 18.542,
+    "AG": 19.485,
+    "ISI": 13.833,
+    "ReZ1": 28,
+    "ReZ3": 154
+   },
+   "name": "pyrene",
+   "smiles": "c1cc2ccc3cccc4ccc(c1)c2c34"
+  },
+  {
+   "sheet": "C19",
+   "rings": 5,
+   "values": {
+    "M1": 68,
+    "M2": 51,
+    "R": 17.071,
+    "SC": 13.723,
+    "H": 16.667,
+    "HM": 214,
+    "GA": 22.428,
+    "AG": 23.606,
+    "ISI": 16.167,
+    "ReZ1": 35,
+    "ReZ3": 170
+   }
+  },
+  {
+   "sheet": "C22",
+   "rings": 6,
+   "values": {
+    "M1": 79,
+    "M2": 60,
+    "R": 20.364,
+    "SC": 16.267,
+    "H": 20,
+    "HM": 249,
+    "GA": 26.485,
+    "AG": 27.546,
+    "ISI": 19,
+    "ReZ1": 41.5,
+    "ReZ3": 202
+   }
+  },
+  {
+   "sheet": "C24",
+   "rings": 7,
+   "values": {
+    "M1": 84,
+    "M2": 60,
+    "R": 23.485,
+    "SC": 18.414,
+    "H": 23,
+    "HM": 252,
+    "GA": 29.314,
+    "AG": 30.728,
+    "ISI": 20,
+    "ReZ1": 48,
+    "ReZ3": 192
+   },
+   "name": "coronene",
+   "smiles": "c1cc2ccc3ccc4ccc5ccc6ccc1c1c2c3c4c5c61"
+  },
+  {
+   "sheet": "C28",
+   "rings": 8,
+   "values": {
+    "M1": 98,
+    "M2": 71,
+    "R": 27.485,
+    "SC": 21.534,
+    "H": 27,
+    "HM": 296,
+    "GA": 34.314,
+    "AG": 35.728,
+    "ISI": 23.5,
+    "ReZ1": 56,
+    "ReZ3": 230
+   }
+  },
+  {
+   "sheet": "C30",
+   "rings": 9,
+   "values": {
+    "M1": 104,
+    "M2": 73,
+    "R": 30.399,
+    "SC": 24.104,
+    "H": 30.33,
+    "HM": 306,
+    "GA": 37.199,
+    "AG": 38.849,
+    "ISI": 24.833,
+    "ReZ1": 62,
+    "ReZ3": 230
+   }
+  },
+  {
+   "sheet": "C32",
+   "rings": 10,
+   "values": {
+    "M1": 110,
+    "M2": 75,
+    "R": 33.314,
+    "SC": 25.673,
+    "H": 32.667,
+    "HM": 316,
+    "GA": 40.97,
+    "AG": 41.97,
+    "ISI": 26.167,
+    "ReZ1": 68,
+    "ReZ3": 230
+   },
+   "name": "ovalene (PubChem CID 67446)",
+   "smiles": "C1=CC2=C3C4=C1C=CC5=CC6=C7C8=C(C=CC9=C8C1=C(C=C9)C=C(C3=C1C7=C54)C=C2)C=C6"
+  }
+ ]
+}

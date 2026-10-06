@@ -1,0 +1,267 @@
+{
+ "source": "Abubakar, Aremu, Aphane, Amusa. A QSPR analysis of physical properties of antituberculosis drugs using neighbourhood degree-based topological indices and support vector regression. Heliyon 10 (2024) e28260",
+ "doi": "10.1016/j.heliyon.2024.e28260",
+ "pmcid": "PMC10987931",
+ "convention": "delta_v = sum_{u in N(v)} d_u (open neighbourhood degree sum, = S_v); edge sums",
+ "columns": {
+  "NGA": "S_GA",
+  "NABC": "S_ABC",
+  "NM1": "sum (S_u + S_v) (not registered; = 2 M2 identically)",
+  "NM2": "sum S_u S_v (not registered)",
+  "NR": "S_R",
+  "NRR": "S_RR",
+  "NHP": "sum (S_u + S_v)^2 (not registered)",
+  "NHM": "S_H"
+ },
+ "terizidone_partition_table_2": {
+  "(3,6)": 2,
+  "(4,5)": 4,
+  "(5,5)": 4,
+  "(5,6)": 8,
+  "(5,7)": 4,
+  "(6,7)": 2
+ },
+ "structure_note": "SMILES are PubChem connectivity SMILES (PUG REST, retrieved 2026-10-03), looked up by the name printed in the paper; the paper itself prints only structure drawings.",
+ "drugs_table_3": [
+  {
+   "name": "Amikacin",
+   "values": {
+    "NGA": 40.96,
+    "NABC": 23.25,
+    "NM1": 491,
+    "NM2": 1455,
+    "NR": 7.92,
+    "NRR": 240.55,
+    "NHP": 6200,
+    "NHM": 7.68
+   },
+   "pubchem_cid": 37768,
+   "smiles": "C1C(C(C(C(C1NC(=O)C(CCN)O)OC2C(C(C(C(O2)CO)O)N)O)O)OC3C(C(C(C(O3)CN)O)O)O)N",
+   "formula": "C22H43N5O13"
+  },
+  {
+   "name": "Bedaquiline",
+   "values": {
+    "NGA": 40.52,
+    "NABC": 22.43,
+    "NM1": 481,
+    "NM2": 1488,
+    "NR": 7.63,
+    "NRR": 237.8,
+    "NHP": 6081,
+    "NHM": 7.57
+   },
+   "pubchem_cid": 5388906,
+   "smiles": "CN(C)CCC(C1=CC=CC2=CC=CC=C21)(C(C3=CC=CC=C3)C4=C(N=C5C=CC(=CC5=C4)Br)OC)O",
+   "formula": "C32H31BrN2O2"
+  },
+  {
+   "name": "Clofazimine",
+   "values": {
+    "NGA": 38.76,
+    "NABC": 20.19,
+    "NM1": 425,
+    "NM2": 1272,
+    "NR": 6.87,
+    "NRR": 211.25,
+    "NHP": 5145,
+    "NHM": 6.82
+   },
+   "pubchem_cid": 2794,
+   "smiles": "CC(C)N=C1C=C2C(=NC3=CC=CC=C3N2C4=CC=C(C=C4)Cl)C=C1NC5=CC=C(C=C5)Cl",
+   "formula": "C27H22Cl2N4"
+  },
+  {
+   "name": "Delamanid",
+   "values": {
+    "NGA": 41.71,
+    "NABC": 23.28,
+    "NM1": 481,
+    "NM2": 1389,
+    "NR": 7.55,
+    "NRR": 238.98,
+    "NHP": 5621,
+    "NHM": 7.49
+   },
+   "pubchem_cid": 6480466,
+   "smiles": "CC1(CN2C=C(N=C2O1)[N+](=O)[O-])COC3=CC=C(C=C3)N4CCC(CC4)OC5=CC=C(C=C5)OC(F)(F)F",
+   "formula": "C25H25F3N4O6"
+  },
+  {
+   "name": "Ethambutol",
+   "values": {
+    "NGA": 12.66,
+    "NABC": 9.91,
+    "NM1": 112,
+    "NM2": 244,
+    "NR": 3.29,
+    "NRR": 54.81,
+    "NHP": 1012,
+    "NHM": 3.19
+   },
+   "pubchem_cid": 14052,
+   "smiles": "CCC(CO)NCCNC(CC)CO",
+   "formula": "C10H24N2O2"
+  },
+  {
+   "name": "Ethionamide",
+   "values": {
+    "NGA": 10.81,
+    "NABC": 6.39,
+    "NM1": 110,
+    "NM2": 280,
+    "NR": 2.36,
+    "NRR": 54.21,
+    "NHP": 1148,
+    "NHM": 2.31
+   },
+   "pubchem_cid": 2761171,
+   "smiles": "CCC1=NC=CC(=C1)C(=S)N",
+   "formula": "C8H10N2S"
+  },
+  {
+   "name": "Imipenem",
+   "values": {
+    "NGA": 22.32,
+    "NABC": 11.85,
+    "NM1": 286,
+    "NM2": 1022,
+    "NR": 3.57,
+    "NRR": 138.91,
+    "NHP": 4298,
+    "NHM": 3.45
+   },
+   "pubchem_cid": 104838,
+   "smiles": "CC(C1C2CC(=C(N2C1=O)C(=O)O)SCCN=CN)O",
+   "formula": "C12H17N3O4S"
+  },
+  {
+   "name": "Isoniazid",
+   "values": {
+    "NGA": 9.8,
+    "NABC": 6.11,
+    "NM1": 87,
+    "NM2": 192,
+    "NR": 2.48,
+    "NRR": 42.65,
+    "NHP": 799,
+    "NHM": 2.43
+   },
+   "pubchem_cid": 3767,
+   "smiles": "C1=CN=CC=C1C(=O)NN",
+   "formula": "C6H7N3O"
+  },
+  {
+   "name": "Levofloxacin",
+   "values": {
+    "NGA": 27.53,
+    "NABC": 15.02,
+    "NM1": 341,
+    "NM2": 1072,
+    "NR": 4.99,
+    "NRR": 168.01,
+    "NHP": 4401,
+    "NHM": 4.89
+   },
+   "pubchem_cid": 149096,
+   "smiles": "CC1COC2=C3N1C=C(C(=O)C3=CC(=C2N4CCN(CC4)C)F)C(=O)O",
+   "formula": "C18H20FN3O4"
+  },
+  {
+   "name": "Linezolid",
+   "values": {
+    "NGA": 25.73,
+    "NABC": 14.43,
+    "NM1": 288,
+    "NM2": 819,
+    "NR": 4.99,
+    "NRR": 142.62,
+    "NHP": 3226,
+    "NHM": 4.93
+   },
+   "pubchem_cid": 441401,
+   "smiles": "CC(=O)NCC1CN(C(=O)O1)C2=CC(=C(C=C2)N3CCOCC3)F",
+   "formula": "C16H20FN3O4"
+  },
+  {
+   "name": "Moxifloxacin",
+   "values": {
+    "NGA": 31.36,
+    "NABC": 17.13,
+    "NM1": 424,
+    "NM2": 1417,
+    "NR": 10.14,
+    "NRR": 208.13,
+    "NHP": 5854,
+    "NHM": 5.08
+   },
+   "pubchem_cid": 152946,
+   "smiles": "COC1=C2C(=CC(=C1N3CC4CCCNC4C3)F)C(=O)C(=CN2C5CC5)C(=O)O",
+   "formula": "C21H24FN3O4"
+  },
+  {
+   "name": "4-Aminosalicylic acid",
+   "values": {
+    "NGA": 10.76,
+    "NABC": 6.65,
+    "NM1": 109,
+    "NM2": 277,
+    "NR": 2.46,
+    "NRR": 53.37,
+    "NHP": 1153,
+    "NHM": 2.41
+   },
+   "pubchem_cid": 4649,
+   "smiles": "C1=CC(=C(C=C1N)O)C(=O)O",
+   "formula": "C7H7NO3"
+  },
+  {
+   "name": "Pyrazinamide",
+   "values": {
+    "NGA": 8.89,
+    "NABC": 5.28,
+    "NM1": 86,
+    "NM2": 207,
+    "NR": 1.97,
+    "NRR": 42.44,
+    "NHP": 850,
+    "NHM": 1.94
+   },
+   "pubchem_cid": 1046,
+   "smiles": "C1=CN=C(C=N1)C(=O)N",
+   "formula": "C5H5N3O"
+  },
+  {
+   "name": "Rifampin",
+   "values": {
+    "NGA": 60.55,
+    "NABC": 32.84,
+    "NM1": 742,
+    "NM2": 2286,
+    "NR": 11.41,
+    "NRR": 363.67,
+    "NHP": 9438,
+    "NHM": 11.09
+   },
+   "pubchem_cid": 135398735,
+   "smiles": "CC1C=CC=C(C(=O)NC2=C(C(=C3C(=C2O)C(=C(C4=C3C(=O)C(O4)(OC=CC(C(C(C(C(C(C1O)C)O)C)OC(=O)C)C)OC)C)C)O)O)C=NN5CCN(CC5)C)C",
+   "formula": "C43H58N4O12"
+  },
+  {
+   "name": "Terizidone",
+   "values": {
+    "NGA": 23.77,
+    "NABC": 13.42,
+    "NM1": 256,
+    "NM2": 680,
+    "NR": 4.61,
+    "NRR": 126.82,
+    "NHP": 2768,
+    "NHM": 4.56
+   },
+   "pubchem_cid": 65720,
+   "smiles": "C1C(C(=O)NO1)N=CC2=CC=C(C=C2)C=NC3CONC3=O",
+   "formula": "C14H14N4O4"
+  }
+ ]
+}

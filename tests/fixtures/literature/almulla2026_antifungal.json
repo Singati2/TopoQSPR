@@ -1,0 +1,500 @@
+{
+ "source": "Almulla, Irfan, Mufti, Almulla, Ganati. Predicting properties of antifungal drug molecules using neighborhood degree topological indices. Sci. Rep. 16 (2026) 25695",
+ "doi": "10.1038/s41598-026-61020-9",
+ "pmcid": "PMC13483912",
+ "convention": "delta(v) = sum of the degrees of the neighbours of v (open neighbourhood, = S_v); edge sums",
+ "columns": {
+  "NM1": "Table 4 column 1, sum (S_u + S_v) (not registered)",
+  "NM2": "column 2, sum S_u S_v (not registered)",
+  "NABC": "column 3 (labelled NABC in the text) = S_ABC",
+  "NF": "column 4, sum (S_u^2 + S_v^2) (not registered)"
+ },
+ "column_note": "Only NABC is labelled in the machine-readable text; columns 1, 2 and 4 are identified by recomputing them from the paper's own Table 2 partitions (they match for all 20 rows). Columns 5-9 (degree-product indices whose formulas are images) are not used.",
+ "structure_note": "SMILES are PubChem connectivity SMILES (PUG REST, retrieved 2026-10-03), looked up by the name printed in the paper; the paper itself prints only structure drawings.",
+ "drugs": [
+  {
+   "name": "Emylcamate",
+   "partition_table_2": {
+    "(2,5)": 2,
+    "(3,4)": 2,
+    "(4,7)": 2,
+    "(5,7)": 2,
+    "(7,7)": 1
+   },
+   "values_table_4": {
+    "NM1": 88,
+    "NM2": 219,
+    "NABC": 5.403,
+    "NF": 484
+   },
+   "pubchem_cid": 6526,
+   "smiles": "CCC(C)(CC)OC(=O)N",
+   "formula": "C7H15NO2"
+  },
+  {
+   "name": "Arbutin",
+   "partition_table_2": {
+    "(2,4)": 1,
+    "(4,7)": 1,
+    "(6,7)": 3,
+    "(7,7)": 4,
+    "(3,7)": 3,
+    "(5,6)": 2,
+    "(5,5)": 4,
+    "(3,5)": 1,
+    "(6,6)": 1
+   },
+   "values_table_4": {
+    "NM1": 224,
+    "NM2": 632,
+    "NABC": 11.1582,
+    "NF": 1334
+   },
+   "pubchem_cid": 440936,
+   "smiles": "C1=CC(=CC=C1O)OC2C(C(C(C(O2)CO)O)O)O",
+   "formula": "C12H16O7"
+  },
+  {
+   "name": "1-Octacosanol",
+   "partition_table_2": {
+    "(2,3)": 2,
+    "(3,4)": 2,
+    "(4,4)": 24
+   },
+   "values_table_4": {
+    "NM1": 216,
+    "NM2": 420,
+    "NABC": 17.4021,
+    "NF": 844
+   },
+   "pubchem_cid": 68406,
+   "smiles": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCO",
+   "formula": "C28H58O"
+  },
+  {
+   "name": "Fluindione",
+   "partition_table_2": {
+    "(5,8)": 2,
+    "(4,5)": 2,
+    "(4,4)": 1,
+    "(8,8)": 1,
+    "(7,8)": 2,
+    "(7,9)": 3,
+    "(3,7)": 2,
+    "(5,7)": 2,
+    "(5,5)": 4,
+    "(3,5)": 1
+   },
+   "values_table_4": {
+    "NM1": 238,
+    "NM2": 728,
+    "NABC": 10.8886,
+    "NF": 1534
+   },
+   "pubchem_cid": 68942,
+   "smiles": "C1=CC=C2C(=C1)C(=O)C(C2=O)C3=CC=C(C=C3)F",
+   "formula": "C15H9FO2"
+  },
+  {
+   "name": "Marbofloxacin",
+   "partition_table_2": {
+    "(1,5)": 1,
+    "(5,5)": 4,
+    "(8,9)": 3,
+    "(6,6)": 1,
+    "(3,6)": 1,
+    "(3,5)": 2,
+    "(6,7)": 1,
+    "(3,7)": 1,
+    "(5,7)": 3,
+    "(7,9)": 2,
+    "(6,8)": 2,
+    "(6,9)": 1,
+    "(5,8)": 2,
+    "(4,5)": 2,
+    "(7,8)": 2
+   },
+   "values_table_4": {
+    "NM1": 342,
+    "NM2": 1081,
+    "NABC": 15.3037,
+    "NF": 2274
+   },
+   "pubchem_cid": 60651,
+   "smiles": "CN1CCN(CC1)C2=C(C=C3C4=C2OCN(N4C=C(C3=O)C(=O)O)C)F",
+   "formula": "C17H19FN4O4"
+  },
+  {
+   "name": "L-threonic acid",
+   "partition_table_2": {
+    "(3,5)": 2,
+    "(5,7)": 1,
+    "(3,7)": 1,
+    "(6,7)": 1,
+    "(3,6)": 1,
+    "(4,6)": 1,
+    "(2,4)": 1
+   },
+   "values_table_4": {
+    "NM1": 76,
+    "NM2": 178,
+    "NABC": 4.8365,
+    "NF": 402
+   },
+   "pubchem_cid": 5460407,
+   "smiles": "C(C(C(C(=O)O)O)O)O",
+   "formula": "C4H8O5"
+  },
+  {
+   "name": "Levalbuterol",
+   "partition_table_2": {
+    "(2,4)": 1,
+    "(4,7)": 1,
+    "(6,7)": 4,
+    "(5,7)": 1,
+    "(3,6)": 2,
+    "(5,6)": 4,
+    "(5,5)": 1,
+    "(4,5)": 3
+   },
+   "values_table_4": {
+    "NM1": 180,
+    "NM2": 480,
+    "NABC": 9.6343,
+    "NF": 1006
+   },
+   "pubchem_cid": 123600,
+   "smiles": "CC(C)(C)NCC(C1=CC(=C(C=C1)O)CO)O",
+   "formula": "C13H21NO3"
+  },
+  {
+   "name": "Amiloxate",
+   "partition_table_2": {
+    "(3,4)": 2,
+    "(4,5)": 3,
+    "(5,5)": 5,
+    "(3,5)": 1,
+    "(5,6)": 5,
+    "(4,6)": 1,
+    "(2,4)": 1
+   },
+   "values_table_4": {
+    "NM1": 170,
+    "NM2": 406,
+    "NABC": 10.5498,
+    "NF": 834
+   },
+   "pubchem_cid": 1549789,
+   "smiles": "CC(C)CCOC(=O)C=CC1=CC=C(C=C1)OC",
+   "formula": "C15H20O3"
+  },
+  {
+   "name": "Menthyl Salicylate",
+   "partition_table_2": {
+    "(3,5)": 3,
+    "(5,8)": 3,
+    "(7,8)": 1,
+    "(5,5)": 2,
+    "(5,6)": 2,
+    "(6,7)": 2,
+    "(6,6)": 1,
+    "(3,6)": 2,
+    "(6,8)": 2,
+    "(4,5)": 2,
+    "(4,4)": 1
+   },
+   "values_table_4": {
+    "NM1": 230,
+    "NM2": 639,
+    "NABC": 11.7726,
+    "NF": 1350
+   },
+   "pubchem_cid": 20055232,
+   "smiles": "CC1CCC(C(C1)OC(=O)C2=CC=CC=C2O)C(C)C",
+   "formula": "C17H24O3"
+  },
+  {
+   "name": "Fluconazole",
+   "partition_table_2": {
+    "(4,4)": 2,
+    "(4,5)": 4,
+    "(5,6)": 5,
+    "(6,7)": 2,
+    "(7,8)": 2,
+    "(4,8)": 1,
+    "(8,9)": 1,
+    "(3,6)": 1,
+    "(6,9)": 1,
+    "(5,9)": 1,
+    "(5,5)": 2,
+    "(3,5)": 1,
+    "(6,6)": 1
+   },
+   "values_table_4": {
+    "NM1": 270,
+    "NM2": 780,
+    "NABC": 13.2539,
+    "NF": 1628
+   },
+   "pubchem_cid": 3365,
+   "smiles": "C1=CC(=C(C=C1F)F)C(CN2C=NC=N2)(CN3C=NC=N3)O",
+   "formula": "C13H12F2N6O"
+  },
+  {
+   "name": "Terbinafine",
+   "partition_table_2": {
+    "(4,5)": 7,
+    "(4,4)": 2,
+    "(5,7)": 3,
+    "(5,8)": 1,
+    "(7,8)": 2,
+    "(6,7)": 1,
+    "(5,6)": 2,
+    "(3,5)": 1,
+    "(5,5)": 1,
+    "(4,6)": 1
+   },
+   "values_table_4": {
+    "NM1": 221,
+    "NM2": 595,
+    "NABC": 11.8403,
+    "NF": 1231
+   },
+   "pubchem_cid": 1549008,
+   "smiles": "CC(C)(C)C#CC=CCN(C)CC1=CC=CC2=CC=CC=C21",
+   "formula": "C21H25N"
+  },
+  {
+   "name": "Clotrimazole",
+   "partition_table_2": {
+    "(4,4)": 6,
+    "(4,5)": 8,
+    "(5,8)": 6,
+    "(8,12)": 3,
+    "(9,12)": 1,
+    "(5,9)": 1,
+    "(5,6)": 1,
+    "(6,9)": 1,
+    "(3,6)": 1
+   },
+   "values_table_4": {
+    "NM1": 328,
+    "NM2": 1039,
+    "NABC": 15.4504,
+    "NF": 2232
+   },
+   "pubchem_cid": 2812,
+   "smiles": "C1=CC=C(C=C1)C(C2=CC=CC=C2)(C3=CC=CC=C3Cl)N4C=CN=C4",
+   "formula": "C22H17ClN2"
+  },
+  {
+   "name": "Miconazole",
+   "partition_table_2": {
+    "(3,5)": 2,
+    "(5,6)": 4,
+    "(6,6)": 3,
+    "(5,5)": 5,
+    "(5,7)": 4,
+    "(6,7)": 3,
+    "(3,6)": 2,
+    "(4,4)": 1,
+    "(4,5)": 2,
+    "(7,7)": 1
+   },
+   "values_table_4": {
+    "NM1": 291,
+    "NM2": 790,
+    "NABC": 15.0764,
+    "NF": 1631
+   },
+   "pubchem_cid": 4189,
+   "smiles": "C1=CC(=C(C=C1Cl)Cl)COC(CN2C=CN=C2)C3=C(C=C(C=C3)Cl)Cl",
+   "formula": "C18H14Cl4N2O"
+  },
+  {
+   "name": "Voriconazole",
+   "partition_table_2": {
+    "(3,5)": 1,
+    "(5,5)": 2,
+    "(5,9)": 2,
+    "(6,9)": 2,
+    "(6,6)": 1,
+    "(5,6)": 4,
+    "(3,6)": 2,
+    "(9,10)": 2,
+    "(4,10)": 1,
+    "(7,10)": 1,
+    "(6,7)": 1,
+    "(4,5)": 4,
+    "(4,4)": 2,
+    "(4,9)": 2,
+    "(9,9)": 1
+   },
+   "values_table_4": {
+    "NM1": 338,
+    "NM2": 1052,
+    "NABC": 15.2759,
+    "NF": 2282
+   },
+   "pubchem_cid": 71616,
+   "smiles": "CC(C1=NC=NC=C1F)C(CN2C=NC=N2)(C3=C(C=C(C=C3)F)F)O",
+   "formula": "C16H14F3N5O"
+  },
+  {
+   "name": "Tavaborole",
+   "partition_table_2": {
+    "(3,5)": 1,
+    "(5,5)": 3,
+    "(5,6)": 2,
+    "(6,7)": 1,
+    "(7,8)": 1,
+    "(5,8)": 1,
+    "(5,7)": 1,
+    "(6,8)": 1,
+    "(3,6)": 1
+   },
+   "values_table_4": {
+    "NM1": 136,
+    "NM2": 389,
+    "NABC": 6.6011,
+    "NF": 812
+   },
+   "pubchem_cid": 11499245,
+   "smiles": "B1(C2=C(CO1)C=C(C=C2)F)O",
+   "formula": "C7H6BFO2"
+  },
+  {
+   "name": "Butenafine",
+   "partition_table_2": {
+    "(4,5)": 4,
+    "(4,4)": 1,
+    "(5,8)": 3,
+    "(7,8)": 2,
+    "(5,7)": 3,
+    "(6,7)": 1,
+    "(5,6)": 4,
+    "(3,5)": 1,
+    "(6,6)": 1,
+    "(5,5)": 2,
+    "(6,8)": 1,
+    "(4,6)": 3
+   },
+   "values_table_4": {
+    "NM1": 290,
+    "NM2": 816,
+    "NABC": 14.3448,
+    "NF": 1702
+   },
+   "pubchem_cid": 2484,
+   "smiles": "CC(C)(C)C1=CC=C(C=C1)CN(C)CC2=CC=CC3=CC=CC=C32",
+   "formula": "C23H27N"
+  },
+  {
+   "name": "Econazole",
+   "partition_table_2": {
+    "(3,5)": 2,
+    "(5,5)": 7,
+    "(5,6)": 6,
+    "(6,6)": 2,
+    "(3,6)": 1,
+    "(6,8)": 1,
+    "(5,8)": 1,
+    "(7,8)": 1,
+    "(5,7)": 1,
+    "(6,7)": 1,
+    "(4,5)": 2,
+    "(4,4)": 1
+   },
+   "values_table_4": {
+    "NM1": 278,
+    "NM2": 752,
+    "NABC": 14.5368,
+    "NF": 1548
+   },
+   "pubchem_cid": 3198,
+   "smiles": "C1=CC(=CC=C1COC(CN2C=CN=C2)C3=C(C=C(C=C3)Cl)Cl)Cl",
+   "formula": "C18H15Cl3N2O"
+  },
+  {
+   "name": "Oxiconazole",
+   "partition_table_2": {
+    "(3,5)": 2,
+    "(5,5)": 4,
+    "(5,7)": 3,
+    "(6,7)": 2,
+    "(3,6)": 2,
+    "(6,6)": 3,
+    "(5,6)": 4,
+    "(4,5)": 4,
+    "(4,4)": 1,
+    "(7,8)": 1,
+    "(6,8)": 1,
+    "(5,8)": 1
+   },
+   "values_table_4": {
+    "NM1": 302,
+    "NM2": 823,
+    "NABC": 15.659,
+    "NF": 1708
+   },
+   "pubchem_cid": 5353853,
+   "smiles": "C1=CC(=C(C=C1Cl)Cl)CON=C(CN2C=CN=C2)C3=C(C=C(C=C3)Cl)Cl",
+   "formula": "C18H13Cl4N3O"
+  },
+  {
+   "name": "Sertaconazole",
+   "partition_table_2": {
+    "(3,5)": 1,
+    "(5,6)": 4,
+    "(6,6)": 2,
+    "(6,8)": 2,
+    "(5,8)": 3,
+    "(5,5)": 4,
+    "(3,6)": 2,
+    "(7,8)": 2,
+    "(6,7)": 1,
+    "(4,5)": 4,
+    "(4,4)": 1,
+    "(5,7)": 3,
+    "(8,8)": 1
+   },
+   "values_table_4": {
+    "NM1": 340,
+    "NM2": 978,
+    "NABC": 16.4861,
+    "NF": 2036
+   },
+   "pubchem_cid": 65863,
+   "smiles": "C1=CC2=C(C(=C1)Cl)SC=C2COC(CN3C=CN=C3)C4=C(C=C(C=C4)Cl)Cl",
+   "formula": "C20H15Cl3N2OS"
+  },
+  {
+   "name": "Florfenicol",
+   "partition_table_2": {
+    "(4,6)": 3,
+    "(6,8)": 1,
+    "(5,8)": 2,
+    "(5,5)": 2,
+    "(5,7)": 2,
+    "(7,7)": 2,
+    "(3,7)": 1,
+    "(4,7)": 1,
+    "(2,4)": 1,
+    "(6,7)": 1,
+    "(6,6)": 1,
+    "(3,6)": 1,
+    "(5,6)": 1,
+    "(3,5)": 2
+   },
+   "values_table_4": {
+    "NM1": 230,
+    "NM2": 631,
+    "NABC": 11.8373,
+    "NF": 1352
+   },
+   "pubchem_cid": 114811,
+   "smiles": "CS(=O)(=O)C1=CC=C(C=C1)C(C(CF)NC(=O)C(Cl)Cl)O",
+   "formula": "C12H14Cl2FNO4S"
+  }
+ ]
+}
