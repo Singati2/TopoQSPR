@@ -23,6 +23,11 @@ suite green (1 101 tests). Open: author items in the paper (URLs, DOIs, CRediT, 
 website adversarial review (agent limit until 2026-10-07) and Render deployment (needs an account),
 purge of `related_papers/` before the repository goes public.
 
+**Direct comparisons (2026-10-06):** `docs/PAPER_VS_CHEMGRAPHX.md` (criterion by criterion against
+the ChemGraphX article's full text) and `docs/WEBSITE_VS_CHEMGRAPHX.md` (same graph sent to both
+services with `tools/compare_sites.py`: 21/21 shared indices and 13/13 entropies agree; 191 values in
+one 0.1 s request against 149 over three).
+
 ## Website
 
 | Capability | ChemGraphX | TopoQSPR (target) |
@@ -44,7 +49,7 @@ purge of `related_papers/` before the repository goes public.
 | Persistent jobs, rate limits, health endpoint | n/a | ✅ (SQLite jobs, per-IP limits, caps, /health) |
 | Automated test suite / CI | ❌ (none found) | ✅ ~880 offline tests incl. 35 web tests, CI |
 | Accessibility (labels, keyboard, contrast) | not assessed | partial ✅ (every input labelled, live-region status, lang/viewport; tested); contrast audit pending |
-| Response for one molecule | 3.4 s cold / 0.6 s warm, one of three views (live AWS Lambda, 2026-10-04) | 0.73–0.82 s for all 191 values (local, machine under full load, 2026-10-05); **not comparable until TopoQSPR is deployed**: Render free tier sleeps after 15 min idle, so its cold start will be slower than Lambda's |
+| Response for one molecule | 0.12–0.18 s per endpoint warm, 3.4 s cold (live AWS Lambda, 2026-10-04/06) | 0.10–0.11 s for all 191 values in one request (local, 2026-10-06); cold start on Render not yet measurable: Render free tier sleeps after 15 min idle, so its cold start will be slower than Lambda's |
 
 ## Paper
 
