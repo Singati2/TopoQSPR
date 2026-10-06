@@ -261,3 +261,10 @@ lock, seeds, run configuration and cohort manifest. Paper numbers come only from
   seeds and everything else identical (`studies/main_confirmatory_protocol_svr.json`). Running the
   controls with the `selected` learner itself is out of reach (one nested CV of the six families
   takes 18 min on this machine; 1 600 draws per stage). Both control runs are reported.
+- **2026-10-06, amended control run completed.** `main_confirmatory_protocol_svr` (SVR control
+  learner; 5 h 54 min). No bootstrap resample explodes (0 of 200 per target); the TI set beats its
+  Y-randomised null for all four endpoints; bootstrap intervals of ΔR²(TI − size): melting point
+  [+0.02, +0.14], log P [+0.05, +0.19], log D [−0.03, +0.09], log S [−0.03, +0.06]. The run used the
+  released registry (104 indices) rather than the 102 of the frozen tag because it was launched from
+  the working tree; its CV stage differs from the frozen run by at most 0.005 in ΔR². Both runs are
+  archived in `results/expB` and both appear in the paper's controls table.
