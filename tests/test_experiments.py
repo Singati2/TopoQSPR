@@ -20,6 +20,7 @@ import pytest
 from rdkit import Chem
 
 from topoqspr import experiments as ex
+from topoqspr.indices import REGISTRY
 from topoqspr.cohort import MANIFEST_COLUMNS, Cohort
 from topoqspr.models import LEGACY_MODELS
 
@@ -562,7 +563,7 @@ def test_experiment_d_controls_use_each_index_on_its_finite_rows():
     assert json.loads(c["rows_per_index"]) == {"R3_M1": 11, "M1": 20}
     assert json.loads(c["excluded_indices"]) == {}
     assert c["pseudo_p"] == pytest.approx(1 / 51) and c["perm_p"] == pytest.approx(1 / 51)
-    assert c["registry_pool"] == 102 and c["registry_pool_partial_nan"] > 0
+    assert c["registry_pool"] == len(REGISTRY) and c["registry_pool_partial_nan"] > 0
 
 
 def test_experiment_d_numeric_names_and_min_n():
