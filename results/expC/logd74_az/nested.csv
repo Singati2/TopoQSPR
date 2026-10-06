@@ -1,0 +1,3 @@
+step,n,p,r2_fold_mean,r2_fold_ci_low,r2_fold_ci_high,r2_pooled_mean,mae_fold_mean,n_failed_folds,n_valid_folds,min_n_test,underpowered,underpowered_reason,reason,family_counts
+nested_random,369,102,0.20325815367449263,0.10889950004330327,0.29761680730568196,0.21026747654481776,1.0638471821083204,0,25,73,False,,,"{""elasticnet"": 14, ""extratrees"": 7, ""pls"": 1, ""ridge"": 2, ""svr"": 1}"
+nested_scaffold,369,102,0.18487412310081439,0.09533378724538479,0.274414458956244,0.19515156798955643,1.0705962635157413,0,25,73,False,,,"{""elasticnet"": 14, ""extratrees"": 4, ""knn"": 3, ""ridge"": 2, ""svr"": 2}"

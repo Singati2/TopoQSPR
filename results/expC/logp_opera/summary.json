@@ -1,0 +1,72 @@
+{
+ "B_CV": 416371.9827479925,
+ "B_CV_all_rows": 0.04634492666379425,
+ "B_rows": "v0.x complete-case rows (503 of 505; NaN-feature rows dropped)",
+ "B_scaffold": 0.0618489938225637,
+ "B_train": 416372.53182080557,
+ "B_train_all_rows": 0.595417739736275,
+ "connectivity_groups": 0,
+ "experiment": "C",
+ "label": "value ~ TI",
+ "legacy_best_family": "RandomForest",
+ "legacy_dropped": [
+  "CHEMBL545",
+  "CHEMBL1412"
+ ],
+ "legacy_n_used": 503,
+ "legacy_reason": "",
+ "legacy_rows_reason": "",
+ "n": 505,
+ "n_target_missing": 1316,
+ "p": 102,
+ "r2_cv": 0.35982557437484186,
+ "r2_nested": 0.3134806477110476,
+ "r2_nested_legacy_rows": -416371.6229224181,
+ "r2_nested_pooled": 0.32309063402548865,
+ "r2_scaffold": 0.2516316538884839,
+ "r2_scaffold_pooled": 0.27412248168969244,
+ "r2_train": 0.9088983874473227,
+ "r2_train_selected": 0.44414247968729226,
+ "random_split": "KFold(shuffle=True)",
+ "scaffold": {
+  "largest_group": 68,
+  "largest_group_share": 0.13465346534653466,
+  "n_groups": 305,
+  "n_singletons": 241
+ },
+ "scaffold_reason": "",
+ "settings": {
+  "ad": "knn",
+  "alpha": 0.05,
+  "families": [
+   "ridge",
+   "elasticnet",
+   "pls",
+   "knn",
+   "svr",
+   "extratrees"
+  ],
+  "inner_splits": 3,
+  "legacy_families": [
+   "ElasticNet",
+   "ExtraTrees",
+   "GradientBoosting",
+   "Lasso",
+   "LinearReg",
+   "NeuralNet",
+   "RandomForest",
+   "Ridge",
+   "SVR",
+   "XGBoost"
+  ],
+  "outer_splits": 5,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ },
+ "underpowered": false
+}

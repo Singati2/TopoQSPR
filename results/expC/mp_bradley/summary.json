@@ -1,0 +1,74 @@
+{
+ "B_CV": 0.012459484741712518,
+ "B_CV_all_rows": 0.02924837550043874,
+ "B_rows": "v0.x complete-case rows (707 of 711; NaN-feature rows dropped)",
+ "B_scaffold": -0.006273544411494303,
+ "B_train": 0.04159449562482301,
+ "B_train_all_rows": 0.05838338638354923,
+ "connectivity_groups": 6,
+ "experiment": "C",
+ "label": "value ~ TI",
+ "legacy_best_family": "Lasso",
+ "legacy_dropped": [
+  "CHEMBL545",
+  "CHEMBL602",
+  "CHEMBL1412",
+  "CHEMBL1200453"
+ ],
+ "legacy_n_used": 707,
+ "legacy_reason": "",
+ "legacy_rows_reason": "",
+ "n": 711,
+ "n_target_missing": 1110,
+ "p": 102,
+ "r2_cv": 0.18678256833448542,
+ "r2_nested": 0.15753419283404668,
+ "r2_nested_legacy_rows": 0.1743230835927729,
+ "r2_nested_pooled": 0.16417680112376298,
+ "r2_scaffold": 0.16380773724554099,
+ "r2_scaffold_pooled": 0.1808687227650588,
+ "r2_train": 0.2159175792175959,
+ "r2_train_selected": 0.29207023383197794,
+ "random_split": "balanced_group_kfold (connectivity groups)",
+ "scaffold": {
+  "largest_group": 89,
+  "largest_group_share": 0.12517580872011252,
+  "n_groups": 446,
+  "n_singletons": 367
+ },
+ "scaffold_reason": "",
+ "settings": {
+  "ad": "knn",
+  "alpha": 0.05,
+  "families": [
+   "ridge",
+   "elasticnet",
+   "pls",
+   "knn",
+   "svr",
+   "extratrees"
+  ],
+  "inner_splits": 3,
+  "legacy_families": [
+   "ElasticNet",
+   "ExtraTrees",
+   "GradientBoosting",
+   "Lasso",
+   "LinearReg",
+   "NeuralNet",
+   "RandomForest",
+   "Ridge",
+   "SVR",
+   "XGBoost"
+  ],
+  "outer_splits": 5,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ },
+ "underpowered": false
+}

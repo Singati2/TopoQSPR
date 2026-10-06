@@ -1,0 +1,4 @@
+term,value,ci_low,ci_high,pooled,ci_method,rows
+B_train,0.11494906223219692,0.02059040860100758,0.20930771586338626,0.10793973936187179,r2_train fixed; nested corrected-t CI reflected,all rows
+B_CV,0.036864886262070795,-0.05749376736911854,0.13122353989326013,0.029855563391745665,r2_cv fixed; nested corrected-t CI reflected,all rows
+B_scaffold,0.01838403057367824,-0.11169681836341125,0.14846487951076773,0.01511590855526132,"sqrt(se_random^2 + se_scaffold^2), df = min; approximate",all rows

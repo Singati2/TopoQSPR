@@ -1,0 +1,4 @@
+step,n,p,r2_fold_mean,r2_fold_ci_low,r2_fold_ci_high,r2_pooled_mean,mae_fold_mean,n_failed_folds,n_valid_folds,min_n_test,underpowered,underpowered_reason,reason,family_counts
+nested_random,351,102,0.40114778055975714,0.27852991029919993,0.5237656508203143,0.41298582272710344,1.0517840560063616,0,25,70,False,,,"{""elasticnet"": 8, ""extratrees"": 3, ""knn"": 3, ""ridge"": 6, ""svr"": 5}"
+nested_scaffold,351,102,0.3674310306906095,0.25428832060109513,0.4805737407801239,0.410892526331918,1.0515018073558633,0,25,70,False,,,"{""elasticnet"": 12, ""extratrees"": 2, ""knn"": 1, ""ridge"": 1, ""svr"": 9}"
+nested_random_legacy_rows,347,102,0.4077187120300431,0.29425229643861955,0.5211851276214667,0.41790496249904213,1.0353905935257646,0,25,69,False,,,"{""elasticnet"": 10, ""ridge"": 5, ""svr"": 10}"

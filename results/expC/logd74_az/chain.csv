@@ -1,0 +1,6 @@
+step,r2,ci_low,ci_high,detail
+train,0.31820721590668954,,,v0.x best family Ridge refitted on all 369 complete-case rows
+train_selected,0.28163525362722097,,,v1.0 inner-CV selection (elasticnet) refitted on all rows
+cv_legacy,0.24012303993656342,,,"v0.x protocol: tuned on all rows, best-of-families fold-mean R2"
+nested_random,0.20325815367449263,0.10889950004330327,0.29761680730568196,
+nested_scaffold,0.18487412310081439,0.09533378724538479,0.274414458956244,

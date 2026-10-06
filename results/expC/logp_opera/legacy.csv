@@ -1,0 +1,11 @@
+family,R2_mean,R2_std,MAE_mean,params,reason
+LinearReg,-440.0957257502411,880.8461468758727,2.995766960723121,{},
+Ridge,-4724.502629279047,9449.651060821445,7.079143789025778,"{""model__alpha"": 10.0}",
+Lasso,0.26521386105717715,0.026259853574451625,1.3157639122572942,"{""model__alpha"": 0.1}",
+ElasticNet,0.2766133557175272,0.03043775583809374,1.304327381897346,"{""model__alpha"": 0.1, ""model__l1_ratio"": 0.7}",
+RandomForest,0.35982557437484186,0.05288387337640825,1.18050554808463,"{""model__max_depth"": null, ""model__n_estimators"": 100}",
+ExtraTrees,0.3462033584549653,0.06648604855302444,1.1956109326859472,"{""model__max_depth"": 10, ""model__n_estimators"": 100}",
+GradientBoosting,0.32665970043005677,0.037210444006130335,1.206600500065764,"{""model__learning_rate"": 0.1, ""model__max_depth"": 3, ""model__n_estimators"": 100}",
+XGBoost,0.3259744821766411,0.039941184982770904,1.2246938267077343,"{""model__learning_rate"": 0.1, ""model__max_depth"": 3, ""model__n_estimators"": 100}",
+SVR,0.3338357839169067,0.06705807367376167,1.2195769315815208,"{""model__C"": 10.0, ""model__gamma"": ""scale"", ""model__kernel"": ""rbf""}",
+NeuralNet,-89.94924011837728,180.3756729929979,2.129161744792974,"{""model__alpha"": 0.001, ""model__hidden_layer_sizes"": [64, 32]}",

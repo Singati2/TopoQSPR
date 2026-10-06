@@ -1,0 +1,4 @@
+term,value,ci_low,ci_high,pooled,ci_method,rows
+B_train,0.07707889845603594,-0.03638751713538768,0.1905453140474595,0.06689264798703692,r2_train fixed; nested corrected-t CI reflected,v0.x complete-case rows (347 of 351; NaN-feature rows dropped)
+B_CV,0.044827637589429536,-0.06863877800199408,0.1582940531808531,0.03464138712043052,r2_cv fixed; nested corrected-t CI reflected,v0.x complete-case rows (347 of 351; NaN-feature rows dropped)
+B_scaffold,0.03371674986914763,-0.1331257355883483,0.20055923532664358,0.002093296395185462,"sqrt(se_random^2 + se_scaffold^2), df = min; approximate",all rows

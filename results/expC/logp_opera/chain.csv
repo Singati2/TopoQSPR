@@ -1,0 +1,7 @@
+step,r2,ci_low,ci_high,detail
+train,0.9088983874473227,,,v0.x best family RandomForest refitted on all 503 complete-case rows
+train_selected,0.44414247968729226,,,v1.0 inner-CV selection (svr) refitted on all rows
+cv_legacy,0.35982557437484186,,,"v0.x protocol: tuned on all rows, best-of-families fold-mean R2"
+nested_random,0.3134806477110476,0.23485545802909294,0.3921058373930023,
+nested_random_legacy_rows,-416371.6229224181,-2730240.733161986,1897497.4873171495,same 503 rows as the v0.x protocol (reference of B_train and B_CV)
+nested_scaffold,0.2516316538884839,0.10006093372633781,0.40320237405063,

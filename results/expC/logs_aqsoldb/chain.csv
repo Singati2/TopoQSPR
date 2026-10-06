@@ -1,0 +1,7 @@
+step,r2,ci_low,ci_high,detail
+train,0.48479761048607906,,,v0.x best family Lasso refitted on all 347 complete-case rows
+train_selected,0.5342423291323729,,,v1.0 inner-CV selection (knn) refitted on all rows
+cv_legacy,0.45254634961947265,,,"v0.x protocol: tuned on all rows, best-of-families fold-mean R2"
+nested_random,0.40114778055975714,0.27852991029919993,0.5237656508203143,
+nested_random_legacy_rows,0.4077187120300431,0.29425229643861955,0.5211851276214667,same 347 rows as the v0.x protocol (reference of B_train and B_CV)
+nested_scaffold,0.3674310306906095,0.25428832060109513,0.4805737407801239,
