@@ -66,7 +66,8 @@ def main() -> None:
         if not t:
             missing.append(s.name)
         rows.append(" & ".join([
-            f"\\texttt{{{_tex(s.name)}}}", FAMILY.get(s.family, _tex(s.family)), f"${s.latex}$",
+            f"\\texttt{{{_tex(s.name)}}}", FAMILY.get(s.family, _tex(s.family)),
+            f"${s.latex}$" if len(s.latex) <= 80 else f"\\scalebox{{0.72}}{{${s.latex}$}}",  # long R_k forms
             f"\\cite{{{s.ref}}}", ("\\tiny " + _tex(t).replace("\\_", "\\_\\allowbreak{}")) if t else "--",
         ]) + " \\\\")
     tex = r"""\scriptsize
