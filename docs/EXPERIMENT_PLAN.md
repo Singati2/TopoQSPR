@@ -268,3 +268,11 @@ lock, seeds, run configuration and cohort manifest. Paper numbers come only from
   released registry (104 indices) rather than the 102 of the frozen tag because it was launched from
   the working tree; its CV stage differs from the frozen run by at most 0.005 in ΔR². Both runs are
   archived in `results/expB` and both appear in the paper's controls table.
+- **2026-10-06, correction to the 2026-10-05 control-learner amendment.** The molecules on which
+  the linear learners extrapolated were re-identified with `tools/check_extrapolation.py` (a
+  scale-free rule, residual > 10 SD of the target, instead of reading the worst residuals by eye):
+  four molecules, not three — lanatoside C (log P; "acetyldigitoxin" above was a misreading of its
+  SMILES), digoxin and digitoxin (solubility), and atracurium (melting point; not a glycoside) —
+  each the largest or second-largest molecule of its endpoint's set, with Hosoya's Z 12–1,593
+  standard deviations from the rest of that set on the folds that exclude it. The text above is
+  left as written; the paper uses the corrected, generated names.
