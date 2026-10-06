@@ -112,7 +112,8 @@ def _matrix_graph(label: str, text: str) -> InputRecord:
 
 
 def _list_graph(label: str, text: str) -> InputRecord:
-    """JSON ``{"1": [2, 3], ...}`` (ChemGraphX's 1-based adjacency list) or lines ``1: 2 3``."""
+    """JSON ``{"1": [2, 3], ...}`` (ChemGraphX's 1-based adjacency list), lines ``1: 2 3``
+    (a vertex and its neighbours) or lines ``1 2`` (one edge per line)."""
     try:
         body = text.strip()
         if body.startswith("{"):
@@ -122,10 +123,17 @@ def _list_graph(label: str, text: str) -> InputRecord:
             for line in body.splitlines():
                 if not line.strip():
                     continue
-                head, _, tail = line.partition(":")
-                adj[int(head)] = [int(x) for x in re.split(r"[\s,;]+", tail.strip()) if x]
+                if ":" in line:
+                    head, _, tail = line.partition(":")
+                    adj.setdefault(int(head), []).extend(int(x) for x in re.split(r"[\s,;]+", tail.strip()) if x)
+                else:
+                    pair = [int(x) for x in re.split(r"[\s,;]+", line.strip()) if x]
+                    if len(pair) != 2:
+                        raise ValueError(f"line {line.strip()!r} is neither 'u: v w ...' nor an edge 'u v'")
+                    adj.setdefault(pair[0], []).append(pair[1])
     except (ValueError, json.JSONDecodeError) as exc:
-        return InputRecord(label, "graph", reason=f"unparsable adjacency list: {exc}")
+        return InputRecord(label, "graph", reason="unparsable adjacency list (accepted: JSON {\"1\": [2, 3]}, "
+                           f"lines '1: 2 3', or one edge '1 2' per line): {exc}")
     verts = sorted(set(adj) | {w for vs in adj.values() for w in vs})
     index = {v: i for i, v in enumerate(verts)}
     edges = set()

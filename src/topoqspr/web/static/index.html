@@ -216,7 +216,7 @@
       <li><b>Molecular Data File (.mol) and SDF</b>: chemical graphs; multi-record SDF files are supported.</li>
       <li><b>Protein Data Bank (.pdb)</b>: structures from the RCSB PDB; hydrogens are suppressed.</li>
       <li><b>Adjacency matrix</b>: a square 0/1 matrix, as JSON (<code>A = [[0,1],[1,0]]</code>) or whitespace rows.</li>
-      <li><b>Adjacency list</b>: JSON (<code>{"1": [2, 3], ...}</code>) or lines <code>1: 2 3</code>.</li>
+      <li><b>Adjacency list</b>: one edge per line (<code>1 2</code>), lines <code>1: 2 3</code> (a vertex and its neighbours), or JSON (<code>{"1": [2, 3], ...}</code>, the ChemGraphX form).</li>
     </ul>
     <h3>2. Work flow with TopoQSPR</h3>
     <ul>

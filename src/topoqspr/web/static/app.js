@@ -485,7 +485,7 @@
     for (const b of document.querySelectorAll(".fmt")) b.setAttribute("aria-pressed", String(b.dataset.format === fmt));
     const ph = { smiles: "CCO ethanol\nc1ccccc1 benzene", sdf: "paste an SDF block or load a file",
                  mol: "paste a MOL block or load a file", pdb: "paste a PDB block or load a file",
-                 adjacency_matrix: "A = [[0,1,1],[1,0,1],[1,1,0]]", adjacency_list: '{"1": [2, 3], "2": [1, 3], "3": [1, 2]}' };
+                 adjacency_matrix: "A = [[0,1,1],[1,0,1],[1,1,0]]", adjacency_list: '1 2\n2 3\n3 1   (one edge per line; also 1: 2 3  or  {"1": [2, 3], ...})' };
     $("indices-text").placeholder = ph[fmt] || "";
   }
 

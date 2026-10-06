@@ -57,3 +57,14 @@ def test_unknown_format():
     with pytest.raises(ValueError):
         parse_input("x", "xyz")
     assert "smiles" in FORMATS
+
+
+def test_adjacency_list_accepts_edge_lines_and_names_the_formats():
+    """One edge per line (the most common hand-typed form) gives the same graph as the other two."""
+    (a,) = parse_input("1 2\n2 3\n3 4\n4 5\n5 6\n6 1", "adjacency_list")
+    (b,) = parse_input("1: 2 6\n2: 3\n3: 4\n4: 5\n5: 6", "adjacency_list")
+    (c,) = parse_input('{"1":[2,6],"2":[1,3],"3":[2,4],"4":[3,5],"5":[4,6],"6":[5,1]}', "adjacency_list")
+    assert a.graph is not None and b.graph is not None
+    assert sorted(a.graph.edges) == sorted(b.graph.edges) == sorted(c.graph.edges) and a.graph.n == 6
+    (bad,) = parse_input("1 2 3\n", "adjacency_list")
+    assert bad.graph is None and "accepted:" in bad.reason and "neither" in bad.reason
