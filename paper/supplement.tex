@@ -1,0 +1,73 @@
+%% TopoQSPR — Supplementary Material (S1 index table, S2 OECD principles, S3 reporting checklist)
+%% Compiled like main.tex; tables S1 come from tools/make_supplement.py.
+\documentclass[preprint,12pt]{elsarticle}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,longtable}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\ml}{\textsc{TopoQSPR}}
+\setlength{\emergencystretch}{2em}
+\IfFileExists{results/supp_S1_macros.tex}{\input{results/supp_S1_macros.tex}}{}
+\IfFileExists{results/provenance.tex}{\input{results/provenance.tex}}{}
+
+\begin{document}
+\begin{frontmatter}
+\title{Supplementary Material for: \ml{}: a reproducible workflow from disease to topological-index QSPR study}
+\end{frontmatter}
+
+\section*{S1. Index registry and verification}
+\ml{}~v1.0 implements \suppNIndices{} topological indices (Supplementary Table~S1) and \suppNEntropies{} bond-wise entropies, one for each edge-additive index $T=\sum_{uv\in E}w(uv)$: $-\sum_{uv}(w(uv)/T)\ln(w(uv)/T)$, named \texttt{ENT\_}$\langle$index$\rangle$. Every index is registered with its family, its definition in LaTeX, its primary reference and a test list; the table is generated from that registry and from \texttt{docs/INDEX\_VERIFICATION.md}, which also records the decisions taken where sources disagree (reverse degree $c_u=\Delta-d_u+1$; the generalised reverse degree $R_k$ with its modular rule; the neighbourhood degree sum; Hosoya's $Z$ by a frontier dynamic programme; degree entropy; Balaban's $J$ with compensated summation) and the three printed values in primary sources that contradict their own definitions. The \suppNEntropies{} entropies are \suppEntropyList.
+
+\IfFileExists{results/supp_S1_indices.tex}{\input{results/supp_S1_indices.tex}}{\todo{results/supp\_S1\_indices.tex not generated yet}}
+
+\section*{S2. OECD validation principles}
+Supplementary Table~S2 maps the five OECD principles for the validation of (Q)SAR models to the artefacts a \ml{} run writes.
+
+\begin{table}[h]
+\centering\footnotesize
+\caption{Supplementary Table S2. OECD (Q)SAR validation principles and the \ml{} artefact that documents each.}
+\begin{tabular}{p{3.6cm}p{9.4cm}}
+\toprule
+Principle & \ml{} artefact \\
+\midrule
+1. A defined endpoint & The target provider record in \texttt{run\_record.json}: source, version, matching rule (full standard InChIKey of the standardised parent), units and the number of molecules matched; measured, computed and tautological targets are labelled as such. \\
+2. An unambiguous algorithm & The study configuration (JSON, hashed) names every feature set, learner family, hyper-parameter grid, split rule and seed; \texttt{topoqspr rerun} re-executes a run record and compares the result files byte for byte. \\
+3. A defined domain of applicability & A $k$-nearest-neighbour distance domain is fitted inside each outer training fold; \texttt{ad.csv} and \texttt{ad\_summary.csv} report the share of outer-test molecules outside it and the metrics inside and outside; \texttt{predictions.csv} flags every prediction. \\
+4. Appropriate measures of goodness-of-fit, robustness and predictivity & Repeated nested cross-validation with grouped folds (stereoisomers; scaffolds), the baseline ladder (null, size, composition), paired $\Delta R^2$ and $\Delta$MAE with corrected repeated $k$-fold $t$ intervals, Benjamini--Hochberg and Benjamini--Yekutieli control over the pre-specified family, Y-randomisation and a whole-procedure bootstrap (\texttt{summary.csv}, \texttt{confirmatory.csv}, \texttt{permutation\_summary.csv}, \texttt{bootstrap.csv}). \\
+5. A mechanistic interpretation, if possible & Not claimed. The experiments ask whether the indices carry information beyond molecular size and composition; feature attribution inside outer training folds is planned for a later version. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{S3. Reporting checklist}
+The checklist follows the categories of the best-practice guidelines for machine learning in chemistry \cite{artrith2021best}; each item names where the information is in the article or the repository.
+
+\begin{table}[h]
+\centering\footnotesize
+\caption{Supplementary Table S3. Reporting checklist.}
+\begin{tabular}{p{4.2cm}p{8.8cm}}
+\toprule
+Item & Where \\
+\midrule
+Data sources, versions and licences & Section~2.1 and \emph{Data availability}: ChEMBL release~37 (CC~BY-SA~3.0); measured endpoints from the licence-checked sources listed in \texttt{docs/EXPERIMENTAL\_DATA.md}; replication data in \texttt{data/replication} with per-study licences. \\
+Data curation and exclusions & Cohort rules (Section~2.1); every excluded candidate has a reason in the manifest; undefined index values carry a reason in \texttt{indices.csv}. \\
+Dataset sizes & \texttt{run\_record.json} (\texttt{counts}) and the $n$ rows of every results table. \\
+Splits and leakage control & Repeated nested CV, stereoisomers grouped by InChIKey connectivity block, scaffold-grouped folds (Section~2.3); seeds and the inner-seed rule in the run record. \\
+Baselines & Null, size (2 features), composition (11), RDKit 2D; every result is reported against them. \\
+Hyper-parameters and model selection & Grids in \texttt{src/topoqspr/models.py}; selection inside the inner loop only; the family chosen per fold is in \texttt{folds.csv}. \\
+Metrics and uncertainty & $R^2$ (pooled and fold mean), MAE; corrected repeated $k$-fold $t$ intervals; BH/BY $q$; permutation $p$; bootstrap percentile intervals (Section~2.3). \\
+Multiple comparisons & Pre-specified confirmatory family; BH and BY over the family. \\
+Applicability domain & kNN domain per outer fold; share outside and in-domain metrics with every result. \\
+Preregistration and amendments & \texttt{docs/EXPERIMENT\_PLAN.md}, tag \texttt{plan-freeze-v1}; dated amendments in the same file. \\
+Code, environment and provenance & Repository with tests and CI, \texttt{requirements-lock.txt}, Docker image, run records with commit, versions, hashes and seeds; \texttt{topoqspr rerun}. \\
+Results regeneration & Every table and figure is produced by \texttt{tools/make\_*.py} from result files; no value is typed by hand. \\
+Negative results & Reported: three endpoints without a corrected-significant gain; a pre-specified control learner that failed by extrapolation. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\bibliographystyle{elsarticle-num}
+\bibliography{refs,results/index_refs_extra}
+\end{document}
