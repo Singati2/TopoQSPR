@@ -82,11 +82,16 @@ def corrected_ttest(diffs: Sequence[float], n_train, n_test, alpha: float = 0.05
     s^2/J to account for overlapping training sets. With unequal folds
     (grouped CV) the ratio is mean(n_test) / mean(n_train).
 
-    If s^2 == 0 the CI collapses to [d_bar, d_bar] and p = 0 if d_bar != 0
-    else 1. ``nan_policy``: "propagate" (any NaN -> NaN result) or "omit"
+    If s^2 == 0 and every difference is exactly 0 (the two procedures agree on
+    every fold) the result is p = 1 with CI [0, 0]. If s^2 == 0 but d_bar != 0
+    (e.g. J identical non-zero differences) the variance is not estimable from
+    the folds: t, p and the CI are NaN and ``reason`` says so. A zero-width CI
+    with p = 0 would claim certainty the data cannot support (audit
+    2026-10-12; no archived result reached this branch). ``nan_policy``: "propagate" (any NaN -> NaN result) or "omit"
     (drop NaN differences and their sizes).
 
-    Returns dict with keys mean, sd, se, t, df, p, ci_low, ci_high, n, ratio.
+    Returns dict with keys mean, sd, se, t, df, p, ci_low, ci_high, n, ratio,
+    reason ("" unless the result is degenerate).
     """
     d = np.asarray(diffs, dtype=float).ravel()
     n1 = np.broadcast_to(np.asarray(n_train, dtype=float), d.shape)
@@ -98,7 +103,8 @@ def corrected_ttest(diffs: Sequence[float], n_train, n_test, alpha: float = 0.05
         raise ValueError("nan_policy must be 'propagate' or 'omit'")
     J = d.size
     out = dict(mean=math.nan, sd=math.nan, se=math.nan, t=math.nan, df=J - 1,
-               p=math.nan, ci_low=math.nan, ci_high=math.nan, n=J, ratio=math.nan)
+               p=math.nan, ci_low=math.nan, ci_high=math.nan, n=J, ratio=math.nan,
+               reason="")
     if J < 2 or not np.all(np.isfinite(d)):
         return out
     ratio = float(n2.mean() / n1.mean())
@@ -107,8 +113,11 @@ def corrected_ttest(diffs: Sequence[float], n_train, n_test, alpha: float = 0.05
     se = math.sqrt((1.0 / J + ratio) * var)
     out.update(mean=mean, sd=math.sqrt(var), se=se, ratio=ratio)
     if se == 0.0:
-        out.update(t=math.copysign(math.inf, mean) if mean != 0 else math.nan,
-                   p=0.0 if mean != 0 else 1.0, ci_low=mean, ci_high=mean)
+        if mean == 0.0:
+            out.update(p=1.0, ci_low=0.0, ci_high=0.0)
+        else:
+            out.update(reason="zero variance of the paired differences: "
+                              "standard error not estimable")
         return out
     t = mean / se
     crit = float(_st.t.ppf(1 - alpha / 2, J - 1))

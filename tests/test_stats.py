@@ -47,8 +47,20 @@ def test_corrected_ttest_unequal_folds_and_nan():
 def test_corrected_ttest_zero_variance():
     out = stats.corrected_ttest([0.0, 0.0, 0.0], 8, 2)
     assert out["p"] == 1.0 and out["ci_low"] == out["ci_high"] == 0.0
-    out = stats.corrected_ttest([0.1, 0.1, 0.1], 8, 2)
-    assert out["p"] == 0.0 and out["ci_low"] == pytest.approx(0.1)
+
+
+def test_corrected_ttest_identical_nonzero_differences_are_degenerate():
+    # audit 2026-10-12: 25 identical non-zero fold differences (5 x 5 CV) used to
+    # give p = 0 and the zero-width CI [0.1, 0.1]. The variance is not estimable,
+    # so the test must not claim significance or a precise interval.
+    out = stats.corrected_ttest([0.1] * 25, n_train=80, n_test=20)
+    assert out["mean"] == pytest.approx(0.1) and out["se"] == 0.0
+    assert math.isnan(out["p"]) and math.isnan(out["t"])
+    assert math.isnan(out["ci_low"]) and math.isnan(out["ci_high"])
+    assert "not estimable" in out["reason"]
+    # any spread at all makes the variance estimable again
+    out = stats.corrected_ttest([0.1] * 24 + [0.1 + 1e-9], 80, 20)
+    assert math.isfinite(out["p"]) and out["reason"] == ""
 
 
 # --------------------------------------------------- Benjamini-Hochberg
