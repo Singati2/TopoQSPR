@@ -24,8 +24,8 @@ PREFIX = {"TI": ("ti.",), "TI_composition": ("ti.", "composition."),
 def main(run: Path, out: Path) -> None:
     folds = pd.read_csv(run / "folds.csv")
     pred = pd.read_csv(run / "predictions.csv")
-    feats = pd.read_csv(run / "features.csv", index_col="id")
-    mols = pd.read_csv(run / "molecules.csv", index_col="id")
+    feats = pd.read_csv(run / "features.csv", index_col="id", float_precision="round_trip")
+    mols = pd.read_csv(run / "molecules.csv", index_col="id", float_precision="round_trip")
     sel = folds[(folds.learner == "selected") & (folds.r2 < -1)]
     rows = []
     for f in sel.itertuples(index=False):

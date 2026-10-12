@@ -53,9 +53,9 @@ def ethanol_vs_dimethyl_ether() -> pd.DataFrame:
 
 
 def main(run: Path, out: Path) -> None:
-    F = pd.read_csv(run / "features.csv", index_col="id")
-    Y = pd.read_csv(run / "targets.csv", index_col="id")
-    M = pd.read_csv(run / "molecules.csv", index_col="id")
+    F = pd.read_csv(run / "features.csv", index_col="id", float_precision="round_trip")
+    Y = pd.read_csv(run / "targets.csv", index_col="id", float_precision="round_trip")
+    M = pd.read_csv(run / "molecules.csv", index_col="id", float_precision="round_trip")
     blocks = {p: [c for c in F.columns if c.startswith(p)] for p in ("ti.", "composition.", "size.")}
     maps = {"size": blocks["size."][:2], "composition": blocks["composition."],
             "TI": blocks["ti."], "TI_composition": blocks["ti."] + blocks["composition."]}

@@ -72,8 +72,8 @@ def paired(results, a, b, alpha=0.05):
 
 def main(run: Path, out: Path, n_jobs: int = 14) -> None:
     out.mkdir(parents=True, exist_ok=True)
-    F = pd.read_csv(run / "features.csv", index_col="id")
-    Y = pd.read_csv(run / "targets.csv", index_col="id")
+    F = pd.read_csv(run / "features.csv", index_col="id", float_precision="round_trip")
+    Y = pd.read_csv(run / "targets.csv", index_col="id", float_precision="round_trip")
     M = pd.read_csv(run / "molecules.csv", index_col="id")
     archived = pd.read_csv(run / "summary.csv")
     scaffold_run = run.parent / "main_scaffold" / "summary.csv"

@@ -207,6 +207,21 @@ curated PHYSPROP-derived sets have their own provenance (EPA). Bradley (CC0) and
 (CC0, Harvard Dataverse) look right. ChEMBL (CC BY-SA 3.0) is right. Needs a check against
 each dataset's own terms before redistributing processed values.
 
+## F15. Archived CSVs re-read without exact float parsing — CONFIRMED, S3
+
+pandas' default `read_csv` float parser is not round-trip exact. It changes 44,290 of the
+archived `features.csv` cells in the last bit, which moved a re-fitted elastic-net R² by
+4×10⁻⁶ (the first attempt of the E1 run caught this with its reproduction assertion). The
+archived files are fine; `_write_csv` writes full `repr` precision. Readers must pass
+`float_precision="round_trip"`. `tools/check_extrapolation.py:30` does not; it computes
+z-scores, so the effect there is immaterial. Any future "re-analyse from archived CSV"
+tool should use exact parsing.
+
+ChemGraphX overlap (from LITERATURE_2026.md, verified in `paper/refs.bib`): Micheal
+Arockiaraj is a co-author of both ChemGraphX (J Cheminform 18:39, 2026) and TopoQSPR.
+This must be disclosed to the editor, and the cross-check of 41 shared indices is not
+fully independent in authorship (it is independent in code).
+
 ---
 
 ## Verified correct (selected)
