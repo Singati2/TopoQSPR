@@ -6,6 +6,10 @@ The repository contains an independent, source-grounded adversarial audit dated 
 
 Read it **before** changing mathematical indices, cohort construction, nested cross-validation, statistics, experiment result tables, or the manuscript. Also read docs/EXPERIMENT_PLAN.md **including its amendments**, docs/CHECKPOINT.md, docs/FEYNMAN_REVIEW.md and docs/INDEX_VERIFICATION.md.
 
+## New exploratory research proposal (countercheck first; 2026-10-13)
+
+Read **[docs/POSITIVE_RESULT_FALSIFICATION_PLAN_2026-10-13.md](docs/POSITIVE_RESULT_FALSIFICATION_PLAN_2026-10-13.md)** when investigating whether graph-theoretic descriptors can show *genuine incremental predictive value* beyond molecular composition. **Do not accept its recommendations on authority.** Start by independently verifying or falsifying every premise (including mathematical small-graph counterexamples, prior-art novelty, data feasibility, chemical identity, leakage risks and metric validity) and write a recommendation-by-recommendation **VALID / VALID WITH CHANGES / INVALID / UNRESOLVED** ledger **before expensive runs**. Follow its gate-based protocol; retain negative results, freeze any new exploratory design before running it, and do not confuse a positive hypothesis with an observed result.
+
 ## Required workflow
 
 1. Check the exact current Git SHA, read the frozen plan tag, and examine both original and amended Experiment B run records. **The main selected-model test is not the Ridge-only or SVR-only control.**
