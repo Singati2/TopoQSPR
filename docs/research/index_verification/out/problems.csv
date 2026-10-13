@@ -1,0 +1,4 @@
+index,graph,group,route,status,absdiff,reldiff,ref,pkg,pkg_type,reason
+HCM2,K1,probe,direct,pkg_nan_ref_value,inf,inf,0,nan,float,modified reverse degree needs Delta(G) >= 1
+HCM2,empty,probe,direct,pkg_nan_ref_value,inf,inf,0,nan,float,modified reverse degree needs Delta(G) >= 1
+HCM2,3K1_edgeless,probe,direct,pkg_nan_ref_value,inf,inf,0,nan,float,modified reverse degree needs Delta(G) >= 1

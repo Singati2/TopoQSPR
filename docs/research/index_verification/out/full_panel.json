@@ -1,0 +1,28 @@
+{
+ "ReZ1_equals_n": 1821,
+ "n_molecules": 1821,
+ "rank_delta3": {
+  "n": 1024,
+  "n_indices": 81,
+  "rank": 5,
+  "last_kept": 0.011675897442009128,
+  "first_dropped": 1.8765249105975012e-16
+ },
+ "rank_delta4": {
+  "n": 792,
+  "n_indices": 81,
+  "rank": 9,
+  "last_kept": 0.0009142599227495426,
+  "first_dropped": 1.2356819327511408e-16
+ },
+ "relations_real_rref_all": {
+  "n_molecules": 1816,
+  "violated": 0,
+  "worst_rel": 1.1368683772161603e-15
+ },
+ "relations_real_rref_delta4": {
+  "n_molecules": 792,
+  "violated": 0,
+  "worst_rel": 1.1368683772161603e-15
+ }
+}

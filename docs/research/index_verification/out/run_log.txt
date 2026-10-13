@@ -1,0 +1,279 @@
+atlas: connected graphs per n (all, max-degree<=4): {2: [1, 1], 3: [2, 2], 4: [6, 6], 5: [21, 21], 6: [112, 78], 7: [853, 353]}; total used 461
+atlas: RDKit sanitisation failures: 0 []
+SMILES route: 521 submitted, 507 accepted, 14 rejected
+  rejected P2: duplicate_inchikey:atlas3 standardised parent identical to an earlier molecule
+  rejected P3: duplicate_inchikey:atlas6 standardised parent identical to an earlier molecule
+  rejected P4: duplicate_inchikey:atlas14 standardised parent identical to an earlier molecule
+  rejected P5: duplicate_inchikey:atlas31 standardised parent identical to an earlier molecule
+  rejected P6: duplicate_inchikey:atlas83 standardised parent identical to an earlier molecule
+  rejected P7: duplicate_inchikey:atlas286 standardised parent identical to an earlier molecule
+  rejected C3: duplicate_inchikey:atlas7 standardised parent identical to an earlier molecule
+  rejected C4: duplicate_inchikey:atlas16 standardised parent identical to an earlier molecule
+  rejected C5: duplicate_inchikey:atlas38 standardised parent identical to an earlier molecule
+  rejected C6: duplicate_inchikey:atlas105 standardised parent identical to an earlier molecule
+  rejected C7: duplicate_inchikey:atlas353 standardised parent identical to an earlier molecule
+  rejected S2: duplicate_inchikey:atlas6 standardised parent identical to an earlier molecule
+  rejected S3: duplicate_inchikey:atlas13 standardised parent identical to an earlier molecule
+  rejected S4: duplicate_inchikey:atlas29 standardised parent identical to an earlier molecule
+SMILES route: graph not isomorphic to intended graph: 0 []
+SMILES route: n_rings != m-n+1: 0 []
+index_table dtypes: ['float64']
+cohort: 1821 molecules; package Z > 2^53 for 9: ['CHEMBL1688530', 'CHEMBL387675', 'CHEMBL262777', 'CHEMBL457547', 'CHEMBL3989945', 'CHEMBL3707290', 'CHEMBL3545123', 'CHEMBL2111100', 'CHEMBL264241']
+drugs: 36 selected, 36 accepted
+drugs: id n m iso rings_pkg cyclomatic sssr Z_ref Z_pkg(direct) Z_table_type exact_direct exact_table
+   CHEMBL506569 69 77 True 9 9 9 203168714727825 203168714727825 float True True
+   CHEMBL1751 55 62 True 8 8 8 290860039896 290860039896 float True True
+   CHEMBL1360 67 72 True 6 6 6 88331563643400 88331563643400 float True True
+   CHEMBL1688530 125 137 True 13 13 15 52259511064445879724729840 52259511064445879724729840 float True False
+   CHEMBL387675 115 118 True 4 4 4 67682532307748789439424 67682532307748789439424 float True False
+   CHEMBL262777 101 110 True 10 10 12 430385410256585344848 430385410256585344848 float True False
+   CHEMBL457547 89 95 True 7 7 7 974614123504671840 974614123504671840 float True False
+   CHEMBL3989945 88 94 True 7 7 7 765418170026960304 765418170026960304 float True False
+   CHEMBL3707290 89 89 True 1 1 1 502090090024061121 502090090024061121 float True False
+   CHEMBL3545123 80 89 True 10 10 10 73384897982285016 73384897982285016 float True False
+   CHEMBL2111100 85 85 True 1 1 1 73223863012323882 73223863012323882 float True False
+   CHEMBL264241 82 88 True 7 7 7 61816971171195696 61816971171195696 float True True
+   CHEMBL545 3 2 True 0 0 0 3 3 float True True
+   CHEMBL108545 11 11 True 1 1 1 156 156 float True True
+   CHEMBL2010507 13 13 True 1 1 1 413 413 float True True
+   CHEMBL1266 15 17 True 3 3 3 1978 1978 float True True
+   CHEMBL856 16 17 True 2 2 2 2046 2046 float True True
+   CHEMBL917 17 18 True 2 2 2 2699 2699 float True True
+   CHEMBL1208 19 21 True 3 3 3 9499 9499 float True True
+   CHEMBL130 20 20 True 1 1 1 7928 7928 float True True
+   CHEMBL1380 21 24 True 4 4 4 33594 33594 float True True
+   CHEMBL1187724 22 24 True 3 3 3 36422 36422 float True True
+   CHEMBL76 22 23 True 2 2 2 33108 33108 float True True
+   CHEMBL656 23 27 True 5 5 5 90538 90538 float True True
+   CHEMBL642 24 24 True 1 1 1 49389 49389 float True True
+   CHEMBL595 25 27 True 3 3 3 176224 176224 float True True
+   CHEMBL583 26 29 True 4 4 4 259158 259158 float True True
+   CHEMBL746 27 29 True 3 3 3 309572 309572 float True True
+   CHEMBL1040 29 31 True 3 3 3 663986 663986 float True True
+   CHEMBL1364144 30 33 True 4 4 4 1133022 1133022 float True True
+   CHEMBL1683 31 34 True 4 4 4 2182338 2182338 float True True
+   CHEMBL4299940 32 36 True 5 5 5 6542912 6542912 float True True
+   CHEMBL428880 34 37 True 4 4 4 10682054 10682054 float True True
+   CHEMBL21333 36 40 True 5 5 5 55858544 55858544 float True True
+   CHEMBL1689772 40 43 True 4 4 4 78752953 78752953 float True True
+   CHEMBL2103872 45 48 True 4 4 4 1168654871 1168654871 float True True
+closed forms: 1615 (graph, index) checks; ref==hand (1e-40): 1615; pkg agrees with hand: 1615
+Hosoya brute-force vs recursion disagreements on atlas: 0 of 461
+rows: 114296; graphs: 591; indices with no problem: 103/104
+  PROBLEM HCM2 pkg_nan_ref_value 3 K1[direct]: ref=0 pkg=nan
+max rel diff over all value comparisons: 2.256e-15
+total value comparisons: 111920; both-undefined: 2373
+[dep] indices that are exact functions of (n) on 586 connected graphs (31 groups with >1 graph): ['ReZ1']
+[dep] indices that are exact functions of (n,m) on 586 connected graphs (54 groups with >1 graph): ['ReZ1']
+[dep] indices that are exact functions of (n,m,degseq) on 586 connected graphs (83 groups with >1 graph): ['M1', 'F', 'ReZ1', 'R1_M1', 'R1_F', 'R1_ReZ1', 'R2_M1', 'R2_F', 'R2_ReZ1', 'R3_M1', 'R3_F', 'R3_ReZ1', 'I_deg']
+[dep] atlas rows with all 104 indices defined (Delta >= 3): 450 of 461
+[dep] rational-valued indices: 67; exact rank of [1,n,m,rational] over atlas: 30 of 70 columns
+[dep:Q] HM = (2)*M2 + (1)*F   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] ReZ1 = (1)*n   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] mM2 = (-35/24)*m + (5/12)*M1 + (1/24)*M2 + (-1/24)*F + (25/12)*H + (-5/6)*ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] sigma = (-2)*M2 + (1)*F   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] ReZ3 = (3251232/164279)*n + (34666356/164279)*m + (-3391087/164279)*M1 + (5536521/328558)*M2 + (283524/164279)*F + (-31839840/164279)*H + (324000/164279)*AZI + (-17946450/164279)*ISI + (-1895820/164279)*SDD   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] BMH = (1625616/164279)*n + (17333178/164279)*m + (-3391087/328558)*M1 + (6193637/657116)*M2 + (447803/328558)*F + (-15919920/164279)*H + (162000/164279)*AZI + (-8973225/164279)*ISI + (-947910/164279)*SDD   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] TMH = (1279884/164279)*n + (42880306/164279)*m + (-12531939/328558)*M1 + (5536521/328558)*M2 + (1104919/164279)*F + (-31839840/164279)*H + (324000/164279)*AZI + (-17946450/164279)*ISI + (-1895820/164279)*SDD   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] BM = (1)*M1 + (1)*M2   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] TM = (1)*M2 + (1)*F   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] HBM = (-602428564/3605102655)*n + (-8123755699/12360351960)*m + (8048526961/43261231860)*M1 + (913351933/43261231860)*M2 + (-186183783/9613607080)*F + (6462937421/5768164248)*H + (-103800/240340177)*AZI + (-1106093557/2884082124)*ISI + (10274258/515014665)*SDD   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] HTM = (-226857333377/756678273624)*n + (-768794740411/1008904364832)*m + (3870394466971/18160278566976)*M1 + (930365358647/36320557133952)*M2 + (-1413443701/61352292456)*F + (6300609706865/4540069641744)*H + (-12942375/21018840934)*AZI + (-3991923787471/9080139283488)*ISI + (9026021179/216193792464)*SDD   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R1_F = (-2)*M2 + (1)*F + (2)*R1_M2   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] R1_HM = (-2)*M2 + (1)*F + (4)*R1_M2   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] R1_BM = (1)*R1_M1 + (1)*R1_M2   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] R1_TM = (-2)*M2 + (1)*F + (3)*R1_M2   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] R1_BMH = (-1)*M2 + (1/2)*F + (2)*R1_M2 + (1/2)*R1_ReZ3   [holds on 38 non-atlas graphs with 3<=Delta<=4; UNIVERSAL on all connected test graphs]
+[dep:Q] R1_ReZ1 = (25/6)*m + (-5/6)*M2 + (5/12)*F + (-35/24)*R1_M1 + (5/6)*R1_M2 + (1/12)*R1_ReZ3 + (-1/12)*R1_TMH   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R2_M1 = (-12)*n + (30)*m + (-9/2)*M1 + (-2)*M2 + (3/2)*F + (-5/6)*R1_M1 + (2)*R1_M2 + (1/3)*R1_ReZ3 + (-1/3)*R1_TMH   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_M2 = (7180544/164279)*n + (1273497587/6406881)*m + (-139137588/2135627)*M1 + (-153611875/8542508)*M2 + (145390087/12813762)*F + (-43564680/164279)*H + (2754000/2135627)*AZI + (310721955/2135627)*ISI + (-633006/164279)*SDD + (-127/26)*R1_M1 + (211/13)*R1_M2 + (12/13)*R1_ReZ3 + (-19/13)*R1_TMH + (-420/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_F = (-60)*n + (150)*m + (-45/2)*M1 + (-20)*M2 + (25/2)*F + (-29/2)*R1_M1 + (20)*R1_M2 + (3)*R1_ReZ3 + (-3)*R1_TMH   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_HM = (4504348/164279)*n + (3508027324/6406881)*m + (-652653567/4271254)*M1 + (-239036955/4271254)*M2 + (450952199/12813762)*F + (-87129360/164279)*H + (5508000/2135627)*AZI + (621443910/2135627)*ISI + (-1266012/164279)*SDD + (-631/26)*R1_M1 + (682/13)*R1_M2 + (63/13)*R1_ReZ3 + (-77/13)*R1_TMH + (-840/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_ReZ3 = (397279688/164279)*n + (28667446790/6406881)*m + (-2704364981/2135627)*M1 + (-1351123889/4271254)*M2 + (1202756975/6406881)*F + (-1413302640/164279)*H + (99900000/2135627)*AZI + (6196031850/2135627)*ISI + (-68418948/164279)*SDD + (-71/13)*R1_M1 + (2718/13)*R1_M2 + (-9/13)*R1_ReZ3 + (-132/13)*R1_TMH + (-9240/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_BM = (5209196/164279)*n + (1465704017/6406881)*m + (-297495819/4271254)*M1 + (-170696891/8542508)*M2 + (82305365/6406881)*F + (-43564680/164279)*H + (2754000/2135627)*AZI + (310721955/2135627)*ISI + (-633006/164279)*SDD + (-223/39)*R1_M1 + (237/13)*R1_M2 + (49/39)*R1_ReZ3 + (-70/39)*R1_TMH + (-420/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_TM = (-2676196/164279)*n + (2234529737/6406881)*m + (-374378391/4271254)*M1 + (-324462035/8542508)*M2 + (152781056/6406881)*F + (-43564680/164279)*H + (2754000/2135627)*AZI + (310721955/2135627)*ISI + (-633006/164279)*SDD + (-252/13)*R1_M1 + (471/13)*R1_M2 + (51/13)*R1_ReZ3 + (-58/13)*R1_TMH + (-420/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_BMH = (200892018/164279)*n + (5362579019/2135627)*m + (-6061383529/8542508)*M1 + (-397540211/2135627)*M2 + (952155383/8542508)*F + (-750216000/164279)*H + (52704000/2135627)*AZI + (3408737880/2135627)*ISI + (-34842480/164279)*SDD + (-773/52)*R1_M1 + (1700/13)*R1_M2 + (27/13)*R1_ReZ3 + (-209/26)*R1_TMH + (-5040/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_TMH = (376580534/164279)*n + (30813751925/6406881)*m + (-11221093427/8542508)*M1 + (-1624484145/4271254)*M2 + (5765653169/25627524)*F + (-1413302640/164279)*H + (99900000/2135627)*AZI + (6196031850/2135627)*ISI + (-68418948/164279)*SDD + (-9341/156)*R1_M1 + (3550/13)*R1_M2 + (661/78)*R1_ReZ3 + (-1507/78)*R1_TMH + (-9240/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_ISI = (-13676671/1149953)*n + (-140251967/89696334)*m + (-62166985/51255048)*M1 + (-252314161/597975560)*M2 + (683812279/1793926680)*F + (26886512/1149953)*H + (-2313000/14949389)*AZI + (70600155/29898778)*ISI + (15955147/5749765)*SDD + (-21863/32760)*R1_M1 + (2503/2730)*R1_M2 + (601/4095)*R1_ReZ3 + (-2437/16380)*R1_TMH + (4/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R2_ReZ1 = (3)*n + (-5)*m + (9/8)*M1 + (-1/12)*M2 + (-1/12)*F + (-7/24)*R1_M1 + (1/12)*R1_M2   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. P3)]
+[dep:Q] R3_M1 = (28)*n + (-290/3)*m + (21)*M1 + (3)*M2 + (-25/6)*F + (13/3)*R1_M1 + (-3)*R1_M2 + (-1/3)*R1_ReZ3 + (1/3)*R1_TMH   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_M2 = (650864698/164279)*n + (31374358159/6406881)*m + (-10731624959/8542508)*M1 + (-5513940431/17085016)*M2 + (1115285230/6406881)*F + (-1960016040/164279)*H + (136917000/2135627)*AZI + (12943681155/4271254)*ISI + (-126326955/164279)*SDD + (3195/52)*R1_M1 + (-211/26)*R1_M2 + (-349/52)*R1_ReZ3 + (123/26)*R1_TMH + (-2520/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_F = (132)*n + (-490)*m + (102)*M1 + (21)*M2 + (-47/2)*F + (91/3)*R1_M1 + (-21)*R1_M2 + (-7/3)*R1_ReZ3 + (7/3)*R1_TMH   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_HM = (1323414224/164279)*n + (59609344628/6406881)*m + (-10295957051/4271254)*M1 + (-5334547763/8542508)*M2 + (4160017513/12813762)*F + (-3920032080/164279)*H + (273834000/2135627)*AZI + (12943681155/2135627)*ISI + (-252653910/164279)*SDD + (11951/78)*R1_M1 + (-484/13)*R1_M2 + (-1229/78)*R1_ReZ3 + (460/39)*R1_TMH + (-5040/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_ReZ3 = (7054577964/164279)*n + (116084720906/2135627)*m + (-57981125479/4271254)*M1 + (-29632516189/8542508)*M2 + (4022883552/2135627)*F + (-21408836400/164279)*H + (1521774000/2135627)*AZI + (68172569745/2135627)*ISI + (-1390187154/164279)*SDD + (53509/78)*R1_M1 + (-1109/13)*R1_M2 + (-5803/78)*R1_ReZ3 + (2039/39)*R1_TMH + (-28560/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_BM = (655464510/164279)*n + (10251675443/2135627)*m + (-10552232291/8542508)*M1 + (-5462685383/17085016)*M2 + (725726595/4271254)*F + (-1960016040/164279)*H + (136917000/2135627)*AZI + (12943681155/4271254)*ISI + (-126326955/164279)*SDD + (10261/156)*R1_M1 + (-289/26)*R1_M2 + (-1099/156)*R1_ReZ3 + (395/78)*R1_TMH + (-2520/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_TM = (672549526/164279)*n + (28234986469/6406881)*m + (-9860289143/8542508)*M1 + (-5155155095/17085016)*M2 + (1929447053/12813762)*F + (-1960016040/164279)*H + (136917000/2135627)*AZI + (12943681155/4271254)*ISI + (-126326955/164279)*SDD + (14317/156)*R1_M1 + (-757/26)*R1_M2 + (-1411/156)*R1_ReZ3 + (551/78)*R1_TMH + (-2520/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_BMH = (4188996094/164279)*n + (203931753673/6406881)*m + (-34138541265/4271254)*M1 + (-4370882994/2135627)*M2 + (28297318825/25627524)*F + (-12664434240/164279)*H + (897804000/2135627)*AZI + (40558125450/2135627)*ISI + (-821420532/164279)*SDD + (5455/13)*R1_M1 + (-1593/26)*R1_M2 + (-586/13)*R1_ReZ3 + (833/26)*R1_TMH + (-16800/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_TMH = (7098276178/164279)*n + (341601684613/6406881)*m + (-57084162139/4271254)*M1 + (-29158406995/8542508)*M2 + (46875766939/25627524)*F + (-21408836400/164279)*H + (1521774000/2135627)*AZI + (68172569745/2135627)*ISI + (-1390187154/164279)*SDD + (29881/39)*R1_M1 + (-3661/26)*R1_M2 + (-3142/39)*R1_ReZ3 + (4559/78)*R1_TMH + (-28560/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_ISI = (879192493/2464185)*n + (16627594843/38441286)*m + (-14712240259/128137620)*M1 + (-2551611147/85425080)*M2 + (2470338199/153765144)*F + (-175200520/164279)*H + (11943000/2135627)*AZI + (1213415585/4271254)*ISI + (-11171641/164279)*SDD + (2813/585)*R1_M1 + (-433/780)*R1_M2 + (-311/585)*R1_ReZ3 + (869/2340)*R1_TMH + (-203/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] R3_ReZ1 = (-8)*n + (55/2)*m + (-45/8)*M1 + (-1/4)*M2 + (5/6)*F + (-13/36)*R1_M1 + (1/4)*R1_M2 + (1/36)*R1_ReZ3 + (-1/36)*R1_TMH   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:Q] HCM2 = (-30958360/164279)*n + (-1710975856/6406881)*m + (123324910/2135627)*M1 + (-3425135/2135627)*M2 + (-2676670/6406881)*F + (92378640/164279)*H + (-5400000/2135627)*AZI + (-272583420/2135627)*ISI + (6575424/164279)*SDD + (-395/39)*R1_M1 + (-415/13)*R1_M2 + (350/39)*R1_ReZ3 + (-110/39)*R1_TMH + (1680/13)*R1_ISI   [holds on 38 non-atlas graphs with 3<=Delta<=4; not universal (e.g. S5)]
+[dep:R all] rows 450; numerical rank of [1,n,m,104 indices] = 38 of 107; dependent columns 69, of which 69 hold on every non-atlas test graph of that stratum (3<=Delta<=4)
+   HM = (2)*M2 + (1)*F  [holds; universal, 38 graphs]
+   GA in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   ABC in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   AZI in span of 9 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   SO in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   ISI in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   ReZ1 = (1)*n  [holds; universal, 38 graphs]
+   mM2 in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   SDD in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   sigma = (-2)*M2 + (1)*F  [holds; universal, 38 graphs]
+   ABS in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   ReZ3 in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   AG in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   HG in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   GBM in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   BMG in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   BMH in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   TMH in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   BM = (1)*M1 + (1)*M2  [holds; universal, 38 graphs]
+   TM = (1)*M2 + (1)*F  [holds; universal, 38 graphs]
+   GH in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   GTM in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   HBM in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   HTM in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   TMG in span of 9 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   R1_F = (-2)*M2 + (1)*F + (2)*R1_M2  [holds; universal, 38 graphs]
+   R1_HM = (-2)*M2 + (1)*F + (4)*R1_M2  [holds; universal, 38 graphs]
+   R1_BM = (1)*R1_M1 + (1)*R1_M2  [holds; universal, 38 graphs]
+   R1_TM = (-2)*M2 + (1)*F + (3)*R1_M2  [holds; universal, 38 graphs]
+   R1_BMH = (-1)*M2 + (1/2)*F + (2)*R1_M2 + (1/2)*R1_ReZ3  [holds; universal, 38 graphs]
+   R1_ABC in span of 14 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   R1_ISI in span of 14 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   R1_RR in span of 14 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   R1_GA in span of 14 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   R1_AG in span of 14 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+   R1_ReZ1 in span of 7 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R2_M1 in span of 9 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_M2 in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_F in span of 9 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_HM in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_ReZ3 in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_BM in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_TM in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_BMH in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_TMH in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_R in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_ABC in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_ISI in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_RR in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_GA in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_AG in span of 14 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R2_ReZ1 in span of 7 earlier columns  [holds; not universal, e.g. P3, 38 graphs]
+   R3_M1 in span of 9 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_M2 in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_F in span of 9 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_HM in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_ReZ3 in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_BM in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_TM in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_BMH in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_TMH in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_R in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_ABC in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_ISI in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_RR in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_GA in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_AG in span of 14 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   R3_ReZ1 in span of 9 earlier columns  [holds; not universal, e.g. S5, 38 graphs]
+   HCM2 in span of 14 earlier columns  [holds; not universal, e.g. P2, 38 graphs]
+[dep:R delta=4] rows 349; numerical rank of [1,n,m,104 indices] = 33 of 107; dependent columns 74, of which 74 hold on every non-atlas test graph of that stratum (delta=4)
+   HM = (2)*M2 + (1)*F  [holds; universal, 20 graphs]
+   GA in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   ABC in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   AZI in span of 9 earlier columns  [holds; not universal, e.g. S5, 20 graphs]
+   SO in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   ISI in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   ReZ1 = (1)*n  [holds; universal, 20 graphs]
+   mM2 in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   SDD in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   sigma = (-2)*M2 + (1)*F  [holds; universal, 20 graphs]
+   ABS in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   ReZ3 in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   AG in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   HG in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   GBM in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   BMG in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   BMH in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   TMH in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   BM = (1)*M1 + (1)*M2  [holds; universal, 20 graphs]
+   TM = (1)*M2 + (1)*F  [holds; universal, 20 graphs]
+   GH in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   GTM in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   HBM in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   HTM in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   TMG in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_M1 = (10)*m + (-1)*M1  [holds; not universal, e.g. P2, 20 graphs]
+   R1_M2 = (25)*m + (-5)*M1 + (1)*M2  [holds; not universal, e.g. P2, 20 graphs]
+   R1_F = (50)*m + (-10)*M1 + (1)*F  [holds; not universal, e.g. P2, 20 graphs]
+   R1_HM = (100)*m + (-20)*M1 + (2)*M2 + (1)*F  [holds; not universal, e.g. P2, 20 graphs]
+   R1_ReZ3 in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_BM = (35)*m + (-6)*M1 + (1)*M2  [holds; not universal, e.g. P2, 20 graphs]
+   R1_TM = (75)*m + (-15)*M1 + (1)*M2 + (1)*F  [holds; not universal, e.g. P2, 20 graphs]
+   R1_BMH in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_TMH in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_R in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_ABC in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_ISI in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_RR in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_GA in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_AG in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+   R1_ReZ1 = (-1)*n + (25/6)*m + (-25/24)*M1 + (5/24)*F  [holds; not universal, e.g. P2, 20 graphs]
+   R2_M1 = (-16)*n + (140/3)*m + (-7)*M1 + (2/3)*F  [holds; not universal, e.g. P3, 20 graphs]
+   R2_M2 in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_F = (-96)*n + (280)*m + (-48)*M1 + (5)*F  [holds; not universal, e.g. P3, 20 graphs]
+   R2_HM in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_ReZ3 in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_BM in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_TM in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_BMH in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_TMH in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_R in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_ABC in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_ISI in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_RR in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_GA in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_AG in span of 9 earlier columns  [holds; not universal, e.g. P3, 20 graphs]
+   R2_ReZ1 = (3)*n + (-35/6)*m + (1)*M1 + (-1/12)*F  [holds; not universal, e.g. P3, 20 graphs]
+   R3_M1 = (32)*n + (-310/3)*m + (25)*M1 + (-10/3)*F  [holds; not universal, e.g. S3, 20 graphs]
+   R3_M2 in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_F = (160)*n + (-1610/3)*m + (130)*M1 + (-53/3)*F  [holds; not universal, e.g. S3, 20 graphs]
+   R3_HM in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_ReZ3 in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_BM in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_TM in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_BMH in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_TMH in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_R in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_ABC in span of 9 earlier columns  [holds; not universal, e.g. S5, 20 graphs]
+   R3_ISI in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_RR in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_GA in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_AG in span of 9 earlier columns  [holds; not universal, e.g. S3, 20 graphs]
+   R3_ReZ1 = (-25/3)*n + (505/18)*m + (-143/24)*M1 + (55/72)*F  [holds; not universal, e.g. S3, 20 graphs]
+   HCM2 in span of 9 earlier columns  [holds; not universal, e.g. P2, 20 graphs]
+[dep] Delta<=4 degree-based indices are sum_(a<=b) N_ab phi(a,b) over 9 edge types (1,2)..(4,4) (excluding (1,1) = K2). Exact-coefficient rank: 32 degree indices -> 9; with n and m -> 9; 32 degree + 48 R_k + HCM2 (Delta = 4 weights) -> 9
+[dep] package float values, 18 Delta=4 drugs x 81 degree/R_k/HCM2 indices: numerical rank 9; singular values (scaled) [1.00e+00 9.59e-02 2.46e-02 1.53e-02 8.73e-03 5.38e-03 1.91e-03 3.43e-04
+ 2.41e-04 1.26e-16 9.32e-17 5.28e-17 4.36e-17 4.27e-17 2.25e-17 1.84e-17
+ 1.63e-17 1.11e-17]
+[dep] exactly proportional index pairs on all 586 connected test graphs: []
+[panel] n_rings (size_table) != m - n + 1 on 0 of 1821 cohort molecules; RDKit SSSR ring count != m - n + 1 on 37
+[panel] 1821 cohort molecules: ReZ1 == n_heavy (|diff| <= 1e-9 n) for 1821
+[panel] Delta=3: 1024 molecules x 81 degree/R_k/HCM2 indices: numerical rank 5 (sv[4]/sv[0] = 1.17e-02, sv[5]/sv[0] = 1.88e-16)
+[panel] Delta=4: 792 molecules x 81 degree/R_k/HCM2 indices: numerical rank 9 (sv[8]/sv[0] = 9.14e-04, sv[9]/sv[0] = 1.24e-16)
+[panel] 3<=Delta<=4: 69 atlas relations re-checked on 1816 cohort molecules (package floats): 0 violated; worst rel residual 1.14e-15
+[panel] Delta=4: 74 atlas relations re-checked on 792 cohort molecules (package floats): 0 violated; worst rel residual 1.14e-15
+[Z>2^53] id n Z_ref Z_direct exact table_float table_err
+    CHEMBL3545123 80 73384897982285016 73384897982285016 True 7.338489798228502e+16 8
+    CHEMBL264241 82 61816971171195696 61816971171195696 True 6.18169711711957e+16 0
+    CHEMBL2111100 85 73223863012323882 73223863012323882 True 7.322386301232389e+16 6
+    CHEMBL3989945 88 765418170026960304 765418170026960304 True 7.654181700269603e+17 -48
+    CHEMBL3707290 89 502090090024061121 502090090024061121 True 5.020900900240611e+17 -1
+    CHEMBL457547 89 974614123504671840 974614123504671840 True 9.746141235046719e+17 32
+    CHEMBL262777 101 430385410256585344848 430385410256585344848 True 4.3038541025658536e+20 14512
+    CHEMBL387675 115 67682532307748789439424 67682532307748789439424 True 6.768253230774879e+22 -1067968
+    CHEMBL1688530 125 52259511064445879724729840 52259511064445879724729840 True 5.225951106444588e+25 1195973136
+    P80 (alkane, Z=F_81) 80 37889062373143906 37889062373143906 True 3.78890623731439e+16 -2
+    P100 (alkane, Z=F_101) 100 573147844013817084101 573147844013817084101 True 5.731478440138171e+20 -14533
+elapsed 203.5 s
