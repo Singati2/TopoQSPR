@@ -1,0 +1,40 @@
+  fm = g.apply(lambda d: pd.Series(dict(
+  pr = P.groupby(["target", "learner", "set", "repeat"]).apply(
+  fm = g.apply(lambda d: pd.Series(dict(
+  pr = P.groupby(["target", "learner", "set", "repeat"]).apply(
+run: main_confirmatory
+rows_seen_more_than_once_per_repeat: 0
+rows_with_inconsistent_fold_across_sets: 0
+distinct_outer_seeds: [0, 1, 2, 3, 4]
+max_abs_diff_fold_r2: 0.0
+max_abs_diff_fold_mae: 0.0
+max_abs_diff_fold_rmse: 0.0
+fold_ntest_mismatch: 0
+max_abs_diff_pooled_r2: 1.1368683772161603e-13
+max_abs_diff_confirmatory: 1.1102230246251565e-16
+informative_bh: ['logp_opera']
+practically_significant: ['logp_opera', 'mp_bradley']
+      target      mean        lo       hi        p     q_bh     q_by
+  mp_bradley  0.071005  0.004302 0.137708 0.037914 0.075828 0.157975
+  logp_opera  0.152927  0.076329 0.229526 0.000388 0.001553 0.003236
+   logd74_az  0.038623 -0.030688 0.107935 0.261440 0.348587 0.726222
+logs_aqsoldb -0.012533 -0.073262 0.048195 0.673940 0.673940 1.000000
+
+run: main_confirmatory_protocol_svr
+rows_seen_more_than_once_per_repeat: 0
+rows_with_inconsistent_fold_across_sets: 0
+distinct_outer_seeds: [0, 1, 2, 3, 4]
+max_abs_diff_fold_r2: 0.0
+max_abs_diff_fold_mae: 0.0
+max_abs_diff_fold_rmse: 0.0
+fold_ntest_mismatch: 0
+max_abs_diff_pooled_r2: 1.1368683772161603e-13
+max_abs_diff_confirmatory: 0.0
+informative_bh: ['logp_opera']
+practically_significant: ['logp_opera', 'mp_bradley']
+      target      mean        lo       hi        p     q_bh     q_by
+  mp_bradley  0.071258  0.004504 0.138011 0.037427 0.074854 0.155945
+  logp_opera  0.150290  0.076193 0.224387 0.000329 0.001315 0.002740
+   logd74_az  0.039209 -0.030189 0.108607 0.255041 0.340054 0.708447
+logs_aqsoldb -0.007064 -0.058652 0.044523 0.779889 0.779889 1.000000
+

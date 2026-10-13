@@ -1,0 +1,4 @@
+endpoint,n_measured_parents,n_constitutions,constitutions_with_stereo_variants,formula_groups_ge2,ge3,ge5,ge10,molecules_in_ge5,molecules_in_ge2,largest_group,largest_formula,within_formula_pairs,within_formula_pairs_unlabeled_isomorphic,formula_groups_ge5_with_ge2_distinct_unlabeled_graphs
+mp_bradley,19500,19066,368,3163,1758,758,206,6587,12721,55,C9H10O3,40746,2253,755
+logp_opera,13848,13847,1,2520,1301,495,112,3994,9106,43,C10H13NO2,23865,1357,488
+logs_aqsoldb,8417,8136,251,1305,630,222,63,1904,4612,35,C12H5Cl5,12053,600,221
