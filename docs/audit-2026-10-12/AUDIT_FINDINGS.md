@@ -222,6 +222,64 @@ Arockiaraj is a co-author of both ChemGraphX (J Cheminform 18:39, 2026) and Topo
 This must be disclosed to the editor, and the cross-check of 41 shared indices is not
 fully independent in authorship (it is independent in code).
 
+## F16. Amended SVR control run from a modified working tree — CONFIRMED (provenance), S3 after check
+
+Raised by PR #2 (A5); missed in this audit's first pass.
+`results/expB/main_confirmatory_protocol_svr/run_record.json`: commit `fe92837 → 1a504a9`,
+`describe = plan-freeze-v1-41-gfe92837-dirty`, `dirty = true`, `untracked = 0`. The record
+stores no diff, so the exact tree cannot be rebuilt from git alone.
+
+**Bounding the risk.** The run started at 19:03:34 on 2026-10-05; `1a504a9` is dated 19:02:41.
+The next commits are `a5ae56f` (19:05, `paper/main.tex` plus archived `results/`) and
+`611cbbb` (19:06, `tools/make_results.py`). `git diff 1a504a9 ab2c30f -- src/ studies/` is
+empty. So the package source and study configs did not change across that window, and the
+config itself is hashed in the record (`config_sha256`). The uncommitted edits were almost
+certainly the paper, tools and result files the run does not execute.
+
+This is strong circumstantial evidence, not proof. Fix for the future: write `git diff` (or its
+hash plus a patch file) into the run record when `dirty` is true, and refuse confirmatory runs on
+a dirty tree.
+
+## F17. Permutation null for unique-size groups is row-wise — CONFIRMED in general, NOT TRIGGERED in any archived run
+
+Raised by PR #2 (A3). `pipeline.permutation_indices` (`src/topoqspr/pipeline.py:1012`) swaps
+equal-size CV groups as blocks. A group of size ≥ 2 whose size no other group shares is
+shuffled row-wise with the singletons. Under a clustered null that is anti-conservative: PR #2's
+`tools/audit_permutation_exchangeability.py` (re-run here, seed 2212) rejects 96 of 200 null
+data sets at nominal 0.05 (rate 0.48). Its construction (the predictor equals the cluster
+indicator) is a worst case, not a model of the drug data.
+
+**Archived runs** (`scripts/permutation_block_check.py`, which rebuilds the per-target groups the
+permutation stage received): in both `main_confirmatory` and `main_confirmatory_protocol_svr`,
+every multi-member group is a size-2 stereoisomer pair. There are 6 (MP), 0 (logP), 4 (logD)
+and 3 (logS), so each is block-swapped, and **0 rows** took the row-wise fallback. The
+published permutation p-values are not affected by this mechanism.
+
+Remaining limitation (documentation): the scheme assumes exchangeability of molecules
+(and of equal-size blocks) under H0. Make it record a warning when the fallback fires;
+`scripts/permutation_block_check.py` exits non-zero in that case.
+
+## PR #2 (`audit-tests-20261012`, pushed 2026-10-12 20:36 by Singati2): cross-check
+
+Its six tests were run against this audit branch: **5 pass, 1 fails by design**.
+`test_a4_degenerate_corrected_ttest_behavior_is_explicit` asserts the old `p == 0.0`, which
+F2 deliberately changed to NaN plus a reason. All six pass on `fecb800`. The two branches must
+not be merged as they are. Patch for the PR's test: `pr2_test_a4.patch` (asserts the new
+contract). The PR's own text says "decide ... do not silently change published values"; F2
+shows no published value reached this branch.
+
+| PR item | This audit | Verdict |
+|---|---|---|
+| A1 selected vs ridge/SVR controls | F12 | limitation (documented); agree |
+| A2 gain beyond composition | E1 run, RESULT_RECONCILIATION §3b | new experiment, run: no interval excludes 0 |
+| A3 permutation exchangeability | F17 | real in general; not triggered in archived runs |
+| A4 degenerate corrected t | F2 (fixed) | confirmed; conflicts with PR test as written |
+| A5 102 vs 104, dirty SVR run | F5, F16 | confirmed; dirty risk bounded |
+| A6 preregistration wording | F4 | confirmed |
+| A7 similarity/cluster split | plan E2 | not run |
+| A8 outlier witnesses | F1, `out/catastrophic_main_confirmatory.csv` | confirmed, plus RDKit Ipc |
+| A9 cohort/source/licence checks | F14, F10, B5 counts | partly done; licences unverified |
+
 ---
 
 ## Verified correct (selected)
