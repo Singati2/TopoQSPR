@@ -32,7 +32,7 @@ This paper is directly related to TopoQSPR because it develops generalized/modif
 
 **DOI:** https://doi.org/10.1080/1062936X.2023.2239149
 
-**PDF (partial):** [`Arockiaraj_2023_SARQSAR_hybrid_GHZ_descriptors_photos.pdf`](Arockiaraj_2023_SARQSAR_hybrid_GHZ_descriptors_photos.pdf). These are 29 phone photos of the article on screen, cropped to the article pages and covering pp. 570–585: the introduction, the bi-/tri-Zagreb (BM, TM) and ten hybrid descriptor definitions (GH, GBM, GTM, HG, HBM, HTM, BMG, BMH, TMG, TMH), Figures 1–2 (the 55 benzenoid hydrocarbons B1–B55), the M-polynomial derivation, Table 1 (bond partitions), Table 2 (descriptor values), Table 3 (experimental log P, RI, BP, ω), the regression equations with Figure 3 and Table 4 (correlations), Figure 4 and Table 5 (predictions for 10 external PAHs), the circumcoronene series H_n (Figure 5, Table 6) and the Conclusion. Pages overlap, some are slightly blurry, and the landscape Table 2 pages are rotated upright. **Not included:** the title page and abstract (p. 569), and the disclosure statement and references (pp. 585–589). Get the full text through the DOI.
+**Access:** Paywalled (© 2023 Informa UK Limited, trading as Taylor & Francis Group). Read it through the DOI with institutional access. The publisher PDF is deliberately not stored in this public repository.
 
 #### Relevance to TopoQSPR
 
