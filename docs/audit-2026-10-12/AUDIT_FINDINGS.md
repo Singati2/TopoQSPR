@@ -155,6 +155,16 @@ has *identical* TI+composition vectors and different measured values:
 | atenolol / practolol | constitutional (amide reversed) | 146.5 / 135 |
 | epirubicin / doxorubicin | C4′ epimers | 344.53 / 204.5 (*see F10*) |
 
+Verification (follow-up, 2026-10-12 late): every one of the 110 TI collision classes
+consists of molecules whose unlabeled heavy-atom graphs are **isomorphic** (networkx), so all
+collisions are graph-isomorphism collisions; no two non-isomorphic graphs share all 102 indices
+in these data. 103 of 136 classes are bitwise equal. The other 33 (e.g. sulfamethazine/
+sulfisomidine, atenolol/practolol) differ by at most 5×10⁻¹⁶ relative, i.e. summation-order
+noise from different atom orderings; the 9-significant-digit key absorbs it. Recomputing the
+pairs from the original input SMILES gives the same result. Consequence: index values are
+atom-order invariant only up to the last bit (S3; a permutation-invariance test should use a
+relative tolerance).
+
 Ethanol (`CCO`) and dimethyl ether (`COC`): all 104 indices are identical
 (`out/ethanol_dimethyl_ether.csv`). NIST WebBook gives normal boiling points of 351.5 ± 0.2 K
 and 248.2–249.5 K. The implied empirical R² ceilings are **not binding** on these datasets,

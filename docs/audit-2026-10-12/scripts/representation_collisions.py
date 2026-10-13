@@ -12,7 +12,7 @@ not an out-of-sample bound). This script computes, per target and per feature ma
 the floor and the implied R^2 ceiling, and lists every multi-member class.
 
 Equality is tested on the archived floating-point values rounded to 9 significant
-digits (indices computed from the same graph are bitwise equal; rounding only guards
+digits (isomorphic graphs agree to <= 5e-16 relative, not always bitwise: rounding guards
 against summation-order noise). NaN compares equal to NaN.
 
     python -I docs/audit-2026-10-12/scripts/representation_collisions.py \
