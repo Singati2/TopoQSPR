@@ -31,8 +31,15 @@ family 32, reverse-degree family 49, incl. HCM2) are reproduced *exactly* (relat
 < 1e-9) by a linear fit on the 9 counts plus intercept, separately for Δ = 3 (1024 molecules)
 and Δ = 4 (792 molecules). On the Bradley isomer set the degree and reverse-degree families
 distinguish exactly the same 30,902 of 35,369 within-formula pairs as (m_ij, Δ). So they are
-information-equivalent to 10 numbers. **Prior art:** this is the "edge partition" method by which
-nearly every degree-index paper computes its values. It is standard, not new.
+information-equivalent to 10 numbers. **Prior art (verified 2026-10-13): ALREADY KNOWN and
+already written up by the same group.** Rada, MATCH Commun. Math. Comput. Chem. 96 (2026)
+841–863 (full text, §3.1) states that every vertex-degree-based index is a linear functional of
+the edge-type vector. The owner's group has a public repository and manuscript in preparation,
+`github.com/Singati2/topological-index-orthogonality` (Shiwakoti, Natarajan, Arockiaraj, *Ten
+Edge-Degree Counts Are All a Degree-Based Topological Index Can See*, v2.1; repo created
+2026-05-16, last push 2026-10-08). It turns this into a rank certificate verified on 318,648
+MoleculeNet molecules. TopoQSPR must cite both and must **not** present M1 as its own result.
+Doing so would be self-duplication.
 
 ## M2. Numerical rank 37 vs 38 (owner's point 1)
 
@@ -49,6 +56,10 @@ between 1e-8 and 1e-14.
 
 ## M3. Representation facts (owner's mission §3)
 
+* Discrimination of degree- vs distance-based indices on isomer sets: ALREADY KNOWN in
+  substance (Dehmer, Grabner & Furtula, PLoS ONE 7:e38564, 2012, full text: degree-based indices
+  have little discrimination power; distance-based do much better). The Bradley census figures
+  (87.4% vs 95.0%) are a new *description of this dataset*, not a new result (02b).
 * **F1 (P).** If the unlabeled heavy-atom graphs of two molecules are isomorphic, every
   unlabeled graph invariant agrees on them. *Proof:* an invariant is by definition constant on
   isomorphism classes. Atom labels and bond orders are not part of the input. **Prior art:**
