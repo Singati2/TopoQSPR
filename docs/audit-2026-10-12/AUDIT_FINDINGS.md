@@ -269,6 +269,50 @@ Remaining limitation (documentation): the scheme assumes exchangeability of mole
 (and of equal-size blocks) under H0. Make it record a warning when the fallback fires;
 `scripts/permutation_block_check.py` exits non-zero in that case.
 
+### F17 follow-up (2026-10-13): replay, calibration, fix
+
+* **Replay of the archived permutations** (`scripts/permutation_replay_and_calibration.py`):
+  all 1600 archived permutations (2 runs × 4 targets × K = 200, `default_rng([0, b])`) were
+  regenerated with the reconstructed groups. 6400 of 6400 multi-member group draws moved as whole
+  blocks; 0 were split. The checker's positive control (plain row shuffle) reports 537 splits in
+  600 draws.
+* **Calibration** (α = 0.05, Wilson 95%): PR #2's worst case at ρ = 0/0.3/0.7/1.0 gives 0.055 /
+  0.165 / 0.382 / 0.492 (n = 400 each). The archived MP group structure gives 0.045 / 0.080 / 0.035 /
+  0.055 (n = 200 each); every interval contains 0.05. The fallback is anti-conservative in
+  proportion to the within-group correlation. The archived structure is calibrated within
+  Monte Carlo error. This is a narrow statement about these group structures, not a proof
+  of validity for every null.
+* **Fix (`90ca304`)**: `pipeline.permutation_fallback_rows` counts the rows that would be
+  permuted row-wise inside multi-member groups. The protocol stage records it per target
+  (`run_record.protocol.permutation.rowwise_fallback_rows`) and **withholds** the p-value (NaN
+  plus reason) when it is > 0. The scheme text no longer says a bijection makes the p-value valid.
+  The config is unchanged, so config hashes and `rerun` byte-identity are unaffected. Tests:
+  `test_permutation_fallback_rows_counts_unique_size_groups`,
+  `test_fallback_rows_match_what_permutation_indices_breaks`,
+  `test_protocol_record_reports_fallback_rows`, `test_protocol_withholds_p_when_fallback_fires`.
+
+### F16 fix (`90ca304`)
+
+Runs from a dirty tree now write `code_diff.patch` (`git diff HEAD --binary`) into the output
+directory and record `code.diff_file` / `code.diff_sha256`. Test:
+`test_git_diff_captures_uncommitted_change`. Refusing dirty runs outright was not done. It would
+break every development run; the archived diff gives exact recoverability instead.
+
+## F18. Experiment A ratio range rounded up at the low end — CONFIRMED, S3
+
+`tools/make_expA.py` prints `\expAminRatio` with `%.0f`. The actual naive/controlled
+standardised-structure ratios are 3.59 (hypertension), 5.08 (asthma), 11.48 (T2D) and 15.97
+(breast) (`results/expA/*/summary.json`). The paper's "4–16 times" should read "3.6–16 times".
+Experiment C's `\expCmaxBtrain = 0.60` was re-derived: 0.909 (v0.x training R², logP) − 0.313
+(nested all-rows reference) = 0.595. Correct.
+
+## Citation spot-check (literature report)
+
+Crossref confirms: Ash et al. JCIM 65:9398–9411 (2025); ChemGraphX J Cheminform 18 (2026-02-11;
+Jacob, Clement, Arockiaraj, Jindal); QSAR in the Browser JCIM 66:7805–7812 (2026); QSPRpred J
+Cheminform 16 (2024); RANQSAR JCAMD 40 (2026). PyPI confirms DOPtools' latest release is 1.3.9
+(2025-06-23); a listed "1.5" is an older (2024-07-26) yanked release.
+
 ## PR #2 (`audit-tests-20261012`, pushed 2026-10-12 20:36 by Singati2): cross-check
 
 Its six tests were run against this audit branch: **5 pass, 1 fails by design**.

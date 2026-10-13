@@ -4,17 +4,27 @@
 software*, not as evidence that topological indices are useful predictors.
 
 **What survived.** On 351–711 measured approved drugs per endpoint, unlabeled-graph indices
-add nothing detectable beyond an 11-count elemental composition. The audit's exploratory test
+show no detectable gain beyond an 11-count elemental composition. The audit's exploratory test
 (TI+composition vs composition, same folds, fit-free asinh transform, random and scaffold
 splits, frozen 102-index registry) gives ΔR² intervals that include zero for all 4 endpoints
 × 2 splits. Point estimates are ≤ 0.02 except melting point (+0.05 / +0.09). The frozen
 headline (TI beats size for logP, +0.15 [0.08, 0.23]) reproduces exactly but shrinks to
 +0.10 [−0.05, +0.25] on scaffold folds with the *same* registry.
 
+**Update 2026-10-13 (amendment E2, locked before running).** On a similarity-cluster split the
+primary family (TI+composition − composition, 4 endpoints, BH) gives q = 0.45–0.84. **No
+detectable gain beyond composition; equivalence within ±0.05 not shown** for any endpoint. ECFP
+beats TI+composition for MP (+0.115 [+0.046, +0.183]). RDKit 2D beats it for MP, logP and logD
+(+0.17 to +0.28). TI+composition still beats size by +0.14 to +0.43 everywhere, but that gain is
+carried by composition. Supported (exploratory) message: unlabeled topological indices showed
+no detectable gain beyond an 11-count element composition on these endpoints; equivalence is
+not shown, so "no information" is not claimed. MP is
+the only endpoint with a consistently positive (non-significant) estimate.
+
 ## Strengths (verified)
 
-* Reproducibility: archived results regenerate to 1e-9 from the archived feature matrix. 1104
-  tests pass. Run records and connectivity-grouped, leakage-safe nested CV are implemented as
+* Reproducibility: archived results regenerate to 1e-9 from the archived feature matrix. 1103
+  tests pass at `fecb800` (1111 after the audit fixes). Run records and connectivity-grouped, leakage-safe nested CV are implemented as
   documented. The bootstrap keeps resampled copies in one fold.
 * Honest frozen design: mandatory size and composition baselines, dated amendments, and the
   catastrophic failures are reported rather than hidden.
@@ -45,9 +55,9 @@ headline (TI beats size for logP, +0.15 [0.08, 0.23]) reproduces exactly but shr
 | J Cheminform (Research/Methodology) | no | **yes, recommended**: evaluation-led, with E1 and ECFP added |
 | Digital Discovery | no | plausible fallback |
 
-## Single next experiment
+## Single next experiment (done 2026-10-13 as amendment E2; see RESULT_RECONCILIATION §7)
 
-E4 + E1 confirmation: declare in a dated amendment, *before running*, the
+Planned as: E4 + E1 confirmation: declare in a dated amendment, *before running*, the
 composition-conditional comparison (asinh, as run here) plus an ECFP baseline, on a
 similarity-cluster split. Then run it once. The possible outcomes and their effect on the paper:
 

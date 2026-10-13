@@ -1,0 +1,17 @@
+{
+ "amendment": "AMD-2026-10-12-E2",
+ "smoke": false,
+ "commit": "533dcbb54ee4e7a1e4410bda15843957ebb49ffe",
+ "dirty": false,
+ "inputs": {
+  "features.csv": "3298dc27d9d2c26c45374aafef319f37cca8b77e2335969f71ce2319dcd06ec2",
+  "molecules.csv": "1dd8e419946f898627a6315d60e113c44cf805f33c2c8c72f00bcb51243ec6f6",
+  "targets.csv": "0a0dc4c593689e15f9d1197fdedb58296e1cca483fb75c56666f2960c4910fc3"
+ },
+ "python": "3.10.12",
+ "rdkit": "2026.03.6",
+ "sklearn": "1.7.2",
+ "n_clusters_all": 1402,
+ "wall_s": 14370.7,
+ "e1_reproduction": "asserted"
+}

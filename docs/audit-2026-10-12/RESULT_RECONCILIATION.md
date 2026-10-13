@@ -110,3 +110,51 @@ Almulla (n = 20): 0 of 27. 0 of 78 significant at 0.05. Index values: 471 of 540
 52 of 66 compounds have all values matching (`expD_macros.tex`). The authors attribute the
 disagreements to different chemical graphs (printed vs resolved structures); this audit read the
 macros but did **not** re-verify that attribution value by value (UNVERIFIED here).
+
+## 7. Amendment E2 (AMD-2026-10-12-E2; exploratory; locked in `e06e084` before the run)
+
+Run: `~/topoqspr_runs/audit_2026-10-12_E2`, script commit `533dcbb` (clean tree), 14 371 s, 0
+failed folds. E1 reproduced to 1e-9 on random and scaffold for all five shared sets. Hashes:
+`summary.csv` 5f42656f…, `paired_tests.csv` 2a1dc1b4…, `folds.csv` 9d1ada8f…,
+`cluster_labels.csv` 614da6bf…. Copies: `out/E2_*.csv`.
+
+Independent checks (TEST_LOG rows 13–15): a hand-written corrected t reproduces all 12
+primary intervals to 1e-16. Hand BH reproduces the q values. In 23 945 group × repeat
+combinations (all three splits), no group straddles outer folds.
+
+**Cluster split (Butina, Tanimoto 0.6):** 1402 clusters over 1821 molecules. Per endpoint
+302–576 groups, largest group 4–6 molecules (≤ 1.4%). It is only mildly stricter than the
+random split (scaffold: largest group 8–13%). This property follows from the threshold declared
+in advance; it is reported, not tuned.
+
+### 7a. Primary family H1: TIa_composition − composition, cluster split
+
+| Endpoint | ΔR² [95% CI] | 90% CI | BH q | ΔMAE [95% CI] | label |
+|---|---|---|---|---|---|
+| MP | +0.069 [−0.017, +0.154] | [−0.002, +0.139] | 0.445 | +2.49 °C [+0.02, +4.96] | no detectable gain; not equivalent |
+| logP | +0.017 [−0.080, +0.115] | [−0.064, +0.098] | 0.842 | +0.045 [−0.021, +0.112] | no detectable gain; not equivalent |
+| logD | −0.045 [−0.128, +0.039] | [−0.114, +0.025] | 0.569 | −0.030 [−0.090, +0.029] | no detectable gain; not equivalent |
+| logS | +0.011 [−0.104, +0.126] | [−0.084, +0.107] | 0.842 | +0.022 [−0.079, +0.122] | no detectable gain; not equivalent |
+
+No endpoint reaches q ≤ 0.05. No endpoint is practically equivalent (no 90% interval inside ±0.05).
+Per the amendment, the wording is "**no detectable gain beyond composition; equivalence not
+shown**". Same contrast on random and scaffold folds (not in H1, already seen in E1): the same
+pattern. MP's point estimate is positive in all three splits (+0.054, +0.092, +0.069), and its ΔMAE
+lower bound is just above 0 on scaffold and cluster splits (uncorrected).
+
+### 7b. Secondary (descriptive)
+
+| contrast | MP | logP | logD | logS |
+|---|---|---|---|---|
+| ECFP − composition, cluster | **+0.183** [+0.108, +0.258] | +0.096 [−0.008, +0.200] | −0.008 [−0.159, +0.142] | −0.026 [−0.120, +0.069] |
+| ECFP − TIa_composition, cluster | **+0.115** [+0.046, +0.183] | +0.078 [−0.048, +0.204] | +0.036 [−0.101, +0.173] | −0.037 [−0.138, +0.064] |
+| rdkit2d_asinh − TIa_composition, cluster | **+0.173** [+0.095, +0.252] | **+0.216** [+0.114, +0.319] | **+0.279** [+0.182, +0.375] | +0.082 [−0.009, +0.172] |
+| TIa_composition − size, cluster | +0.202 [+0.122, +0.282] | +0.432 [+0.309, +0.554] | +0.138 [+0.019, +0.258] | +0.136 [+0.030, +0.242] |
+
+Fold-mean R² (cluster / random / scaffold): ECFP MP 0.40/0.42/0.39, logP 0.68/0.72/0.67,
+logD 0.33/0.37/0.36, logS 0.50/0.51/0.30. TIa_composition MP 0.29/0.29/0.29, logP 0.60/0.58/0.59,
+logD 0.30/0.34/0.32, logS 0.54/0.54/0.50. ECFP is weakest on logS scaffold (0.30). There
+rdkit2d_asinh and composition beat it.
+
+Raw TI_composition has fold-mean R² < −1 in 5 of 12 cells (worst: logP cluster, −31 887). The asinh version
+never drops below a fold-mean of 0.28. The extrapolation failure (F1) recurs under every split.
