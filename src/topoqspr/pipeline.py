@@ -1005,8 +1005,30 @@ PERMUTATION_SCHEME = (
     "random permutation of those groups (row order inside a block kept). Only groups of a "
     "size shared with another group keep their within-group y structure under the null; a "
     "group whose size is unique (e.g. the only 3-member group) has its rows permuted "
-    "row-wise with the singletons, so its rows can draw y from different groups. Every "
-    "draw is a permutation of y, so the p-value stays valid.")
+    "row-wise with the singletons, so its rows can draw y from different groups. Being a "
+    "permutation of y does not by itself make the p-value valid: validity needs "
+    "exchangeability of the permuted units under the null. With correlated targets "
+    "inside a unique-size group the row-wise fallback is anti-conservative, so the "
+    "protocol stage withholds the p-value of any target where it fires "
+    "(rowwise_fallback_rows; audit 2026-10-12, F17).")
+
+
+def permutation_fallback_rows(groups) -> int:
+    """Rows that :func:`permutation_indices` permutes row-wise although they belong to a
+    multi-member group (a group of size >= 2 whose size no other group shares).
+
+    For those rows the restricted permutation does not keep the within-group structure,
+    and under correlated within-group targets the test is anti-conservative (audit
+    2026-10-12, F17: 0.48 rejection rate at nominal 0.05 in the worst case). The
+    protocol stage withholds the permutation p-value of a target when this is > 0.
+    """
+    if groups is None:
+        return 0
+    _, counts = np.unique(np.asarray(groups, dtype=object).astype(str), return_counts=True)
+    multi = counts[counts > 1]
+    sizes, n_with = np.unique(multi, return_counts=True)
+    unique_sizes = set(sizes[n_with == 1].tolist())
+    return int(sum(c for c in multi if c in unique_sizes))
 
 
 def permutation_indices(n: int, groups, rng: np.random.Generator) -> np.ndarray:
@@ -1479,6 +1501,7 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
     # --- Y-randomised control
     perm = p["permutation"]
     perm_rows, perm_summ = [], []
+    fallback_by_target: dict[str, int] = {}
     t0 = time.perf_counter()
     if perm["enabled"] and family:
         pl_learner = perm["learner"] or learner
@@ -1500,10 +1523,20 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
             df.insert(0, "target", t)
             perm_rows.append(df)
             obs = c["cmp"][pl_learner].results
+            fallback = permutation_fallback_rows(c["groups"])
+            fallback_by_target[t] = fallback
+            if fallback:
+                log.warning("protocol permutations %s: %d rows of unique-size groups were "
+                            "permuted row-wise; p-values withheld", t, fallback)
             for x in sets_t:
                 sobs = _nested_stat(obs[x])["r2_pooled_mean"]
                 pv_ = stats.permutation_pvalue(sobs, df.loc[df["set"] == x, "r2_pooled_mean"],
                                                quantile=perm["quantile"])
+                if fallback:  # fail closed: exchangeability of those rows is not established
+                    pv_ = dict(pv_, p=math.nan, uninformative=None, reason="; ".join(
+                        r for r in (pv_.get("reason", ""),
+                                    f"{fallback} rows of unique-size CV groups permuted row-wise "
+                                    "(within-group structure not kept): p withheld") if r))
                 perm_summ.append(dict(target=t, learner=pl_learner, set=x,
                                       n_permutations=perm["n_permutations"], seed=perm["seed"],
                                       observed_r2_pooled_mean=pv_["observed"], p=pv_["p"],
@@ -1528,6 +1561,7 @@ def _protocol_stage(cfg, res, specs, units_all, timer):
             scheme=PERMUTATION_SCHEME,
             scheme_by_target={t: ("block" if ctx[t]["groups"] is not None else "row-wise")
                               for t in targets if t in ctx},
+            rowwise_fallback_rows=fallback_by_target,
             enabled=True)
     else:
         record["permutation"] = dict(enabled=False, reason=(
@@ -1647,6 +1681,7 @@ def run_study(config: Mapping, out_dir: str | os.PathLike, *, timestamp_utc: str
         pinned to a release); built from ``config.runtime`` otherwise.
     """
     code = pv.git_info()  # the source tree as imported, before anything can change it
+    code_diff = pv.git_diff() if code.get("dirty") else None
     cfg = resolve_config(config)
     final = Path(out_dir)
     if final.exists() and (not final.is_dir() or any(final.iterdir())) and not overwrite:
@@ -1662,6 +1697,11 @@ def run_study(config: Mapping, out_dir: str | os.PathLike, *, timestamp_utc: str
     if out.exists():
         shutil.rmtree(out)
     out.mkdir()
+    if code_diff is not None:
+        # a dirty tree is reproducible only with its diff (audit 2026-10-12, F16)
+        (out / "code_diff.patch").write_text(code_diff, encoding="utf-8")
+        code = dict(code, diff_file="code_diff.patch",
+                    diff_sha256=pv.sha256_bytes(code_diff.encode("utf-8")))
     try:
         record, summary, mol_table_all, written = _run_stages(
             cfg, providers, out, base, timestamp_utc, client, code)

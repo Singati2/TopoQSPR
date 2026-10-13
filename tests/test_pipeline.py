@@ -954,3 +954,23 @@ def test_ti_composition_set_is_ti_plus_composition():
     assert sets["TI_composition"] == [c for c in wide.columns if c.startswith("ti.")] + \
         [c for c in wide.columns if c.startswith("composition.")]
     assert len(sets["TI_composition"]) == len(REGISTRY) + 11
+
+
+def test_git_diff_captures_uncommitted_change(tmp_path):
+    # audit 2026-10-12 F16: a dirty tree must be recoverable from its diff
+    import subprocess
+    from topoqspr import provenance as pv
+
+    def git(*a):
+        subprocess.run(["git", *a], cwd=tmp_path, check=True, capture_output=True)
+    git("init", "-q")
+    git("config", "user.email", "t@example.org")
+    git("config", "user.name", "t")
+    (tmp_path / "f.py").write_text("x = 1\n")
+    git("add", "f.py")
+    git("commit", "-q", "-m", "c")
+    assert pv.git_diff(tmp_path) == ""
+    (tmp_path / "f.py").write_text("x = 2\n")
+    assert pv.git_info(tmp_path)["dirty"] is True
+    d = pv.git_diff(tmp_path)
+    assert "-x = 1" in d and "+x = 2" in d

@@ -153,6 +153,17 @@ def git_info(path: str | os.PathLike | None = None) -> dict:
     )
 
 
+def git_diff(path: str | os.PathLike | None = None) -> str | None:
+    """``git diff HEAD --binary`` of the tracked files at ``path`` (None outside git).
+
+    A run started from a modified tree (``git_info()["dirty"]``) cannot be rebuilt from
+    its commit alone; the pipeline archives this diff next to the run record so that it
+    can (audit 2026-10-12, F16).
+    """
+    here = Path(path) if path is not None else Path(__file__).resolve().parent
+    return _git(["diff", "HEAD", "--binary"], here)
+
+
 def build_info() -> dict | None:
     """The commit baked into an installed copy at build time, or ``None``.
 

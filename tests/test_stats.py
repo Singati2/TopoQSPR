@@ -304,3 +304,22 @@ def test_nested_cv_passes_groups_to_knn_ad():
         ev.nested_cv(X, y, ("ridge",), outer_splits=3, seeds=(0,), inner_splits=2,
                      groups=groups, ad="knn", min_n=10, min_n_test=3)
     assert len(seen) == 3 and all(g is not None and g.size > 0 for g in seen)
+
+
+def test_corrected_ttest_degenerate_with_missing_folds():
+    # a failed fold (NaN) propagates by default; omitting it can leave a degenerate set
+    out = stats.corrected_ttest([0.1, 0.1, np.nan], 8, 2)
+    assert math.isnan(out["mean"]) and math.isnan(out["p"]) and out["reason"] == ""
+    om = stats.corrected_ttest([0.1, 0.1, np.nan], 8, 2, nan_policy="omit")
+    assert om["n"] == 2 and om["mean"] == pytest.approx(0.1)
+    assert math.isnan(om["p"]) and "not estimable" in om["reason"]
+    # a single remaining fold: no variance at all (J < 2) -> NaN without the zero-variance reason
+    one = stats.corrected_ttest([0.1, np.nan], 8, 2, nan_policy="omit")
+    assert one["n"] == 1 and math.isnan(one["p"])
+
+
+def test_corrected_ttest_all_zero_and_ordinary_cases_unchanged():
+    zero = stats.corrected_ttest([0.0] * 25, 80, 20)
+    assert zero["p"] == 1.0 and zero["ci_low"] == zero["ci_high"] == 0.0 and zero["reason"] == ""
+    ordinary = stats.corrected_ttest([0.01, 0.03, -0.02, 0.05, 0.0], 80, 20)
+    assert 0 < ordinary["p"] < 1 and ordinary["ci_low"] < ordinary["mean"] < ordinary["ci_high"]

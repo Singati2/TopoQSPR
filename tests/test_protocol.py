@@ -574,3 +574,50 @@ def test_bootstrap_defaults_to_pooled_cohort_only(source, extra, want):
 
 def test_bootstrap_record_states_enabled_rule(proto_run):
     assert proto_run.run_record["protocol"]["bootstrap"]["enabled_rule"] == pl.ENABLED_RULE_BOOT
+
+
+# ------------------------------------- audit 2026-10-12 F17: fail-closed fallback
+def test_permutation_fallback_rows_counts_unique_size_groups():
+    assert pl.permutation_fallback_rows(None) == 0
+    assert pl.permutation_fallback_rows(["a", "a", "b", "b", "s1", "s2"]) == 0  # pairs swap
+    assert pl.permutation_fallback_rows(["u", "u", "u", "s1", "s2"]) == 3  # only 3-group
+    assert pl.permutation_fallback_rows(["a", "a", "b", "b", "u", "u", "u", "s"]) == 3
+    assert pl.permutation_fallback_rows(["a", "a", "a", "b", "b", "b"]) == 0
+
+
+def test_fallback_rows_match_what_permutation_indices_breaks():
+    # every row counted by permutation_fallback_rows is exactly a row of a group that
+    # permutation_indices does not move as a block
+    groups = np.array(["u"] * 3 + ["p1", "p1", "p2", "p2"] + [f"s{i}" for i in range(5)],
+                      dtype=object)
+    split = set()
+    for b in range(200):
+        perm = pl.permutation_indices(groups.size, groups, np.random.default_rng([0, b]))
+        for g in ("u", "p1", "p2"):
+            rows = np.flatnonzero(groups == g)
+            if len(set(groups[perm[rows]])) != 1:
+                split.add(g)
+    assert split == {"u"} and pl.permutation_fallback_rows(groups) == 3
+
+
+def test_protocol_record_reports_fallback_rows(proto_run):
+    perm = proto_run.run_record["protocol"]["permutation"]
+    fb = perm["rowwise_fallback_rows"]
+    assert set(fb) and all(isinstance(v, int) and v >= 0 for v in fb.values())
+    summ = pd.read_csv(proto_run.out_dir / "permutation_summary.csv")
+    for t, v in fb.items():
+        rows = summ[summ["target"] == t]
+        if v:  # fail closed
+            assert rows["p"].isna().all() and rows["reason"].str.contains("withheld").all()
+        else:
+            assert rows["p"].notna().all()
+
+
+def test_protocol_withholds_p_when_fallback_fires(tmp_path, monkeypatch):
+    # force the fallback: every permutation p-value must be withheld with a reason
+    monkeypatch.setattr(pl, "permutation_fallback_rows", lambda groups: 3)
+    run = pl.run_study(_protocol_config(), tmp_path / "res", timestamp_utc=TS, base_dir=FIX)
+    summ = pd.read_csv(run.out_dir / "permutation_summary.csv")
+    assert len(summ) and summ["p"].isna().all()
+    assert summ["reason"].str.contains("withheld").all()
+    assert set(run.run_record["protocol"]["permutation"]["rowwise_fallback_rows"].values()) == {3}
