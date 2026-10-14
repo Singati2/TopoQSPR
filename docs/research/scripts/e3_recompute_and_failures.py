@@ -41,7 +41,7 @@ def main(run: Path) -> None:
     out = Path(__file__).resolve().parents[1] / "out" / "E3"
     out.mkdir(parents=True, exist_ok=True)
     rows = []
-    for cdir in sorted((run / "cells").glob("*_E3*")):
+    for cdir in sorted(c for c in (run / "cells").glob("*_E3*") if (c / "predictions.csv.gz").exists()):
         P = pd.read_csv(cdir / "predictions.csv.gz", float_precision="round_trip")
         F = pd.read_csv(cdir / "folds.csv", float_precision="round_trip")
         arch = pd.read_csv(cdir / "paired.csv", float_precision="round_trip")

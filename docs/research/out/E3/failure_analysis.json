@@ -1,0 +1,33 @@
+{
+ "n_molecules":6725,
+ "mae_by_set":{
+  "ECFP":28.653,
+  "ECFP_TIa":29.643,
+  "TIa":50.558,
+  "TIa_composition":38.842,
+  "composition":43.649,
+  "distance_composition":39.96,
+  "edgetypes_composition":38.46,
+  "rdkit2d_asinh":25.757,
+  "rdkit2d_asinh_TIa":25.748,
+  "size":55.375
+ },
+ "n_abs_error_gt_100C_TIa_composition":356,
+ "worst_10_formulas_TIa_composition_MAE":{
+  "C3H7NO2":132.6,
+  "C6H13NO2":128.6,
+  "C6H11NO2":127.1,
+  "C4H9NO2":112.7,
+  "C8H8N2O2":104.0,
+  "C6H4FNO2":101.9,
+  "C18H18O2":98.5,
+  "C6H5NO3":95.4,
+  "C5H11NO2":93.6,
+  "C5H9NO2":93.5
+ },
+ "n_molecules_in_isomorphic_pairs":2096,
+ "mean_AE_TIa_comp_minus_ECFP_isomorphic":11.679,
+ "mean_AE_TIa_comp_minus_ECFP_rest":9.515,
+ "mean_AE_gain_TIa_over_comp_isomorphic":3.464,
+ "mean_AE_gain_TIa_over_comp_rest":5.415
+}
