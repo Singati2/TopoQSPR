@@ -18,3 +18,6 @@ build/
 src/topoqspr/_build_info.py
 paper/results/*
 !paper/results/.gitkeep
+
+# ResearchOS local state (store, locks)
+.researchos/
