@@ -1,0 +1,68 @@
+{
+ "_about": "Seed claims taken from docs/research/PUBLICATION_READINESS.md at 8e5bc2e, with the evidence that already existed. C-EDGE10 is seeded with the status that document gave it, so the worked example shows how ResearchOS handles it. The C-EDGE10 llm row illustrates that a model's opinion is stored as qualitative_llm_review and never counts as numerical evidence.",
+ "claims": [
+  {
+   "claim_id": "C-MP-PRIMARY",
+   "text": "On measured melting point (Bradley, known formula, E3a), TIa_composition beats composition: dR2 +0.085 [0.065, 0.106], 15/15 folds.",
+   "scope": "MP only; exploratory dated amendment (fc69883), not third-party preregistration",
+   "status": "supported",
+   "stage": "exploratory",
+   "limitations": ["one endpoint positive", "learner selected per set"],
+   "evidence": [
+    {"kind": "recomputation", "independence": "independent_recomputation", "supports": "supports",
+     "summary": "fold metrics and corrected-t interval recomputed from predictions by a separate script; max abs diff 0.0",
+     "reviewer": "docs/research/scripts/e3_recompute_and_failures.py", "method": "independent code over archived predictions",
+     "artifacts": [{"path": "docs/research/out/E3/recomputed_paired.csv", "sha256": "e807118ecbe61bc89593b6995f3cac5388b1a0028bfb2d3a58cd11c95c1d9453", "commit": "8e5bc2e"},
+                   {"path": "docs/research/out/E3/mp_bradley_E3a/paired.csv", "sha256": "97f33b6be3ea718b05b17ca031448ae2874035fa312ce137a3a2d05ac4bbbbab", "commit": "39c67ac"}],
+     "commit": "fc69883", "protocol_hash": "docs/research/06_PROSPECTIVE_STUDY_AMENDMENT.md + 06b at fc69883", "seed": "0,1,2",
+     "metrics": {"d_r2": 0.0852, "lo": 0.065, "hi": 0.1055}},
+    {"kind": "control", "independence": "same_code_rerun", "supports": "supports",
+     "summary": "negative control (y permuted within formula) gives no spurious gain: -0.028 [-0.052, -0.004]",
+     "reviewer": "docs/research/scripts/e3_isomer.py --negative-control", "method": "same pipeline, permuted target",
+     "artifacts": [{"path": "docs/research/out/E3/negative_control_paired.csv", "sha256": "f6c31f0e48def54fddcb83d8033f568e9d52948f4f23de447801fb0392dc3244", "commit": "f3f1f4e"}]}
+   ]
+  },
+  {
+   "claim_id": "C-EDGE10",
+   "text": "The gain is carried by 10 numbers (9 degree-pair edge counts + max degree).",
+   "scope": "as worded in PUBLICATION_READINESS.md at 8e5bc2e",
+   "status": "supported",
+   "stage": "exploratory",
+   "manuscript_refs": ["docs/research/PUBLICATION_READINESS.md: supported-claims table row 6"],
+   "evidence": [
+    {"kind": "review", "independence": "qualitative_llm_review", "supports": "supports",
+     "summary": "an assistant summarised edgetypes_composition >= TIa_composition as 'carries the whole gain'",
+     "reviewer": "LLM assistant (session of 2026-10-14)", "method": "reading summary tables; no computation"}
+   ]
+  },
+  {
+   "claim_id": "C-EXT-SOURCE",
+   "text": "The external melting-point test (Bradley PHYSPROP-free -> OPERA PHYSPROP) is source-disjoint.",
+   "scope": "record level only; reference-level independence not shown (OPERA has no reference field)",
+   "status": "supported",
+   "stage": "exploratory",
+   "limitations": ["source-disjoint must not be reported as independent"],
+   "evidence": [
+    {"kind": "metric", "independence": "source_disjoint_data", "supports": "supports",
+     "summary": "training set excludes every PHYSPROP record; test is OPERA PHYSPROP MP",
+     "reviewer": "docs/research/scripts/e3_isomer.py (physprop_free_bradley_keys)", "method": "record-level exclusion",
+     "artifacts": [{"path": "docs/research/out/E3/external/paired.csv", "sha256": "b4232c7d61091e5bba13e7578b2cbbb4f21f3e8c7126c408ba382b8ad748ab2d", "commit": "4a8cb1d"}],
+     "license_note": "OPERA per-molecule predictions are not redistributed (terms unresolved)"}
+   ]
+  },
+  {
+   "claim_id": "C-LOGP-NULL",
+   "text": "For OPERA logP, TIa_composition adds nothing practically meaningful beyond composition (90% CIs inside +/-0.05).",
+   "scope": "logP, E3a and E3b; exploratory",
+   "status": "supported",
+   "stage": "exploratory",
+   "evidence": [
+    {"kind": "recomputation", "independence": "independent_recomputation", "supports": "supports",
+     "summary": "E3a +0.016 [0.001, 0.032] (q 0.056); E3b -0.001 [-0.023, 0.020]; recomputed exactly",
+     "reviewer": "docs/research/scripts/e3_recompute_and_failures.py", "method": "independent code over archived predictions",
+     "artifacts": [{"path": "docs/research/out/E3/logp_opera_E3a/paired.csv", "sha256": "c206922ebad6886044b9006bb49412487803bf4a807aa4c6902bb83a7008ed93", "commit": "9f3e828"},
+                   {"path": "docs/research/out/E3/logp_opera_E3b/paired.csv", "sha256": "991dd1662965587d6f940558d68e1b411bb186b39306f2eed9bc027d9cb25748", "commit": "8e5bc2e"}]}
+   ]
+  }
+ ]
+}
