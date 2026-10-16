@@ -33,10 +33,13 @@ representation, and it is the practically relevant comparison. A fixed-learner b
 learner, two representations) is not in the archive. It needs a refit and would be a labelled
 supplementary analysis.
 
-**R2-4. Only one endpoint under the controlled design.** logP is pending. E2's drug-cohort results
-for logP, logD and logS showed no detectable gain.
-*Severity: high for generality.* *Response:* restrict every claim to MP until logP E3 is reported.
-Present E2's nulls.
+**R2-4. One positive endpoint.** Under the controlled design, logP shows no practically meaningful
+gain (E3a +0.016, q 0.056; E3b −0.001; equivalent to 0). E2's drug-cohort results for logP, logD and
+logS showed no detectable gain. The positive finding therefore rests on MP alone.
+*Severity: high for generality.* *Response:* frame the paper as endpoint-dependent: a positive
+result for MP and an equivalence-bounded null for logP. Do not generalise to "properties". A
+second packing-sensitive endpoint (for example boiling point or enthalpy of fusion) would test
+whether the MP result reflects a mechanism or one dataset.
 
 **R2-5. Overlap with the authors' own companion manuscript.** The m_ij reduction, the information
 ceiling and "RDKit 2D > topology" appear in `topological-index-orthogonality`.

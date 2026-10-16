@@ -1,7 +1,7 @@
 # 08 — Novelty and submission decision (Gate F), 2026-10-14
 
-Inputs: 02/02b (prior art, read 2026-10-13), 03 (mathematics), 05 (data), 07 (E3 results, MP
-complete, logP pending). This document answers the owner's question:
+Inputs: 02/02b (prior art, read 2026-10-13), 03 (mathematics), 05 (data), 07 (E3 results, all
+cells complete 2026-10-16). This document answers the owner's question:
 
 > What genuinely new scientific understanding does TopoQSPR establish that existing mathematical
 > graph-theory and QSPR papers have not established?
@@ -32,6 +32,7 @@ three statements together under this design on a measured endpoint.
 | **N3** | Discrimination ≠ predictive value on a measured endpoint. Distance indices discriminate most but predict worst; on unseen external formulas they add nothing (−0.028 [−0.058, +0.002]) | 07 §3, 03 M4 C3 | **PROBABLY NEW as a measured demonstration.** The general caution is folklore. No paper found tests it with formula-controlled MP and group-held-out CV |
 | **N4** | Topology's incremental value beyond RDKit 2D is practically zero (90% CIs inside ±0.05). Beyond ECFP it is zero or *negative* (E3b −0.015 [−0.029, −0.002]; external unseen −0.023) | 07 §3 | **INCREMENTAL.** K5 is known; the equivalence-bounded statement with a significant harm is a clean addition |
 | N5 | Within formula, unlabeled topology explains about 18–21% of MP variance; labelled representations explain 52–59% | 07 §5 | **Post hoc.** Descriptive only |
+| **N7** | Topology's added value is endpoint-dependent. For logP, composition alone reaches R² 0.77–0.81 and TI adds +0.016 (E3a, q 0.056) or −0.001 (E3b), practically equivalent to 0 (90% CIs inside ±0.05). For MP, which depends on shape and packing, it adds +0.085–0.106 | 07 §3b | **INCREMENTAL.** It is expected chemistry (logP is close to additive in atom and fragment contributions; MP is not). It is still a clean controlled contrast and makes the MP result's scope explicit |
 | N6 | Drug-cohort endpoints (E1/E2): no detectable gain beyond composition for logP/logD/logS; MP was underpowered (n = 711) and is consistent with E3 | audit RESULT_RECONCILIATION §7 | Negative and inconclusive results; keep in the paper |
 
 ## 3. Decision
@@ -44,9 +45,9 @@ Target: Journal of Cheminformatics (Research article). Fallback: Digital Discove
 
 ### Conditions (all required before submission)
 
-1. **logP E3 cells** finish, or are formally recorded NOT RUN. The BH family is then recomputed
-   (07: q values are provisional). The paper must state that only one endpoint was tested under the
-   formula-controlled design.
+1. **Done (2026-10-16):** logP E3 ran, and the BH family is final (42 contrasts). The paper must
+   report the endpoint dependence. Topology adds a practically meaningful amount for MP. For logP it
+   adds nothing practically meaningful beyond composition (N7).
 2. **Companion-manuscript coordination.** `topological-index-orthogonality` (same authors) covers K1
    and the m_ij ceiling. Either merge, or cite it and confine this paper to N1–N4. Undisclosed
    overlap is the largest rejection risk.
