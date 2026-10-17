@@ -18,7 +18,7 @@ scope (one positive endpoint), overlap with the companion manuscript, wording, a
 | …and on a source-disjoint external set: +0.072 [0.019, 0.138] (known formula), +0.240 [0.203, 0.281] (unseen formula; composition extrapolates poorly) | E3-ext | exploratory, single fit, source-disjoint |
 | No spurious gain when within-formula signal is destroyed: −0.028 [−0.052, −0.004] | negative control | control, not tested |
 | Robust to the replicate filter: +0.088 [0.052, 0.123] | S-noflt | sensitivity |
-| The gain is carried by 10 numbers (9 degree-pair counts + Δ) | edgetypes_composition ≥ TIa_composition (E3a, E3b, external known) | exploratory |
+| Within the cross-validated cells, 10 numbers (9 degree-pair counts + Δ) match the full index set: edgetypes_composition 0.663 vs TIa_composition 0.657 (MP E3a), 0.630 vs 0.629 (E3b); also on logP and external known formulas. On unseen external formulas the full set scored higher (0.471 vs 0.423) with different selected learners (extra trees vs SVR) and no interval on the difference, so whether the non-degree indices add information there is unresolved | edgetypes_composition vs TIa_composition, 6 contexts; ResearchOS T-a5cea8c5230c | exploratory; external gap learner-confounded |
 | Better isomer discrimination does not mean better prediction: distance indices discriminate most and predict worst | E3a/E3b/ext + census | exploratory |
 | No practically meaningful value beyond RDKit 2D (90% CI inside ±0.05). Zero or negative beyond ECFP (E3b −0.015 [−0.029, −0.002]) | E3 secondary | BH final (42 contrasts; E3b ECFP q 0.048) |
 | logP (OPERA, E3): TI adds nothing practically meaningful beyond composition: E3a +0.016 [0.001, 0.032], q 0.056; E3b −0.001 [−0.023, +0.020]; 90% CIs inside ±0.05 | E3 logP | exploratory; equivalence shown |
@@ -30,13 +30,13 @@ scope (one positive endpoint), overlap with the companion manuscript, wording, a
 "TIs improve prediction" (not beyond standard descriptors) · any new index or new theorem ·
 degree-index linearity or rank as new (Rada 2026; companion manuscript) · "independent external
 validation" · "preregistered" · "95% isomer discrimination → predictive superiority" · any positive
-claim for logP/logD/logS · disease-specific predictive validity · "deployed v1.0 web tool".
+claim for logP/logD/logS · "the gain is carried by 10 numbers" (unqualified) · disease-specific predictive validity · "deployed v1.0 web tool".
 
 ## Answer to the owner's question
 
 *What genuinely new understanding does TopoQSPR establish?* No new mathematics. One controlled
 empirical result: on measured melting points, unlabeled topology carries real information beyond
-composition. All of it sits in the degree-pair edge counts, and none of it survives once standard
+composition. Within the cross-validated cells it is matched by the degree-pair edge counts alone (whether the other indices add anything on unseen external formulas is unresolved, see the table), and none of it survives once standard
 labelled descriptors are present. A second, linked result: the index family that discriminates
 isomers best is the worst predictor. A third, scoping result: the value is endpoint-dependent.
 For logP, which is close to additive in atoms, it is practically zero. Everything else (linearity, rank, discrimination ordering,
