@@ -5,6 +5,7 @@
 # ==========================================
 
 import os
+import math
 import argparse
 import pandas as pd
 from openpyxl import Workbook
@@ -54,6 +55,14 @@ def _autofit(ws):
         ws.column_dimensions[col_letter].width = min(max(max_len + 2, 10), 40)
 
 
+def _opt_round(v, nd=4):
+    try:
+        v = float(v)
+    except (TypeError, ValueError):
+        return "N/A"
+    return "N/A" if math.isnan(v) else round(v, nd)
+
+
 def export_excel(disease, df, corr, ml_results, top_models, shap_summaries, out_path):
     wb = Workbook()
 
@@ -91,7 +100,7 @@ def export_excel(disease, df, corr, ml_results, top_models, shap_summaries, out_
         best_r2 = "N/A"
         best_model_desc = "N/A (Insufficient data for ML)"
 
-    ws["A9"]  = "Best R² overall"
+    ws["A9"]  = "Best R² overall (compare with ΔR² vs composition, Best Models sheet)"
     ws["B9"]  = best_r2
     ws["A10"] = "Best model"
     ws["B10"] = best_model_desc
@@ -142,14 +151,17 @@ def export_excel(disease, df, corr, ml_results, top_models, shap_summaries, out_
     # ── Sheet 3: ML Results ───────────────────────────────
     ws3 = wb.create_sheet("ML Results")
     ws3.sheet_view.showGridLines = False
-    ml_headers = ["Property", "Model", "R² Mean", "R² Std", "MAE Mean"]
+    ml_headers = ["Property", "Model", "R² Mean", "R² Std", "MAE Mean",
+                  "Composition-only R² (same model)", "ΔR² (indices − composition)"]
     for ci, h in enumerate(ml_headers, start=1):
         _style_header(ws3.cell(row=1, column=ci, value=h))
     for ri, row in enumerate(ml_results.itertuples(index=False), start=2):
         vals = [row.Property, row.Model,
                 round(float(row.R2_mean), 4),
                 round(float(row.R2_std), 4),
-                round(float(row.MAE_mean), 4)]
+                round(float(row.MAE_mean), 4),
+                _opt_round(getattr(row, "Comp_R2_mean", None)),
+                _opt_round(getattr(row, "Delta_R2", None))]
         for ci, val in enumerate(vals, start=1):
             c = ws3.cell(row=ri, column=ci, value=val)
             c.font = Font(name="Arial", size=10)
@@ -168,7 +180,9 @@ def export_excel(disease, df, corr, ml_results, top_models, shap_summaries, out_
         vals = [row.Property, row.Model,
                 round(float(row.R2_mean), 4),
                 round(float(row.R2_std), 4),
-                round(float(row.MAE_mean), 4)]
+                round(float(row.MAE_mean), 4),
+                _opt_round(getattr(row, "Comp_R2_mean", None)),
+                _opt_round(getattr(row, "Delta_R2", None))]
         for ci, val in enumerate(vals, start=1):
             c = ws4.cell(row=ri, column=ci, value=val)
             c.font = Font(name="Arial", size=10)

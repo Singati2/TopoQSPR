@@ -216,7 +216,7 @@ footer{padding:20px 32px;border-top:1px solid var(--border);display:flex;justify
     <div class="pills" id="pill-box"></div>
     <!-- startup warning — shown only if backend never responds; UI stays usable -->
     <div id="startup-banner">
-      ⚠️ Server is warming up (first visit may take ~60s can take ~60s on first visit).
+      ⚠️ Server is warming up (first visit can take ~60s).
       You can still type your disease and click Analyse — it will connect automatically.
     </div>
   </div>
@@ -287,13 +287,13 @@ footer{padding:20px 32px;border-top:1px solid var(--border);display:flex;justify
     <div style="padding-bottom:32px;margin-bottom:32px;border-bottom:1px solid var(--border)">
       <div class="eyebrow">About this tool</div>
       <div class="display">Molecu<em>Lens</em></div>
-      <div class="lead">An automated drug discovery research platform. Type any disease name — MolecuLens fetches real drug data from multiple databases, computes 135 graph-theoretic topological indices, trains 11 ML models with rigorous 5-fold CV, and delivers a full QSPR analysis with statistical significance testing, SHAP explanations, and drug-likeness filters.</div>
+      <div class="lead">An exploratory QSPR research tool. Type a disease name — MolecuLens collects the drugs ChEMBL links to it, computes 135 graph-theoretic topological indices, trains 11 ML models with 5-fold CV, and reports each result next to a composition-only baseline, with correlations, SHAP explanations and drug-likeness filters. It is not a drug-discovery or disease-specific prediction system.</div>
     </div>
     <div class="sh"><h2>Data <em>sources</em></h2><div class="sh-line"></div></div>
     <div class="cgrid c2" style="margin-bottom:36px">
       <div class="card"><div class="clabel">ChEMBL</div><div class="cbody">Disease→drug mapping via MeSH headings. Returns ChEMBL IDs, canonical SMILES, and 7 RDKit base properties.</div></div>
       <div class="card"><div class="clabel">PubChem</div><div class="cbody">20 physicochemical properties — XLogP3, ExactMass, TPSA, Complexity, FormalCharge, stereo counts and more.</div></div>
-      <div class="card"><div class="clabel">ADMET (RDKit)</div><div class="cbody">Fast, reliable ADMET predictions computed locally — GI absorption, BBB permeability, Caco2, Lipinski pass, QED.</div></div>
+      <div class="card"><div class="clabel">ADMET flags (RDKit)</div><div class="cbody">Rule-of-thumb flags computed locally from RDKit descriptors — GI absorption and BBB cut-offs, Lipinski pass, QED. These are screening heuristics, not validated ADMET predictions.</div></div>
       <div class="card"><div class="clabel">UniChem + ChEMBL Bioactivity</div><div class="cbody">Cross-database IDs (ChemSpider, ZINC, DrugBank, ChEBI) + experimental IC50, Ki, EC50, Kd values.</div></div>
     </div>
     <div class="sh"><h2>135 Topological <em>indices</em></h2><div class="sh-line"></div></div>
@@ -561,10 +561,12 @@ function showResults(data,jobId){
     <a class="dlbtn bl" href="${API}/download-excel/${jobId}" download><svg viewBox="0 0 16 16"><path d="M8 2v9M4 8l4 4 4-4M2 14h12"/></svg>Excel (7 sheets)</a>`;
   const lip=Math.round((data.lipinski_pass||0)/n*100);
   const pai=Math.round((data.pains_pass||0)/n*100);
-  const bestR2=data.top_models?.length?Math.max(...data.top_models.map(m=>m.R2_mean||0)).toFixed(3):'—';
+  const withDelta=(data.top_models||[]).filter(m=>m.Delta_R2!=null);
+  const bestD=withDelta.length?withDelta.reduce((a,b)=>b.Delta_R2>a.Delta_R2?b:a):null;
+  const bestDTxt=bestD?(bestD.Delta_R2>=0?'+':'')+bestD.Delta_R2.toFixed(3):'—';
   document.getElementById('stat-grid').innerHTML=`
     <div class="card"><div class="clabel">Drugs analysed</div><div class="cval ac">${data.drug_count}</div></div>
-    <div class="card"><div class="clabel">Best R²</div><div class="cval">${bestR2}</div></div>
+    <div class="card"><div class="clabel">Best ΔR² over composition</div><div class="cval">${bestDTxt}</div><div class="csub">${bestD?bestD.Property:'no baseline available'}</div></div>
     <div class="card"><div class="clabel">Lipinski pass</div><div class="cval">${lip}<span style="font-size:17px;color:var(--text3)">%</span></div><div class="csub">${data.lipinski_pass||0} of ${n}</div></div>
     <div class="card"><div class="clabel">PAINS clean</div><div class="cval">${pai}<span style="font-size:17px;color:var(--text3)">%</span></div><div class="csub">${data.pains_pass||0} of ${n}</div></div>`;
 
@@ -604,7 +606,7 @@ function buildProps(data){
   const groups=[
     ['RDKit computed properties',['MolWt','LogP','TPSA','HBD','HBA','RotBonds','MolMR']],
     ['PubChem physicochemical properties',cols.filter(c=>c.startsWith('PC_'))],
-    ['ADMET properties (RDKit)',cols.filter(c=>c.startsWith('ADMET_'))],
+    ['ADMET rule-of-thumb flags (RDKit; not predictions)',cols.filter(c=>c.startsWith('ADMET_'))],
     ['Bioactivity — experimental (ChEMBL)',['BIO_IC50','BIO_Ki','BIO_EC50','BIO_Kd']],
     ['Cross-database identifiers (UniChem)',cols.filter(c=>c.startsWith('UC_')).concat(['InChIKey'])],
   ];
@@ -729,17 +731,20 @@ function buildCorr(data){
 function buildML(data){
   const el=document.getElementById('rp-ml');
   if(!data.top_models?.length){el.innerHTML='<div class="card"><div class="cbody">No ML results available.</div></div>';return;}
-  let html=`<div style="font-size:13px;color:var(--text3);margin-bottom:16px">11 ML models trained per property using 135 topological indices as features. 5-fold CV + GridSearchCV.</div>
+  let html=`<div style="font-size:13px;color:var(--text3);margin-bottom:16px">11 ML models trained per property using 135 topological indices as features. 5-fold CV + GridSearchCV. <b>Composition-only R²</b> refits the same model on element counts alone; only the ΔR² column says what topology adds. Many properties here (molecular weight, heavy-atom count) are almost fully determined by composition, so a high R² on its own means little. Hyperparameters are tuned on the full set before CV, so all R² values are somewhat optimistic.</div>
   <div class="slabel">Best model per property</div>
-  <div class="tw"><table><thead><tr><th>Property</th><th>Best model</th><th>R² mean</th><th>R² std</th><th>MAE</th></tr></thead><tbody>`;
+  <div class="tw"><table><thead><tr><th>Property</th><th>Best model</th><th>R² mean</th><th>R² std</th><th>MAE</th><th>Composition-only R²</th><th>ΔR²</th></tr></thead><tbody>`;
   data.top_models.forEach(m=>{
     const r2=m.R2_mean!=null?m.R2_mean.toFixed(3):'—';
     const std=m.R2_std!=null?m.R2_std.toFixed(3):'—';
     const mae=m.MAE_mean!=null?m.MAE_mean.toFixed(3):'—';
+    const comp=m.Comp_R2_mean!=null?m.Comp_R2_mean.toFixed(3):'—';
+    const delta=m.Delta_R2!=null?(m.Delta_R2>=0?'+':'')+m.Delta_R2.toFixed(3):'—';
     const pct=Math.max(0,Math.min(100,(m.R2_mean||0)*100));
     html+=`<tr><td>${m.Property}</td><td class="tac">${m.Model}</td>
       <td><div class="r2w"><div class="r2t"><div class="r2f" style="width:${pct}%"></div></div>${r2}</div></td>
-      <td class="tmt">±${std}</td><td class="tmt">${mae}</td></tr>`;
+      <td class="tmt">±${std}</td><td class="tmt">${mae}</td>
+      <td class="tmt">${comp}</td><td class="tmt">${delta}</td></tr>`;
   });
   html+='</tbody></table></div>';
   el.innerHTML=html;

@@ -16,6 +16,7 @@ from rdkit.Chem import rdmolops
 from rdkit.Chem.FilterCatalog import FilterCatalog, FilterCatalogParams
 
 from scipy.stats import pearsonr, spearmanr
+from sklearn.base import clone
 from sklearn.model_selection import KFold, GridSearchCV, cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
@@ -777,6 +778,23 @@ MODELS_AND_GRIDS = {
 # ==========================================
 # ALGORITHM 3: ML with k-fold CV
 # ==========================================
+def _composition_matrix(smiles_list) -> np.ndarray:
+    """Element counts (C, H, N, O, S, P, F, Cl, Br, I, other heavy) per molecule.
+
+    Composition-only baseline: topology is only worth reporting if it beats this."""
+    elems = ["C", "H", "N", "O", "S", "P", "F", "Cl", "Br", "I"]
+    rows = []
+    for smi in smiles_list:
+        counts = dict.fromkeys(elems + ["other"], 0)
+        mol = Chem.MolFromSmiles(str(smi))
+        if mol is not None:
+            for atom in Chem.AddHs(mol).GetAtoms():
+                sym = atom.GetSymbol()
+                counts[sym if sym in counts else "other"] += 1
+        rows.append([counts[e] for e in elems + ["other"]])
+    return np.asarray(rows, dtype=np.float64)
+
+
 def run_ml_qspr(df: pd.DataFrame):
     print(f"[*] Running ML with {CV_FOLDS}-fold CV...")
 
@@ -788,6 +806,7 @@ def run_ml_qspr(df: pd.DataFrame):
 
     X = clean_topo[valid_topo].values.astype(np.float64)
     valid_idx = clean_topo.index
+    X_comp = _composition_matrix(df.loc[valid_idx, "SMILES"])
 
     available_targets = []
     for t in ML_TARGETS:
@@ -821,6 +840,7 @@ def run_ml_qspr(df: pd.DataFrame):
 
             best_r2 = -np.inf
             best_model_for_prop = None
+            best_pipe = None
 
             for name, (model, param_grid) in MODELS_AND_GRIDS.items():
                 try:
@@ -860,6 +880,7 @@ def run_ml_qspr(df: pd.DataFrame):
 
                     if mean_r2 > best_r2:
                         best_r2 = mean_r2
+                        best_pipe = clone(tuned_pipe)
                         tuned_pipe.fit(X_prop, y)
                         row_indices = list(valid_idx[mask])
                         best_model_for_prop = (tuned_pipe, row_indices)
@@ -871,6 +892,21 @@ def run_ml_qspr(df: pd.DataFrame):
             if best_model_for_prop is not None:
                 best_models[prop] = best_model_for_prop
                 print(f"    [✓] {prop}: best R²={best_r2:.3f}")
+                # Same learner and hyperparameters, composition features only.
+                # The hyperparameters were tuned on the topological features, so
+                # the delta is, if anything, tilted in favour of topology.
+                try:
+                    comp_r2 = float(np.nanmean(cross_val_score(
+                        best_pipe, X_comp[mask], y, cv=kf_outer,
+                        scoring="r2", error_score=np.nan,
+                    )))
+                except Exception as e:
+                    print(f"    [!] Composition baseline failed for {prop}: {e}")
+                    comp_r2 = float("nan")
+                for row in all_results:
+                    if row["Property"] == prop:
+                        row["Comp_R2_mean"] = round(comp_r2, 4)
+                        row["Delta_R2"] = round(row["R2_mean"] - comp_r2, 4)
 
         except Exception as e:
             print(f"    [!] Skipping {prop} entirely due to error: {e}")

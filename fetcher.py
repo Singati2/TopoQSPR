@@ -274,10 +274,11 @@ def enrich_with_pubchem(df: pd.DataFrame) -> pd.DataFrame:
 # ==========================================
 # ADMET — RDKit-only (fast, no external API dependency)
 # FIXED: Removed unreliable pkCSM external API calls that caused 30+ min timeouts.
-# The biosig API is frequently down/slow. RDKit gives us reliable ADMET approximations.
+# The biosig API is frequently down/slow. The RDKit columns below are descriptors plus
+# rule-of-thumb flags (Lipinski/Egan-style cut-offs). They are not ADMET predictions.
 # ==========================================
 def _compute_admet_rdkit(smiles: str) -> dict:
-    """Compute ADMET properties using RDKit descriptors only. Fast and reliable."""
+    """RDKit descriptors and rule-of-thumb ADMET flags. Not validated predictions."""
     try:
         from rdkit.Chem import rdMolDescriptors
         mol = Chem.MolFromSmiles(smiles)
@@ -295,12 +296,10 @@ def _compute_admet_rdkit(smiles: str) -> dict:
 
         gi_absorption = "High" if (mw < 500 and logp < 5 and hbd <= 5 and hba <= 10) else "Low"
         bbb_permeant  = "Yes"  if (mw < 400 and logp > 0 and tpsa < 90) else "No"
-        caco2         = round(0.5 - 0.01 * tpsa + 0.02 * logp, 3)
 
         result = {
             "ADMET_GI_Absorption":    gi_absorption,
             "ADMET_BBB_Permeant":     bbb_permeant,
-            "ADMET_Caco2_approx":     caco2,
             "ADMET_MW":               round(mw, 3),
             "ADMET_LogP":             round(logp, 3),
             "ADMET_TPSA":             round(tpsa, 3),
