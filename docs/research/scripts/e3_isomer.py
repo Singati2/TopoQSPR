@@ -55,7 +55,7 @@ def parents(endpoint: str, drop_disagreeing: bool = True):
 
 
 def physprop_free_bradley_keys() -> set:
-    x = pd.read_excel(Path("~/.cache/topoqspr/expdata/bradley/BradleyMeltingPointDataset.xlsx").expanduser())
+    x = pd.read_excel(expdata.fetch("bradley", offline=True))  # honours $TOPOQSPR_CACHE
     phys = set(x.loc[x.source.astype(str).str.contains("PHYSPROP", case=False), "key"].astype(str))
     recs = expdata.load_records("mp_bradley", offline=True)[["record_id", "inchikey", "status"]]
     recs = recs[recs.status == "ok"]

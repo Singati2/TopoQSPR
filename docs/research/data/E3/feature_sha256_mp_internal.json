@@ -1,0 +1,21 @@
+{
+ "note": "MP internal E3 feature hashes were not stored in run_info.json (only the last endpoint's). Recorded 2026-10-17 by rebuilding with e3_isomer.build('mp_bradley') in the E3 environment (same package versions as run_info.json); inclusion list and labels verified identical to the archived E3 run before recording. Post hoc reference, not an original E3 artifact.",
+ "python": "3.10.12",
+ "rdkit": "2026.03.6",
+ "sklearn": "1.7.2",
+ "included": 6725,
+ "formula_groups": 758,
+ "registry_sha256": "44d62c3b91cbbce556ba137c695db8dce462562b2f09a1a1a8bf2586b7c28490",
+ "feature_sha256": {
+  "size": "17feea2539c28486fb20b5cff5e8d56dd5ef9f4e97d28549bc3f165e862d435e",
+  "composition": "451ce8564b9bf7219521d70135f4c28163565cfe1c4076ac6dfbe5ab61b94ab0",
+  "TIa": "c0784c761431e740c29a49a4516c2cc6fd9a96d6538c686ecf78dce2089eb653",
+  "TIa_composition": "5d9f9807afa844738c63708bb09a41020be67854c24e9b81c01b9cdb8fb14cba",
+  "distance_composition": "2152010b73854ebf70a244892b03d22046969f9a8727bbbea118a49d73fcb298",
+  "edgetypes_composition": "529072c610412e1299fa86cecf40e95676ce92011599b4c15d67b89ff8b660b4",
+  "rdkit2d_asinh": "e5aa009aa42e1770dc23fad2618f1d7e5888b6daf7910cae1cd00556c60643b9",
+  "rdkit2d_asinh_TIa": "69dc89317be73a2a29e0d3aceb733e2673a70dbe444c1e9697986d5c6c8a97f0",
+  "ECFP": "23a82c9b392f61cf079f0991c25d52e1e9f5a903ea003d364dd98ef7acef7f8a",
+  "ECFP_TIa": "a22d6a46d64b82809872b4e90d99ded95c3ee56a2a4ff35a0a95a89af21e8e6e"
+ }
+}
