@@ -1,0 +1,37 @@
+{
+ "amendment": "AMD-2026-10-13-E3",
+ "commit_at_start": "f3f1f4e0c1d8929cf5c02041eb37332c74d49f2a",
+ "dirty_at_start": false,
+ "python": "3.10.12",
+ "rdkit": "2026.03.6",
+ "sklearn": "1.7.2",
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "cells": {
+  "logp_opera": {
+   "endpoint": "logp_opera",
+   "drop_disagreeing": true,
+   "measured_parents": 13848,
+   "candidates": 13848,
+   "included": 3994,
+   "formula_groups": 495,
+   "registry_sha256": "44d62c3b91cbbce556ba137c695db8dce462562b2f09a1a1a8bf2586b7c28490",
+   "feature_sha256": {
+    "size": "82608f72469b391c010241b338484ed2b3642f21c603b715ae607aaf5e7b5804",
+    "composition": "4cab7a5a78d61cf4b42ec8333aa0f9e172e149241b8cb256bf29ec256d63ec0a",
+    "TIa": "5fd6835117911f05c9bd256b410d6bf809658cd67b4dcee0ddbcbede60a2069b",
+    "TIa_composition": "5963d395f896c5c5c2917c04d56f8173e4eb1bc6f27c4d65b13db65c96a5935a",
+    "distance_composition": "aeb7ed582408e757b0bfc6123ebbb8f8eec7257bc719924e409c1f4850d8d6a1",
+    "edgetypes_composition": "c06e1f744901b76880fd8ad30918e5a2d1543c575a23dc101f6218e23f32cac8",
+    "rdkit2d_asinh": "fc3c4ff7127b9ba3932b4ffa394aef5daf394fdbc43e501d6b277b41b2fe2b74",
+    "rdkit2d_asinh_TIa": "b3d213ed505929c038038cbfacdcb97a871199be7b2216d59c600d7e3afacc01",
+    "ECFP": "8820496ad4951d135fda99b0e92e67772fd1dd4d6587979938b359c51aa58c5a",
+    "ECFP_TIa": "2b7a00a361334864902903982a05c747ad59e475deafce3b90d06015758f4425"
+   }
+  }
+ },
+ "wall_s": 117580.1
+}

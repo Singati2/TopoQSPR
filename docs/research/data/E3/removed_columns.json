@@ -1,0 +1,42 @@
+{
+ "note": "Measured OPERA/PHYSPROP values removed (upstream data terms unknown). Restore with docs/research/scripts/restore_opera_values.py.",
+ "removed": {
+  "cells/logp_opera_E3a/predictions_no_y.csv.gz": {
+   "column": "y_true",
+   "key": [
+    "set",
+    "repeat",
+    "fold",
+    "row"
+   ],
+   "n_rows": 119820,
+   "sha256_float64_in_row_order": "19c107a0a058cd4283e962f5c27aa080ef09ea9649d1ef391136f04dddd93681"
+  },
+  "cells/logp_opera_E3b/predictions_no_y.csv.gz": {
+   "column": "y_true",
+   "key": [
+    "set",
+    "repeat",
+    "fold",
+    "row"
+   ],
+   "n_rows": 119820,
+   "sha256_float64_in_row_order": "19c107a0a058cd4283e962f5c27aa080ef09ea9649d1ef391136f04dddd93681"
+  },
+  "external/predictions_no_y.csv.gz": {
+   "column": "y",
+   "key": [
+    "id"
+   ],
+   "n_rows": 8341,
+   "sha256_float64_in_row_order": "3f4a3e07b2a41f2b505724e87425f3248ec15c9af6efda10f49503bc60092d42"
+  }
+ },
+ "sha256_of_original_archive_files": {
+  "cells/logp_opera_E3a/predictions.csv.gz": "4b0ff7cbc301d92ef5dddad5a6cc761a9bfadd4a98408331b6f68eed66cb81cf",
+  "cells/logp_opera_E3b/predictions.csv.gz": "8806e3799de990398518ae31dac1af55c11071228de783a4f5d2ec98bdc8072a",
+  "cells/mp_bradley_E3a/predictions.csv.gz": "a58b6e6da5fcb056fd89d70abf9ef908f78397fae2720ac95338e2fab7c74456",
+  "cells/mp_bradley_E3b/predictions.csv.gz": "f2e7fac7847c1e769abae9027f1d79af999a9641d08982350b2f5d8854aec627",
+  "external/predictions.csv.gz": "e927d7c13633f7d3e05842ac6635a786dcdc2fc125e20ee6850cdaa15d484d16"
+ }
+}

@@ -1,0 +1,15 @@
+context,set,family,folds
+logp_opera_E3a,TIa_composition,extratrees,9
+logp_opera_E3a,TIa_composition,svr,6
+logp_opera_E3a,edgetypes_composition,extratrees,9
+logp_opera_E3a,edgetypes_composition,svr,6
+logp_opera_E3b,TIa_composition,svr,14
+logp_opera_E3b,TIa_composition,ridge,1
+logp_opera_E3b,edgetypes_composition,svr,14
+logp_opera_E3b,edgetypes_composition,extratrees,1
+mp_bradley_E3a,TIa_composition,svr,12
+mp_bradley_E3a,TIa_composition,extratrees,3
+mp_bradley_E3a,edgetypes_composition,svr,15
+mp_bradley_E3b,TIa_composition,svr,15
+mp_bradley_E3b,edgetypes_composition,svr,10
+mp_bradley_E3b,edgetypes_composition,extratrees,5

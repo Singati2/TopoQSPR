@@ -1,0 +1,28 @@
+{
+ "train": {
+  "endpoint": "mp_bradley",
+  "drop_disagreeing": true,
+  "measured_parents": 19500,
+  "candidates": 10689,
+  "included": 2252,
+  "formula_groups": 305,
+  "registry_sha256": "44d62c3b91cbbce556ba137c695db8dce462562b2f09a1a1a8bf2586b7c28490",
+  "feature_sha256": {
+   "size": "a38c77b9ed611f5bd1a9117ac5d40c3f680e9f71a6bcd81cdeaea4f01ffabecf",
+   "composition": "2469376c8b318d2db83b3768a452ea011affef8ab4772ea0816b407194fb981d",
+   "TIa": "4000f6ebba0f1b594c0c4f858d64396e26dbf958883b718e0f55b9d52462d4d9",
+   "TIa_composition": "1cce70f3b35a054f92b162baa7d2eff7dda47f5a67529c2d1f4761bc1248e1fd",
+   "distance_composition": "d27af273070ed687db543aa27697cb542103686f09b7c3e74d29b52cacfc0d72",
+   "edgetypes_composition": "7597c7f06311d7eb39637bf7e87f05ddf2027c728a07629d8afa961b43b62cfc",
+   "rdkit2d_asinh": "b35e61742878be1c5aa6c969dae8420ce519d86dc27d312248be9e82a174b625",
+   "rdkit2d_asinh_TIa": "8dd27ff8e4b3a340713ef3d48c91c8d9024788dd480c980028f5eb83f8c6753a",
+   "ECFP": "97f78541ce7a6c6a951995e34fe79b33724a114717346e2b0be955b81a896c69",
+   "ECFP_TIa": "846ecb6f62d7e5273149a6836fd99bf9d052a341d29fb4188213ee41b746d590"
+  }
+ },
+ "train_physprop_free": true,
+ "test_sizes": {
+  "known_formula": 1014,
+  "unseen_formula": 7327
+ }
+}
