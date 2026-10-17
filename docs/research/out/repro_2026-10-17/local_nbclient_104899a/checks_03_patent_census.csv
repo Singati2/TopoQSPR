@@ -1,0 +1,6 @@
+check,status,observed,expected,note
+figshare licence is CC0,PASS,CC0,CC0,
+file present,PASS,,melting_point.sdf,
+file md5 as pinned,PASS,20618014e0fe69ce7dbd1de87413e1f1,20618014e0fe69ce7dbd1de87413e1f1,
+file size as pinned,PASS,637981904,637981904,
+census,INFO,"not run: needs --approve-download (owner approval, doc 15 §7)",,

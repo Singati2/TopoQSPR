@@ -45,7 +45,7 @@ Target: Journal of Cheminformatics (Research article). Fallback: Digital Discove
 
 ### Conditions (all required before submission)
 
-1. **Done (2026-10-16):** logP E3 ran, and the BH family is final (42 contrasts). The paper must
+1. **Done (2026-10-16):** logP E3 ran, and the BH family is final (41 secondary contrasts; 42 with the primary, which is not in the family). The paper must
    report the endpoint dependence. Topology adds a practically meaningful amount for MP. For logP it
    adds nothing practically meaningful beyond composition (N7).
 2. **Companion-manuscript coordination.** `topological-index-orthogonality` (same authors) covers K1

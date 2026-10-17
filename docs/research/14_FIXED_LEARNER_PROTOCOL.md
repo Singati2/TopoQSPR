@@ -1,115 +1,238 @@
-# 14. Fixed-learner protocol: full index set vs edge-type counts (DRAFT, not frozen, not approved)
+# 14. Fixed-learner protocol, revision 2: four arms (DRAFT, not frozen, not approved)
 
-**Status:** draft for the owner. Nothing in this protocol has been run. It becomes frozen only when
-the owner approves it and the commit that freezes it is recorded in §9.
-**Answers:** doc 12 P0 step 3, as modified in doc 13 (all six families, not only SVR and extra trees).
-**Date:** 2026-10-16.
+**Status:**
+- Draft for the owner. **Nothing in this protocol has been run on real labels.** Only permuted-label
+  smoke and timing runs have been made (§10).
+- The protocol is frozen only when the owner approves it. The freezing commit is then recorded in §11.
 
-## 1. Question
+**Revision history:**
+- r1 (861b3ce): two arms (full vs edge types) and a δ = 0.02 decision rule.
+- r2 (this file): four arms and a corrected decision rule, after the owner's Colab-first brief and
+  the four-arm review (2026-10-17). The point-by-point countercheck is in doc 18.
 
-On melting point, does the full TI set add information beyond the 9 degree-pair edge counts plus
-maximum degree, once both representations use the **same learner**?
+**Date:** 2026-10-17.
 
-`TIa_composition` = 104 registry indices + element counts. `edgetypes_composition` = 9 edge-type
-counts m_ij + Δ + element counts. Both as built by `docs/research/scripts/e3_isomer.py` at the E3 commit.
+**Label:**
+- This is an **exploratory, post hoc** experiment. It was designed after the E3 results and the
+  P0 contrast had been seen.
+- It is not prospective and not confirmatory, and it cannot revise any E3 number. Its estimands
+  (feature set × *fixed* learner) differ from E3's (best-selected model per representation).
 
-## 2. What is already known (P0 step 1, no training; `out/P0/`, doc 13 §2)
+## 1. Questions
 
-| context | R² full | R² edge | Δ (full − edge) [95% CI] | selected families (full / edge) |
-|---|---:|---:|---|---|
-| MP E3a (15 folds, corrected t) | 0.657 | 0.663 | −0.006 [−0.015, +0.003] | SVR 12 + ET 3 / SVR 15 |
-| MP E3b | 0.629 | 0.630 | −0.001 [−0.014, +0.011] | SVR 15 / SVR 10 + ET 5 |
-| External, known formula (1,014; 211 formulas) | 0.458 | 0.484 | −0.026 [−0.070, +0.007] | ET / SVR |
-| External, unseen formula (7,327; 4,382 formulas) | 0.471 | 0.423 | **+0.048 [+0.025, +0.072]** | ET / SVR |
+1. **Composition-controlled (manuscript question):** with the learner fixed, does topology add
+   predictive value for melting point beyond element composition?
+2. **Edge sufficiency:** with the learner fixed, does the registered index set add predictive value
+   once the degree-pair edge counts are already supplied?
+3. **Descriptive:** how do the compact edge-count set and the full set compare, and do edge counts
+   add anything once the full registry is supplied?
 
-The only interval that excludes zero is external unseen-formula, which is also the only context
-where the two selected learners differ in a single fit. The fixed-learner experiment is designed
-to separate the two explanations there.
+All answers are **predictive-value contrasts under the stated learners and pipelines**. They do not
+prove that any feature carries intrinsic, causal or information-theoretic content.
 
-## 3. Estimand
+## 2. Arms
 
-For each learner family F ∈ {ridge, elasticnet, pls, knn, svr, extratrees} (the six E3 families):
+Every arm is built by the unchanged E3 code (`e3_isomer.featurise`). The new union arm is assembled in
+`fixed_learner.arm_frames`.
 
-Δ_F = R²(TIa_composition, F) − R²(edgetypes_composition, F)
+| arm | E3 name | columns (p, MP internal) | construction |
+|---|---|---|---|
+| C | `composition` | element counts | as E3 |
+| C+E | `edgetypes_composition` | 9 counts m_ij for degree pairs (i ≤ j ≤ 4, without (1,1)) + max degree + C | raw counts, as E3 |
+| C+T | `TIa_composition` | asinh of the 104 registry indices + C | as E3 |
+| C+E+T | new | the E block (raw), then the T block (asinh), then C | concatenation; same per-column values as in the other arms |
 
-with hyperparameters tuned **inside the training data only** (inner 3-fold group CV, as in E3).
-This is **feature × fixed learner**, a different estimand from E3's best-selected model per
-representation. It is exploratory. It does not replace or revise any E3 number.
+**Nesting.**
+- C ⊂ C+E ⊂ C+E+T and C ⊂ C+T ⊂ C+E+T hold as column sets.
+- C+E and C+T are **not** nested. The degree-based indices are linear in the m_ij only *before* the
+  asinh transform, and the transform breaks that linearity.
+- So `C+T − C+E` compares two different sets. It cannot show that the indices add information beyond
+  the edge counts. That question is `C+E+T − C+E` (co-primary 2).
+- Dimensions, numeric rank, constant and duplicate columns per arm are in `feature_manifest.json`,
+  written by `fixed_learner.py build`. Doc 18 §2 summarises them.
 
-**Primary contrast:** external unseen-formula Δ_F for F = the family E3 selected for *either*
-representation there (extra trees and SVR), reported as **two co-primary contrasts**. The other four
-families are reported in full, as secondary results.
+**Preprocessing.** Each step is fitted on training rows only, inside the scikit-learn pipeline
+(`topoqspr.models`):
+1. median imputation;
+2. removal of training-constant and exact-duplicate columns;
+3. standardisation, for the scale-sensitive families;
+4. target standardisation, for elastic net and SVR.
 
-## 4. Data, splits and code (identical to E3)
+The asinh transform is a fixed elementwise function, so it has no fitted parameters.
 
-| item | value |
+## 3. Learners and tuning
+
+- **Families:** ridge, elastic net, PLS, kNN, SVR and extra trees. Each is run **alone**
+  (`families=[F]`), with the E3 grids (`topoqspr.models.FAMILIES`).
+- **The grids are the same for every arm.** The only dependence on dimension is the PLS constraint
+  n_components ≤ p, which leaves the grid unchanged for every arm here (p ≥ 11).
+- **Tuning:** inner grouped 3-fold CV inside each training set, minimising MSE, with the same splits
+  for every arm (seeded by 1000·seed + fold, as E3). The tuning budget is matched across arms.
+- **Co-primary learners: extra trees and SVR.**
+  - They are the two families E3 selected in almost every MP fold for these representations.
+  - That choice is itself outcome-informed. To counter it, the other four families are run and
+    reported in full, as secondary.
+  - Ridge or kNN cannot be substituted after the results are seen.
+- **External context:**
+  - Extra trees is fitted with training seeds 0–4. The seed changes the forest and the inner splits.
+  - The other five families are deterministic given the inner splits, so they are fitted with seed 0
+    only. Seed 0 is primary.
+
+## 4. Contexts, splits and data
+
+| context | training | evaluation | groups |
+|---|---|---|---|
+| mp_E3a | Bradley isomer set (6,725 molecules, 758 formulas), E3 inclusion list asserted | E3 outer folds, seeds 0–2 × 5 | constitution |
+| mp_E3b | same | same, formula-grouped | formula |
+| external | PHYSPROP-free Bradley isomer set (2,252) | OPERA/PHYSPROP parents: known formula 1,014 (211 formulas), **unseen formula 7,327 (4,382)** | train constitutions excluded from test |
+
+- **logP is not included.** The question is about melting point, and P0 showed edge types match or
+  beat the full set on logP.
+- **Fail-closed checks**, done in `build` and `run` before any fit:
+  - inclusion lists, labels and formula assignments equal the E3 archive;
+  - feature hashes equal the archived ones (external: `external/info.json`; MP internal:
+    `feature_sha256_mp_internal.json`, recorded post hoc in the E3 environment, see doc 18);
+  - the external split equals `test_split.csv`, in order and in sizes;
+  - every unit checks that its train and test groups are disjoint;
+  - training and test columns are identical.
+- **External test labels are never loaded by the fitting code.** Only `analyse` reads them, from the
+  restored public dataset.
+
+## 5. Estimands and contrasts
+
+For each family F, context c and arm pair (a, b): Δ = R²(a, F, c) − R²(b, F, c).
+
+R² is defined identically in every arm: 1 − SSE/SST, with SST around the mean of the evaluation set.
+Internal R² is the mean over 15 folds of fold R². External R² is pooled R² per test subset.
+
+R² depends on the variance of y in each evaluation set, which differs between contexts (doc 18 §3).
+So **MAE and RMSE are reported for both arms next to every ΔR²**.
+
+| role | contrast |
 |---|---|
-| training data | Bradley MP, PHYSPROP-free parents (external) and the E3 inclusion set (internal), rebuilt by `e3_isomer.build` |
-| external test | OPERA PHYSPROP MP parents not in the training constitutions, known/unseen split as `data/E3/external/test_split.csv` (sizes 1,014 / 7,327, asserted) |
-| internal cells | MP E3a (groups = constitution), MP E3b (groups = formula); seeds 0, 1, 2 × 5 outer folds, as E3 |
-| tuning | `evaluate.nested_cv` / `select_and_refit` with `families=[F]` (one family), same grids and inner splits as E3 |
-| feature hashes | must equal `data/E3/run_info.json` and `external/info.json` (run aborts otherwise) |
-| logP | not included: edge types already match or beat the full set there (P0), so it cannot explain the gap |
+| **co-primary 1** | C+T − C |
+| **co-primary 2** | C+E+T − C+E |
+| secondary | C+T − C+E (not nested), C+E+T − C+T (redundancy), C+E − C |
 
-New code: one script, `docs/research/scripts/p0_fixed_learner.py`, which calls the E3 functions
-with `families=[F]` and writes predictions plus folds in the E3 layout. It contains no new modelling code.
+## 6. Inference
 
-## 5. Inference
+- **Internal: corrected resampled t** (Nadeau & Bengio 2003), over the 15 seed × fold scores, as in E3.
+  - The 15 scores overlap and are not independent replicates. The correction partly allows for this,
+    but its coverage under formula grouping is unverified.
+  - Notebook 04 estimates that coverage by simulation. Its result is reported next to the intervals,
+    whatever it is.
+  - A seed-level summary (3 seed means) is reported as a descriptive check.
+- **External:** a paired formula-cluster bootstrap. The 2,000 resamples (seed 2026) resample the test
+  **formulas**, not molecules.
+  - The training fit is **held fixed** during the bootstrap, so the interval covers only test-set
+    sampling.
+  - Training variability is reported separately: the SD of Δ over extra-trees seeds 0–4. The
+    category is also reported for each seed.
+- **One-sided bounds** are the ends of the two-sided 90% intervals.
 
-- **External:** paired formula-cluster bootstrap, 2,000 resamples, seed 2026, percentile 95% and 90%
-  intervals, as in E3.
-- **Internal:** corrected resampled t over 15 seed × fold scores, as in E3.
-- **Multiplicity:** BH over all 18 Δ_F (6 families × 3 contexts: external unseen, E3a, E3b). Co-primary
-  contrasts are reported with and without adjustment. External known-formula (n = 1,014) is reported,
-  but it is outside the family because the 211 formulas give a wide interval.
+## 7. Margin δ and decision rule
 
-## 6. Decision rule (pre-specified margin δ = 0.02 R²)
+**About δ = 0.02 R²:**
+- It is a **candidate smallest effect of interest**, proposed *after* the E3 and P0 effects were seen.
+  It is not a demonstrated chemical threshold.
+- Its calibration (doc 18 §3): on the evaluation populations, 0.02 R² corresponds to about
+  1.0–1.5 °C RMSE at the observed operating points (MP internal 1.5, external known 1.05, unseen 1.4).
+- Bradley replicate spread is median 0.7 °C, mean 2.8 °C and 90th percentile 5.3 °C (4,665 parents
+  with ≥ 2 values). So 0.02 is about one typical disagreement between replicate measurements.
+- The **primary** analysis uses δ = 0.02. Results at δ = 0.01 and 0.03 are reported as a sensitivity
+  check only. They cannot change the primary statements.
 
-δ = 0.02 is the smallest gap that would justify a manuscript sentence that the non-degree indices add
-information. It is less than half the gap observed for the selected models (0.048).
+**Statements, per (learner, context, contrast):**
 
-For each co-primary contrast (extra trees, SVR):
+| statement | requirement |
+|---|---|
+| S1 "adds predictive value" | H0: Δ ≤ 0 rejected, one-sided α = 0.05 (co-primary: Holm-adjusted) |
+| S2 "adds at least δ" | H0: Δ ≤ δ rejected, i.e. one-sided 95% lower bound > δ (co-primary: Holm-adjusted). **A point estimate ≥ δ with a 95% CI excluding 0 is not S2.** |
+| S3 "equivalent within ±δ" | TOST: the whole 90% CI inside [−δ, +δ] |
+| S4 "worse" / "worse by at least δ" | mirror of S1/S2 |
+| inconclusive | none of the above |
 
-| outcome | rule | wording allowed |
+`fixed_learner.classify` implements these categories from the unadjusted intervals. The Holm
+columns decide the co-primary statements.
+
+**Multiplicity:**
+- **Co-primary family**, Holm over 12 one-sided tests: 2 estimands × 2 learners (extra trees, SVR) × 3
+  contexts (mp_E3a, mp_E3b, external unseen formula, seed 0). This is done separately for S1 and S2.
+- Everything else (other families, secondary contrasts, external known formula, other seeds) gets BH
+  q-values and is descriptive.
+- S3 is an intersection-union test and needs no adjustment.
+
+**Wording for the manuscript:**
+- A statement is reported as **consistent** only if it holds for both co-primary learners in all
+  three contexts.
+- Otherwise it is **mixed by learner/context**: each cell is listed, and no general claim is made.
+- A learner × feature interaction (a gap for one learner only) is reported as a finding.
+
+**Feasibility, stated before running:**
+- **External unseen formula:** the P0 bootstrap SE of a full-vs-edge difference was 0.012, which gives
+  a 90% half-width of about 0.020. S3 there would need an estimate within about ±0.0003 of zero, so in
+  practice external equivalence cannot be shown.
+  - The external equivalence question is kept, but labelled **exploratory and underpowered**. The
+    estimate and full CI are reported, and an inconclusive result is called inconclusive.
+- **External S2** needs an estimate above about 0.04.
+- **Internal:** with 90% half-widths of about 0.008 (P0), S2 and S3 can both be reached.
+
+**Possible outcomes.** Every outcome is allowed and is reported as found: positive, negative, mixed or
+inconclusive.
+- No re-runs to change an outcome. A crash from a code bug is fixed, logged, and then the affected
+  context is re-run in full.
+- No change to the design after any real-label result.
+
+## 8. Robustness (notebook 04, reported with the results)
+
+- **(a)** Formula-cluster vs molecule-level bootstrap SE on the external test.
+- **(b)** Coverage of the corrected-t interval under formula grouping. Ridge, 400 replicates; SVR, 100.
+- **(c)** Training-seed variability of the archived E3 external pipeline (seeds 1–4). This needs the
+  same approval as §11.
+- **(d)** The pre-declared within-formula R² (negative for every TI representation) next to the
+  post hoc centred metric, both labelled.
+
+## 9. What this experiment cannot show
+
+- Causal or information-theoretic novelty of any index.
+- Superiority over RDKit 2D or ECFP. E3 already shows that TI adds nothing practically meaningful
+  beyond RDKit 2D, and slightly hurts ECFP.
+- Independence of the external labels. The external test is source-disjoint, not
+  measurement-independent.
+- Generalisation to other endpoints.
+
+## 10. Compute budget and execution
+
+**Work:** 760 units (`fixed_learner.units("full")`):
+- 720 internal: 2 contexts × 6 families × 4 arms × 15 folds;
+- 40 external: 4 arms × (5 families + 5 extra-trees seeds).
+
+**Projection from the permuted-label bench run** (`fixed_learner.py run --mode bench`, then
+`budget`). The exact table is in doc 18 §5.
+
+The CPU-hours below are core-hours. Each unit runs on one core; units run in parallel over workers.
+
+| where | workers | projected wall time |
 |---|---|---|
-| (a) equivalent | 90% CI inside [−0.02, +0.02] | "with a fixed learner, the 10 edge-type numbers match the full set within 0.02 R²" |
-| (b) full set better | 95% CI lower bound > 0 **and** point estimate ≥ 0.02 | "the non-degree indices add information on unseen formulas (exploratory)" |
-| (b′) edge types better | 95% CI upper bound < 0 **and** point estimate ≤ −0.02 | report as found |
-| (c) unresolved | anything else | "unresolved"; no attribution claim |
+| this workstation (16 cores, n_jobs = 8 when sharing) | 8 | see doc 18 §5 |
+| Colab free tier (2 vCPU, sessions ≤ 12 h, may be cut earlier) | 2 | see doc 18 §5; needs several sessions |
 
-- **If the two co-primary contrasts disagree:** report both. The conclusion is (c) unless the
-  disagreement is itself the finding, i.e. the gap appears for one learner only. That would be
-  evidence of a learner × feature interaction, and it is reported as such.
-- **No re-runs to change the outcome.** A crash caused by a code bug is fixed, logged, and then
-  everything is re-run. No design change follows any result.
+**How to run it:**
+- **Resume:** every unit is written atomically with a sha256 record, and a re-run skips only verified
+  units. Set `USE_DRIVE=True` on Colab so units survive a disconnect.
+- **Shards:** `--shard i/N` splits the units deterministically, so several sessions or machines can
+  share the run. Results do not depend on which shard computed a unit.
+- **Order:** external first (minutes), then mp_E3b, then mp_E3a. The internal cells run even if the
+  external result is decisive, because they are declared here.
+- **Machine sharing:** the run does not start while a protected owner job runs, and uses n_jobs ≤ 8
+  when sharing.
 
-## 7. Budget and resources (estimated from E3 wall times, 16 CPUs)
+## 11. Owner approval checkpoint
 
-| stage | basis | estimate |
-|---|---|---|
-| external, 6 families × 2 sets | E3 external stage, 10 sets × 6 families: 42 min | 15–25 min |
-| MP E3a, 6 × 2 | E3 MP E3a, 10 sets × 6 families: 59,499 s | ≈ 3–3.5 h |
-| MP E3b, 6 × 2 | 62,780 s for 10 sets | ≈ 3.5 h |
-
-Peak memory in E3 was about 1.1 GB RSS. GPU is not used.
-
-- **Run order:** external first. It answers the primary question, and the internal cells only add context.
-- **Stop rule:** the internal cells run even if external is decisive, because they were declared here.
-- **Machine sharing:** the run waits while any protected owner job is running (ResearchOS
-  `processes()` list), and uses `n_jobs ≤ 8` when sharing the machine.
-
-## 8. Possible results and what each means
-
-- **(a) on both:** N2 can be stated with a fixed learner: the edge counts suffice. The 0.048 gap was
-  learner selection.
-- **(b) on both:** the readiness wording changes to "the full set adds about X on unseen formulas".
-  N2 is dropped and replaced by that result.
-- **Interaction:** report it. It weakens any representation-only claim.
-- **(c):** the claim stays "unresolved", exactly as in `PUBLICATION_READINESS.md` at `9dce4d3`.
-
-## 9. Owner approval checkpoint
-
-- [ ] δ = 0.02 accepted, or changed to: ____
-- [ ] co-primary families (extra trees, SVR) accepted
-- [ ] budget accepted; the run may start when no protected job is running
-- [ ] frozen at commit: ____ (filled in by the commit that freezes it; the run log must cite it)
+- [ ] four arms, co-primary estimands (C+T − C, C+E+T − C+E) and co-primary learners (ET, SVR) accepted
+- [ ] statements S1–S4, Holm over the 12 co-primary tests, BH elsewhere accepted
+- [ ] δ = 0.02 as a candidate threshold (post hoc, calibrated in doc 18 §3); sensitivity 0.01/0.03 descriptive only
+- [ ] compute budget (doc 18 §5) and where it runs (workstation / Colab shards / HPC)
+- [ ] notebook 04 seeds 1–4 (training variability) included
+- [ ] frozen at commit: ____ (the commit that ticks these boxes; `fixed_learner.py run --mode full`
+      refuses to start without `OUT/APPROVED_FULL_RUN` holding this SHA)

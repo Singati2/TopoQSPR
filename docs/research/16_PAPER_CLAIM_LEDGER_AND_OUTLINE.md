@@ -12,7 +12,7 @@ Items marked **PENDING** depend on experiments that have not run, and must not b
 | A1 | "On measured melting points, adding unlabeled-graph topological indices to element counts raised cross-validated R² by 0.085 (95% CI 0.065–0.105) for molecules whose formula was seen in training, and by 0.106 (0.087–0.125) for held-out formulas." | E3a, E3b | exploratory; pre-fit dated protocol, outcome-informed endpoint |
 | A2 | "On a source-disjoint external MP set, the gain was 0.072 (0.019–0.138) for known formulas and 0.240 (0.203–0.281) for unseen formulas, where composition alone reached R² 0.23." | E3 external | exploratory, single fit, source-disjoint (not independent) |
 | A3 | "Permuting MP within formula removed the gain (−0.028, −0.052 to −0.004)." | negative control | control |
-| A4 | "Topology added no practically meaningful information beyond RDKit 2D descriptors (90% CI within ±0.05), and slightly reduced performance when added to ECFP on held-out formulas (−0.015, −0.029 to −0.002; BH q = 0.048)." | E3 secondary | BH, 42 contrasts |
+| A4 | "Topology added no practically meaningful information beyond RDKit 2D descriptors (90% CI within ±0.05), and slightly reduced performance when added to ECFP on held-out formulas (−0.015, −0.029 to −0.002; BH q = 0.048)." | E3 secondary | BH over 41 secondary contrasts (42 in total with the primary) |
 | A5 | "For logP, the topology gain beyond composition was practically zero (E3a +0.016, q = 0.056; E3b −0.001; 90% CIs within ±0.05)." | E3 logP | exploratory; equivalence |
 | A6 | "Within the cross-validated cells, the 9 degree-pair edge counts plus maximum degree matched the full index set (differences −0.006 to −0.001 for MP; all 95% CIs include 0). On unseen external formulas the full set scored higher (0.471 vs 0.423; Δ 0.048, 0.025–0.072), but the two representations used different selected learners, so this gap is not attributed to the indices." | doc 13 §2 | exploratory; learner-confounded |
 | A7 | "The index family that discriminates isomers best (distance-based) predicted MP worst under per-representation model selection." | E3 + census | exploratory; fixed-learner check pending |
@@ -73,7 +73,7 @@ Items marked **PENDING** depend on experiments that have not run, and must not b
    - six learner families and nested CV;
    - E3a/E3b/external estimands;
    - corrected t and cluster bootstrap;
-   - BH family (42);
+   - BH family (41 secondary contrasts; the primary contrast is outside it);
    - the pre-fit dated protocol, with its outcome-informed endpoint choice disclosed.
 3. **Results:**
    - 3.1 MP primary (A1–A3);
@@ -97,3 +97,20 @@ Items marked **PENDING** depend on experiments that have not run, and must not b
    - learner selections per fold;
    - failure analysis;
    - the 104-index verification (03, 03a, 03b).
+
+## 6. Claim status after 2026-10-17 (Colab-first round; doc 18)
+
+| claim | status | what changed |
+|---|---|---|
+| A1–A3, A5, A9 | **exploratory, reproduced.** Every number recomputes from the public artifacts at \|diff\| ≤ 1e-9 (notebook 01, 571 checks) | none |
+| A4 | exploratory, reproduced; **BH family is 41 secondary contrasts** (42 in total) | wording fixed |
+| A6 (edge counts vs full set) | exploratory; external gap learner-confounded; **fixed-learner four-arm test PENDING** (doc 14 r2, not approved, not run) | the nested contrast C+E+T − C+E replaces C+T − C+E as the test of "beyond edge counts" |
+| A7 (discrimination ≠ prediction) | exploratory; **still under per-representation selection**. The four-arm run does not test it (the distance set is not an arm). | unchanged; soften or drop if not tested |
+| A8 (linearity, rank 38) | known result: cite, never claim | an outside review (2026-10-17) attacks exactly this in the companion work; keep it as background |
+| "TI adds beyond composition, under fixed learners" | **unsupported until doc 14 r2 runs** | new estimand |
+| "the registry adds beyond edge counts" | **unsupported until doc 14 r2 runs** | — |
+| "external result is independent" | **not supported, and must not be claimed.** Source-disjoint only: 3,253 of the 8,341 external test constitutions also occur in the Bradley isomer set used for the internal cells, though not in the PHYSPROP-free training subset. | evidence added |
+| "the corrected-t intervals have nominal coverage" | see doc 18 §3.3 (simulation, finite-population approximation) | new |
+| confirmation on the patent set | **not attempted**; census awaiting approval | — |
+
+**Wording rule unchanged:** "preregistered", "independent validation" and "deployed v1.0" are forbidden.

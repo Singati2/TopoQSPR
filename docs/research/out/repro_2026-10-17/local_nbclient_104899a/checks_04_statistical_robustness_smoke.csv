@@ -1,0 +1,6 @@
+check,status,observed,expected,note
+(a) bootstrap SEs finite and positive,PASS,,,
+"(a) formula-cluster / molecule-level bootstrap SE ratio per contrast (finding, not a gate)",INFO,known_formula TIa_composition-composition: 1.47; known_formula TIa_composition-edgetypes_composition: 1.18; known_formula rdkit2d_asinh_TIa-rdkit2d_asinh: 0.97; known_formula ECFP_TIa-ECFP: 1.31; unseen_formula TIa_composition-composition: 1.41; unseen_formula TIa_composition-edgetypes_composition: ,,
+"(b) coverage ridge: corrected t 1.000 (MC SE 0.000), naive t 0.900",INFO,"{""learner"": ""ridge"", ""n_replicates"": 40, ""n_truth_draws"": 100, ""study_sample_rows_mean"": 3347, ""train_rows"": 2678, ""test_rows"": 669, ""theta_target"": 0.1101, ""theta_mc_se"": 0.0028, ""coverage_corrected_t"": 1.0, ""coverage_corrected_t_mc_se"": 0.0, ""coverage_naive_t"": 0.9, ""mean_width_corrected"": 0.0678,",,
+"(c) seed 0 re-fit reproduces archived external predictions (max |diff|, degC)",PASS,0.0 (|diff| 0.00e+00),0.0 ± 1e-06,cross-machine refit; BLAS/libsvm may differ in the last bits
+(d) pre-declared within-formula R2 matches committed summaries (max |diff|),PASS,0.0 (|diff| 0.00e+00),0.0 ± 1e-09,
