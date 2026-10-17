@@ -63,7 +63,7 @@ study-config schema, the outputs and the run record are described in
 - **Evaluation.** Hyperparameters are tuned on the full data before cross-validation (not truly nested). No null or molecular-size baseline. Duplicate and size-determined targets.
 - **Indices.** Hosoya Z is incorrect for molecules with more than 18 bonds. Index values are not yet unit-tested against reference values.
 - **Annotations.** The `ADMET_*` columns are RDKit descriptors and rule-of-thumb flags (GI absorption, BBB), not validated predictions; the former `ADMET_Caco2_approx` heuristic was removed. Bioactivity columns take the first reported value regardless of target or unit.
-- The interface advertises 11 models; 10 are implemented.
+- The interface previously advertised 11 models; 10 are implemented, and it now says 10.
 - Also found by the audit: four indices with wrong numerators, duplicate indices (DS1 = DS2), Balaban J wrong for salts, failed indices filled with 0, a shared model instance reused across targets. Details and fixes: `docs/AUDIT_TOPOQSPR.md`, `docs/INDEX_VERIFICATION.md`.
 
 ## Citation

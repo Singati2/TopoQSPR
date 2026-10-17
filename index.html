@@ -252,7 +252,7 @@ footer{padding:20px 32px;border-top:1px solid var(--border);display:flex;justify
         </div></div>
         <div class="pstep" id="ps3"><div class="pstep-ico">4</div><div>
           <div class="pstep-txt">ML training + correlation analysis</div>
-          <div class="pstep-sub">11 models · 5-fold CV · GridSearchCV · Pearson + Spearman + p-values + VIF</div>
+          <div class="pstep-sub">10 models · 5-fold CV · GridSearchCV · Pearson + Spearman + p-values + VIF</div>
         </div></div>
         <div class="pstep" id="ps4"><div class="pstep-ico">5</div><div>
           <div class="pstep-txt">SHAP feature importance + export</div>
@@ -287,7 +287,7 @@ footer{padding:20px 32px;border-top:1px solid var(--border);display:flex;justify
     <div style="padding-bottom:32px;margin-bottom:32px;border-bottom:1px solid var(--border)">
       <div class="eyebrow">About this tool</div>
       <div class="display">Molecu<em>Lens</em></div>
-      <div class="lead">An exploratory QSPR research tool. Type a disease name — MolecuLens collects the drugs ChEMBL links to it, computes 135 graph-theoretic topological indices, trains 11 ML models with 5-fold CV, and reports each result next to a composition-only baseline, with correlations, SHAP explanations and drug-likeness filters. It is not a drug-discovery or disease-specific prediction system.</div>
+      <div class="lead">An exploratory QSPR research tool. Type a disease name — MolecuLens collects the drugs ChEMBL links to it, computes 135 graph-theoretic topological indices, trains 10 ML models with 5-fold CV, and reports each result next to a composition-only baseline, with correlations, SHAP explanations and drug-likeness filters. It is not a drug-discovery or disease-specific prediction system.</div>
     </div>
     <div class="sh"><h2>Data <em>sources</em></h2><div class="sh-line"></div></div>
     <div class="cgrid c2" style="margin-bottom:36px">
@@ -322,7 +322,7 @@ footer{padding:20px 32px;border-top:1px solid var(--border);display:flex;justify
     <div class="sh"><h2>Running the <em>pipeline</em></h2><div class="sh-line"></div></div>
     <div class="hsteps">
       <div class="hstep"><div class="hnum">1</div><div><div class="htitle">Enter a disease name</div><div class="hdesc">Type any disease — diabetes, hypertension, alzheimer, cancer, asthma, epilepsy, parkinson, rheumatoid arthritis etc. Typos are handled automatically. The system validates against a curated MeSH disease list and probes ChEMBL for drug availability.</div></div></div>
-      <div class="hstep"><div class="hnum">2</div><div><div class="htitle">Wait for the pipeline to complete</div><div class="hdesc">The first run takes 20–45 minutes — fetching up to 200 drugs from 4 APIs, computing 135 topological indices per molecule, and training 11 ML models with 5-fold CV. The same disease searched again returns instantly from cache. On Railway free tier, the first page load may take ~30s to warm up — this is normal.</div></div></div>
+      <div class="hstep"><div class="hnum">2</div><div><div class="htitle">Wait for the pipeline to complete</div><div class="hdesc">The first run takes 20–45 minutes — fetching up to 200 drugs from 4 APIs, computing 135 topological indices per molecule, and training 10 ML models with 5-fold CV. The same disease searched again returns instantly from cache. On Railway free tier, the first page load may take ~30s to warm up — this is normal.</div></div></div>
       <div class="hstep"><div class="hnum">3</div><div><div class="htitle">Explore results across 7 tabs</div><div class="hdesc">Drug Properties → Drug-likeness Filters → Topological Indices → Correlation Analysis → ML Performance → SHAP Importance → Data Preview.</div></div></div>
       <div class="hstep"><div class="hnum">4</div><div><div class="htitle">Download your data</div><div class="hdesc">CSV (all drugs × all properties) and Excel (7 sheets) including full correlation matrices with p-values, VIF, and index definitions with formulas for citation.</div></div></div>
     </div>
@@ -530,7 +530,7 @@ function advStep(id){
   const idx=STEP_SEG[id];
   const seg=document.getElementById('sg'+idx);
   if(seg){seg.style.background=SEGC[idx];seg.style.animation='pseg 1s ease-in-out infinite';seg.style.boxShadow=`0 0 8px ${SEGC[idx]}88`;}
-  const lbl={'ps0':'Fetching drug data...','ps1':'Applying filters...','ps2':'Computing 135 indices...','ps3':'Training 11 ML models...','ps4':'SHAP + exporting...'};
+  const lbl={'ps0':'Fetching drug data...','ps1':'Applying filters...','ps2':'Computing 135 indices...','ps3':'Training 10 ML models...','ps4':'SHAP + exporting...'};
   document.getElementById('prog-stat').textContent=lbl[id]||'Running...';
 }
 function markDone(id){
@@ -731,7 +731,7 @@ function buildCorr(data){
 function buildML(data){
   const el=document.getElementById('rp-ml');
   if(!data.top_models?.length){el.innerHTML='<div class="card"><div class="cbody">No ML results available.</div></div>';return;}
-  let html=`<div style="font-size:13px;color:var(--text3);margin-bottom:16px">11 ML models trained per property using 135 topological indices as features. 5-fold CV + GridSearchCV. <b>Composition-only R²</b> refits the same model on element counts alone; only the ΔR² column says what topology adds. Many properties here (molecular weight, heavy-atom count) are almost fully determined by composition, so a high R² on its own means little. Hyperparameters are tuned on the full set before CV, so all R² values are somewhat optimistic.</div>
+  let html=`<div style="font-size:13px;color:var(--text3);margin-bottom:16px">10 ML models trained per property using 135 topological indices as features. 5-fold CV + GridSearchCV. <b>Composition-only R²</b> refits the same model on element counts alone; only the ΔR² column says what topology adds. Many properties here (molecular weight, heavy-atom count) are almost fully determined by composition, so a high R² on its own means little. Hyperparameters are tuned on the full set before CV, so all R² values are somewhat optimistic.</div>
   <div class="slabel">Best model per property</div>
   <div class="tw"><table><thead><tr><th>Property</th><th>Best model</th><th>R² mean</th><th>R² std</th><th>MAE</th><th>Composition-only R²</th><th>ΔR²</th></tr></thead><tbody>`;
   data.top_models.forEach(m=>{
