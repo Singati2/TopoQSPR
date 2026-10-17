@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import repro_common as RC  # noqa: E402
 from restore_opera_values import col_sha256  # noqa: E402
 
-PRIVATE = "|".join(["/home/" + "mpcrlab", "/mnt/" + "beegfs", r"\.venvs/"])  # built so this line does not match itself
+PRIVATE = "|".join(["/home/" + "mpcrlab", "/mnt/" + "beegfs", r"\." + "ven" + "vs/"])  # assembled so this line does not match itself
 PLAUSIBLE = {"mp": (-200.0, 700.0), "logp": (-10.0, 15.0)}  # degC, log10 units
 
 

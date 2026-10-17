@@ -54,12 +54,3 @@ The design is in `docs/research/06_PROSPECTIVE_STUDY_AMENDMENT.md` and `06b`; th
 3. restore the OPERA values;
 4. re-run the P0 analysis;
 5. compare with `docs/research/out/P0/`.
-
-## Added 2026-10-17 (post hoc reference, not part of the original archive)
-
-- **`feature_sha256_mp_internal.json`**: feature-matrix hashes for the MP internal cells.
-  - `run_info.json` stores only the hashes of the last endpoint run (logP).
-  - These hashes were recorded by rebuilding with the E3 code in the E3 environment, after the
-    inclusion list and labels were checked to be identical to the archive.
-  - `fixed_learner.py build` checks a fresh rebuild against them.
-- **This file is not in `SHA256SUMS`.** That list covers the files built by `publish_e3_dataset.py`.
