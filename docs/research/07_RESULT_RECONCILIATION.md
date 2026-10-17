@@ -32,7 +32,7 @@ MP E3a (known formula, unseen constitution), ΔR² = R²(TIa_composition) − R�
 
 | ΔR² | 95% CI | 90% CI | p | ΔMAE | folds positive |
 |---|---|---|---|---|---|
-| **+0.085** | [+0.065, +0.106] | [+0.069, +0.102] | < 1e-4 | **4.8 °C** [3.6, 6.0] lower | 15/15 |
+| **+0.085** | [+0.065, +0.105] | [+0.069, +0.102] | < 1e-4 | **4.8 °C** [3.6, 6.0] lower | 15/15 |
 
 Decision rule (06 §5): p < 0.05 and ΔR² > 0, so "topology adds measurable within-formula
 information for MP" is **supported**. The point estimate is ≥ 0.05, so it is "practically
@@ -139,7 +139,7 @@ explain 52–59%.
 
 | Earlier result | E3 | Consistent? |
 |---|---|---|
-| E2 (drug cohort, cluster split): MP TIa_composition − composition +0.069 [−0.017, +0.154], q 0.45 | E3a +0.085 [0.065, 0.106] | **Yes.** Same point estimate, and E2's interval contains E3's. E2 was underpowered (711 drugs with MP). E3 has 6,725 molecules. E2's "no detectable gain" was absence of evidence, not evidence of absence |
+| E2 (drug cohort, cluster split): MP TIa_composition − composition +0.069 [−0.017, +0.154], q 0.45 | E3a +0.085 [0.065, 0.105] | **Yes.** Same point estimate, and E2's interval contains E3's. E2 was underpowered (711 drugs with MP). E3 has 6,725 molecules. E2's "no detectable gain" was absence of evidence, not evidence of absence |
 | E2 logP/logD/logS: no detectable gain | logP E3a +0.016 (q 0.056), E3b −0.001; practically equivalent to 0 | **Yes**, and now with equivalence shown for logP |
 | E2: ECFP and RDKit 2D beat TIa_composition on MP | Same direction and similar size (+0.14 / +0.18) | Yes |
 | 03 M1: 81 indices = linear in 9 edge counts | edgetypes_composition ≥ TIa_composition in E3a, E3b and external (known); slightly lower on external unseen (0.42 vs 0.47) | Yes. The non-degree indices add little or nothing; on new external formulas they add some |

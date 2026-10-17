@@ -13,7 +13,7 @@ scope (one positive endpoint), overlap with the companion manuscript, wording, a
 
 | Claim | Evidence | Label |
 |---|---|---|
-| Unlabeled topology adds MP information beyond element composition within known formulas: ΔR² +0.085 [0.065, 0.106], MAE −4.8 °C, 15/15 folds | E3a primary test, independent recomputation exact | exploratory amendment, primary test passed |
+| Unlabeled topology adds MP information beyond element composition within known formulas: ΔR² +0.085 [0.065, 0.105], MAE −4.8 °C, 15/15 folds | E3a primary test, independent recomputation exact | exploratory amendment, primary test passed |
 | …and across held-out formulas: +0.106 [0.087, 0.125] | E3b | exploratory |
 | …and on a source-disjoint external set: +0.072 [0.019, 0.138] (known formula), +0.240 [0.203, 0.281] (unseen formula; composition extrapolates poorly) | E3-ext | exploratory, single fit, source-disjoint |
 | No spurious gain when within-formula signal is destroyed: −0.028 [−0.052, −0.004] | negative control | control, not tested |
