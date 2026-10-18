@@ -104,11 +104,11 @@ Items marked **PENDING** depend on experiments that have not run, and must not b
 |---|---|---|
 | A1–A3, A5, A9 | **exploratory, reproduced.** Every number recomputes from the public artifacts at \|diff\| ≤ 1e-9 (notebook 01, 571 checks) | none |
 | A4 | exploratory, reproduced; **BH family is 41 secondary contrasts** (42 in total) | wording fixed |
-| A6 (edge counts vs full set) | exploratory; external gap learner-confounded; **fixed-learner four-arm test PENDING** (doc 14 r2, not approved, not run) | the nested contrast C+E+T − C+E replaces C+T − C+E as the test of "beyond edge counts" |
+| A6 (edge counts vs full set) | exploratory; external gap learner-confounded; **fixed-learner four-arm test done** (doc 14 r2, frozen 1457bc9): edge counts carry the gain; see the two rows below | the nested contrast C+E+T − C+E replaces C+T − C+E as the test of "beyond edge counts" |
 | A7 (discrimination ≠ prediction) | exploratory; **still under per-representation selection**. The four-arm run does not test it (the distance set is not an arm). | unchanged; soften or drop if not tested |
 | A8 (linearity, rank 38) | known result: cite, never claim | an outside review (2026-10-17) attacks exactly this in the companion work; keep it as background |
-| "TI adds beyond composition, under fixed learners" | **unsupported until doc 14 r2 runs** | new estimand |
-| "the registry adds beyond edge counts" | **unsupported until doc 14 r2 runs** | — |
+| "TI adds beyond composition, under fixed learners" | **supported (doc 14 r2, frozen 1457bc9, run 2026-10-18).** C+T − C > δ = 0.02 in all 12 co-primary cells with ET and SVR (Holm p < 0.001; ΔR² 0.087–0.221). Exploratory/post hoc label applies. | `out/doc14r2_full_1457bc9/` |
+| "the registry adds beyond edge counts" | **not supported under the co-primary learners.** C+E+T − C+E: 0/6 tests > 0 after Holm (min p 0.30); 3/6 equivalent within ±0.02; external ET worse by > δ (−0.035; 5 seeds −0.036 ± 0.003); external SVR inconclusive (pre-labelled underpowered). **Must also report:** linear learners (ridge, elastic net, PLS, descriptive) gain +0.03 to +0.07 internally and +0.06 to +0.14 externally. | allowed wording: "with flexible learners, the indices add nothing measurable beyond bond-type edge counts and composition" |
 | "external result is independent" | **not supported, and must not be claimed.** Source-disjoint only: 3,253 of the 8,341 external test constitutions also occur in the Bradley isomer set used for the internal cells, though not in the PHYSPROP-free training subset. | evidence added |
 | "the corrected-t intervals have nominal coverage" | see doc 18 §3.3 (simulation, finite-population approximation) | new |
 | confirmation on the patent set | **not attempted**; census awaiting approval | — |
