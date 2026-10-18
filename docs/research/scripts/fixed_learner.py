@@ -66,7 +66,7 @@ TRAIN_SEEDS_EXTERNAL = {"extratrees": (0, 1, 2, 3, 4)}  # others: (0,)
 DELTA = 0.02  # candidate smallest effect of interest (R2); see doc 14 §6 for its status
 SMOKE = dict(contexts={"mp_E3b": dict(seeds=(0,), folds=(0,)), "external": {}},
              families=["ridge", "extratrees"], permute_seed=20261017)
-PROTOCOL_VERSION = "doc14-r2-draft"
+PROTOCOL_VERSION = "doc14-r2"
 
 
 # ----------------------------------------------------------------------------- data

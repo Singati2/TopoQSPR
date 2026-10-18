@@ -1,9 +1,10 @@
-# 14. Fixed-learner protocol, revision 2: four arms (DRAFT, not frozen, not approved)
+# 14. Fixed-learner protocol, revision 2: four arms (FROZEN, owner-approved 2026-10-18)
 
 **Status:**
-- Draft for the owner. **Nothing in this protocol has been run on real labels.** Only permuted-label
-  smoke and timing runs have been made (§10).
-- The protocol is frozen only when the owner approves it. The freezing commit is then recorded in §11.
+- **Frozen.** The owner approved this protocol unchanged on 2026-10-18 and chose the workstation for
+  the full run. The freezing commit is the commit that changed this status line (§11).
+- Before approval, nothing in this protocol had been run on real labels. Only permuted-label smoke and
+  timing runs had been made (§10). No text below was changed at freezing.
 
 **Revision history:**
 - r1 (861b3ce): two arms (full vs edge types) and a δ = 0.02 decision rule.
@@ -229,10 +230,11 @@ The CPU-hours below are core-hours. Each unit runs on one core; units run in par
 
 ## 11. Owner approval checkpoint
 
-- [ ] four arms, co-primary estimands (C+T − C, C+E+T − C+E) and co-primary learners (ET, SVR) accepted
-- [ ] statements S1–S4, Holm over the 12 co-primary tests, BH elsewhere accepted
-- [ ] δ = 0.02 as a candidate threshold (post hoc, calibrated in doc 18 §3); sensitivity 0.01/0.03 descriptive only
-- [ ] compute budget (doc 18 §5) and where it runs (workstation / Colab shards / HPC)
-- [ ] notebook 04 seeds 1–4 (training variability) included
-- [ ] frozen at commit: ____ (the commit that ticks these boxes; `fixed_learner.py run --mode full`
-      refuses to start without `OUT/APPROVED_FULL_RUN` holding this SHA)
+- [x] four arms, co-primary estimands (C+T − C, C+E+T − C+E) and co-primary learners (ET, SVR) accepted
+- [x] statements S1–S4, Holm over the 12 co-primary tests, BH elsewhere accepted
+- [x] δ = 0.02 as a candidate threshold (post hoc, calibrated in doc 18 §3); sensitivity 0.01/0.03 descriptive only
+- [x] compute budget (doc 18 §5) and where it runs: **workstation** (16 cores, n_jobs ≤ 8 when shared)
+- [x] notebook 04 seeds 1–4 (training variability) included
+- [x] frozen at commit: the commit that ticks these boxes (`git log -1 --format=%H --
+      docs/research/14_FIXED_LEARNER_PROTOCOL.md`); `OUT/APPROVED_FULL_RUN` of the full run holds that SHA
+- Approval: owner, 2026-10-18 ("approved, run it on the workstation").
